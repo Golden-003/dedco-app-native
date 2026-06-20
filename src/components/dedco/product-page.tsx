@@ -82,14 +82,14 @@ export function ProductPage({
       >
         <button
           onClick={() => onNavigate({ name: "home" })}
-          className="hover:text-terracotta"
+          className="hover:text-amber"
         >
           Accueil
         </button>
         <ChevronRight size={12} />
         <button
           onClick={() => onNavigate({ name: "marketplace" })}
-          className="hover:text-terracotta"
+          className="hover:text-amber"
         >
           Marketplace
         </button>
@@ -118,7 +118,7 @@ export function ProductPage({
                   onClick={() => setSelectedImageIdx(i)}
                   className={`w-16 h-16 sm:w-20 sm:h-20 rounded-md overflow-hidden flex-shrink-0 border-2 transition-all ${
                     i === selectedImageIdx
-                      ? "border-terracotta"
+                      ? "border-amber"
                       : "border-border opacity-60 hover:opacity-100"
                   }`}
                   aria-label={`Voir l'image ${i + 1}`}
@@ -162,7 +162,7 @@ export function ProductPage({
 
           {/* Price */}
           <div className="flex items-baseline gap-3 mb-6 pb-6 border-b border-border">
-            <span className="font-numeric font-bold text-3xl text-terracotta">
+            <span className="font-numeric font-bold text-3xl text-amber">
               {formatFCFA(product.price)}
             </span>
             {product.originalPrice && (
@@ -219,7 +219,7 @@ export function ProductPage({
                     className={`px-3 py-1.5 text-xs rounded-md border-2 transition-all ${
                       selectedColor === color ||
                       (selectedColor === null && color === product.colors[0])
-                        ? "border-terracotta bg-terracotta-pale text-terracotta font-semibold"
+                        ? "border-amber bg-amber-pale text-amber-dark font-semibold"
                         : "border-border text-ink-soft hover:border-ink-mute"
                     }`}
                   >
@@ -357,7 +357,7 @@ export function ProductPage({
                 <button
                   type="button"
                   onClick={() => onNavigate({ name: "artisan", id: artisan.id })}
-                  className="text-terracotta font-semibold text-sm hover:underline ml-auto"
+                  className="text-amber font-semibold text-sm hover:underline ml-auto"
                 >
                   Voir le profil →
                 </button>

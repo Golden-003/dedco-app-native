@@ -58,7 +58,7 @@ export function InspirationsPage({
             onClick={() => setRoomFilter(room)}
             className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all border ${
               roomFilter === room
-                ? "bg-terracotta text-white border-terracotta"
+                ? "bg-amber text-white border-amber"
                 : "bg-white text-ink-soft border-border hover:border-ink-mute"
             }`}
           >
@@ -129,7 +129,7 @@ export function DesignersPage({
             onClick={() => setStyleFilter(style)}
             className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all border ${
               styleFilter === style
-                ? "bg-terracotta text-white border-terracotta"
+                ? "bg-amber text-white border-amber"
                 : "bg-white text-ink-soft border-border hover:border-ink-mute"
             }`}
           >
@@ -281,7 +281,7 @@ export function DesignerDetailPage({
                   <p className="text-xs text-ink-mute uppercase tracking-wide mb-1">
                     Tarif horaire
                   </p>
-                  <p className="font-display font-bold text-lg text-terracotta font-numeric">
+                  <p className="font-display font-bold text-lg text-amber font-numeric">
                     {designer.hourlyRate.toLocaleString("fr-FR")} F
                   </p>
                   <p className="text-xs text-ink-mute">FCFA / heure</p>
@@ -374,7 +374,7 @@ export function ArtisanDetailPage({
             </p>
             <div className="flex flex-wrap gap-4 text-sm">
               <div>
-                <span className="font-bold text-terracotta font-numeric">{artisan.rating}</span>{" "}
+                <span className="font-bold text-amber font-numeric">{artisan.rating}</span>{" "}
                 <span className="text-ink-mute">/ 5 · <span className="font-numeric">{artisan.reviews}</span> avis</span>
               </div>
               <div>

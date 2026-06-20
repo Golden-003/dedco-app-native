@@ -141,7 +141,7 @@ export function MarketplacePage({
                 onClick={() => applyPreset(preset)}
                 className={`px-3 py-1.5 text-xs rounded-md border transition-all font-numeric ${
                   active
-                    ? "border-terracotta bg-terracotta-pale text-terracotta font-semibold"
+                    ? "border-amber bg-amber-pale text-amber-dark font-semibold"
                     : "border-border text-ink-soft hover:border-ink-mute"
                 }`}
               >
@@ -206,7 +206,7 @@ export function MarketplacePage({
           checked={onlyFav}
           onChange={(e) => setOnlyFav(e.target.checked)}
           className="w-4 h-4"
-          style={{ accentColor: "var(--terracotta)" }}
+          style={{ accentColor: "var(--amber)" }}
         />
         <span>
           Mes favoris uniquement{" "}
@@ -252,7 +252,7 @@ export function MarketplacePage({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Rechercher un produit, une matière, un style..."
-          className="w-full pl-10 pr-4 py-3 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-terracotta"
+          className="w-full pl-10 pr-4 py-3 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-amber"
           aria-label="Rechercher dans la marketplace"
         />
       </div>
@@ -279,7 +279,7 @@ export function MarketplacePage({
               onClick={() => toggleCat(cat.slug)}
               className={`px-3.5 py-1.5 text-xs font-medium whitespace-nowrap rounded-full border transition-all flex-shrink-0 flex items-center gap-1.5 ${
                 active
-                  ? "bg-terracotta text-white border-terracotta"
+                  ? "bg-amber text-white border-amber"
                   : "bg-white text-ink-soft border-border hover:border-ink-mute"
               }`}
             >
@@ -300,14 +300,14 @@ export function MarketplacePage({
           onClick={() => setShowAdvanced((s) => !s)}
           className={`inline-flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-md border transition-all ${
             showAdvanced || activeFilterCount > 0
-              ? "border-terracotta bg-terracotta-pale text-terracotta"
+              ? "border-amber bg-amber-pale text-amber-dark"
               : "border-border text-ink-soft hover:border-ink-mute"
           }`}
         >
           <SlidersHorizontal size={14} />
           Filtres avancés
           {activeFilterCount > 0 && (
-            <span className="font-numeric bg-terracotta text-white rounded-full min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px]">
+            <span className="font-numeric bg-amber text-white rounded-full min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px]">
               {activeFilterCount}
             </span>
           )}
@@ -325,7 +325,7 @@ export function MarketplacePage({
             id="sort-select"
             value={sort}
             onChange={(e) => setSort(e.target.value as SortKey)}
-            className="px-3 py-2 text-xs border border-border rounded-md bg-white focus:outline-none focus:border-terracotta"
+            className="px-3 py-2 text-xs border border-border rounded-md bg-white focus:outline-none focus:border-amber"
           >
             <option value="pertinence">Pertinence</option>
             <option value="price-asc">Prix croissant</option>
@@ -386,7 +386,7 @@ export function MarketplacePage({
           <button
             type="button"
             onClick={resetFilters}
-            className="text-xs text-terracotta hover:underline font-semibold ml-1"
+            className="text-xs text-amber hover:underline font-semibold ml-1"
           >
             Tout effacer
           </button>
@@ -468,12 +468,12 @@ function ActiveChip({
   onClear: () => void;
 }) {
   return (
-    <span className="inline-flex items-center gap-1.5 pl-3 pr-2 py-1 text-xs font-medium rounded-full bg-terracotta-pale text-terracotta border border-terracotta/30">
+    <span className="inline-flex items-center gap-1.5 pl-3 pr-2 py-1 text-xs font-medium rounded-full bg-amber-pale text-amber-dark border border-amber/30">
       {label}
       <button
         type="button"
         onClick={onClear}
-        className="w-4 h-4 rounded-full flex items-center justify-center hover:bg-terracotta hover:text-white transition-colors"
+        className="w-4 h-4 rounded-full flex items-center justify-center hover:bg-amber hover:text-white transition-colors"
         aria-label={`Retirer le filtre ${label}`}
       >
         <X size={10} />

@@ -240,7 +240,7 @@ export function BriefPage({
                     done
                       ? "bg-forest text-white"
                       : current
-                        ? "bg-terracotta text-white"
+                        ? "bg-amber text-white"
                         : "bg-warm text-ink-mute"
                   }`}
                 >
@@ -258,7 +258,7 @@ export function BriefPage({
           })}
         </div>
         <p className="text-xs text-ink-mute">
-          Étape {step} / {TOTAL_STEPS} —{" "}
+          Étape <span className="font-numeric">{step}</span> / <span className="font-numeric">{TOTAL_STEPS}</span> —{" "}
           {[
             "Type de projet",
             "Contexte & style",
@@ -287,13 +287,13 @@ export function BriefPage({
                   onClick={() => update("type", t.id)}
                   className={`p-5 rounded-lg border-2 text-center transition-all ${
                     data.type === t.id
-                      ? "border-terracotta bg-terracotta-pale"
+                      ? "border-amber bg-amber-pale"
                       : "border-border bg-white hover:border-ink-mute"
                   }`}
                 >
                   <div
                     className={`mx-auto mb-2 ${
-                      data.type === t.id ? "text-terracotta" : "text-ink-soft"
+                      data.type === t.id ? "text-amber" : "text-ink-soft"
                     }`}
                   >
                     {t.icon}
@@ -320,7 +320,7 @@ export function BriefPage({
             <select
               value={data.room}
               onChange={(e) => update("room", e.target.value)}
-              className="w-full px-3 py-2.5 mb-5 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-terracotta"
+              className="w-full px-3 py-2.5 mb-5 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-amber"
             >
               <option value="">— Sélectionnez —</option>
               {ROOMS.map((r) => (
@@ -343,7 +343,7 @@ export function BriefPage({
                     type="button"
                     onClick={() => toggleStyle(s.id)}
                     className={`relative rounded-lg overflow-hidden border-2 transition-all aspect-[4/5] ${
-                      active ? "border-terracotta" : "border-transparent"
+                      active ? "border-amber" : "border-transparent"
                     }`}
                     aria-pressed={active}
                   >
@@ -364,7 +364,7 @@ export function BriefPage({
                       {s.label}
                     </div>
                     {active && (
-                      <div className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-terracotta text-white flex items-center justify-center">
+                      <div className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-amber text-white flex items-center justify-center">
                         <Check size={14} />
                       </div>
                     )}
@@ -395,7 +395,7 @@ export function BriefPage({
                   onChange={(e) => update("budgetMin", Number(e.target.value))}
                   step={10000}
                   min={0}
-                  className="w-full px-3 py-2.5 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-terracotta"
+                  className="w-full px-3 py-2.5 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-amber"
                 />
               </div>
               <div>
@@ -408,7 +408,7 @@ export function BriefPage({
                   onChange={(e) => update("budgetMax", Number(e.target.value))}
                   step={10000}
                   min={data.budgetMin}
-                  className="w-full px-3 py-2.5 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-terracotta"
+                  className="w-full px-3 py-2.5 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-amber"
                 />
               </div>
             </div>
@@ -416,7 +416,7 @@ export function BriefPage({
             <div className="dedco-card p-4 bg-warm/50 mb-4">
               <div className="flex justify-between items-baseline">
                 <span className="text-sm text-ink-soft">Fourchette</span>
-                <span className="font-display font-bold text-terracotta text-lg">
+                <span className="font-display font-bold text-amber text-lg">
                   {data.budgetMin.toLocaleString("fr-FR")} —{" "}
                   {data.budgetMax.toLocaleString("fr-FR")} FCFA
                 </span>
@@ -464,7 +464,7 @@ export function BriefPage({
               }}
               rows={8}
               placeholder="Ex : Je souhaite une table basse en bois iroko avec plateau wax bleu Ankara pour mon salon de 25m². Style afro-contemporain, dimensions 120×60×45cm environ. J'aimerais un tiroir de rangement..."
-              className="w-full px-4 py-3 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-terracotta resize-none"
+              className="w-full px-4 py-3 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-amber resize-none"
             />
             <div className="flex justify-between items-center mt-2 text-xs">
               <span className={descLen < 50 ? "text-terracotta" : "text-forest"}>
@@ -488,7 +488,7 @@ export function BriefPage({
 
             <label
               htmlFor="brief-upload"
-              className="block border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer hover:border-terracotta transition-colors bg-white"
+              className="block border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer hover:border-amber transition-colors bg-white"
             >
               <Upload size={28} className="mx-auto text-ink-mute mb-2" />
               <p className="text-sm font-semibold mb-1">
@@ -574,16 +574,16 @@ export function BriefPage({
                     onClick={() => update("delay", d.id as BriefData["delay"])}
                     className={`w-full flex items-center gap-3 p-4 rounded-lg border-2 text-left transition-all ${
                       active
-                        ? "border-terracotta bg-terracotta-pale"
+                        ? "border-amber bg-amber-pale"
                         : "border-border bg-white hover:border-ink-mute"
                     }`}
                   >
                     <div
                       className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
                         active
-                          ? "bg-terracotta text-white"
+                          ? "bg-amber text-white"
                           : d.warning
-                            ? "bg-terracotta-pale text-terracotta"
+                            ? "bg-amber-pale text-amber-dark"
                             : "bg-warm text-ink-soft"
                       }`}
                     >
@@ -593,7 +593,7 @@ export function BriefPage({
                       <p className="font-display font-semibold">{d.label}</p>
                       <p className="text-xs text-ink-mute">{d.desc}</p>
                     </div>
-                    {active && <Check size={20} className="text-terracotta" />}
+                    {active && <Check size={20} className="text-amber" />}
                   </button>
                 );
               })}

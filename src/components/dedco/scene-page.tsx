@@ -79,12 +79,12 @@ export function ScenePage({
                 >
                   <span
                     className={`block rounded-full bg-white shadow-lg hotspot-dot ${
-                      isActive ? "ring-4 ring-terracotta/40" : ""
+                      isActive ? "ring-4 ring-amber/40" : ""
                     }`}
                     style={{
                       width: 28,
                       height: 28,
-                      border: "2px solid var(--terracotta)",
+                      border: "2px solid var(--amber)",
                     }}
                   />
                   <span
@@ -300,7 +300,7 @@ export function ScenePage({
                     {product.desc}
                   </p>
                   <div className="flex items-baseline gap-2 mb-4">
-                    <span className="font-numeric font-bold text-xl text-terracotta">
+                    <span className="font-numeric font-bold text-xl text-amber">
                       {formatFCFA(product.price)}
                     </span>
                     {product.originalPrice && (

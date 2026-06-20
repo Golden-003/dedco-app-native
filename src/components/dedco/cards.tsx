@@ -130,7 +130,7 @@ export function ProductCard({
           {product.name}
         </h3>
         <div className="flex items-baseline gap-1.5">
-          <span className="font-numeric font-bold text-base text-terracotta">
+          <span className="font-numeric font-bold text-base text-amber">
             {formatFCFA(product.price)}
           </span>
           {product.originalPrice && (
@@ -405,7 +405,7 @@ export function DesignerCard({
           </span>
           <span className="text-xs text-ink-soft">
             Dès{" "}
-            <strong className="text-terracotta font-numeric">
+            <strong className="text-amber font-numeric">
               {formatFCFA(designer.hourlyRate)}
             </strong>
             /h
@@ -486,7 +486,7 @@ export function CategoryCard({
     <button
       type="button"
       onClick={() => onOpen(category.slug)}
-      className="dedco-card p-4 sm:p-5 text-center hover:shadow-lg hover:border-terracotta transition-all cursor-pointer group"
+      className="dedco-card p-4 sm:p-5 text-center hover:shadow-lg hover:border-amber transition-all cursor-pointer group"
     >
       <div className="text-3xl sm:text-4xl mb-2 group-hover:scale-110 transition-transform">
         {category.icon}

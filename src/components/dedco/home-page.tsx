@@ -113,8 +113,8 @@ export function HomePage({
                 ))}
               </div>
               <p className="text-sm opacity-90">
-                <strong>2 400+ clients</strong> satisfaits ·{" "}
-                <strong>180+ artisans</strong> vérifiés
+                <strong className="font-numeric">2 400+ clients</strong> satisfaits ·{" "}
+                <strong className="font-numeric">180+ artisans</strong> vérifiés
               </p>
             </div>
           </div>
@@ -131,12 +131,12 @@ export function HomePage({
               desc: "Sécurisé Fedapay",
             },
             {
-              icon: <Users size={22} className="text-terracotta" />,
+              icon: <Users size={22} className="text-amber" />,
               title: "Artisans vérifiés",
               desc: "KYC + niveaux N1-N4",
             },
             {
-              icon: <Truck size={22} className="text-terracotta-lt" />,
+              icon: <Truck size={22} className="text-amber-dark" />,
               title: "Livraison 3 temps",
               desc: "Tracée photo par photo",
             },
@@ -176,7 +176,7 @@ export function HomePage({
             <button
               type="button"
               onClick={() => onNavigate({ name: "inspirations" })}
-              className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold text-terracotta hover:text-terracotta-lt transition-colors"
+              className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold text-amber hover:text-amber-dark transition-colors"
             >
               Toutes les scènes <ArrowRight size={16} />
             </button>
@@ -239,7 +239,7 @@ export function HomePage({
             <button
               type="button"
               onClick={() => onNavigate({ name: "marketplace" })}
-              className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold text-terracotta hover:text-terracotta-lt transition-colors"
+              className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold text-amber hover:text-amber-dark transition-colors"
             >
               Voir tout <ArrowRight size={16} />
             </button>
@@ -324,7 +324,7 @@ export function HomePage({
         className="py-16 text-center text-white"
         style={{
           background:
-            "linear-gradient(135deg, var(--terracotta) 0%, var(--amber-dark) 100%)",
+            "linear-gradient(135deg, var(--amber) 0%, var(--terracotta) 100%)",
         }}
       >
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
@@ -373,7 +373,7 @@ export function HomePage({
             <button
               type="button"
               onClick={() => onNavigate({ name: "magazine" })}
-              className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold text-terracotta hover:text-terracotta-lt transition-colors"
+              className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold text-amber hover:text-amber-dark transition-colors"
             >
               Tous les articles <ArrowRight size={16} />
             </button>
