@@ -75,7 +75,7 @@ export function Navbar({
             className="font-display text-2xl font-bold tracking-tight flex-shrink-0"
             aria-label="Retour à l'accueil Dedco"
           >
-            Dedco<span className="text-amber">.</span>
+            <span className="text-terracotta">Dedco</span><span className="text-amber">.</span>
           </button>
 
           {/* Desktop nav */}
@@ -163,7 +163,7 @@ export function Navbar({
           <div className="relative w-72 max-w-[80vw] bg-cream h-full dedco-slide-in-right flex flex-col">
             <div className="h-16 px-4 flex items-center justify-between border-b border-border">
               <span className="font-display text-xl font-bold">
-                Dedco<span className="text-amber">.</span>
+                <span className="text-terracotta">Dedco</span><span className="text-amber">.</span>
               </span>
               <button
                 type="button"
@@ -316,7 +316,7 @@ export function Footer({
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-8 mb-10">
           <div className="col-span-2 lg:col-span-1">
             <div className="font-display text-2xl font-bold text-white mb-3">
-              Dedco<span className="text-amber">.</span>
+              <span className="text-terracotta">Dedco</span><span className="text-amber">.</span>
             </div>
             <p className="text-sm leading-relaxed mb-4">
               La marketplace béninoise de l'artisanat d'aménagement intérieur.
