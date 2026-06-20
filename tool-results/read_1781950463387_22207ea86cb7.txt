@@ -1,0 +1,202 @@
+     1→   950→  .inline-cards .scene-card{min-width:280px}
+     2→   951→}
+     3→   952→</style>
+     4→   953→</head>
+     5→   954→<body>
+     6→   955→<!-- ========== NAVBAR ========== -->
+     7→   956→<nav id="navbar" role="navigation" aria-label="Navigation principale">
+     8→   957→  <div class="navbar-inner">
+     9→   958→    <a class="navbar-logo" href="#/" onclick="navigate('/')">Dedco<span>.</span></a>
+    10→   959→    <div class="navbar-links">
+    11→   960→      <a href="#/" onclick="navigate('/')" data-nav="/">Accueil</a>
+    12→   961→      <a href="#/inspirations" onclick="navigate('/inspirations')" data-nav="/inspirations">Inspirations</a>
+    13→   962→      <a href="#/marketplace" onclick="navigate('/marketplace')" data-nav="/marketplace">Marketplace</a>
+    14→   963→      <a href="#/designers" onclick="navigate('/designers')" data-nav="/designers">Designers d'espace</a>
+    15→   964→      <a href="#/magazine" onclick="navigate('/magazine')" data-nav="/magazine">Magazine</a>
+    16→   965→    </div>
+    17→   966→    <div class="navbar-actions">
+    18→   967→      <button class="navbar-icon-btn" onclick="openSearchOverlay()" aria-label="Rechercher" title="Rechercher">
+    19→   968→        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    20→   969→      </button>
+    21→   970→      <button class="navbar-icon-btn" onclick="navigate('/favoris')" aria-label="Favoris" title="Mes favoris">
+    22→   971→        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    23→   972→        <span class="badge-dot"></span>
+    24→   973→      </button>
+    25→   974→      <button class="navbar-icon-btn" onclick="openCart()" aria-label="Panier" title="Mon panier" id="cart-btn">
+    26→   975→        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    27→   976→        <span class="badge-dot" id="cart-dot" style="display:none"></span>
+    28→   977→      </button>
+    29→   978→      <img loading="lazy" class="navbar-avatar" id="navbar-avatar" src="https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&w=240&q=85" alt="Portrait du profil utilisateur Dedco" onclick="navigate('/dashboard')" title="Mon compte">
+    30→   979→    </div>
+    31→   980→  </div>
+    32→   981→</nav>
+    33→   982→
+    34→   983→<!-- ========== PAGE CONTAINER ========== -->
+    35→   984→<main id="page-container" role="main"></main>
+    36→   985→
+    37→   986→<!-- ========== BOTTOM NAV (Mobile) ========== -->
+    38→   987→<nav id="bottom-nav" aria-label="Navigation mobile">
+    39→   988→  <button class="bottom-nav-item active" data-bnav="/" onclick="navigate('/')">
+    40→   989→    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    41→   990→    Accueil
+    42→   991→  </button>
+    43→   992→  <button class="bottom-nav-item" data-bnav="/marketplace" onclick="navigate('/marketplace')">
+    44→   993→    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    45→   994→    Marché
+    46→   995→  </button>
+    47→   996→  <button class="bottom-nav-item" data-bnav="/inspirations" onclick="navigate('/inspirations')">
+    48→   997→    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2"/><circle cx="12" cy="12" r="3"/></svg>
+    49→   998→    Inspi
+    50→   999→  </button>
+    51→  1000→  <button class="bottom-nav-item" data-bnav="/dashboard" onclick="navigate('/dashboard')">
+    52→  1001→    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
+    53→  1002→    Projets
+    54→  1003→  </button>
+    55→  1004→  <button class="bottom-nav-item" data-bnav="/profil" onclick="navigate('/dashboard')">
+    56→  1005→    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    57→  1006→    Profil
+    58→  1007→  </button>
+    59→  1008→</nav>
+    60→  1009→
+    61→  1010→<!-- ========== MODALS CONTAINER ========== -->
+    62→  1011→<div id="modals-container"></div>
+    63→  1012→
+    64→  1013→<!-- ========== TOAST CONTAINER ========== -->
+    65→  1014→<div id="toast-container" role="status" aria-live="polite"></div>
+    66→  1015→
+    67→  1016→
+    68→  1017→
+    69→  1018→<!-- ========== DEMO SWITCHER ========== -->
+    70→  1019→<div id="demo-switcher" style="position:fixed;right:20px;bottom:calc(var(--bottom-nav-h)+20px);z-index:400">
+    71→  1020→  <div id="demo-panel" style="display:none;position:absolute;bottom:60px;right:0;background:var(--text-1);border-radius:var(--r-2xl);padding:var(--s5);box-shadow:var(--shadow-xl);min-width:220px;color:#fff;max-height:420px;overflow-y:auto">
+    72→  1021→    <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.5);margin-bottom:var(--s3);font-weight:700">Navigation Démo</div>
+    73→  1022→    <div style="display:flex;flex-direction:column;gap:2px" id="demo-nav-list"></div>
+    74→  1023→  </div>
+    75→  1024→  <button onclick="toggleDemoPanel()" id="demo-btn" style="width:48px;height:48px;border-radius:50%;background:var(--amber);color:#fff;box-shadow:var(--shadow-amber);display:flex;align-items:center;justify-content:center;font-size:1.3rem;border:none;cursor:pointer;transition:transform var(--t-fast)" title="Navigation rapide démo" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">🗺️</button>
+    76→  1025→</div>
+    77→  1026→
+    78→  1027→<!-- ========== SEARCH OVERLAY ========== -->
+    79→  1028→<div id="search-overlay" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(30,24,19,.6);backdrop-filter:blur(8px)" onclick="closeSearchOverlay()">
+    80→  1029→  <div style="max-width:640px;margin:80px auto 0;padding:0 var(--s6)" onclick="event.stopPropagation()">
+    81→  1030→    <div class="search-bar" style="padding:10px 16px;border-radius:var(--r-xl);box-shadow:var(--shadow-xl)">
+    82→  1031→      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-3)"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    83→  1032→      <input id="search-input" type="text" placeholder="Rechercher des produits, artisans, designs..." style="font-size:1rem" oninput="handleSearchInput(this.value)" autofocus>
+    84→  1033→      <button onclick="closeSearchOverlay()" style="color:var(--text-3);padding:4px">✕</button>
+    85→  1034→    </div>
+    86→  1035→    <div id="search-results" style="background:var(--bg-card);border-radius:var(--r-xl);margin-top:8px;box-shadow:var(--shadow-xl);max-height:400px;overflow-y:auto;display:none"></div>
+    87→  1036→    <div style="color:rgba(255,255,255,.6);font-size:.8125rem;margin-top:12px;text-align:center">Appuyez sur Échap pour fermer</div>
+    88→  1037→  </div>
+    89→  1038→</div>
+    90→  1039→
+    91→  1040→<!-- ========== CART SIDEBAR ========== -->
+    92→  1041→<div id="cart-sidebar" style="display:none;position:fixed;inset:0;z-index:250">
+    93→  1042→  <div style="position:absolute;inset:0;background:rgba(30,24,19,.5)" onclick="closeCart()"></div>
+    94→  1043→  <div style="position:absolute;top:0;right:0;bottom:0;width:min(420px,100vw);background:var(--bg-card);display:flex;flex-direction:column;box-shadow:var(--shadow-xl)">
+    95→  1044→    <div style="padding:var(--s6) var(--s7);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+    96→  1045→      <div style="font-weight:700;font-size:1.0625rem">Mon Panier <span id="cart-count" style="color:var(--text-3);font-weight:400;font-size:.875rem"></span></div>
+    97→  1046→      <button onclick="closeCart()" class="modal-close"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    98→  1047→    </div>
+    99→  1048→    <div id="cart-items" style="flex:1;overflow-y:auto;padding:var(--s5) var(--s7)"></div>
+   100→  1049→    <div style="padding:var(--s6) var(--s7);border-top:1px solid var(--border)">
+   101→  1050→      <div style="display:flex;justify-content:space-between;margin-bottom:var(--s5);font-weight:700;font-size:1.0625rem">
+   102→  1051→        <span>Total</span><span id="cart-total" style="color:var(--amber)">0 FCFA</span>
+   103→  1052→      </div>
+   104→  1053→      <button class="btn btn-primary btn-lg w-full" onclick="navigate('/checkout');closeCart()">Procéder au paiement</button>
+   105→  1054→      <button class="btn btn-ghost btn-lg w-full mt-3" onclick="navigate('/marketplace');closeCart()">Continuer mes achats</button>
+   106→  1055→    </div>
+   107→  1056→  </div>
+   108→  1057→</div>
+   109→  1058→
+   110→  1059→<script>
+   111→  1060→/* ============================================================
+   112→  1061→   DEDCO PROTOTYPE — Mock Data
+   113→  1062→   ============================================================ */
+   114→  1063→const DATA = {
+   115→  1064→
+   116→  1065→/* ---- PRODUCTS (22) ---- */
+   117→  1066→products: [
+   118→  1067→  {id:1,name:"Table basse Bénin Wax",price:185000,originalPrice:225000,category:"tables",artisanId:1,material:"Bois iroko, tissu wax",colors:["Naturel & Wax bleu","Naturel & Wax orange","Sombre & Wax rouge"],rating:4.8,reviews:23,stock:3,badge:"Coup de cœur",images:["https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=1200&q=85","https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?auto=format&fit=crop&crop=entropy&w=800&q=80","https://images.unsplash.com/photo-1579656592043-a20e25a4aa4b?auto=format&fit=crop&crop=entropy&w=800&q=80"],desc:"Table basse artisanale en bois iroko massif avec plateau décoré de tissu wax authentique. Chaque pièce est unique, fabriquée à la main dans l'atelier Akindélé à Cotonou. Dimensions : 120×60×45cm.",tags:["artisanat","wax","bois","iroko"]},
+   119→  1068→  {id:2,name:"Fauteuil Sahel Tressé",price:245000,category:"fauteuils",artisanId:2,material:"Rotin naturel, tissu coton",colors:["Naturel","Ébène"],rating:4.9,reviews:41,stock:5,badge:"Best-seller",images:["https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&w=1200&q=85","https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&crop=entropy&w=800&q=80"],desc:"Fauteuil iconique en rotin tressé à la main, conçu par l'atelier Dossou. Structure solide et coussin en coton naturel. Idéal pour salon ou véranda tropicale.",tags:["rotin","fauteuil","artisanat"]},
+   120→  1069→  {id:3,name:"Lampe Abat-jour Bogolan",price:68000,originalPrice:85000,category:"luminaires",artisanId:3,material:"Tissu bogolan, métal laiton",colors:["Bogolan classique","Bogolan indigo"],rating:4.6,reviews:17,stock:8,badge:"Promo -20%",images:["https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?auto=format&fit=crop&crop=entropy&w=800&q=80","https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&crop=entropy&w=800&q=80"],desc:"Lampe de table avec abat-jour en tissu bogolan authentique du Mali, structure en laiton brossé. Lumière tamisée et chaleureuse.",tags:["luminaire","bogolan","laiton"]},
+   121→  1070→  {id:4,name:"Miroir Encadré Raffia",price:95000,category:"decoration",artisanId:4,material:"Raffia naturel, bois",colors:["Naturel"],rating:4.7,reviews:12,stock:4,images:["https://images.unsplash.com/photo-1510828561531-05a3388f6d3d?auto=format&fit=crop&crop=entropy&w=800&q=80","https://images.unsplash.com/photo-1468531390554-9f62f9767a87?auto=format&fit=crop&crop=entropy&w=800&q=80"],desc:"Grand miroir rond (80cm) avec cadre en raffia tressé artisanalement. Pièce décorative unique pour entrée ou salon.",tags:["miroir","raffia","décoration"]},
+   122→  1071→  {id:5,name:"Commode Porto-Novo",price:385000,category:"rangements",artisanId:1,material:"Bois teck, quincaillerie laiton",colors:["Naturel teck","Teck ciré foncé"],rating:4.9,reviews:8,stock:2,badge:"Exclusif",images:["https://images.unsplash.com/photo-1517467139951-f5a925c9f9de?auto=format&fit=crop&w=1200&q=85","https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?auto=format&fit=crop&crop=entropy&w=800&q=80"],desc:"Commode 4 tiroirs en teck massif avec poignées en laiton gravé. Design épuré inspiré de l'architecture coloniale réinterprétée.",tags:["commode","teck","rangement"]},
+   123→  1072→  {id:6,name:"Coussins Kente Set ×4",price:42000,category:"textiles",artisanId:5,material:"Tissu kente, rembourrage",colors:["Or & Rouge","Bleu & Or","Multicolore"],rating:4.5,reviews:34,stock:12,images:["https://images.unsplash.com/photo-1579656592043-a20e25a4aa4b?auto=format&fit=crop&crop=entropy&w=800&q=80"],desc:"Set de 4 coussins en tissu kente authentique, rembourrage en fibres naturelles. Apportent une touche colorée et ethnique à votre canapé.",tags:["coussins","kente","textile"]},
+   124→  1073→  {id:7,name:"Table à manger Abomey",price:520000,category:"tables",artisanId:2,material:"Bois acajou massif",colors:["Acajou naturel","Acajou ciré"],rating:4.8,reviews:6,stock:1,badge:"Sur commande",images:["https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?auto=format&fit=crop&crop=entropy&w=800&q=80"],desc:"Table à manger 6 à 8 personnes en acajou du Bénin. Plateau 220×100cm, pieds tournés. Délai de fabrication : 3 semaines.",tags:["table","acajou","salle à manger"]},
+   125→  1074→  {id:8,name:"Tapis Sable du Sahara",price:155000,category:"textiles",artisanId:6,material:"Laine naturelle, coton",colors:["Beige & Terracotta","Indigo & Sable"],rating:4.7,reviews:19,stock:6,images:["https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=1200&q=85"],desc:"Tapis berbère revisité (200×300cm) en laine naturelle, tissé à la main. Motifs géométriques sahéliens contemporains.",tags:["tapis","laine","géométrique"]},
+   126→  1075→  {id:9,name:"Bibliothèque Yoruba",price:295000,category:"rangements",artisanId:1,material:"Contreplaqué, laque mate",colors:["Blanc cassé","Terracotta","Vert forêt"],rating:4.6,reviews:14,stock:3,images:["https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?auto=format&fit=crop&w=1200&q=85"],desc:"Bibliothèque modulaire 5 niveaux, laquée en couleurs signature Dedco. S'assemble sans outils. Hauteur 180cm.",tags:["bibliothèque","modulaire","rangement"]},
+   127→  1076→  {id:10,name:"Suspension Bambou Tressé",price:78000,originalPrice:95000,category:"luminaires",artisanId:3,material:"Bambou naturel, fil électrique tissu",colors:["Naturel","Teinté sombre"],rating:4.8,reviews:27,stock:7,badge:"Promo",images:["https://images.unsplash.com/photo-1648809895588-c0bd7e06a61c?auto=format&fit=crop&crop=entropy&w=800&q=80"],desc:"Suspension en bambou tressé artisanalement, douille E27. Création lumineuse et organique pour salon ou salle à manger. Diamètre 45cm.",tags:["suspension","bambou","luminaire"]},
+   128→  1077→  {id:11,name:"Canapé Tropique 3 places",price:680000,category:"canapes",artisanId:7,material:"Bois massif, tissu coton naturel",colors:["Lin naturel","Terracotta","Vert forêt"],rating:4.9,reviews:11,stock:2,badge:"Coup de cœur",images:["https://images.unsplash.com/photo-1693578616322-c8abe6c7393d?auto=format&fit=crop&w=1200&q=85"],desc:"Canapé 3 places structure bois, pieds tournés, garnissage mousse haute résilience. Housse amovible lavable. Fabrication sur commande 4 semaines.",tags:["canapé","coton","salon"]},
+   129→  1078→  {id:12,name:"Vase Cotonou Collection",price:35000,category:"decoration",artisanId:8,material:"Terre cuite, émail",colors:["Terracotta naturel","Émail blanc","Émail bleu cobalt"],rating:4.6,reviews:38,stock:15,images:["https://images.unsplash.com/photo-1611078295948-10b3961e1e40?auto=format&fit=crop&crop=entropy&w=800&q=80"],desc:"Vase en terre cuite de Cotonou, tournée et peinte à la main. Chaque pièce est unique. Plusieurs tailles disponibles.",tags:["vase","terre cuite","poterie"]},
+   130→  1079→  {id:13,name:"Panier Osier Décoratif",price:28000,category:"decoration",artisanId:5,material:"Osier tressé",colors:["Naturel","Teinté noir"],rating:4.4,reviews:22,stock:20,images:["https://images.unsplash.com/photo-1528789386055-75c4b717bad1?auto=format&fit=crop&crop=entropy&w=800&q=80"],desc:"Grand panier en osier tressé (Ø50cm×60cm). Rangement décoratif, plante pot de cache, ou simple décoration.",tags:["panier","osier","décoration"]},
+   131→  1080→  {id:14,name:"Lit Platform Eko",price:485000,originalPrice:560000,category:"lits",artisanId:2,material:"Bois iroko, tissu wax headboard",colors:["Naturel & Wax géo","Teck & Wax batik"],rating:4.9,reviews:9,stock:1,badge:"Promo -13%",images:["https://images.unsplash.com/photo-1655276602527-ca7c0c44d6de?auto=format&fit=crop&w=1200&q=85"],desc:"Lit plateforme 160×200cm en bois iroko massif. Tête de lit habillée en wax géométrique. Idéal pour chambre contemporaine africaine.",tags:["lit","chambre","iroko","wax"]},
+   132→  1081→  {id:15,name:"Appliques Mural Duo",price:52000,category:"luminaires",artisanId:3,material:"Métal, tissu",colors:["Noir mat","Laiton","Cuivre"],rating:4.7,reviews:15,stock:9,images:["https://images.unsplash.com/photo-1568146687696-427782f92379?auto=format&fit=crop&crop=entropy&w=800&q=80"],desc:"Paire d'appliques murales orientables, diffuseur en tissu naturel. Idéal pour éclairage d'ambiance en chambre ou salon.",tags:["applique","éclairage","métal"]},
+   133→  1082→  {id:16,name:"Tabouret Tamtam",price:38000,category:"tables",artisanId:4,material:"Bois sculpté, peinture naturelle",colors:["Naturel","Ocre","Noir"],rating:4.8,reviews:31,stock:10,images:["https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&crop=entropy&w=800&q=80"],desc:"Tabouret sculpté à la main en forme de tamtam traditionnel. Polyvalent : tabouret, table d'appoint ou décoration.",tags:["tabouret","sculpté","artisanat"]},
+   134→  1083→  {id:17,name:"Rideaux Wax Imprimé ×2",price:64000,category:"textiles",artisanId:5,material:"Tissu wax 100% coton",colors:["Bleu Ankara","Rouge Kente","Vert Bogolan"],rating:4.5,reviews:26,stock:8,images:["https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&crop=entropy&w=800&q=80"],desc:"Paire de rideaux (2×250cm) en wax imprimé authentique. Doublure légère incluse. Grandes fenêtres et portes-fenêtres.",tags:["rideaux","wax","textile"]},
+   135→  1084→  {id:18,name:"Plateau Serviteur Laiton",price:45000,category:"decoration",artisanId:8,material:"Laiton martelé",colors:["Laiton naturel","Laiton noirci"],rating:4.8,reviews:19,stock:6,images:["https://images.unsplash.com/photo-1618722060945-b87f7326995b?auto=format&fit=crop&crop=entropy&w=800&q=80"],desc:"Grand plateau en laiton martelé artisanalement (Ø60cm). Utilisation décorative ou fonctionnelle, plié sur trépied ou sur table.",tags:["plateau","laiton","décoration"]},
+   136→  1085→  {id:19,name:"Bibliothèque Liane Rotin",price:320000,category:"rangements",artisanId:4,material:"Métal, rotin naturel",colors:["Noir & Naturel","Blanc & Naturel"],rating:4.7,reviews:7,stock:2,badge:"Nouveauté",images:["https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&crop=entropy&w=800&q=80"],desc:"Bibliothèque design à structure métal avec façades en rotin tressé. 3 niveaux, 150×40×180cm. Esprit tropical chic.",tags:["bibliothèque","rotin","métal"]},
+   137→  1086→  {id:20,name:"Porte-manteau Baobab",price:72000,category:"decoration",artisanId:6,material:"Bois massif sculpté",colors:["Naturel","Teinté brun"],rating:4.9,reviews:44,stock:5,badge:"Coup de cœur",images:["https://images.unsplash.com/photo-1604264726154-26480e76f4e1?auto=format&fit=crop&crop=entropy&w=800&q=80"],desc:"Porte-manteau mural en forme de branches de baobab, sculpté dans un seul morceau de bois. 6 crochets naturels. Oeuvre d'art fonctionnelle.",tags:["porte-manteau","sculpté","bois"]},
+   138→  1087→  {id:21,name:"Chaise Accra Cuir",price:175000,category:"fauteuils",artisanId:7,material:"Bois, cuir végétal",colors:["Caramel","Noir","Cognac"],rating:4.8,reviews:16,stock:4,images:["https://images.unsplash.com/photo-1567016376408-0226e4d0c1ea?auto=format&fit=crop&crop=entropy&w=800&q=80"],desc:"Chaise design en bois massif avec assise et dossier en cuir végétal tannage végétal. Empilable. Idéal salle à manger.",tags:["chaise","cuir","salle à manger"]},
+   139→  1088→  {id:22,name:"Set Nuit Zen Bambou",price:89000,category:"decoration",artisanId:3,material:"Bambou, céramique",colors:["Naturel"],rating:4.6,reviews:13,stock:7,images:["https://images.unsplash.com/photo-1611078295948-10b3961e1e40?auto=format&fit=crop&crop=entropy&w=800&q=80"],desc:"Set de décoration chambre : porte-bougie, vide-poche, vase en bambou et céramique. Esprit zen et naturel.",tags:["chambre","bambou","zen"]},
+   140→  1089→],
+   141→  1090→
+   142→  1091→/* ---- ARTISANS (8) ---- */
+   143→  1092→artisans: [
+   144→  1093→  {id:1,name:"Kofi Akindélé",specialty:"Ébénisterie & Menuiserie",city:"Cotonou",avatar:"https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=240&q=85",rating:4.9,reviews:87,level:"N3",verified:true,experience:"12 ans",bio:"Maître ébéniste formé à Cotonou et Accra, Kofi crée des meubles qui marient les essences locales et les techniques traditionnelles avec un design contemporain. Son atelier Akindélé Wood emploie 8 artisans.",portfolio:["https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=1200&q=85","https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?auto=format&fit=crop&crop=entropy&w=300&q=80","https://images.unsplash.com/photo-1566921895456-1cee64031c33?w=300&q=80"],trust:90},
+   145→  1094→  {id:2,name:"Amara Dossou",specialty:"Rotin & Osier",city:"Porto-Novo",avatar:"https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&crop=faces&w=240&q=85",rating:4.8,reviews:64,level:"N3",verified:true,experience:"8 ans",bio:"Artisan spécialisé dans la vannerie et le mobilier en rotin, Amara perpétue un savoir-faire familial transmis sur 3 générations. Ses créations sont exportées en France et au Sénégal.",portfolio:["https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=1200&q=85","https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&crop=entropy&w=300&q=80","https://images.unsplash.com/photo-1528789386055-75c4b717bad1?auto=format&fit=crop&crop=entropy&w=300&q=80"],trust:85},
+   146→  1095→  {id:3,name:"Fatou Loko",specialty:"Luminaires & Textile",city:"Cotonou",avatar:"https://images.unsplash.com/photo-1507152927179-bc4ebfef7103?auto=format&fit=crop&crop=faces&w=240&q=85",rating:4.7,reviews:52,level:"N2",verified:true,experience:"5 ans",bio:"Créatrice lumineuse qui associe les textiles traditionnels bogolan et wax à des luminaires contemporains. Ses pièces apportent une ambiance chaleureuse unique.",portfolio:["https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?auto=format&fit=crop&crop=entropy&w=300&q=80","https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&crop=entropy&w=300&q=80","https://images.unsplash.com/photo-1648809895588-c0bd7e06a61c?auto=format&fit=crop&crop=entropy&w=300&q=80"],trust:72},
+   147→  1096→  {id:4,name:"Brice Gogan",specialty:"Sculpture & Art Déco",city:"Abomey",avatar:"https://images.unsplash.com/photo-1620932934088-fbdb2920e484?auto=format&fit=crop&crop=faces&w=240&q=85",rating:4.7,reviews:39,level:"N2",verified:false,experience:"9 ans",bio:"Sculpteur d'Abomey, ville royale du Bénin, Brice travaille le bois, le métal et la terre pour créer des pièces décoratives uniques d'inspiration vodou et contemporaine.",portfolio:["https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&crop=entropy&w=300&q=80","https://images.unsplash.com/photo-1604264726154-26480e76f4e1?auto=format&fit=crop&crop=entropy&w=300&q=80","https://images.unsplash.com/photo-1611078295948-10b3961e1e40?auto=format&fit=crop&crop=entropy&w=300&q=80"],trust:65},
+   148→  1097→  {id:5,name:"Aïcha Monteiro",specialty:"Tissus & Couture",city:"Cotonou",avatar:"https://images.unsplash.com/photo-1743871698163-a2e470d8eac7?auto=format&fit=crop&crop=faces&w=240&q=85",rating:4.5,reviews:28,level:"N1",verified:false,experience:"3 ans",bio:"Couturière et créatrice textile, Aïcha travaille les wax, kente et bogolan pour créer coussins, rideaux et textiles d'intérieur hauts de gamme.",portfolio:["https://images.unsplash.com/photo-1579656592043-a20e25a4aa4b?auto=format&fit=crop&crop=entropy&w=300&q=80","https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&crop=entropy&w=300&q=80","https://images.unsplash.com/photo-1618722060945-b87f7326995b?auto=format&fit=crop&crop=entropy&w=300&q=80"],trust:45},
+   149→  1098→  {id:6,name:"Théodore Kpachi",specialty:"Bois Sculpté",city:"Parakou",avatar:"https://images.unsplash.com/photo-1612214070442-3c806a722f0b?auto=format&fit=crop&crop=faces&w=240&q=85",rating:4.8,reviews:35,level:"N2",verified:true,experience:"15 ans",bio:"Maître sculpteur de Parakou, Théodore transforme le bois local en sculptures fonctionnelles et décoratives. Son atelier forme les jeunes artisans du nord Bénin.",portfolio:["https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&crop=entropy&w=300&q=80","https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=1200&q=85","https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?auto=format&fit=crop&crop=entropy&w=300&q=80"],trust:78},
+   150→  1099→  {id:7,name:"Romuald Azonsi",specialty:"Tapisserie & Mobilier",city:"Cotonou",avatar:"https://images.unsplash.com/photo-1533108344127-a586d2b02479?auto=format&fit=crop&crop=faces&w=240&q=85",rating:4.9,reviews:47,level:"N3",verified:true,experience:"11 ans",bio:"Tapissier de haut vol, Romuald redonne vie aux meubles et crée des canapés et fauteuils sur mesure alliant confort européen et esthétique africaine.",portfolio:["https://images.unsplash.com/photo-1693578616322-c8abe6c7393d?auto=format&fit=crop&w=1200&q=85","https://images.unsplash.com/photo-1567016376408-0226e4d0c1ea?auto=format&fit=crop&crop=entropy&w=300&q=80","https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&w=1200&q=85"],trust:88},
+   151→  1100→  {id:8,name:"Céleste Houéssou",specialty:"Poterie & Céramique",city:"Porto-Novo",avatar:"https://images.unsplash.com/photo-1533674689012-136b487b7736?auto=format&fit=crop&crop=faces&w=240&q=85",rating:4.6,reviews:31,level:"N2",verified:true,experience:"7 ans",bio:"Céramiste et potière, Céleste perpétue l'art de la poterie béninoise en créant vases, bols et objets décoratifs contemporains inspirés des motifs vodou et egun.",portfolio:["https://images.unsplash.com/photo-1611078295948-10b3961e1e40?auto=format&fit=crop&crop=entropy&w=300&q=80","https://images.unsplash.com/photo-1528789386055-75c4b717bad1?auto=format&fit=crop&crop=entropy&w=300&q=80","https://images.unsplash.com/photo-1510828561531-05a3388f6d3d?auto=format&fit=crop&crop=entropy&w=300&q=80"],trust:70},
+   152→  1101→],
+   153→  1102→
+   154→  1103→/* ---- DESIGNERS (4) ---- */
+   155→  1104→designers: [
+   156→  1105→  {id:1,name:"Ndèye Sarr",specialty:"Design d'intérieur contemporain-africain",city:"Cotonou",avatar:"https://images.unsplash.com/photo-1729355796906-10a9809e0864?auto=format&fit=crop&crop=faces&w=240&q=85",rating:4.9,reviews:34,hourlyRate:25000,projects:28,bio:"Designer diplômée de l'École de Design de Nantes, Ndèye crée des intérieurs qui fusionnent modernité et héritage africain.",style:"Afro-contemporain minimaliste",cover:"https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=1600&q=85"},
+   157→  1106→  {id:2,name:"Chidi Okonkwo",specialty:"Architecture d'intérieur & Scénographie",city:"Cotonou",avatar:"https://images.unsplash.com/photo-1616805765352-beedbad46b2a?auto=format&fit=crop&crop=faces&w=240&q=85",rating:4.8,reviews:22,hourlyRate:35000,projects:15,bio:"Architecte nigérian installé à Cotonou, Chidi apporte une vision pan-africaine à l'aménagement d'intérieur haut de gamme.",style:"Tropical luxe",cover:"https://images.unsplash.com/photo-1656403002413-2ac6137237d6?auto=format&fit=crop&w=1600&q=85"},
+   158→  1107→  {id:3,name:"Karine Agboton",specialty:"Décoration & Styling",city:"Porto-Novo",avatar:"https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=240&q=85",rating:4.7,reviews:41,hourlyRate:18000,projects:52,bio:"Décoratrice polyvalente avec 10 ans d'expérience, Karine transforme les espaces résidentiels et commerciaux avec créativité et budget maîtrisé.",style:"Éclectique chaleureux",cover:"https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=1600&q=85"},
+   159→  1108→  {id:4,name:"Marc-Aurel Favi",specialty:"Design biophilique",city:"Abomey-Calavi",avatar:"https://images.unsplash.com/photo-1570158268183-d296b2892211?auto=format&fit=crop&crop=faces&w=240&q=85",rating:4.8,reviews:18,hourlyRate:22000,projects:20,bio:"Spécialiste du design biophilique, Marc intègre la nature dans chaque espace pour créer des environnements apaisants et durables.",style:"Naturel & biophilique",cover:"https://images.unsplash.com/photo-1528789386055-75c4b717bad1?auto=format&fit=crop&w=1200&q=85"},
+   160→  1109→],
+   161→  1110→
+   162→  1111→/* ---- SCENES / INSPIRATIONS (5) ---- */
+   163→  1112→scenes: [
+   164→  1113→  {id:1,slug:"salon-terracotta-wax",title:"Salon Terracotta & Wax",style:"Afro-contemporain",room:"Salon",image:"https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=1600&q=85",hotspots:[{x:30,y:55,productId:2},{x:55,y:70,productId:1},{x:75,y:45,productId:3}],tags:["terracotta","wax","salon"],saves:234,designerId:1},
+   165→  1114→  {id:2,slug:"chambre-zen-bambou",title:"Chambre Zen Bambou",style:"Tropical minimaliste",room:"Chambre",image:"https://images.unsplash.com/photo-1655276602527-ca7c0c44d6de?auto=format&fit=crop&w=1600&q=85",hotspots:[{x:40,y:60,productId:14},{x:70,y:40,productId:10},{x:25,y:35,productId:22}],tags:["zen","bambou","chambre"],saves:189,designerId:3},
+   166→  1115→  {id:3,slug:"bureau-laiton-bois",title:"Bureau Laiton & Bois",style:"Tropical luxe",room:"Bureau",image:"https://images.unsplash.com/photo-1656403002413-2ac6137237d6?auto=format&fit=crop&w=1600&q=85",hotspots:[{x:45,y:65,productId:5},{x:25,y:50,productId:18},{x:70,y:30,productId:15}],tags:["bureau","laiton","bois"],saves:156,designerId:2},
+   167→  1116→  {id:4,slug:"cuisine-terre-cuite",title:"Cuisine Terre Cuite",style:"Méditerranée africaine",room:"Cuisine",image:"https://images.unsplash.com/photo-1656402887556-e727ffe1f6d7?auto=format&fit=crop&crop=entropy&w=1200&q=80",hotspots:[{x:35,y:55,productId:12},{x:60,y:40,productId:16},{x:80,y:60,productId:13}],tags:["cuisine","terre cuite","poterie"],saves:98,designerId:4},
+   168→  1117→  {id:5,slug:"entree-sculpturale",title:"Entrée Sculpturale",style:"Art & Artisanat",room:"Entrée",image:"https://images.unsplash.com/photo-1604264726154-26480e76f4e1?auto=format&fit=crop&crop=entropy&w=1200&q=80",hotspots:[{x:50,y:50,productId:20},{x:30,y:70,productId:4},{x:70,y:60,productId:16}],tags:["entrée","sculpture","miroir"],saves:143,designerId:1},
+   169→  1118→],
+   170→  1119→
+   171→  1120→/* ---- BRIEFS (5) ---- */
+   172→  1121→briefs: [
+   173→  1122→  {id:1,clientName:"Sophie Kossou",type:"Aménagement complet",room:"Salon",budget:[200000,500000],status:"proposition_reçue",description:"Je souhaite rénover mon salon de 25m² dans un style afro-contemporain. Je veux garder les murs blancs et apporter de la chaleur avec des meubles et textiles.",artisanId:1,created:"2024-01-15",deadline:"2024-03-01"},
+   174→  1123→  {id:2,clientName:"Paul Mensah",type:"Mobilier sur mesure",room:"Chambre",budget:[150000,300000],status:"en_attente",description:"Création d'une tête de lit en bois et wax pour ma chambre 160×200cm. Style naturel.",artisanId:null,created:"2024-01-20",deadline:"2024-02-28"},
+   175→  1124→  {id:3,clientName:"Marie Adjovi",type:"Décoration",room:"Bureau",budget:[50000,120000],status:"en_production",description:"Décorer mon bureau à domicile avec des éléments artisanaux locaux.",artisanId:3,created:"2024-01-10",deadline:"2024-02-15"},
+   176→  1125→  {id:4,clientName:"Jean Hounkpatin",type:"Luminaires",room:"Salon & Salle à manger",budget:[80000,200000],status:"livré",description:"Je cherche des luminaires faits main pour mon appartement.",artisanId:3,created:"2023-12-01",deadline:"2024-01-15"},
+   177→  1126→  {id:5,clientName:"Aurore Tossou",type:"Mobilier complet",room:"Salle à manger",budget:[400000,800000],status:"litige",description:"Table à manger et chaises pour 8 personnes, style contemporain africain.",artisanId:2,created:"2023-11-15",deadline:"2024-01-01"},
+   178→  1127→],
+   179→  1128→
+   180→  1129→/* ---- PROJECTS (for artisan kanban) ---- */
+   181→  1130→projects: [
+   182→  1131→  {id:1,client:"Sophie K.",item:"Table basse Wax",stage:"production",amount:185000,dueDate:"2024-02-20",progress:60},
+   183→  1132→  {id:2,client:"Marc A.",item:"Commode Porto-Novo",stage:"en_attente",amount:385000,dueDate:"2024-03-05",progress:0},
+   184→  1133→  {id:3,client:"Lucie B.",item:"Bibliothèque Yoruba",stage:"expédiée",amount:295000,dueDate:"2024-01-30",progress:85},
+   185→  1134→  {id:4,client:"Kofi D.",item:"Table à manger",stage:"livree",amount:520000,dueDate:"2024-01-15",progress:100},
+   186→  1135→  {id:5,client:"Anne S.",item:"Miroir Raffia",stage:"en_attente",amount:95000,dueDate:"2024-02-28",progress:0},
+   187→  1136→  {id:6,client:"Bob M.",item:"Tabouret Tamtam ×2",stage:"production",amount:76000,dueDate:"2024-02-18",progress:30},
+   188→  1137→],
+   189→  1138→
+   190→  1139→/* ---- MESSAGES ---- */
+   191→  1140→conversations: [
+   192→  1141→  {id:1,with:"Kofi Akindélé",avatar:"https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=240&q=85",lastMsg:"La commande sera prête vendredi.",time:"10:32",unread:2,role:"artisan",messages:[
+   193→  1142→    {from:"them",text:"Bonjour ! J'ai bien reçu votre brief pour la table basse.",time:"09:00"},
+   194→  1143→    {from:"me",text:"Bonjour Kofi ! Merci. Avez-vous des questions sur les dimensions ?",time:"09:15"},
+   195→  1144→    {from:"them",text:"Les dimensions sont parfaites. Pour les tissus wax, préférez-vous le bleu Ankara ou le rouge Kente ?",time:"09:45"},
+   196→  1145→    {from:"me",text:"Je vais prendre le bleu Ankara, ça correspondra mieux à mon salon.",time:"10:00"},
+   197→  1146→    {from:"them",text:"La commande sera prête vendredi.",time:"10:32"},
+   198→  1147→  ]},
+   199→  1148→  {id:2,with:"Fatou Loko",avatar:"https://images.unsplash.com/photo-1507152927179-bc4ebfef7103?auto=format&fit=crop&crop=faces&w=240&q=85",lastMsg:"Voici les photos de mes lampes disponibles.",time:"Hier",unread:0,role:"artisan",messages:[
+   200→  1149→    {from:"them",text:"Bonjour ! Je suis Fatou, créatrice de luminaires. Voici les photos de mes lampes disponibles.",time:"Hier 14:00"},
+   201→
+   202→[showing lines 950-1149 of 4310; use offset=1150 with limit to continue reading]
