@@ -340,7 +340,7 @@ export function HomePage({
           <div className="flex flex-wrap justify-center gap-3">
             <button
               type="button"
-              onClick={() => onNavigate({ name: "marketplace" })}
+              onClick={() => onNavigate({ name: "brief" })}
               className="dedco-btn dedco-btn-light dedco-btn-xl"
             >
               Créer mon brief gratuit

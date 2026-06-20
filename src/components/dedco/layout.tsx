@@ -135,7 +135,7 @@ export function Navbar({
             </button>
             <button
               type="button"
-              onClick={() => onNavigate({ name: "marketplace" })}
+              onClick={() => onNavigate({ name: "brief" })}
               className="hidden sm:inline-flex dedco-btn dedco-btn-primary dedco-btn-sm ml-2"
             >
               Créer mon brief
@@ -197,7 +197,7 @@ export function Navbar({
               <button
                 type="button"
                 onClick={() => {
-                  onNavigate({ name: "marketplace" });
+                  onNavigate({ name: "brief" });
                   setMobileOpen(false);
                 }}
                 className="dedco-btn dedco-btn-primary w-full"

@@ -291,7 +291,7 @@ export function ProductPage({
 
           <button
             type="button"
-            onClick={() => onNavigate({ name: "marketplace" })}
+            onClick={() => onNavigate({ name: "brief" })}
             className="dedco-btn dedco-btn-secondary w-full mb-6"
           >
             Demander un brief personnalisé

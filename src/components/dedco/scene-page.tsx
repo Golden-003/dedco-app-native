@@ -187,7 +187,7 @@ export function ScenePage({
 
             <button
               type="button"
-              onClick={() => onNavigate({ name: "marketplace" })}
+              onClick={() => onNavigate({ name: "brief" })}
               className="dedco-btn dedco-btn-primary w-full mt-2"
             >
               <ShoppingBag size={18} /> Commander cette scène

@@ -94,6 +94,7 @@ export type Route =
   | { name: "scene"; slug: string }
   | { name: "artisan"; id: number }
   | { name: "designer"; id: number }
-  | { name: "favorites" };
+  | { name: "favorites" }
+  | { name: "brief" };
 
 export type CartItem = Product & { qty: number; selectedColor?: string };

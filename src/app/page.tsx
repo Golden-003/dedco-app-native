@@ -19,6 +19,7 @@ import {
   MagazinePage,
   FavoritesPage,
 } from "@/components/dedco/other-pages";
+import { BriefPage } from "@/components/dedco/brief-page";
 import { CartSidebar, SearchOverlay } from "@/components/dedco/cart-search";
 
 export default function Home() {
@@ -186,6 +187,8 @@ export default function Home() {
         );
       case "magazine":
         return <MagazinePage />;
+      case "brief":
+        return <BriefPage onNavigate={navigate} onBack={back} />;
       case "favorites":
         return (
           <FavoritesPage

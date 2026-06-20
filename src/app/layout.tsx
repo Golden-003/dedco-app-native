@@ -1,15 +1,7 @@
 import type { Metadata } from "next";
-import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
-
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
-});
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -51,7 +43,7 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <body
-        className={`${fraunces.variable} ${jakarta.variable} antialiased`}
+        className={`${jakarta.variable} antialiased`}
         style={{
           backgroundColor: "var(--bg-cream)",
           color: "var(--text-1)",
