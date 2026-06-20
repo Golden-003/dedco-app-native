@@ -58,7 +58,7 @@ export function InspirationsPage({
             onClick={() => setRoomFilter(room)}
             className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all border ${
               roomFilter === room
-                ? "bg-amber text-white border-amber"
+                ? "bg-terracotta text-white border-terracotta"
                 : "bg-white text-ink-soft border-border hover:border-ink-mute"
             }`}
           >
@@ -129,7 +129,7 @@ export function DesignersPage({
             onClick={() => setStyleFilter(style)}
             className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all border ${
               styleFilter === style
-                ? "bg-amber text-white border-amber"
+                ? "bg-terracotta text-white border-terracotta"
                 : "bg-white text-ink-soft border-border hover:border-ink-mute"
             }`}
           >
@@ -281,7 +281,7 @@ export function DesignerDetailPage({
                   <p className="text-xs text-ink-mute uppercase tracking-wide mb-1">
                     Tarif horaire
                   </p>
-                  <p className="font-display font-bold text-lg text-amber">
+                  <p className="font-display font-bold text-lg text-terracotta font-numeric">
                     {designer.hourlyRate.toLocaleString("fr-FR")} F
                   </p>
                   <p className="text-xs text-ink-mute">FCFA / heure</p>
@@ -374,11 +374,11 @@ export function ArtisanDetailPage({
             </p>
             <div className="flex flex-wrap gap-4 text-sm">
               <div>
-                <span className="font-bold text-amber">{artisan.rating}</span>{" "}
-                <span className="text-ink-mute">/ 5 · {artisan.reviews} avis</span>
+                <span className="font-bold text-terracotta font-numeric">{artisan.rating}</span>{" "}
+                <span className="text-ink-mute">/ 5 · <span className="font-numeric">{artisan.reviews}</span> avis</span>
               </div>
               <div>
-                <span className="font-bold">{artisan.trust}%</span>{" "}
+                <span className="font-bold font-numeric">{artisan.trust}%</span>{" "}
                 <span className="text-ink-mute">de confiance</span>
               </div>
             </div>
@@ -392,7 +392,7 @@ export function ArtisanDetailPage({
       </div>
 
       <div className="mb-6">
-        <h2 className="display-md mb-4">Réalisations ({artisan.portfolio.length})</h2>
+        <h2 className="display-md mb-4">Réalisations (<span className="font-numeric">{artisan.portfolio.length}</span>)</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {artisan.portfolio.map((img, i) => (
             <div
@@ -412,7 +412,7 @@ export function ArtisanDetailPage({
       {products.length > 0 && (
         <div>
           <h2 className="display-md mb-4">
-            Produits en vente ({products.length})
+            Produits en vente (<span className="font-numeric">{products.length}</span>)
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {products.map((p) => (
@@ -461,7 +461,7 @@ export function MagazinePage() {
           </div>
           <div className="p-6 sm:p-8 flex flex-col justify-center">
             <div className="flex items-center gap-2 text-xs text-ink-mute mb-3">
-              <span className="dedco-badge dedco-badge-amber-solid">
+              <span className="dedco-badge dedco-badge-terra-solid">
                 À la une
               </span>
               <span>·</span>

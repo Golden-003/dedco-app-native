@@ -131,17 +131,17 @@ export function HomePage({
               desc: "Sécurisé Fedapay",
             },
             {
-              icon: <Users size={22} className="text-amber" />,
+              icon: <Users size={22} className="text-terracotta" />,
               title: "Artisans vérifiés",
               desc: "KYC + niveaux N1-N4",
             },
             {
-              icon: <Truck size={22} className="text-terracotta" />,
+              icon: <Truck size={22} className="text-terracotta-lt" />,
               title: "Livraison 3 temps",
               desc: "Tracée photo par photo",
             },
             {
-              icon: <Sparkles size={22} className="text-amber-dark" />,
+              icon: <Sparkles size={22} className="text-amber" />,
               title: "Shop the Look",
               desc: "Scènes interactives",
             },
@@ -176,7 +176,7 @@ export function HomePage({
             <button
               type="button"
               onClick={() => onNavigate({ name: "inspirations" })}
-              className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold text-amber hover:text-amber-dark transition-colors"
+              className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold text-terracotta hover:text-terracotta-lt transition-colors"
             >
               Toutes les scènes <ArrowRight size={16} />
             </button>
@@ -239,7 +239,7 @@ export function HomePage({
             <button
               type="button"
               onClick={() => onNavigate({ name: "marketplace" })}
-              className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold text-amber hover:text-amber-dark transition-colors"
+              className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold text-terracotta hover:text-terracotta-lt transition-colors"
             >
               Voir tout <ArrowRight size={16} />
             </button>
@@ -324,7 +324,7 @@ export function HomePage({
         className="py-16 text-center text-white"
         style={{
           background:
-            "linear-gradient(135deg, var(--amber) 0%, var(--terracotta) 100%)",
+            "linear-gradient(135deg, var(--terracotta) 0%, var(--amber-dark) 100%)",
         }}
       >
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
@@ -373,7 +373,7 @@ export function HomePage({
             <button
               type="button"
               onClick={() => onNavigate({ name: "magazine" })}
-              className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold text-amber hover:text-amber-dark transition-colors"
+              className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold text-terracotta hover:text-terracotta-lt transition-colors"
             >
               Tous les articles <ArrowRight size={16} />
             </button>

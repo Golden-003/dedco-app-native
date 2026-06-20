@@ -82,14 +82,14 @@ export function ProductPage({
       >
         <button
           onClick={() => onNavigate({ name: "home" })}
-          className="hover:text-amber"
+          className="hover:text-terracotta"
         >
           Accueil
         </button>
         <ChevronRight size={12} />
         <button
           onClick={() => onNavigate({ name: "marketplace" })}
-          className="hover:text-amber"
+          className="hover:text-terracotta"
         >
           Marketplace
         </button>
@@ -118,7 +118,7 @@ export function ProductPage({
                   onClick={() => setSelectedImageIdx(i)}
                   className={`w-16 h-16 sm:w-20 sm:h-20 rounded-md overflow-hidden flex-shrink-0 border-2 transition-all ${
                     i === selectedImageIdx
-                      ? "border-amber"
+                      ? "border-terracotta"
                       : "border-border opacity-60 hover:opacity-100"
                   }`}
                   aria-label={`Voir l'image ${i + 1}`}
@@ -138,7 +138,7 @@ export function ProductPage({
         {/* Info */}
         <div>
           {product.badge && (
-            <span className="dedco-badge dedco-badge-amber-solid mb-3">
+            <span className="dedco-badge dedco-badge-terra-solid mb-3">
               {product.badge}
             </span>
           )}
@@ -147,13 +147,13 @@ export function ProductPage({
           {/* Rating */}
           <div className="flex items-center gap-2 mb-4 text-sm">
             <Stars rating={product.rating} size={16} />
-            <span className="font-semibold">{product.rating}</span>
+            <span className="font-semibold font-numeric">{product.rating}</span>
             <span className="text-ink-mute">·</span>
-            <span className="text-ink-soft">{product.reviews} avis</span>
+            <span className="text-ink-soft font-numeric">{product.reviews} avis</span>
             <span className="text-ink-mute">·</span>
             {product.stock > 0 ? (
               <span className="text-forest font-medium flex items-center gap-1">
-                <BadgeCheck size={14} /> En stock ({product.stock})
+                <BadgeCheck size={14} /> En stock (<span className="font-numeric">{product.stock}</span>)
               </span>
             ) : (
               <span className="text-terracotta font-medium">Sur commande</span>
@@ -162,16 +162,16 @@ export function ProductPage({
 
           {/* Price */}
           <div className="flex items-baseline gap-3 mb-6 pb-6 border-b border-border">
-            <span className="font-display font-bold text-3xl text-amber">
+            <span className="font-numeric font-bold text-3xl text-terracotta">
               {formatFCFA(product.price)}
             </span>
             {product.originalPrice && (
-              <span className="text-base text-ink-mute line-through">
+              <span className="text-base text-ink-mute line-through font-numeric">
                 {formatFCFA(product.originalPrice)}
               </span>
             )}
             {product.originalPrice && (
-              <span className="dedco-badge dedco-badge-terra">
+              <span className="dedco-badge dedco-badge-terra font-numeric">
                 -
                 {Math.round(
                   (1 - product.price / product.originalPrice) * 100,
@@ -219,7 +219,7 @@ export function ProductPage({
                     className={`px-3 py-1.5 text-xs rounded-md border-2 transition-all ${
                       selectedColor === color ||
                       (selectedColor === null && color === product.colors[0])
-                        ? "border-amber bg-amber-pale text-amber-dark font-semibold"
+                        ? "border-terracotta bg-terracotta-pale text-terracotta font-semibold"
                         : "border-border text-ink-soft hover:border-ink-mute"
                     }`}
                   >
@@ -308,7 +308,7 @@ export function ProductPage({
                 <item.icon
                   size={20}
                   className="mx-auto mb-1.5"
-                  style={{ color: "var(--amber)" }}
+                  style={{ color: "var(--terracotta)" }}
                 />
                 <p className="text-xs font-semibold leading-tight">
                   {item.label}
@@ -349,15 +349,15 @@ export function ProductPage({
               <div className="flex items-center gap-4 text-sm">
                 <div className="flex items-center gap-1">
                   <Stars rating={artisan.rating} size={14} />
-                  <span className="font-semibold">{artisan.rating}</span>
-                  <span className="text-ink-mute">
+                  <span className="font-semibold font-numeric">{artisan.rating}</span>
+                  <span className="text-ink-mute font-numeric">
                     ({artisan.reviews} avis)
                   </span>
                 </div>
                 <button
                   type="button"
                   onClick={() => onNavigate({ name: "artisan", id: artisan.id })}
-                  className="text-amber font-semibold text-sm hover:underline ml-auto"
+                  className="text-terracotta font-semibold text-sm hover:underline ml-auto"
                 >
                   Voir le profil →
                 </button>

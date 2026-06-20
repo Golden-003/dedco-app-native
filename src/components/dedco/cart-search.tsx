@@ -39,7 +39,7 @@ export function CartSidebar({
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-border bg-white">
           <div className="flex items-center gap-2">
-            <ShoppingBag size={20} className="text-amber" />
+            <ShoppingBag size={20} className="text-terracotta" />
             <h2 className="font-display font-bold text-lg">Mon panier</h2>
             {items.length > 0 && (
               <span className="dedco-badge dedco-badge-amber">
@@ -99,7 +99,7 @@ export function CartSidebar({
                         {item.selectedColor}
                       </p>
                     )}
-                    <p className="font-display font-bold text-sm text-amber mb-2">
+                    <p className="font-numeric font-bold text-sm text-terracotta mb-2">
                       {formatFCFA(item.price)}
                     </p>
                     <div className="flex items-center justify-between">
@@ -163,7 +163,7 @@ export function CartSidebar({
             </div>
             <div className="flex justify-between items-baseline pt-3 border-t border-border mb-3">
               <span className="font-display font-bold">Total</span>
-              <span className="font-display font-bold text-xl text-amber">
+              <span className="font-numeric font-bold text-xl text-terracotta">
                 {formatFCFA(total)}
               </span>
             </div>

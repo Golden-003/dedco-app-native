@@ -75,7 +75,7 @@ export function Navbar({
             className="font-display text-2xl font-bold tracking-tight flex-shrink-0"
             aria-label="Retour à l'accueil Dedco"
           >
-            Dedco<span className="text-amber">.</span>
+            Dedco<span className="text-terracotta">.</span>
           </button>
 
           {/* Desktop nav */}
@@ -87,7 +87,7 @@ export function Navbar({
                 onClick={() => onNavigate(link.route)}
                 className={`text-sm font-medium transition-colors relative pb-1 ${
                   isActive(link.route)
-                    ? "text-amber border-b-2 border-amber"
+                    ? "text-terracotta border-b-2 border-terracotta"
                     : "text-ink-soft hover:text-ink"
                 }`}
               >
@@ -128,7 +128,7 @@ export function Navbar({
             >
               <ShoppingBag size={20} />
               {cartCount > 0 && (
-                <span className="absolute top-0 right-0 min-w-[18px] h-[18px] px-1 rounded-full bg-amber text-white text-[10px] font-bold flex items-center justify-center">
+                <span className="absolute top-0 right-0 min-w-[18px] h-[18px] px-1 rounded-full bg-terracotta text-white text-[10px] font-bold flex items-center justify-center">
                   {cartCount}
                 </span>
               )}
@@ -163,7 +163,7 @@ export function Navbar({
           <div className="relative w-72 max-w-[80vw] bg-cream h-full dedco-slide-in-right flex flex-col">
             <div className="h-16 px-4 flex items-center justify-between border-b border-border">
               <span className="font-display text-xl font-bold">
-                Dedco<span className="text-amber">.</span>
+                Dedco<span className="text-terracotta">.</span>
               </span>
               <button
                 type="button"
@@ -185,7 +185,7 @@ export function Navbar({
                   }}
                   className={`w-full text-left px-4 py-3 text-base font-medium transition-colors ${
                     isActive(link.route)
-                      ? "text-amber bg-amber-pale/50"
+                      ? "text-terracotta bg-terracotta-pale/50"
                       : "text-ink hover:bg-warm"
                   }`}
                 >
@@ -285,7 +285,7 @@ export function BottomNav({
               type="button"
               onClick={() => onNavigate(item.route)}
               className={`flex flex-col items-center justify-center gap-0.5 py-2.5 transition-colors ${
-                active ? "text-amber" : "text-ink-mute"
+                active ? "text-terracotta" : "text-ink-mute"
               }`}
             >
               {item.icon}
@@ -316,7 +316,7 @@ export function Footer({
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-8 mb-10">
           <div className="col-span-2 lg:col-span-1">
             <div className="font-display text-2xl font-bold text-white mb-3">
-              Dedco<span className="text-amber">.</span>
+              Dedco<span className="text-terracotta">.</span>
             </div>
             <p className="text-sm leading-relaxed mb-4">
               La marketplace béninoise de l'artisanat d'aménagement intérieur.
@@ -327,7 +327,7 @@ export function Footer({
                 <button
                   key={s}
                   type="button"
-                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-amber hover:text-white transition-colors flex items-center justify-center text-[10px] font-semibold"
+                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-terracotta hover:text-white transition-colors flex items-center justify-center text-[10px] font-semibold"
                   aria-label={s}
                 >
                   {s[0]}
@@ -343,7 +343,7 @@ export function Footer({
                 <button
                   type="button"
                   onClick={() => onNavigate({ name: "marketplace" })}
-                  className="hover:text-amber transition-colors"
+                  className="hover:text-terracotta transition-colors"
                 >
                   Marketplace
                 </button>
@@ -352,7 +352,7 @@ export function Footer({
                 <button
                   type="button"
                   onClick={() => onNavigate({ name: "inspirations" })}
-                  className="hover:text-amber transition-colors"
+                  className="hover:text-terracotta transition-colors"
                 >
                   Inspirations
                 </button>
@@ -361,7 +361,7 @@ export function Footer({
                 <button
                   type="button"
                   onClick={() => onNavigate({ name: "designers" })}
-                  className="hover:text-amber transition-colors"
+                  className="hover:text-terracotta transition-colors"
                 >
                   Designers
                 </button>
@@ -370,7 +370,7 @@ export function Footer({
                 <button
                   type="button"
                   onClick={() => onNavigate({ name: "magazine" })}
-                  className="hover:text-amber transition-colors"
+                  className="hover:text-terracotta transition-colors"
                 >
                   Magazine
                 </button>
@@ -382,22 +382,22 @@ export function Footer({
             <h4 className="text-white font-semibold mb-3 text-sm">Artisans</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <button className="hover:text-amber transition-colors">
+                <button className="hover:text-terracotta transition-colors">
                   Devenir artisan
                 </button>
               </li>
               <li>
-                <button className="hover:text-amber transition-colors">
+                <button className="hover:text-terracotta transition-colors">
                   Niveaux de confiance
                 </button>
               </li>
               <li>
-                <button className="hover:text-amber transition-colors">
+                <button className="hover:text-terracotta transition-colors">
                   Abonnements
                 </button>
               </li>
               <li>
-                <button className="hover:text-amber transition-colors">
+                <button className="hover:text-terracotta transition-colors">
                   Centre d'aide
                 </button>
               </li>
@@ -408,22 +408,22 @@ export function Footer({
             <h4 className="text-white font-semibold mb-3 text-sm">À propos</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <button className="hover:text-amber transition-colors">
+                <button className="hover:text-terracotta transition-colors">
                   Notre mission
                 </button>
               </li>
               <li>
-                <button className="hover:text-amber transition-colors">
+                <button className="hover:text-terracotta transition-colors">
                   Sécurité & confiance
                 </button>
               </li>
               <li>
-                <button className="hover:text-amber transition-colors">
+                <button className="hover:text-terracotta transition-colors">
                   CGU & CGV
                 </button>
               </li>
               <li>
-                <button className="hover:text-amber transition-colors">
+                <button className="hover:text-terracotta transition-colors">
                   Contact
                 </button>
               </li>
@@ -445,7 +445,7 @@ export function Footer({
                 type="email"
                 placeholder="Votre email"
                 aria-label="Votre adresse email"
-                className="flex-1 min-w-0 px-3 py-2 rounded-md bg-white/10 text-white text-sm placeholder-white/50 border border-white/20 focus:outline-none focus:border-amber"
+                className="flex-1 min-w-0 px-3 py-2 rounded-md bg-white/10 text-white text-sm placeholder-white/50 border border-white/20 focus:outline-none focus:border-terracotta"
               />
               <button
                 type="submit"
@@ -460,13 +460,13 @@ export function Footer({
         <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
           <p>© 2026 Dedco · Cotonou, Bénin · Tous droits réservés</p>
           <div className="flex gap-4">
-            <button className="hover:text-amber transition-colors">
+            <button className="hover:text-terracotta transition-colors">
               Mentions légales
             </button>
-            <button className="hover:text-amber transition-colors">
+            <button className="hover:text-terracotta transition-colors">
               Confidentialité
             </button>
-            <button className="hover:text-amber transition-colors">
+            <button className="hover:text-terracotta transition-colors">
               Cookies
             </button>
           </div>
@@ -485,7 +485,7 @@ export function BackButton({ onBack }: { onBack: () => void }) {
     <button
       type="button"
       onClick={onBack}
-      className="inline-flex items-center gap-1 text-sm text-ink-soft hover:text-amber transition-colors mb-4 font-medium"
+      className="inline-flex items-center gap-1 text-sm text-ink-soft hover:text-terracotta transition-colors mb-4 font-medium"
     >
       <ChevronLeft size={16} /> Retour
     </button>

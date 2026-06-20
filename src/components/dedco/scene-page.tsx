@@ -79,16 +79,16 @@ export function ScenePage({
                 >
                   <span
                     className={`block rounded-full bg-white shadow-lg hotspot-dot ${
-                      isActive ? "ring-4 ring-amber/40" : ""
+                      isActive ? "ring-4 ring-terracotta/40" : ""
                     }`}
                     style={{
                       width: 28,
                       height: 28,
-                      border: "2px solid var(--amber)",
+                      border: "2px solid var(--terracotta)",
                     }}
                   />
                   <span
-                    className="absolute left-1/2 top-full mt-1 -translate-x-1/2 px-2 py-0.5 rounded text-[10px] font-semibold bg-ink text-white whitespace-nowrap pointer-events-none"
+                    className="absolute left-1/2 top-full mt-1 -translate-x-1/2 px-2 py-0.5 rounded text-[10px] font-semibold bg-ink text-white whitespace-nowrap pointer-events-none font-numeric"
                   >
                     {formatFCFA(product.price)}
                   </span>
@@ -102,7 +102,7 @@ export function ScenePage({
                 onClick={() => setIsSaved((s) => !s)}
                 className={`w-10 h-10 rounded-full flex items-center justify-center backdrop-blur transition-all ${
                   isSaved
-                    ? "bg-white text-amber"
+                    ? "bg-white text-terracotta"
                     : "bg-white/60 text-ink hover:bg-white"
                 }`}
                 aria-label={isSaved ? "Retirer des favoris" : "Sauvegarder"}
@@ -289,7 +289,7 @@ export function ScenePage({
                 </div>
                 <div className="p-5">
                   {product.badge && (
-                    <span className="dedco-badge dedco-badge-amber-solid mb-2">
+                    <span className="dedco-badge dedco-badge-terra-solid mb-2">
                       {product.badge}
                     </span>
                   )}
@@ -300,11 +300,11 @@ export function ScenePage({
                     {product.desc}
                   </p>
                   <div className="flex items-baseline gap-2 mb-4">
-                    <span className="font-display font-bold text-xl text-amber">
+                    <span className="font-numeric font-bold text-xl text-terracotta">
                       {formatFCFA(product.price)}
                     </span>
                     {product.originalPrice && (
-                      <span className="text-sm text-ink-mute line-through">
+                      <span className="text-sm text-ink-mute line-through font-numeric">
                         {formatFCFA(product.originalPrice)}
                       </span>
                     )}

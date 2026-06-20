@@ -57,19 +57,19 @@
   --color-card-foreground: var(--text-1);
   --color-popover: var(--bg-card);
   --color-popover-foreground: var(--text-1);
-  --color-primary: var(--amber);
+  --color-primary: var(--terracotta);
   --color-primary-foreground: #ffffff;
-  --color-secondary: var(--amber-pale);
-  --color-secondary-foreground: var(--amber-dark);
+  --color-secondary: var(--terracotta-pale);
+  --color-secondary-foreground: var(--terracotta);
   --color-muted: var(--bg-warm);
   --color-muted-foreground: var(--text-2);
   --color-accent: var(--forest-pale);
   --color-accent-foreground: var(--forest);
-  --color-destructive: var(--terracotta);
+  --color-destructive: #7a2c1c;
   --color-destructive-foreground: #ffffff;
   --color-border: var(--border);
   --color-input: var(--border);
-  --color-ring: var(--amber);
+  --color-ring: var(--terracotta);
 
   --color-amber: var(--amber);
   --color-amber-dark: var(--amber-dark);
@@ -88,7 +88,7 @@
   --color-ink-mute: var(--text-3);
 
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Quache", var(--font-fraunces), Georgia, serif;
+  --font-display: "Quache", Georgia, serif;
 
   --radius-sm: 4px;
   --radius-md: 6px;
@@ -101,18 +101,18 @@
   --shadow-md: 0 4px 12px rgba(30, 24, 19, 0.1), 0 1px 4px rgba(30, 24, 19, 0.06);
   --shadow-lg: 0 8px 24px rgba(30, 24, 19, 0.12), 0 2px 8px rgba(30, 24, 19, 0.07);
   --shadow-xl: 0 16px 48px rgba(30, 24, 19, 0.16), 0 4px 16px rgba(30, 24, 19, 0.08);
-  --shadow-amber: 0 4px 16px rgba(191, 121, 59, 0.3);
+  --shadow-primary: 0 4px 16px rgba(166, 68, 46, 0.3);
 }
 
 :root {
   /* Palette Dedco OFFICIELLE (image fournie) */
+  --terracotta: #a6442e;
+  --terracotta-lt: #c4614a;
+  --terracotta-pale: #faeae6;
   --amber: #bf793b;
   --amber-dark: #9a5a1f;
   --amber-light: #d4954a;
   --amber-pale: #f5e6d3;
-  --terracotta: #a6442e;
-  --terracotta-lt: #c4614a;
-  --terracotta-pale: #faeae6;
   --forest: #548c45;
   --forest-lt: #6ba35a;
   --forest-pale: #e6f2e3;
@@ -149,6 +149,15 @@ h1, h2, h3, h4, h5, h6,
   letter-spacing: -0.01em;
 }
 
+/* Numeric utility — uses Plus Jakarta Sans for clean digit rendering.
+   Editorial pattern: serif for words, sans-serif for numbers.
+   Applied to prices, ratings, stats, amounts. */
+.font-numeric {
+  font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif !important;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  letter-spacing: -0.005em;
+}
+
 /* ============================================================
    DEDCO COMPOSANTS — Utilitaires custom
    ============================================================ */
@@ -160,27 +169,27 @@ h1, h2, h3, h4, h5, h6,
     border: 2px solid transparent;
   }
   .dedco-btn:active { transform: scale(0.98); }
-  .dedco-btn:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+  .dedco-btn:focus-visible { outline: 3px solid var(--terracotta); outline-offset: 2px; }
   .dedco-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
   .dedco-btn-primary {
-    background: var(--amber);
+    background: var(--terracotta);
     color: #fff;
-    border-color: var(--amber);
+    border-color: var(--terracotta);
   }
   .dedco-btn-primary:hover {
-    background: var(--amber-dark);
-    border-color: var(--amber-dark);
-    box-shadow: var(--shadow-amber);
+    background: #8a3522;
+    border-color: #8a3522;
+    box-shadow: var(--shadow-primary);
     transform: translateY(-1px);
   }
 
   .dedco-btn-secondary {
     background: transparent;
-    color: var(--amber);
-    border-color: var(--amber);
+    color: var(--terracotta);
+    border-color: var(--terracotta);
   }
-  .dedco-btn-secondary:hover { background: var(--amber-pale); }
+  .dedco-btn-secondary:hover { background: var(--terracotta-pale); }
 
   .dedco-btn-ghost {
     background: transparent;
@@ -200,6 +209,12 @@ h1, h2, h3, h4, h5, h6,
     background: var(--terracotta);
     color: #fff;
     border-color: var(--terracotta);
+  }
+
+  .dedco-btn-amber {
+    background: var(--amber);
+    color: #fff;
+    border-color: var(--amber);
   }
 
   .dedco-btn-forest {
@@ -224,6 +239,7 @@ h1, h2, h3, h4, h5, h6,
   .dedco-badge-dark { background: var(--text-1); color: #fff; }
   .dedco-badge-white { background: rgba(255, 255, 255, 0.95); color: var(--text-1); box-shadow: var(--shadow-sm); }
   .dedco-badge-amber-solid { background: var(--amber); color: #fff; }
+  .dedco-badge-terra-solid { background: var(--terracotta); color: #fff; }
 
   /* Cards */
   .dedco-card {
@@ -246,7 +262,7 @@ h1, h2, h3, h4, h5, h6,
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--amber);
+    color: var(--terracotta);
     margin-bottom: 8px;
   }
 

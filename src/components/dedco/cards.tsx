@@ -36,8 +36,8 @@ export function LevelBadge({ level }: { level: string }) {
   const styles: Record<string, string> = {
     N1: "dedco-badge-gray",
     N2: "dedco-badge-forest",
-    N3: "dedco-badge-amber",
-    N4: "dedco-badge-amber-solid",
+    N3: "dedco-badge-terra",
+    N4: "dedco-badge-terra-solid",
   };
   return <span className={`dedco-badge ${styles[level] || ""}`}>{level}</span>;
 }
@@ -86,7 +86,7 @@ export function ProductCard({
       <div className="relative aspect-square overflow-hidden bg-warm">
         {product.badge && (
           <div className="absolute top-2.5 left-2.5 z-10 flex flex-col gap-1">
-            <span className="dedco-badge dedco-badge-amber-solid">
+            <span className="dedco-badge dedco-badge-terra-solid">
               {product.badge}
             </span>
           </div>
@@ -130,7 +130,7 @@ export function ProductCard({
           {product.name}
         </h3>
         <div className="flex items-baseline gap-1.5">
-          <span className="font-display font-bold text-base text-amber">
+          <span className="font-numeric font-bold text-base text-terracotta">
             {formatFCFA(product.price)}
           </span>
           {product.originalPrice && (
@@ -142,7 +142,7 @@ export function ProductCard({
         <div className="flex items-center justify-between mt-2.5">
           <div className="flex items-center gap-1 text-xs text-ink-soft">
             <Stars rating={product.rating} size={12} />
-            <span>
+            <span className="font-numeric">
               {product.rating} ({product.reviews})
             </span>
           </div>
@@ -311,11 +311,11 @@ export function ArtisanCard({
       </div>
       <div className="flex gap-4 mb-3 text-xs text-ink-soft">
         <div>
-          <span className="font-bold text-ink">{artisan.rating}</span> ·{" "}
-          {artisan.reviews} avis
+          <span className="font-bold text-ink font-numeric">{artisan.rating}</span> ·{" "}
+          <span className="font-numeric">{artisan.reviews}</span> avis
         </div>
         <div>
-          <span className="font-bold text-ink">{artisan.experience}</span>{" "}
+          <span className="font-bold text-ink font-numeric">{artisan.experience}</span>{" "}
           d'expérience
         </div>
       </div>
@@ -390,12 +390,12 @@ export function DesignerCard({
         <div className="flex items-center gap-3 text-xs text-ink-soft mb-3">
           <div className="flex items-center gap-1">
             <Stars rating={designer.rating} size={11} />
-            <span>
+            <span className="font-numeric">
               {designer.rating} ({designer.reviews})
             </span>
           </div>
           <span>·</span>
-          <span>{designer.projects} projets</span>
+          <span className="font-numeric">{designer.projects} projets</span>
           <span>·</span>
           <span>{designer.city}</span>
         </div>
@@ -405,7 +405,7 @@ export function DesignerCard({
           </span>
           <span className="text-xs text-ink-soft">
             Dès{" "}
-            <strong className="text-amber">
+            <strong className="text-terracotta font-numeric">
               {formatFCFA(designer.hourlyRate)}
             </strong>
             /h
@@ -486,7 +486,7 @@ export function CategoryCard({
     <button
       type="button"
       onClick={() => onOpen(category.slug)}
-      className="dedco-card p-4 sm:p-5 text-center hover:shadow-lg hover:border-amber transition-all cursor-pointer group"
+      className="dedco-card p-4 sm:p-5 text-center hover:shadow-lg hover:border-terracotta transition-all cursor-pointer group"
     >
       <div className="text-3xl sm:text-4xl mb-2 group-hover:scale-110 transition-transform">
         {category.icon}
@@ -494,7 +494,7 @@ export function CategoryCard({
       <h3 className="font-display font-semibold text-sm sm:text-base">
         {category.name}
       </h3>
-      <p className="text-xs text-ink-mute mt-0.5">{category.count} produits</p>
+      <p className="text-xs text-ink-mute mt-0.5 font-numeric">{category.count} produits</p>
     </button>
   );
 }
