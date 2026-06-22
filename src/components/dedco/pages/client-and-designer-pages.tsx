@@ -25,8 +25,9 @@ import {
   Upload,
   Video,
   MapPin,
+  AlertTriangle,
 } from "lucide-react";
-import { useDedcoStore } from "@/lib/store";
+import { useDedcoStore, type ProjectScope } from "@/lib/store";
 import { formatFCFA, DESIGNERS, ARTISANS, PRODUCTS, getProduct } from "@/lib/dedco-data";
 
 // ============================================================
@@ -510,16 +511,19 @@ export function ClientProjetsPage() {
 }
 
 // ============================================================
-// PAGE: brief-designer — Formulaire brief designer 5 étapes
+// PAGE: brief-designer — Type d'accompagnement + brief adaptatif 6 étapes
 // ============================================================
 
 export function BriefDesignerPage({ designerId }: { designerId: number }) {
   const navigate = useDedcoStore((s) => s.navigate);
   const designer = DESIGNERS.find((d) => d.id === designerId) || DESIGNERS[0];
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0); // 0 = type accompagnement, 1-5 = brief
   const [submitted, setSubmitted] = useState(false);
 
-  // Step 1 — Votre projet
+  // Étape 0 — Type d'accompagnement (PIVOT ÉCONOMIQUE)
+  const [scope, setScope] = useState<ProjectScope | "">("");
+
+  // Étape 1 — Votre projet
   const [besoinType, setBesoinType] = useState<string>("");
   const [lieuType, setLieuType] = useState<string>("");
   const [piece, setPiece] = useState("");
@@ -527,20 +531,26 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
   const [ville, setVille] = useState("");
   const [quartier, setQuartier] = useState("");
 
-  // Step 2 — Votre besoin
+  // Étape 2 — Votre besoin
   const [souhaits, setSouhaits] = useState("");
   const [style, setStyle] = useState("");
   const [contraintes, setContraintes] = useState("");
   const [budget, setBudget] = useState<string>("");
   const [echeance, setEcheance] = useState<string>("");
 
-  // Step 3 — Inspirations
+  // Étape 3 — Inspirations
   const [photos, setPhotos] = useState<string[]>([]);
   const [inspirations, setInspirations] = useState<string[]>([]);
   const [commentaire, setCommentaire] = useState("");
 
-  // Step 4 — Premier échange souhaité (CENTRAL)
+  // Étape 4 — Premier échange (filtré par scope)
   const [format, setFormat] = useState<"distance" | "visite" | "recommandation" | "">("");
+
+  // Champs avancés (full_project uniquement)
+  const [planLogement, setPlanLogement] = useState<string[]>([]);
+  const [espacesMultiples, setEspacesMultiples] = useState("");
+  const [contraintesTechniques, setContraintesTechniques] = useState("");
+  const [niveauSuivi, setNiveauSuivi] = useState<string>("");
 
   const BESOIN_TYPES = [
     "Conseils décoration",
@@ -551,17 +561,89 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
     "Autre",
   ];
   const LIEU_TYPES = ["Maison", "Appartement", "Studio", "Bureau", "Commerce", "Restaurant / hôtel", "Autre"];
-  const BUDGETS = [
-    "moins de 250 000 FCFA",
-    "250 000 à 750 000 FCFA",
-    "750 000 à 1 500 000 FCFA",
-    "plus de 1 500 000 FCFA",
-    "je ne sais pas encore",
-  ];
+  const BUDGETS_QUICK = ["moins de 50 000 FCFA", "50 000 - 150 000 FCFA", "150 000 - 300 000 FCFA", "je ne sais pas encore"];
+  const BUDGETS_ROOM = ["moins de 250 000 FCFA", "250 000 à 750 000 FCFA", "750 000 à 1 500 000 FCFA", "plus de 1 500 000 FCFA", "je ne sais pas encore"];
+  const BUDGETS_FULL = ["moins de 500 000 FCFA", "500 000 - 2 000 000 FCFA", "2 000 000 - 5 000 000 FCFA", "plus de 5 000 000 FCFA", "sur devis"];
   const ECHEANCES = ["< 1 mois", "1-3 mois", "3-6 mois", "> 6 mois", "Pas pressé"];
+  const NIVEAUX_SUIVI = ["Conseil ponctuel", "Suivi régulier", "Coordination complète chantier"];
+
+  // Config selon le scope choisi
+  const SCOPE_CONFIG: Record<ProjectScope, {
+    title: string;
+    desc: string;
+    icon: string;
+    triggers: string[];
+    priceLabel: string;
+    formats: { id: "distance" | "visite" | "recommandation"; label: string; desc: string; default?: boolean; recommended?: boolean }[];
+    needsLocation: boolean;
+    needsSurface: boolean;
+    needsPlan: boolean;
+    needsMultiSpaces: boolean;
+    budgets: string[];
+  }> = {
+    quick_advice: {
+      title: "Conseil rapide",
+      desc: "Réponses à des questions ponctuelles, ajustements décoratifs, optimisation d'un espace existant. Sans engagement lourd.",
+      icon: "💡",
+      triggers: ["Cadrage léger", "Possible 100% à distance", "Peu ou pas de visite", "Livrable simple (recommandations)"],
+      priceLabel: "À partir de 15 000 – 50 000 FCFA",
+      formats: [
+        { id: "distance", label: "À distance (visio)", desc: "Échange par visio ou appel. Idéal pour conseil rapide.", default: true, recommended: true },
+        { id: "recommandation", label: "Recommandation designer", desc: "Le designer choisira le format adapté." },
+      ],
+      needsLocation: false,
+      needsSurface: false,
+      needsPlan: false,
+      needsMultiSpaces: false,
+      budgets: BUDGETS_QUICK,
+    },
+    room_design: {
+      title: "Aménagement d'un espace",
+      desc: "Une pièce ou zone définie. Transformation ou optimisation. Choix mobilier + décoration. Possibilité de visite.",
+      icon: "🛋️",
+      triggers: ["Cadrage standard obligatoire", "Visite possible si nécessaire", "Proposition complète après cadrage"],
+      priceLabel: "À partir de 30 000 – 150 000 FCFA (cadrage + projet)",
+      formats: [
+        { id: "distance", label: "À distance (visio)", desc: "Échange par visio ou appel." },
+        { id: "visite", label: "Visite sur site", desc: "Le designer découvre l'espace avant de proposer." },
+        { id: "recommandation", label: "Recommandation designer", desc: "Le designer choisira le format le plus pertinent.", default: true, recommended: true },
+      ],
+      needsLocation: true,
+      needsSurface: true,
+      needsPlan: false,
+      needsMultiSpaces: false,
+      budgets: BUDGETS_ROOM,
+    },
+    full_project: {
+      title: "Projet complet",
+      desc: "Maison / appartement entier / bureau / commerce. Conception globale. Coordination possible. Forte probabilité de visite terrain.",
+      icon: "🏠",
+      triggers: ["Cadrage structuré obligatoire", "Visite quasi systématique si terrain", "Proposition détaillée obligatoire"],
+      priceLabel: "À partir de 100 000 FCFA + projet sur devis",
+      formats: [
+        { id: "visite", label: "Visite sur site (fortement suggérée)", desc: "Cadrage terrain prioritaire pour projet complet.", default: true, recommended: true },
+        { id: "recommandation", label: "Recommandation designer", desc: "Le designer confirmera la nécessité de visite." },
+      ],
+      needsLocation: true,
+      needsSurface: true,
+      needsPlan: true,
+      needsMultiSpaces: true,
+      budgets: BUDGETS_FULL,
+    },
+  };
+
+  const scopeConfig = scope ? SCOPE_CONFIG[scope] : null;
+  const TOTAL_STEPS = 5; // brief steps (0 = type, 1-5 = brief)
+  const TOTAL_PROGRESS = 6; // 0 + 5 brief steps
 
   const canNext = () => {
-    if (step === 1) return besoinType && lieuType && piece && ville;
+    if (step === 0) return scope !== "";
+    if (step === 1) {
+      if (!besoinType) return false;
+      if (scopeConfig?.needsLocation && (!ville || !quartier)) return false;
+      if (scopeConfig?.needsSurface && !piece) return false;
+      return true;
+    }
     if (step === 2) return souhaits.length >= 10 && budget;
     if (step === 3) return true;
     if (step === 4) return format !== "";
@@ -576,8 +658,11 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
           <CheckCircle2 size={40} className="text-[var(--forest)]" />
         </div>
         <h1 className="display-xl mb-3">Brief envoyé !</h1>
-        <p className="text-sm text-[var(--text-2)] mb-6">
-          Votre brief a été transmis à <strong>{designer.name}</strong>. Vous recevrez une proposition de cadrage sous 24-48h. Aucun paiement à cette étape.
+        <p className="text-sm text-[var(--text-2)] mb-2">
+          Votre brief <strong>{scopeConfig?.title}</strong> a été transmis à <strong>{designer.name}</strong>.
+        </p>
+        <p className="text-xs text-[var(--text-3)] mb-6">
+          Vous recevrez une proposition de cadrage sous 24-48h. Aucun paiement à cette étape.
         </p>
         <button
           onClick={() => navigate({ page: "designer-projet-attente", projectId: "BRF-2026-001" })}
@@ -603,9 +688,9 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
         </div>
       </div>
 
-      {/* Stepper 5 étapes */}
+      {/* Stepper 0-5 (6 steps total) */}
       <div className="flex items-center justify-between mb-6">
-        {[1, 2, 3, 4, 5].map((n) => (
+        {[0, 1, 2, 3, 4, 5].map((n) => (
           <div key={n} className="flex items-center flex-1 last:flex-none">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 ${
               n < step ? "bg-[var(--forest)] text-white" : n === step ? "bg-[var(--amber)] text-white" : "bg-[var(--bg-warm)] text-[var(--text-3)]"
@@ -617,14 +702,63 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
         ))}
       </div>
       <p className="text-xs text-[var(--text-3)] mb-5 font-numeric">
-        Étape {step}/5 — {["Votre projet", "Votre besoin", "Inspirations", "Premier échange", "Envoi"][step - 1]}
+        Étape {step}/{TOTAL_PROGRESS} — {step === 0 ? "Type d'accompagnement" : ["Votre projet", "Votre besoin", "Inspirations", "Premier échange", "Envoi"][step - 1]}
       </p>
 
       <div className="dedco-card p-5 mb-5">
-        {/* STEP 1 — Votre projet */}
-        {step === 1 && (
+        {/* STEP 0 — Type d'accompagnement (PIVOT) */}
+        {step === 0 && (
           <div>
-            <h2 className="display-sm mb-4">Votre projet</h2>
+            <h2 className="display-sm mb-2">Quel type de projet souhaitez-vous réaliser ?</h2>
+            <p className="text-xs text-[var(--text-3)] mb-4">Cela permet au designer d'adapter son approche, son prix et le niveau d'intervention dès le début.</p>
+            <div className="space-y-3">
+              {(Object.keys(SCOPE_CONFIG) as ProjectScope[]).map((key) => {
+                const cfg = SCOPE_CONFIG[key];
+                const active = scope === key;
+                return (
+                  <button
+                    key={key}
+                    onClick={() => setScope(key)}
+                    className={`w-full p-5 rounded-lg border-2 text-left transition-all ${
+                      active ? "border-[var(--amber)] bg-[var(--amber-pale)]/30" : "border-[var(--border)] hover:border-[var(--text-3)]"
+                    }`}
+                  >
+                    <div className="flex items-start gap-3 mb-2">
+                      <span className="text-2xl">{cfg.icon}</span>
+                      <div className="flex-1">
+                        <p className="font-display font-semibold text-base">{cfg.title}</p>
+                        <p className="text-xs text-[var(--text-3)] mt-0.5">{cfg.desc}</p>
+                      </div>
+                      {active && <Check size={18} className="text-[var(--amber)] flex-shrink-0" />}
+                    </div>
+                    <div className="ml-9">
+                      <p className="font-numeric font-bold text-sm text-[var(--amber)] mb-1">{cfg.priceLabel}</p>
+                      <div className="flex flex-wrap gap-1">
+                        {cfg.triggers.map((t) => (
+                          <span key={t} className="dedco-badge dedco-badge-gray text-[10px]">{t}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+            <div className="mt-4 p-3 bg-[var(--bg-warm)] rounded-md flex items-start gap-2">
+              <AlertTriangle size={14} className="text-[var(--amber)] flex-shrink-0 mt-0.5" />
+              <p className="text-xs text-[var(--text-2)]">
+                <strong>Règle d'or :</strong> Aucun projet ne peut être traité sans type d'accompagnement défini. Ce choix pilote toute la suite (brief, format d'échange, prix, cadrage).
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* STEP 1 — Votre projet (adapté selon scope) */}
+        {step === 1 && scopeConfig && (
+          <div>
+            <h2 className="display-sm mb-1">Votre projet</h2>
+            <p className="text-xs text-[var(--text-3)] mb-4 flex items-center gap-1">
+              <span className="dedco-badge dedco-badge-amber">{scopeConfig.icon} {scopeConfig.title}</span>
+            </p>
             <div className="space-y-4">
               <div>
                 <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Type de besoin</label>
@@ -640,35 +774,58 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
                   {LIEU_TYPES.map((l) => <option key={l}>{l}</option>)}
                 </select>
               </div>
-              <div className="grid sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Pièce / espace concerné</label>
-                  <input value={piece} onChange={(e) => setPiece(e.target.value)} placeholder="Ex: Salon" className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white" />
+              {/* Champs adaptatifs */}
+              {(scopeConfig.needsSurface || true) && (
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">
+                      Pièce / espace concerné {!scopeConfig.needsSurface && <span className="text-[var(--text-3)] italic">(facultatif)</span>}
+                    </label>
+                    <input value={piece} onChange={(e) => setPiece(e.target.value)} placeholder="Ex: Salon" className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white" />
+                  </div>
+                  {scopeConfig.needsSurface && (
+                    <div>
+                      <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Surface approx. (m²)</label>
+                      <input type="number" value={surface} onChange={(e) => setSurface(Number(e.target.value))} className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white font-numeric" />
+                    </div>
+                  )}
                 </div>
+              )}
+              {/* Espaces multiples (full_project) */}
+              {scopeConfig.needsMultiSpaces && (
                 <div>
-                  <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Surface approx. (m²) — facultatif</label>
-                  <input type="number" value={surface} onChange={(e) => setSurface(Number(e.target.value))} className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white font-numeric" />
+                  <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Espaces à aménager (plusieurs possibles)</label>
+                  <input value={espacesMultiples} onChange={(e) => setEspacesMultiples(e.target.value)} placeholder="Ex: Salon, cuisine, 2 chambres" className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white" />
                 </div>
-              </div>
-              <div className="grid sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Ville</label>
-                  <input value={ville} onChange={(e) => setVille(e.target.value)} placeholder="Cotonou" className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white" />
+              )}
+              {/* Localisation (sauf quick_advice) */}
+              {scopeConfig.needsLocation && (
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Ville</label>
+                    <input value={ville} onChange={(e) => setVille(e.target.value)} placeholder="Cotonou" className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white" />
+                  </div>
+                  <div>
+                    <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Quartier</label>
+                    <input value={quartier} onChange={(e) => setQuartier(e.target.value)} placeholder="Akpakpa" className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white" />
+                  </div>
                 </div>
-                <div>
-                  <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Quartier</label>
-                  <input value={quartier} onChange={(e) => setQuartier(e.target.value)} placeholder="Akpakpa" className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white" />
-                </div>
-              </div>
+              )}
+              {!scopeConfig.needsLocation && (
+                <p className="text-xs text-[var(--text-3)] italic">💡 Pour un conseil rapide, la localisation n'est pas obligatoire.</p>
+              )}
               <p className="text-xs text-[var(--text-3)] italic">L'adresse exacte ne sera pas demandée à cette étape.</p>
             </div>
           </div>
         )}
 
-        {/* STEP 2 — Votre besoin */}
-        {step === 2 && (
+        {/* STEP 2 — Votre besoin (adapté selon scope) */}
+        {step === 2 && scopeConfig && (
           <div>
-            <h2 className="display-sm mb-4">Votre besoin</h2>
+            <h2 className="display-sm mb-1">Votre besoin</h2>
+            <p className="text-xs text-[var(--text-3)] mb-4">
+              <span className="dedco-badge dedco-badge-amber">{scopeConfig.icon} {scopeConfig.title}</span>
+            </p>
             <div className="space-y-4">
               <div>
                 <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Ce que vous souhaitez changer</label>
@@ -680,14 +837,30 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
                 <input value={style} onChange={(e) => setStyle(e.target.value)} placeholder="Ex: Afro-contemporain, minimaliste..." className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white" />
               </div>
               <div>
-                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Contraintes connues (facultatif)</label>
+                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Contraintes connues {!scopeConfig.needsPlan && <span className="italic">(facultatif)</span>}</label>
                 <input value={contraintes} onChange={(e) => setContraintes(e.target.value)} placeholder="Ex: Budget limité, animaux, etc." className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white" />
               </div>
+              {/* Contraintes techniques (full_project) */}
+              {scopeConfig.needsPlan && (
+                <>
+                  <div>
+                    <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Contraintes techniques (facultatif)</label>
+                    <input value={contraintesTechniques} onChange={(e) => setContraintesTechniques(e.target.value)} placeholder="Ex: Plomberie à refaire, électricité ancienne..." className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white" />
+                  </div>
+                  <div>
+                    <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Niveau de suivi souhaité</label>
+                    <select value={niveauSuivi} onChange={(e) => setNiveauSuivi(e.target.value)} className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white">
+                      <option value="">— Sélectionnez —</option>
+                      {NIVEAUX_SUIVI.map((n) => <option key={n}>{n}</option>)}
+                    </select>
+                  </div>
+                </>
+              )}
               <div>
                 <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Budget global estimatif</label>
                 <select value={budget} onChange={(e) => setBudget(e.target.value)} className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white">
                   <option value="">— Sélectionnez —</option>
-                  {BUDGETS.map((b) => <option key={b}>{b}</option>)}
+                  {scopeConfig.budgets.map((b) => <option key={b}>{b}</option>)}
                 </select>
               </div>
               <div>
@@ -701,11 +874,29 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
           </div>
         )}
 
-        {/* STEP 3 — Inspirations */}
-        {step === 3 && (
+        {/* STEP 3 — Inspirations (+ plan pour full_project) */}
+        {step === 3 && scopeConfig && (
           <div>
-            <h2 className="display-sm mb-4">Inspirations</h2>
+            <h2 className="display-sm mb-1">Inspirations</h2>
+            <p className="text-xs text-[var(--text-3)] mb-4">
+              <span className="dedco-badge dedco-badge-amber">{scopeConfig.icon} {scopeConfig.title}</span>
+            </p>
             <div className="space-y-4">
+              {/* Plan du logement (full_project) */}
+              {scopeConfig.needsPlan && (
+                <div>
+                  <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Plan du logement (facultatif)</label>
+                  <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-6 text-center cursor-pointer hover:border-[var(--amber)] bg-white">
+                    <Upload size={24} className="mx-auto text-[var(--text-3)] mb-2" />
+                    <p className="text-sm font-semibold">Ajouter un plan</p>
+                    <p className="text-xs text-[var(--text-3)]">{planLogement.length} fichier(s)</p>
+                    <input type="file" multiple accept="image/*,application/pdf" className="sr-only" onChange={(e) => {
+                      const files = Array.from(e.target.files || []);
+                      setPlanLogement(files.map((f) => URL.createObjectURL(f)));
+                    }} />
+                  </label>
+                </div>
+              )}
               <div>
                 <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Photos de votre espace</label>
                 <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-6 text-center cursor-pointer hover:border-[var(--amber)] bg-white">
@@ -738,38 +929,48 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
           </div>
         )}
 
-        {/* STEP 4 — Premier échange souhaité (ÉTAPE CENTRALE) */}
-        {step === 4 && (
+        {/* STEP 4 — Premier échange (filtré par scope) */}
+        {step === 4 && scopeConfig && (
           <div>
             <h2 className="display-sm mb-2">Comment souhaitez-vous commencer ?</h2>
-            <p className="text-xs text-[var(--text-3)] mb-4">Cette étape détermine le format du premier échange avec le designer.</p>
+            <p className="text-xs text-[var(--text-3)] mb-4">
+              <span className="dedco-badge dedco-badge-amber">{scopeConfig.icon} {scopeConfig.title}</span>
+              <span className="ml-2">Format filtré selon votre type de projet.</span>
+            </p>
             <div className="space-y-3">
-              {[
-                { id: "distance", label: "À distance", desc: "Échange par appel, visio ou messagerie. Adapté pour un premier avis ou un projet simple.", icon: <Video size={24} /> },
-                { id: "visite", label: "Visite sur site souhaitée", desc: "Vous souhaitez que le designer découvre l'espace avant de proposer la mission.", icon: <MapPin size={24} /> },
-                { id: "recommandation", label: "Je laisse le designer recommander", desc: "Le designer choisira le format le plus pertinent après analyse de votre brief.", icon: <Sparkles size={24} /> },
-              ].map((f) => (
-                <button
-                  key={f.id}
-                  onClick={() => setFormat(f.id as typeof format)}
-                  className={`w-full p-4 rounded-lg border-2 text-left transition-all ${
-                    format === f.id ? "border-[var(--amber)] bg-[var(--amber-pale)]/30" : "border-[var(--border)] hover:border-[var(--text-3)]"
-                  }`}
-                >
-                  <div className="flex items-start gap-3">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-                      format === f.id ? "bg-[var(--amber)] text-white" : "bg-[var(--bg-warm)] text-[var(--text-2)]"
-                    }`}>
-                      {f.icon}
+              {scopeConfig.formats.map((f) => {
+                const icons: Record<string, React.ReactNode> = {
+                  distance: <Video size={24} />,
+                  visite: <MapPin size={24} />,
+                  recommandation: <Sparkles size={24} />,
+                };
+                const active = format === f.id;
+                return (
+                  <button
+                    key={f.id}
+                    onClick={() => setFormat(f.id)}
+                    className={`w-full p-4 rounded-lg border-2 text-left transition-all ${
+                      active ? "border-[var(--amber)] bg-[var(--amber-pale)]/30" : "border-[var(--border)] hover:border-[var(--text-3)]"
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+                        active ? "bg-[var(--amber)] text-white" : "bg-[var(--bg-warm)] text-[var(--text-2)]"
+                      }`}>
+                        {icons[f.id]}
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-display font-semibold text-sm mb-0.5 flex items-center gap-2">
+                          {f.label}
+                          {f.recommended && <span className="dedco-badge dedco-badge-forest text-[10px]">Recommandé</span>}
+                        </p>
+                        <p className="text-xs text-[var(--text-3)]">{f.desc}</p>
+                      </div>
+                      {active && <Check size={16} className="text-[var(--amber)] flex-shrink-0" />}
                     </div>
-                    <div className="flex-1">
-                      <p className="font-display font-semibold text-sm mb-0.5">{f.label}</p>
-                      <p className="text-xs text-[var(--text-3)]">{f.desc}</p>
-                    </div>
-                    {format === f.id && <Check size={16} className="text-[var(--amber)] flex-shrink-0" />}
-                  </div>
-                </button>
-              ))}
+                  </button>
+                );
+              })}
             </div>
             <div className="mt-4 p-3 bg-[var(--amber-pale)]/30 rounded-md flex items-start gap-2">
               <Sparkles size={14} className="text-[var(--amber)] flex-shrink-0 mt-0.5" />
@@ -781,16 +982,22 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
         )}
 
         {/* STEP 5 — Récapitulatif + envoi */}
-        {step === 5 && (
+        {step === 5 && scopeConfig && (
           <div>
-            <h2 className="display-sm mb-4">Récapitulatif</h2>
+            <h2 className="display-sm mb-2">Récapitulatif</h2>
+            <p className="text-xs text-[var(--text-3)] mb-4">
+              <span className="dedco-badge dedco-badge-amber">{scopeConfig.icon} {scopeConfig.title}</span>
+            </p>
             <dl className="space-y-2 text-sm">
-              <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Projet</dt><dd className="text-right">{besoinType} · {lieuType}</dd></div>
-              <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Lieu</dt><dd className="text-right">{piece}, {quartier} {ville}</dd></div>
-              <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Besoin</dt><dd className="text-right max-w-[60%]">{souhaits.slice(0, 50)}{souhaits.length > 50 ? "..." : ""}</dd></div>
+              <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Type de projet</dt><dd className="text-right font-semibold">{scopeConfig.title}</dd></div>
+              <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Besoin</dt><dd className="text-right">{besoinType}</dd></div>
+              {piece && <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Pièce</dt><dd className="text-right">{piece}</dd></div>}
+              {scopeConfig.needsSurface && <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Surface</dt><dd className="text-right font-numeric">{surface} m²</dd></div>}
+              {scopeConfig.needsLocation && ville && <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Lieu</dt><dd className="text-right">{quartier}, {ville}</dd></div>}
+              {scopeConfig.needsMultiSpaces && espacesMultiples && <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Espaces</dt><dd className="text-right">{espacesMultiples}</dd></div>}
               <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Budget</dt><dd className="text-right font-numeric">{budget}</dd></div>
               <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Format souhaité</dt><dd className="text-right">{format === "distance" ? "À distance" : format === "visite" ? "Visite sur site" : "Recommandation designer"}</dd></div>
-              <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Photos</dt><dd className="text-right font-numeric">{photos.length + inspirations.length} fichier(s)</dd></div>
+              <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Photos</dt><dd className="text-right font-numeric">{photos.length + inspirations.length + planLogement.length} fichier(s)</dd></div>
             </dl>
             <div className="mt-4 p-3 bg-[var(--forest-pale)]/30 rounded-md flex items-start gap-2">
               <CheckCircle2 size={14} className="text-[var(--forest)] flex-shrink-0 mt-0.5" />
@@ -801,8 +1008,8 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
       </div>
 
       <div className="flex gap-3">
-        <button onClick={() => step > 1 ? setStep(step - 1) : navigate({ page: "designer", id: designerId })} className="dedco-btn dedco-btn-ghost">
-          {step === 1 ? "Annuler" : "Précédent"}
+        <button onClick={() => step > 0 ? setStep(step - 1) : navigate({ page: "designer", id: designerId })} className="dedco-btn dedco-btn-ghost">
+          {step === 0 ? "Annuler" : "Précédent"}
         </button>
         <button
           onClick={() => step < 5 ? setStep(step + 1) : setSubmitted(true)}
@@ -821,7 +1028,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
   );
 }
 
-// ============================================================
+
 // PAGE: avis-livraison — Avis post-livraison
 // ============================================================
 

@@ -100,6 +100,12 @@ export type AppRoute =
   | { page: 'projet-livraison'; projectId: string };
 
 // ============================================================
+// ProjectScope — type d'accompagnement (pivot économique)
+// ============================================================
+
+export type ProjectScope = "quick_advice" | "room_design" | "full_project";
+
+// ============================================================
 // CurrentUser — distinguishes visitor vs logged-in (client/artisan/designer/admin/maison)
 // ============================================================
 
