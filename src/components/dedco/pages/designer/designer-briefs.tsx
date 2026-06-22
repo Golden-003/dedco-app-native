@@ -197,7 +197,7 @@ export function DesignerBriefsPage() {
                   <button
                     className="dedco-btn dedco-btn-primary dedco-btn-sm whitespace-nowrap"
                     onClick={() =>
-                      navigate({ page: "brief-detail", id: brief.id })
+                      navigate({ page: "designer-brief-recu", briefId: String(brief.id) })
                     }
                   >
                     Répondre au brief

@@ -250,7 +250,7 @@ export function DesignerDashboardPage() {
                   key={brief.id}
                   className="dedco-card p-4 cursor-pointer hover:shadow-md transition-shadow"
                   onClick={() =>
-                    navigate({ page: "brief-detail", id: brief.id })
+                    navigate({ page: "designer-brief-recu", briefId: String(brief.id) })
                   }
                 >
                   <div className="flex items-start justify-between gap-2 mb-2">
