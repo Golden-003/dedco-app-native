@@ -243,20 +243,23 @@ export function DesignerDetailPage({
               </h2>
               <ol className="space-y-3">
                 {[
-                  "Vous envoyez un brief détaillé (pièce, surface, style, budget).",
-                  "Vous échangez en messagerie sécurisée + appel Google Meet optionnel.",
-                  "Le designer envoie une proposition formelle (prix, délai, livrables).",
-                  "Vous validez et payez via séquestre Fedapay — 100% sécurisé.",
-                  "Le designer livre un PDF (plans, moodboards, recommandations).",
-                  "Vous confirmez la réception. Le paiement est débloqué.",
+                  { title: "Brief initial (gratuit)", desc: "Vous décrivez votre besoin et choisissez un format de premier échange : à distance, visite sur site, ou recommandation du designer." },
+                  { title: "Proposition de cadrage", desc: "Le designer analyse votre brief et propose un premier échange avec un prix clair (visite, consultation). Aucun engagement sur le projet complet." },
+                  { title: "Paiement du cadrage", desc: "Vous acceptez et payez le cadrage (avec 1,5% de frais de garantie Dedco). L'adresse exacte est révélée si visite sur site." },
+                  { title: "Rendez-vous", desc: "Consultation à distance (visio/appel) ou visite sur site. Les deux parties confirment que l'échange a eu lieu." },
+                  { title: "Compte rendu", desc: "Le designer rédige un court compte rendu : besoin retenu, contraintes, orientation proposée. Le paiement du cadrage est libéré." },
+                  { title: "Proposition finale de mission", desc: "Le designer propose la mission complète : livrables, étapes, délai, révisions, honoraires. Transparence totale (commission 10% côté designer)." },
+                  { title: "Paiement et exécution", desc: "Vous validez et payez (acompte 50%, solde à la livraison). Le projet démarre avec messagerie, calendrier et jalons." },
+                  { title: "Livraison et achats", desc: "Le designer livre les livrables (moodboard, plans, sélection produits). Vous validez, le paiement est libéré. Vous pouvez acheter les produits recommandés via Dedco." },
                 ].map((step, i) => (
                   <li key={i} className="flex gap-3">
                     <span className="w-6 h-6 rounded-full bg-amber text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
                       {i + 1}
                     </span>
-                    <span className="text-sm text-ink-soft leading-relaxed">
-                      {step}
-                    </span>
+                    <div className="text-sm leading-relaxed">
+                      <p className="font-semibold text-ink">{step.title}</p>
+                      <p className="text-ink-soft text-xs mt-0.5">{step.desc}</p>
+                    </div>
                   </li>
                 ))}
               </ol>
@@ -280,44 +283,29 @@ export function DesignerDetailPage({
                 </div>
                 <div>
                   <p className="text-xs text-ink-mute uppercase tracking-wide mb-1">
-                    Tarif horaire
+                    Prix de démarrage
                   </p>
                   <p className="font-display font-bold text-lg text-amber font-numeric">
                     {designer.hourlyRate.toLocaleString("fr-FR")} F
                   </p>
-                  <p className="text-xs text-ink-mute">FCFA / heure</p>
+                  <p className="text-xs text-ink-mute">FCFA · cadrage</p>
                 </div>
               </div>
 
               <button
                 type="button"
-                onClick={() => onNavigate({ name: "brief" })}
+                onClick={() => useDedcoStore.getState().navigate({ page: "brief-designer", designerId: designer.id })}
                 className="dedco-btn dedco-btn-primary w-full mb-3"
               >
                 Démarrer un projet
                 <span className="block text-[10px] font-normal opacity-80">À partir de {designer.hourlyRate.toLocaleString("fr-FR")} FCFA</span>
               </button>
-              <p className="text-xs text-ink-soft text-center mb-3 px-2">
+              <p className="text-xs text-ink-soft text-center mb-4 px-2">
                 Décrivez votre besoin. Le designer vous proposera un premier format de cadrage adapté avant tout engagement sur le projet complet.
               </p>
-              <button
-                type="button"
-                onClick={() => useDedcoStore.getState().navigate({ page: "brief-designer", designerId: designer.id })}
-                className="dedco-btn dedco-btn-secondary w-full mb-3"
-              >
-                Démarrer mon projet
-              </button>
-              <button
-                type="button"
-                className="dedco-btn dedco-btn-ghost w-full mb-4"
-              >
-                Envoyer un message
-              </button>
 
               <p className="text-xs text-ink-mute leading-relaxed">
-                💡 Le paiement est 100% séquestré via Fedapay. Le designer est
-                payé uniquement à la livraison du PDF. Aucune commission Dedco
-                sur les honoraires designer.
+                💡 Le brief est gratuit. Le cadrage est payant après proposition explicite du designer. Le projet complet est payé après acceptation de la proposition finale. Paiement sécurisé via Fedapay avec 1,5% de frais de garantie Dedco.
               </p>
             </div>
           </aside>
