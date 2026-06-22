@@ -16,6 +16,7 @@ import {
   LogOut,
   Shield,
   Globe,
+  MessageSquare,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
 import { BackButton } from "../layout";
@@ -49,11 +50,12 @@ const ADDRESSES = [
   },
 ];
 
-type ProfileTab = "profile" | "orders" | "favorites" | "wallet" | "settings";
+type ProfileTab = "profile" | "orders" | "favorites" | "wallet" | "settings" | "messages";
 
 const TABS: { key: ProfileTab; label: string; icon: React.ReactNode }[] = [
   { key: "profile", label: "Profil", icon: <User size={18} /> },
   { key: "orders", label: "Commandes", icon: <Package size={18} /> },
+  { key: "messages", label: "Messages", icon: <MessageSquare size={18} /> },
   { key: "favorites", label: "Favoris", icon: <Heart size={18} /> },
   { key: "wallet", label: "Portefeuille", icon: <Wallet size={18} /> },
   { key: "settings", label: "Paramètres", icon: <Settings size={18} /> },
@@ -82,12 +84,13 @@ export function ProfilePage() {
   const handleTabClick = (tab: ProfileTab) => {
     setActiveTab(tab);
     if (tab === "orders") {
-      // BLOC 8 — Voir mes projets → client-projets
       navigate({ page: "client-projets" });
     } else if (tab === "favorites") {
       navigate({ page: "favorites" });
     } else if (tab === "wallet") {
       navigate({ page: "wallet" });
+    } else if (tab === "messages") {
+      navigate({ page: "messages" });
     }
   };
 

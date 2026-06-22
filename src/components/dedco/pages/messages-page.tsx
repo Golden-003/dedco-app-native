@@ -129,8 +129,9 @@ const CONVERSATIONS: Conversation[] = [
 // ============================================================
 
 export function MessagesPage() {
-  const route = useDedcoStore((s) => s.route);
   const navigate = useDedcoStore((s) => s.navigate);
+  const goBack = useDedcoStore((s) => s.goBack);
+  const route = useDedcoStore((s) => s.route);
   const [searchQuery, setSearchQuery] = useState("");
   const [messageText, setMessageText] = useState("");
 
@@ -176,6 +177,12 @@ export function MessagesPage() {
         >
           {/* Header */}
           <div className="p-4 border-b border-border">
+            <button
+              onClick={() => goBack()}
+              className="flex items-center gap-1 text-sm text-[var(--text-3)] hover:text-[var(--amber)] transition-colors mb-3"
+            >
+              <ChevronLeft size={16} /> Retour
+            </button>
             <h1 className="display-lg mb-3">Messages</h1>
             <div className="relative">
               <Search
