@@ -29,12 +29,28 @@ import {
   Trash2,
   ShoppingBag,
 } from "lucide-react";
-import { useDedcoStore } from "@/lib/store";
+import { useDedcoStore, type ProjectScope } from "@/lib/store";
 import { formatFCFA, DESIGNERS, PRODUCTS, getProduct } from "@/lib/dedco-data";
 
 // ============================================================
 // MOCK DATA — Workflow designer
 // ============================================================
+
+// Helper shared scope config (matches BriefDesignerPage)
+const SCOPE_INFO: Record<ProjectScope, { label: string; icon: string; price: number }> = {
+  quick_advice: { label: "Conseil rapide", icon: "💡", price: 25000 },
+  room_design: { label: "Aménagement d'un espace", icon: "🛋️", price: 40000 },
+  full_project: { label: "Projet complet", icon: "🏠", price: 100000 },
+};
+
+function ScopeBadge({ scope }: { scope: ProjectScope }) {
+  const info = SCOPE_INFO[scope];
+  return (
+    <span className="dedco-badge dedco-badge-amber">
+      {info.icon} {info.label}
+    </span>
+  );
+}
 
 const MOCK_BRIEF = {
   id: "BRF-2026-001",
@@ -43,6 +59,7 @@ const MOCK_BRIEF = {
   designerAvatar: "https://images.unsplash.com/photo-1729355796906-10a9809e0864?auto=format&fit=crop&crop=faces&w=120&q=80",
   clientName: "Sophie Kossou",
   clientAvatar: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=120&q=80",
+  scope: "room_design" as ProjectScope,
   // Step 1
   besoinType: "Aménagement d'une pièce",
   lieuType: "Appartement",
@@ -108,7 +125,10 @@ export function DesignerProjetAttentePage({ projectId }: { projectId: string }) 
 
       {/* Brief summary */}
       <div className="dedco-card p-5 mb-5">
-        <h2 className="font-display font-bold mb-4">Résumé du brief</h2>
+        <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+          <h2 className="font-display font-bold">Résumé du brief</h2>
+          <ScopeBadge scope={brief.scope} />
+        </div>
         <dl className="grid sm:grid-cols-2 gap-4 text-sm">
           <div>
             <dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Type de besoin</dt>
@@ -220,7 +240,10 @@ export function DesignerBriefRecuPage({ briefId }: { briefId: string }) {
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <header className="mb-6">
-        <h1 className="display-lg mb-1">Brief reçu</h1>
+        <div className="flex items-center gap-3 mb-2 flex-wrap">
+          <h1 className="display-lg mb-0">Brief reçu</h1>
+          <ScopeBadge scope={brief.scope} />
+        </div>
         <p className="text-sm text-[var(--text-2)] font-numeric">{brief.id} · Reçu {brief.sentAt}</p>
       </header>
 
@@ -314,16 +337,20 @@ export function DesignerBriefRecuPage({ briefId }: { briefId: string }) {
 export function DesignerCadrageCreatePage({ briefId }: { briefId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
   const brief = MOCK_BRIEF;
+  // Prix par défaut selon le scope (pivot économique)
+  const defaultPrix = SCOPE_INFO[brief.scope].price;
   const [form, setForm] = useState({
-    objet: "Diagnostic initial pour aménagement de salon",
-    format: "visite" as "distance" | "visite",
+    objet: `Diagnostic initial — ${SCOPE_INFO[brief.scope].label}`,
+    format: brief.scope === "full_project" ? "visite" as "distance" | "visite" : brief.scope === "quick_advice" ? "distance" as "distance" | "visite" : "visite" as "distance" | "visite",
     date: "Mardi 14h",
-    duree: "1h30",
-    inclus: "Visite, échange de cadrage, analyse des contraintes, prise de mesures si nécessaire",
+    duree: brief.scope === "quick_advice" ? "45 min" : "1h30",
+    inclus: brief.scope === "quick_advice"
+      ? "Échange visio, analyse rapide, recommandations écrites"
+      : "Visite, échange de cadrage, analyse des contraintes, prise de mesures si nécessaire",
     nonInclus: "Plans, moodboard, liste d'achats, suivi",
-    prix: 40000,
+    prix: defaultPrix,
     suite: "Proposition complète envoyée sous 72h après le rendez-vous",
-    deduction: true,
+    deduction: brief.scope !== "quick_advice",
   });
 
   const garantie = Math.round(form.prix * 0.015);
@@ -336,7 +363,10 @@ export function DesignerCadrageCreatePage({ briefId }: { briefId: string }) {
       </button>
 
       <header className="mb-6">
-        <h1 className="display-lg mb-1">Proposition de cadrage</h1>
+        <div className="flex items-center gap-3 mb-2 flex-wrap">
+          <h1 className="display-lg mb-0">Proposition de cadrage</h1>
+          <ScopeBadge scope={brief.scope} />
+        </div>
         <p className="text-sm text-[var(--text-2)]">Définissez le premier échange avec {brief.clientName}</p>
       </header>
 
@@ -494,6 +524,7 @@ export function ClientCadrageRecuPage({ proposalId }: { proposalId: string }) {
   const proposal = {
     designerName: "Ndèye Sarr",
     designerAvatar: "https://images.unsplash.com/photo-1729355796906-10a9809e0864?auto=format&fit=crop&crop=faces&w=120&q=80",
+    scope: "room_design" as ProjectScope,
     objet: "Diagnostic initial pour aménagement de salon",
     format: "Visite sur site",
     date: "Mardi 14h",
@@ -514,7 +545,10 @@ export function ClientCadrageRecuPage({ proposalId }: { proposalId: string }) {
       </button>
 
       <header className="mb-6">
-        <span className="dedco-badge dedco-badge-amber mb-2">Proposition de cadrage</span>
+        <div className="flex items-center gap-2 mb-2 flex-wrap">
+          <span className="dedco-badge dedco-badge-amber">Proposition de cadrage</span>
+          <ScopeBadge scope={proposal.scope} />
+        </div>
         <h1 className="display-lg mb-2">{proposal.objet}</h1>
         <div className="flex items-center gap-3">
           <img src={proposal.designerAvatar} alt={proposal.designerName} className="w-10 h-10 rounded-full" />
@@ -987,6 +1021,7 @@ export function DesignerPropositionFinalePage({ cadrageId }: { cadrageId: string
 export function ClientPropositionFinalePage({ proposalId }: { proposalId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
   const proposal = {
+    scope: "room_design" as ProjectScope,
     titre: "Aménagement complet du salon",
     objectif: "Transformer le salon en espace convivial, moderne et ancré dans l'identité africaine contemporaine.",
     livrables: ["Moodboard", "Plan d'implantation", "Sélection de mobilier et décoration", "Liste d'achats Dedco"],
@@ -1008,7 +1043,10 @@ export function ClientPropositionFinalePage({ proposalId }: { proposalId: string
       </button>
 
       <header className="mb-6">
-        <span className="dedco-badge dedco-badge-amber mb-2">Proposition finale de mission</span>
+        <div className="flex items-center gap-2 mb-2 flex-wrap">
+          <span className="dedco-badge dedco-badge-amber">Proposition finale de mission</span>
+          <ScopeBadge scope={proposal.scope} />
+        </div>
         <h1 className="display-lg mb-2">{proposal.titre}</h1>
         <p className="text-sm text-[var(--text-2)]">{proposal.objectif}</p>
       </header>
@@ -1157,7 +1195,10 @@ export function ProjetDetailPage({ projectId }: { projectId: string }) {
         </button>
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div>
-            <span className="dedco-badge dedco-badge-amber mb-1">En cours</span>
+            <div className="flex items-center gap-2 mb-1 flex-wrap">
+              <span className="dedco-badge dedco-badge-amber">En cours</span>
+              <ScopeBadge scope="room_design" />
+            </div>
             <h1 className="display-lg">Aménagement complet du salon</h1>
             <p className="text-sm text-[var(--text-2)] font-numeric">PROJ-2026-001 · Démarré le 22 juin · 21 jours restants</p>
           </div>
