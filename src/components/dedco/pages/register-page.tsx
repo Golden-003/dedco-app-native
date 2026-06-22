@@ -29,6 +29,7 @@ const ROLES: { id: Role; label: string; desc: string; icon: React.ReactNode }[] 
 
 export function RegisterPage() {
   const navigate = useDedcoStore((s) => s.navigate);
+  const login = useDedcoStore((s) => s.login);
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
 
@@ -59,6 +60,19 @@ export function RegisterPage() {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
+      // Auto-connect selon le rôle choisi
+      const avatars: Record<Role, string> = {
+        client: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=120&q=80",
+        artisan: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=120&q=80",
+        designer: "https://images.unsplash.com/photo-1729355796906-10a9809e0864?auto=format&fit=crop&crop=faces&w=120&q=80",
+        maison: "https://images.unsplash.com/photo-1533674689012-136b487b7736?auto=format&fit=crop&crop=faces&w=120&q=80",
+      };
+      login({
+        role,
+        name: fullName || email.split("@")[0] || "Nouvel utilisateur",
+        email: email || "user@dedco.bj",
+        avatar: avatars[role],
+      });
       // Route to appropriate dashboard based on selected role
       switch (role) {
         case "artisan":

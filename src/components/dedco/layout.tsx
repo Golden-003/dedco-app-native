@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   Search,
   Heart,
@@ -8,9 +8,20 @@ import {
   Menu,
   X,
   ChevronLeft,
+  ChevronDown,
+  User,
+  LayoutDashboard,
+  Wallet,
+  ShoppingBag as OrdersIcon,
+  LogOut,
+  Briefcase,
+  Wrench,
+  Palette,
+  Shield,
+  Home as HomeIcon,
 } from "lucide-react";
 import type { Route } from "@/lib/dedco-types";
-import { useDedcoStore, type AppRoute } from "@/lib/store";
+import { useDedcoStore, type AppRoute, type CurrentUser, type UserRole } from "@/lib/store";
 
 // ============================================================
 // Navbar (desktop) + mobile menu
@@ -23,6 +34,199 @@ const NAV_LINKS: { label: string; route: Route }[] = [
   { label: "Designers d'espace", route: { name: "designers" } },
   { label: "Magazine", route: { name: "magazine" } },
 ];
+
+// ============================================================
+// UserMenu — Distinction visiteur vs connecté
+// Visiteur (currentUser = null) → boutons "Connexion" + "S'inscrire"
+// Connecté → avatar + dropdown avec actions selon le rôle
+// ============================================================
+
+const ROLE_DASHBOARD: Record<UserRole, AppRoute["page"]> = {
+  client: "profile",
+  artisan: "artisan-dashboard",
+  designer: "designer-dashboard",
+  admin: "admin-dashboard",
+  maison: "maison-dashboard",
+};
+
+const ROLE_LABEL: Record<UserRole, string> = {
+  client: "Client",
+  artisan: "Artisan",
+  designer: "Designer",
+  admin: "Admin",
+  maison: "Maison déco",
+};
+
+const ROLE_ICON: Record<UserRole, React.ReactNode> = {
+  client: <HomeIcon size={14} />,
+  artisan: <Wrench size={14} />,
+  designer: <Palette size={14} />,
+  admin: <Shield size={14} />,
+  maison: <Briefcase size={14} />,
+};
+
+function UserMenu({
+  currentUser,
+  navigate,
+  logout,
+}: {
+  currentUser: CurrentUser | null;
+  navigate: (r: AppRoute) => void;
+  logout: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  // ── VISITEUR : pas encore connecté ──
+  if (!currentUser) {
+    return (
+      <div className="hidden sm:flex items-center gap-2 ml-2">
+        <button
+          type="button"
+          onClick={() => navigate({ page: "login" })}
+          className="dedco-btn dedco-btn-ghost dedco-btn-sm"
+        >
+          Connexion
+        </button>
+        <button
+          type="button"
+          onClick={() => navigate({ page: "register" })}
+          className="dedco-btn dedco-btn-primary dedco-btn-sm"
+        >
+          S'inscrire
+        </button>
+      </div>
+    );
+  }
+
+  // ── CONNECTÉ : avatar + dropdown ──
+  const isPrestataire = currentUser.role !== "client";
+
+  return (
+    <div className="relative ml-2 hidden sm:block" ref={ref}>
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-2 px-2 py-1.5 rounded-full hover:bg-warm transition-colors"
+        aria-label="Menu utilisateur"
+        aria-expanded={open}
+      >
+        <img
+          src={currentUser.avatar}
+          alt={currentUser.name}
+          className="w-8 h-8 rounded-full object-cover border-2 border-amber"
+        />
+        <div className="hidden md:flex flex-col items-start leading-tight">
+          <span className="text-xs font-semibold text-ink max-w-[100px] truncate">
+            {currentUser.name.split(" ")[0]}
+          </span>
+          <span className="text-[10px] text-ink-mute flex items-center gap-1">
+            {ROLE_ICON[currentUser.role]}
+            {ROLE_LABEL[currentUser.role]}
+          </span>
+        </div>
+        <ChevronDown size={14} className={`text-ink-mute transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+
+      {open && (
+        <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-lg shadow-lg border border-border overflow-hidden z-50">
+          {/* Header card */}
+          <div className="p-4 bg-amber-pale/50 border-b border-border">
+            <div className="flex items-center gap-3">
+              <img src={currentUser.avatar} alt={currentUser.name} className="w-10 h-10 rounded-full object-cover" />
+              <div className="min-w-0">
+                <p className="text-sm font-display font-semibold truncate">{currentUser.name}</p>
+                <p className="text-xs text-ink-mute truncate">{currentUser.email}</p>
+              </div>
+            </div>
+            <span className="dedco-badge dedco-badge-amber mt-2 inline-flex">
+              {ROLE_ICON[currentUser.role]}
+              {ROLE_LABEL[currentUser.role]}
+            </span>
+          </div>
+
+          {/* Actions */}
+          <div className="py-1">
+            {/* Prestataire : "Mon espace" → dashboard */}
+            {isPrestataire && (
+              <button
+                type="button"
+                onClick={() => {
+                  navigate({ page: ROLE_DASHBOARD[currentUser.role] } as AppRoute);
+                  setOpen(false);
+                }}
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-ink hover:bg-warm transition-colors"
+              >
+                <LayoutDashboard size={16} className="text-amber" />
+                Mon espace {ROLE_LABEL[currentUser.role]}
+              </button>
+            )}
+
+            {/* Client : Mon profil */}
+            {!isPrestataire && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => { navigate({ page: "profile" }); setOpen(false); }}
+                  className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-ink hover:bg-warm transition-colors"
+                >
+                  <User size={16} className="text-amber" />
+                  Mon profil
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { navigate({ page: "client-projets" }); setOpen(false); }}
+                  className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-ink hover:bg-warm transition-colors"
+                >
+                  <OrdersIcon size={16} className="text-amber" />
+                  Mes commandes
+                </button>
+              </>
+            )}
+
+            {/* Wallet commun */}
+            <button
+              type="button"
+              onClick={() => {
+                navigate({
+                  page:
+                    currentUser.role === "artisan" ? "artisan-wallet"
+                    : currentUser.role === "designer" ? "designer-wallet"
+                    : "wallet",
+                });
+                setOpen(false);
+              }}
+              className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-ink hover:bg-warm transition-colors"
+            >
+              <Wallet size={16} className="text-amber" />
+              Mon wallet
+            </button>
+
+            <div className="border-t border-border my-1" />
+            <button
+              type="button"
+              onClick={() => { logout(); setOpen(false); }}
+              className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-terracotta hover:bg-terracotta-pale transition-colors"
+            >
+              <LogOut size={16} />
+              Déconnexion
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function Navbar({
   currentRoute,
@@ -44,6 +248,8 @@ export function Navbar({
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useDedcoStore((s) => s.navigate);
+  const currentUser = useDedcoStore((s) => s.currentUser);
+  const logout = useDedcoStore((s) => s.logout);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -135,28 +341,8 @@ export function Navbar({
                 </span>
               )}
             </button>
-            <button
-              type="button"
-              onClick={() => onNavigate({ name: "brief" })}
-              className="hidden sm:inline-flex dedco-btn dedco-btn-primary dedco-btn-sm ml-2"
-            >
-              Créer mon brief
-            </button>
-            {/* BLOC 8 — Boutons connexion/inscription */}
-            <button
-              type="button"
-              onClick={() => navigate({ page: "login" })}
-              className="hidden sm:inline-flex dedco-btn dedco-btn-ghost dedco-btn-sm"
-            >
-              Connexion
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate({ page: "register" })}
-              className="hidden sm:inline-flex dedco-btn dedco-btn-secondary dedco-btn-sm"
-            >
-              S'inscrire
-            </button>
+            {/* ── BLOC 8 — Distinction visiteur / connecté ── */}
+            <UserMenu currentUser={currentUser} navigate={navigate} logout={logout} />
             <button
               type="button"
               onClick={() => setMobileOpen(true)}

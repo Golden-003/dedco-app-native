@@ -87,6 +87,19 @@ export type AppRoute =
   | { page: 'plans-tarifs' };
 
 // ============================================================
+// CurrentUser — distinguishes visitor vs logged-in (client/artisan/designer/admin/maison)
+// ============================================================
+
+export type UserRole = "client" | "artisan" | "designer" | "admin" | "maison";
+
+export interface CurrentUser {
+  role: UserRole;
+  name: string;
+  email: string;
+  avatar: string;
+}
+
+// ============================================================
 // Store State & Actions
 // ============================================================
 
@@ -98,10 +111,15 @@ interface DedcoState {
   savedScenes: string[];
   cartOpen: boolean;
   searchOpen: boolean;
+  currentUser: CurrentUser | null;
 
   // Navigation
   navigate: (route: AppRoute) => void;
   goBack: () => void;
+
+  // Auth
+  login: (user: CurrentUser) => void;
+  logout: () => void;
 
   // Cart
   addToCart: (item: CartItem) => void;
@@ -134,6 +152,7 @@ export const useDedcoStore = create<DedcoState>((set, get) => ({
   savedScenes: [],
   cartOpen: false,
   searchOpen: false,
+  currentUser: null,
 
   // ── Navigation ──
   navigate: (route) => {
@@ -155,6 +174,12 @@ export const useDedcoStore = create<DedcoState>((set, get) => ({
       route: prev,
       history: history.slice(0, -1),
     });
+  },
+
+  // ── Auth ──
+  login: (user) => set({ currentUser: user }),
+  logout: () => {
+    set({ currentUser: null, route: { page: 'home' } });
   },
 
   // ── Cart ──

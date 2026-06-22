@@ -15,19 +15,78 @@ const DEMO_ROLES = [
 
 export function LoginPage() {
   const navigate = useDedcoStore((s) => s.navigate);
+  const login = useDedcoStore((s) => s.login);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showDemo, setShowDemo] = useState(false);
 
+  // Connecte en tant que client (rôle par défaut pour login classique)
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
+      login({
+        role: "client",
+        name: email.split("@")[0] || "Client Dedco",
+        email: email || "client@dedco.bj",
+        avatar: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=120&q=80",
+      });
       navigate({ page: "home" });
     }, 1000);
+  };
+
+  // Connecte en tant que rôle démo (depuis le sélecteur "Accéder aux tableaux de bord")
+  const handleDemoLogin = (page: typeof DEMO_ROLES[number]["page"]) => {
+    const role = DEMO_ROLES.find((r) => r.page === page);
+    if (!role) return;
+
+    // Map page → UserRole
+    const roleMap: Record<string, "client" | "admin" | "artisan" | "designer" | "maison"> = {
+      "profile": "client",
+      "admin-dashboard": "admin",
+      "artisan-dashboard": "artisan",
+      "designer-dashboard": "designer",
+      "maison-dashboard": "maison",
+    };
+    const userRole = roleMap[page] || "client";
+
+    // Mock user selon le rôle
+    const mockUsers = {
+      client: {
+        name: "Sophie Kossou",
+        email: "sophie.kossou@email.bj",
+        avatar: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=120&q=80",
+      },
+      admin: {
+        name: "Admin Dedco",
+        email: "admin@dedco.bj",
+        avatar: "https://images.unsplash.com/photo-1616805765352-beedbad46b2a?auto=format&fit=crop&crop=faces&w=120&q=80",
+      },
+      artisan: {
+        name: "Kofi Akindélé",
+        email: "kofi@akindele-wood.bj",
+        avatar: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=120&q=80",
+      },
+      designer: {
+        name: "Ndèye Sarr",
+        email: "ndeye@sarr-design.bj",
+        avatar: "https://images.unsplash.com/photo-1729355796906-10a9809e0864?auto=format&fit=crop&crop=faces&w=120&q=80",
+      },
+      maison: {
+        name: "Atelier Bohème",
+        email: "contact@atelier-boheme.bj",
+        avatar: "https://images.unsplash.com/photo-1533674689012-136b487b7736?auto=format&fit=crop&crop=faces&w=120&q=80",
+      },
+    };
+
+    login({
+      role: userRole,
+      ...mockUsers[userRole],
+    });
+    navigate({ page });
   };
 
   return (
@@ -167,7 +226,7 @@ export function LoginPage() {
                   <button
                     key={role.page}
                     type="button"
-                    onClick={() => navigate({ page: role.page })}
+                    onClick={() => handleDemoLogin(role.page)}
                     className="p-3 rounded-lg border-2 text-left transition-all cursor-pointer hover:shadow-sm"
                     style={{
                       borderColor: role.color,
