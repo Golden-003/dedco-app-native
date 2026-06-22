@@ -408,7 +408,7 @@ export function DesignerCard({
             <strong className="text-amber font-numeric">
               {formatFCFA(designer.hourlyRate)}
             </strong>
-            /h
+            <span className="block text-[10px] text-ink-mute">cadrage</span>
           </span>
         </div>
       </div>

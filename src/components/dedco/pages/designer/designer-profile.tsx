@@ -179,7 +179,7 @@ export function DesignerProfilePage() {
             </div>
             <div>
               <label className="block text-sm font-medium text-[var(--text-1)] mb-1.5">
-                Tarif horaire (FCFA)
+                Prix de démarrage / cadrage (FCFA)
               </label>
               <div className="relative">
                 <input
@@ -189,7 +189,7 @@ export function DesignerProfilePage() {
                   className="w-full px-4 py-2.5 text-sm border border-[var(--border)] rounded-lg bg-[var(--bg-card)] text-[var(--text-1)] focus:outline-none focus:ring-2 focus:ring-[var(--amber)] focus:border-transparent font-numeric"
                 />
                 <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[var(--text-3)]">
-                  FCFA/h
+                  FCFA · cadrage
                 </span>
               </div>
             </div>
