@@ -89,6 +89,21 @@ import {
   AvisLivraisonPage,
   PlansTarifsPage,
 } from "@/components/dedco/pages/client-and-designer-pages";
+// Workflow designer (refonte parcours)
+import {
+  DesignerProjetAttentePage,
+  DesignerBriefRecuPage,
+  DesignerCadrageCreatePage,
+  ClientCadrageRecuPage,
+  CadragePaiementPage,
+  CadrageRendezVousPage,
+  CadrageCompteRenduPage,
+  DesignerPropositionFinalePage,
+  ClientPropositionFinalePage,
+  ProjetPaiementPage,
+  ProjetDetailPage,
+  ProjetLivraisonPage,
+} from "@/components/dedco/pages/designer-workflow-pages";
 
 // Layouts
 import { ArtisanLayout } from "@/components/dedco/pages/artisan/artisan-layout";
@@ -433,6 +448,45 @@ export function DedcoRouter() {
 
       case "plans-tarifs":
         return <PlansTarifsPage />;
+
+      // ════════════════════════════════════════
+      // WORKFLOW DESIGNER (refonte parcours)
+      // ════════════════════════════════════════
+      case "designer-projet-attente":
+        return <DesignerProjetAttentePage projectId={route.projectId} />;
+
+      case "designer-brief-recu":
+        return <DesignerLayout><DesignerBriefRecuPage briefId={route.briefId} /></DesignerLayout>;
+
+      case "designer-cadrage-create":
+        return <DesignerLayout><DesignerCadrageCreatePage briefId={route.briefId} /></DesignerLayout>;
+
+      case "client-cadrage-recu":
+        return <ClientCadrageRecuPage proposalId={route.proposalId} />;
+
+      case "cadrage-paiement":
+        return <CadragePaiementPage proposalId={route.proposalId} />;
+
+      case "cadrage-rendez-vous":
+        return <CadrageRendezVousPage cadrageId={route.cadrageId} />;
+
+      case "cadrage-compte-rendu":
+        return <CadrageCompteRenduPage cadrageId={route.cadrageId} />;
+
+      case "designer-proposition-finale":
+        return <DesignerLayout><DesignerPropositionFinalePage cadrageId={route.cadrageId} /></DesignerLayout>;
+
+      case "client-proposition-finale":
+        return <ClientPropositionFinalePage proposalId={route.proposalId} />;
+
+      case "projet-paiement":
+        return <ProjetPaiementPage proposalId={route.proposalId} />;
+
+      case "projet-detail":
+        return <ProjetDetailPage projectId={route.projectId} />;
+
+      case "projet-livraison":
+        return <ProjetLivraisonPage projectId={route.projectId} />;
 
       // ════════════════════════════════════════
       // MAISON DASHBOARD

@@ -294,6 +294,17 @@ export function DesignerDetailPage({
                 onClick={() => onNavigate({ name: "brief" })}
                 className="dedco-btn dedco-btn-primary w-full mb-3"
               >
+                Démarrer un projet
+                <span className="block text-[10px] font-normal opacity-80">À partir de {designer.hourlyRate.toLocaleString("fr-FR")} FCFA</span>
+              </button>
+              <p className="text-xs text-ink-soft text-center mb-3 px-2">
+                Décrivez votre besoin. Le designer vous proposera un premier format de cadrage adapté avant tout engagement sur le projet complet.
+              </p>
+              <button
+                type="button"
+                onClick={() => useDedcoStore.getState().navigate({ page: "brief-designer", designerId: designer.id })}
+                className="dedco-btn dedco-btn-secondary w-full mb-3"
+              >
                 Démarrer mon projet
               </button>
               <button

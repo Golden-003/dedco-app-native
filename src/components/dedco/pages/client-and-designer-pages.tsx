@@ -22,6 +22,9 @@ import {
   Sparkles,
   ShieldCheck,
   Truck,
+  Upload,
+  Video,
+  MapPin,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
 import { formatFCFA, DESIGNERS, ARTISANS, PRODUCTS, getProduct } from "@/lib/dedco-data";
@@ -514,38 +517,55 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
   const navigate = useDedcoStore((s) => s.navigate);
   const designer = DESIGNERS.find((d) => d.id === designerId) || DESIGNERS[0];
   const [step, setStep] = useState(1);
-  const [service, setService] = useState<string>("");
-  const [room, setRoom] = useState("");
-  const [surface, setSurface] = useState(20);
-  const [styles, setStyles] = useState<string[]>([]);
-  const [budget, setBudget] = useState(200000);
-  const [delay, setDelay] = useState<"urgent" | "moyen" | "flexible">("moyen");
-  const [desc, setDesc] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const SERVICES = [
-    { id: "conseil", label: "Conseil déco", desc: "Consultation ponctuelle", icon: "💡" },
-    { id: "amenagement", label: "Aménagement complet", desc: "Projet clé en main", icon: "🏠" },
-    { id: "suivi", label: "Suivi chantier", desc: "Coordination travaux", icon: "👷" },
-    { id: "shopping", label: "Shopping accompagné", desc: "Sélection produits", icon: "🛍️" },
+  // Step 1 — Votre projet
+  const [besoinType, setBesoinType] = useState<string>("");
+  const [lieuType, setLieuType] = useState<string>("");
+  const [piece, setPiece] = useState("");
+  const [surface, setSurface] = useState(25);
+  const [ville, setVille] = useState("");
+  const [quartier, setQuartier] = useState("");
+
+  // Step 2 — Votre besoin
+  const [souhaits, setSouhaits] = useState("");
+  const [style, setStyle] = useState("");
+  const [contraintes, setContraintes] = useState("");
+  const [budget, setBudget] = useState<string>("");
+  const [echeance, setEcheance] = useState<string>("");
+
+  // Step 3 — Inspirations
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [inspirations, setInspirations] = useState<string[]>([]);
+  const [commentaire, setCommentaire] = useState("");
+
+  // Step 4 — Premier échange souhaité (CENTRAL)
+  const [format, setFormat] = useState<"distance" | "visite" | "recommandation" | "">("");
+
+  const BESOIN_TYPES = [
+    "Conseils décoration",
+    "Aménagement d'une pièce",
+    "Aménagement de plusieurs pièces",
+    "Rénovation / transformation",
+    "Projet professionnel",
+    "Autre",
   ];
-  const STYLE_OPTS = [
-    { id: "afro", label: "Afro-contemporain", img: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=300&q=80" },
-    { id: "min", label: "Minimaliste", img: "https://images.unsplash.com/photo-1616627452792-20384b0f7d9b?auto=format&fit=crop&w=300&q=80" },
-    { id: "trop", label: "Tropical", img: "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=300&q=80" },
-    { id: "indus", label: "Industriel", img: "https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?auto=format&fit=crop&w=300&q=80" },
-    { id: "scan", label: "Scandinave", img: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=300&q=80" },
-    { id: "boh", label: "Bohème", img: "https://images.unsplash.com/photo-1615874959474-d609969a20ed?auto=format&fit=crop&w=300&q=80" },
-    { id: "wax", label: "Wax & Couleur", img: "https://images.unsplash.com/photo-1579656592043-a20e25a4aa4b?auto=format&fit=crop&w=300&q=80" },
-    { id: "zen", label: "Zen & Bio", img: "https://images.unsplash.com/photo-1528789386055-75c4b717bad1?auto=format&fit=crop&w=300&q=80" },
+  const LIEU_TYPES = ["Maison", "Appartement", "Studio", "Bureau", "Commerce", "Restaurant / hôtel", "Autre"];
+  const BUDGETS = [
+    "moins de 250 000 FCFA",
+    "250 000 à 750 000 FCFA",
+    "750 000 à 1 500 000 FCFA",
+    "plus de 1 500 000 FCFA",
+    "je ne sais pas encore",
   ];
+  const ECHEANCES = ["< 1 mois", "1-3 mois", "3-6 mois", "> 6 mois", "Pas pressé"];
 
   const canNext = () => {
-    if (step === 1) return !!service;
-    if (step === 2) return !!room;
-    if (step === 3) return styles.length > 0;
-    if (step === 4) return true;
-    if (step === 5) return desc.length >= 50;
+    if (step === 1) return besoinType && lieuType && piece && ville;
+    if (step === 2) return souhaits.length >= 10 && budget;
+    if (step === 3) return true;
+    if (step === 4) return format !== "";
+    if (step === 5) return true;
     return false;
   };
 
@@ -555,12 +575,15 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
         <div className="w-20 h-20 rounded-full bg-[var(--forest-pale)] mx-auto flex items-center justify-center mb-5">
           <CheckCircle2 size={40} className="text-[var(--forest)]" />
         </div>
-        <h1 className="display-xl mb-3">Demande envoyée !</h1>
+        <h1 className="display-xl mb-3">Brief envoyé !</h1>
         <p className="text-sm text-[var(--text-2)] mb-6">
-          Votre brief a été transmis directement à <strong>{designer.name}</strong>. Vous recevrez une proposition sous 48h dans votre messagerie.
+          Votre brief a été transmis à <strong>{designer.name}</strong>. Vous recevrez une proposition de cadrage sous 24-48h. Aucun paiement à cette étape.
         </p>
-        <button onClick={() => navigate({ page: "home" })} className="dedco-btn dedco-btn-primary">
-          Retour à l'accueil
+        <button
+          onClick={() => navigate({ page: "designer-projet-attente", projectId: "BRF-2026-001" })}
+          className="dedco-btn dedco-btn-primary"
+        >
+          Voir mon projet <ChevronRight size={16} />
         </button>
       </div>
     );
@@ -580,7 +603,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
         </div>
       </div>
 
-      {/* Stepper */}
+      {/* Stepper 5 étapes */}
       <div className="flex items-center justify-between mb-6">
         {[1, 2, 3, 4, 5].map((n) => (
           <div key={n} className="flex items-center flex-1 last:flex-none">
@@ -593,101 +616,186 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
           </div>
         ))}
       </div>
-      <p className="text-xs text-[var(--text-3)] mb-5 font-numeric">Étape {step}/5</p>
+      <p className="text-xs text-[var(--text-3)] mb-5 font-numeric">
+        Étape {step}/5 — {["Votre projet", "Votre besoin", "Inspirations", "Premier échange", "Envoi"][step - 1]}
+      </p>
 
       <div className="dedco-card p-5 mb-5">
+        {/* STEP 1 — Votre projet */}
         {step === 1 && (
           <div>
-            <h2 className="display-sm mb-4">Type de service</h2>
-            <div className="grid grid-cols-2 gap-3">
-              {SERVICES.map((s) => (
+            <h2 className="display-sm mb-4">Votre projet</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Type de besoin</label>
+                <select value={besoinType} onChange={(e) => setBesoinType(e.target.value)} className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white">
+                  <option value="">— Sélectionnez —</option>
+                  {BESOIN_TYPES.map((b) => <option key={b}>{b}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Type de lieu</label>
+                <select value={lieuType} onChange={(e) => setLieuType(e.target.value)} className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white">
+                  <option value="">— Sélectionnez —</option>
+                  {LIEU_TYPES.map((l) => <option key={l}>{l}</option>)}
+                </select>
+              </div>
+              <div className="grid sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Pièce / espace concerné</label>
+                  <input value={piece} onChange={(e) => setPiece(e.target.value)} placeholder="Ex: Salon" className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white" />
+                </div>
+                <div>
+                  <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Surface approx. (m²) — facultatif</label>
+                  <input type="number" value={surface} onChange={(e) => setSurface(Number(e.target.value))} className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white font-numeric" />
+                </div>
+              </div>
+              <div className="grid sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Ville</label>
+                  <input value={ville} onChange={(e) => setVille(e.target.value)} placeholder="Cotonou" className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white" />
+                </div>
+                <div>
+                  <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Quartier</label>
+                  <input value={quartier} onChange={(e) => setQuartier(e.target.value)} placeholder="Akpakpa" className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white" />
+                </div>
+              </div>
+              <p className="text-xs text-[var(--text-3)] italic">L'adresse exacte ne sera pas demandée à cette étape.</p>
+            </div>
+          </div>
+        )}
+
+        {/* STEP 2 — Votre besoin */}
+        {step === 2 && (
+          <div>
+            <h2 className="display-sm mb-4">Votre besoin</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Ce que vous souhaitez changer</label>
+                <textarea value={souhaits} onChange={(e) => setSouhaits(e.target.value.slice(0, 500))} rows={3} placeholder="Ex: Moderniser mon salon en gardant une touche africaine..." className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white resize-none" />
+                <p className="text-xs text-[var(--text-3)] text-right font-numeric">{souhaits.length}/500</p>
+              </div>
+              <div>
+                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Style recherché</label>
+                <input value={style} onChange={(e) => setStyle(e.target.value)} placeholder="Ex: Afro-contemporain, minimaliste..." className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white" />
+              </div>
+              <div>
+                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Contraintes connues (facultatif)</label>
+                <input value={contraintes} onChange={(e) => setContraintes(e.target.value)} placeholder="Ex: Budget limité, animaux, etc." className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white" />
+              </div>
+              <div>
+                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Budget global estimatif</label>
+                <select value={budget} onChange={(e) => setBudget(e.target.value)} className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white">
+                  <option value="">— Sélectionnez —</option>
+                  {BUDGETS.map((b) => <option key={b}>{b}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Échéance souhaitée</label>
+                <select value={echeance} onChange={(e) => setEcheance(e.target.value)} className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white">
+                  <option value="">— Sélectionnez —</option>
+                  {ECHEANCES.map((e) => <option key={e}>{e}</option>)}
+                </select>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* STEP 3 — Inspirations */}
+        {step === 3 && (
+          <div>
+            <h2 className="display-sm mb-4">Inspirations</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Photos de votre espace</label>
+                <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-6 text-center cursor-pointer hover:border-[var(--amber)] bg-white">
+                  <Upload size={24} className="mx-auto text-[var(--text-3)] mb-2" />
+                  <p className="text-sm font-semibold">Ajouter des photos</p>
+                  <p className="text-xs text-[var(--text-3)]">{photos.length} photo(s)</p>
+                  <input type="file" multiple accept="image/*" className="sr-only" onChange={(e) => {
+                    const files = Array.from(e.target.files || []);
+                    setPhotos(files.map((f) => URL.createObjectURL(f)));
+                  }} />
+                </label>
+              </div>
+              <div>
+                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Images d'inspiration</label>
+                <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-6 text-center cursor-pointer hover:border-[var(--amber)] bg-white">
+                  <Sparkles size={24} className="mx-auto text-[var(--text-3)] mb-2" />
+                  <p className="text-sm font-semibold">Ajouter des inspirations</p>
+                  <p className="text-xs text-[var(--text-3)]">{inspirations.length} image(s)</p>
+                  <input type="file" multiple accept="image/*" className="sr-only" onChange={(e) => {
+                    const files = Array.from(e.target.files || []);
+                    setInspirations(files.map((f) => URL.createObjectURL(f)));
+                  }} />
+                </label>
+              </div>
+              <div>
+                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Commentaire (facultatif)</label>
+                <textarea value={commentaire} onChange={(e) => setCommentaire(e.target.value)} rows={3} placeholder="Précisez vos envies, références..." className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white resize-none" />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* STEP 4 — Premier échange souhaité (ÉTAPE CENTRALE) */}
+        {step === 4 && (
+          <div>
+            <h2 className="display-sm mb-2">Comment souhaitez-vous commencer ?</h2>
+            <p className="text-xs text-[var(--text-3)] mb-4">Cette étape détermine le format du premier échange avec le designer.</p>
+            <div className="space-y-3">
+              {[
+                { id: "distance", label: "À distance", desc: "Échange par appel, visio ou messagerie. Adapté pour un premier avis ou un projet simple.", icon: <Video size={24} /> },
+                { id: "visite", label: "Visite sur site souhaitée", desc: "Vous souhaitez que le designer découvre l'espace avant de proposer la mission.", icon: <MapPin size={24} /> },
+                { id: "recommandation", label: "Je laisse le designer recommander", desc: "Le designer choisira le format le plus pertinent après analyse de votre brief.", icon: <Sparkles size={24} /> },
+              ].map((f) => (
                 <button
-                  key={s.id}
-                  onClick={() => setService(s.id)}
-                  className={`p-4 rounded-lg border-2 text-left transition-all ${
-                    service === s.id ? "border-[var(--amber)] bg-[var(--amber-pale)]" : "border-[var(--border)] hover:border-[var(--text-3)]"
+                  key={f.id}
+                  onClick={() => setFormat(f.id as typeof format)}
+                  className={`w-full p-4 rounded-lg border-2 text-left transition-all ${
+                    format === f.id ? "border-[var(--amber)] bg-[var(--amber-pale)]/30" : "border-[var(--border)] hover:border-[var(--text-3)]"
                   }`}
                 >
-                  <div className="text-2xl mb-1">{s.icon}</div>
-                  <p className="font-display font-semibold text-sm">{s.label}</p>
-                  <p className="text-xs text-[var(--text-3)]">{s.desc}</p>
+                  <div className="flex items-start gap-3">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+                      format === f.id ? "bg-[var(--amber)] text-white" : "bg-[var(--bg-warm)] text-[var(--text-2)]"
+                    }`}>
+                      {f.icon}
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-display font-semibold text-sm mb-0.5">{f.label}</p>
+                      <p className="text-xs text-[var(--text-3)]">{f.desc}</p>
+                    </div>
+                    {format === f.id && <Check size={16} className="text-[var(--amber)] flex-shrink-0" />}
+                  </div>
                 </button>
               ))}
             </div>
-          </div>
-        )}
-        {step === 2 && (
-          <div>
-            <h2 className="display-sm mb-4">Pièce et surface</h2>
-            <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2 block">Pièce concernée</label>
-            <select value={room} onChange={(e) => setRoom(e.target.value)} className="w-full px-3 py-2.5 mb-5 text-sm border border-[var(--border)] rounded-md bg-white">
-              <option value="">— Sélectionnez —</option>
-              {["Salon", "Chambre", "Cuisine", "Salle à manger", "Bureau", "Entrée", "Extérieur"].map((r) => (
-                <option key={r}>{r}</option>
-              ))}
-            </select>
-            <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2 block">
-              Surface : <span className="font-numeric font-bold text-[var(--amber)]">{surface} m²</span>
-            </label>
-            <input type="range" min={5} max={100} value={surface} onChange={(e) => setSurface(Number(e.target.value))} className="w-full" style={{ accentColor: "var(--amber)" }} />
-          </div>
-        )}
-        {step === 3 && (
-          <div>
-            <h2 className="display-sm mb-4">Styles de référence</h2>
-            <p className="text-xs text-[var(--text-3)] mb-3">Sélectionnez 1 à 3 styles</p>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              {STYLE_OPTS.map((s) => {
-                const active = styles.includes(s.id);
-                return (
-                  <button
-                    key={s.id}
-                    onClick={() => setStyles(styles.includes(s.id) ? styles.filter((x) => x !== s.id) : styles.length < 3 ? [...styles, s.id] : styles)}
-                    className={`relative rounded-lg overflow-hidden border-2 aspect-[4/5] transition-all ${active ? "border-[var(--amber)]" : "border-transparent"}`}
-                  >
-                    <img src={s.img} alt={s.label} className="w-full h-full object-cover" />
-                    <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(30,24,19,0.85), transparent 60%)" }} />
-                    <p className="absolute bottom-2 left-2 right-2 text-white text-xs font-semibold">{s.label}</p>
-                    {active && <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-[var(--amber)] text-white flex items-center justify-center"><Check size={12} /></div>}
-                  </button>
-                );
-              })}
+            <div className="mt-4 p-3 bg-[var(--amber-pale)]/30 rounded-md flex items-start gap-2">
+              <Sparkles size={14} className="text-[var(--amber)] flex-shrink-0 mt-0.5" />
+              <p className="text-xs text-[var(--text-2)]">
+                Le format, le contenu et le prix de cette première étape seront confirmés par le designer avant paiement.
+              </p>
             </div>
           </div>
         )}
-        {step === 4 && (
-          <div>
-            <h2 className="display-sm mb-4">Budget et délai</h2>
-            <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2 block">
-              Budget : <span className="font-numeric font-bold text-[var(--amber)]">{formatFCFA(budget)}</span>
-            </label>
-            <input type="range" min={50000} max={2000000} step={50000} value={budget} onChange={(e) => setBudget(Number(e.target.value))} className="w-full mb-5" style={{ accentColor: "var(--amber)" }} />
-            <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2 block">Délai</label>
-            <div className="space-y-2">
-              {[
-                { id: "urgent", label: "Urgent (< 2 semaines)" },
-                { id: "moyen", label: "Moyen (2-8 semaines)" },
-                { id: "flexible", label: "Flexible (> 8 semaines)" },
-              ].map((d) => (
-                <label key={d.id} className={`flex items-center gap-2 p-3 rounded-md cursor-pointer border-2 transition-all ${delay === d.id ? "border-[var(--amber)] bg-[var(--amber-pale)]" : "border-[var(--border)]"}`}>
-                  <input type="radio" name="delay" checked={delay === d.id} onChange={() => setDelay(d.id as typeof delay)} className="w-4 h-4" style={{ accentColor: "var(--amber)" }} />
-                  <span className="text-sm">{d.label}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-        )}
+
+        {/* STEP 5 — Récapitulatif + envoi */}
         {step === 5 && (
           <div>
-            <h2 className="display-sm mb-4">Description et photos</h2>
-            <textarea
-              value={desc}
-              onChange={(e) => setDesc(e.target.value.slice(0, 1000))}
-              rows={5}
-              placeholder="Décrivez votre projet, vos contraintes, vos envies... (min 50 caractères)"
-              className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white resize-none focus:outline-none focus:border-[var(--amber)]"
-            />
-            <p className="text-xs text-[var(--text-3)] text-right font-numeric">{desc.length}/1000</p>
+            <h2 className="display-sm mb-4">Récapitulatif</h2>
+            <dl className="space-y-2 text-sm">
+              <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Projet</dt><dd className="text-right">{besoinType} · {lieuType}</dd></div>
+              <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Lieu</dt><dd className="text-right">{piece}, {quartier} {ville}</dd></div>
+              <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Besoin</dt><dd className="text-right max-w-[60%]">{souhaits.slice(0, 50)}{souhaits.length > 50 ? "..." : ""}</dd></div>
+              <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Budget</dt><dd className="text-right font-numeric">{budget}</dd></div>
+              <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Format souhaité</dt><dd className="text-right">{format === "distance" ? "À distance" : format === "visite" ? "Visite sur site" : "Recommandation designer"}</dd></div>
+              <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Photos</dt><dd className="text-right font-numeric">{photos.length + inspirations.length} fichier(s)</dd></div>
+            </dl>
+            <div className="mt-4 p-3 bg-[var(--forest-pale)]/30 rounded-md flex items-start gap-2">
+              <CheckCircle2 size={14} className="text-[var(--forest)] flex-shrink-0 mt-0.5" />
+              <p className="text-xs text-[var(--text-2)]"><strong>Aucun paiement à cette étape.</strong> Le designer analysera votre brief et vous proposera un cadrage (avec prix) avant tout engagement.</p>
+            </div>
           </div>
         )}
       </div>
@@ -701,12 +809,13 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
           disabled={!canNext()}
           className="dedco-btn dedco-btn-primary flex-1"
         >
-          {step < 5 ? "Continuer" : "Envoyer ma demande"}
+          {step < 5 ? "Continuer" : "Envoyer mon brief"}
+          {step < 5 && <ChevronRight size={16} />}
         </button>
       </div>
 
       <p className="text-xs text-[var(--text-3)] text-center mt-4">
-        Demande transmise directement au designer · Réponse sous 48h
+        Brief transmis directement au designer · Proposition de cadrage sous 24-48h · Aucun paiement
       </p>
     </div>
   );

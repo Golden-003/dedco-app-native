@@ -84,7 +84,20 @@ export type AppRoute =
   | { page: 'client-projets' }
   | { page: 'brief-designer'; designerId: number }
   | { page: 'avis-livraison'; orderId: string }
-  | { page: 'plans-tarifs' };
+  | { page: 'plans-tarifs' }
+  // ── DESIGNER WORKFLOW (refonte parcours designer)
+  | { page: 'designer-projet-attente'; projectId: string }
+  | { page: 'designer-brief-recu'; briefId: string }
+  | { page: 'designer-cadrage-create'; briefId: string }
+  | { page: 'client-cadrage-recu'; proposalId: string }
+  | { page: 'cadrage-paiement'; proposalId: string }
+  | { page: 'cadrage-rendez-vous'; cadrageId: string }
+  | { page: 'cadrage-compte-rendu'; cadrageId: string }
+  | { page: 'designer-proposition-finale'; cadrageId: string }
+  | { page: 'client-proposition-finale'; proposalId: string }
+  | { page: 'projet-paiement'; proposalId: string }
+  | { page: 'projet-detail'; projectId: string }
+  | { page: 'projet-livraison'; projectId: string };
 
 // ============================================================
 // CurrentUser — distinguishes visitor vs logged-in (client/artisan/designer/admin/maison)
