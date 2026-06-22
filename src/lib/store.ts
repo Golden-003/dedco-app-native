@@ -59,7 +59,32 @@ export type AppRoute =
   | { page: 'notifications' }
   | { page: 'help-center' }
   | { page: 'about' }
-  | { page: 'become-artisan' };
+  | { page: 'become-artisan' }
+  // ── ARTISAN extended (BLOC 4)
+  | { page: 'artisan-demandes' }
+  | { page: 'artisan-projets' }
+  | { page: 'artisan-wallet' }
+  | { page: 'artisan-avis' }
+  | { page: 'artisan-certification' }
+  | { page: 'artisan-abonnement' }
+  | { page: 'artisan-parametres' }
+  // ── ADMIN extended (BLOC 4)
+  | { page: 'admin-kyc' }
+  | { page: 'admin-messages' }
+  | { page: 'admin-litiges'; id?: string }
+  | { page: 'admin-scenes' }
+  | { page: 'admin-collections' }
+  | { page: 'admin-certification' }
+  | { page: 'admin-parametres' }
+  // ── DESIGNER extended (BLOC 4)
+  | { page: 'designer-wallet' }
+  | { page: 'designer-portfolio' }
+  | { page: 'designer-abonnement' }
+  // ── CLIENT (BLOC 4)
+  | { page: 'client-projets' }
+  | { page: 'brief-designer'; designerId: number }
+  | { page: 'avis-livraison'; orderId: string }
+  | { page: 'plans-tarifs' };
 
 // ============================================================
 // Store State & Actions

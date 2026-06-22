@@ -61,9 +61,39 @@ import { HelpCenterPage } from "@/components/dedco/pages/help-center-page";
 import { AboutPage } from "@/components/dedco/pages/about-page";
 import { BecomeArtisanPage } from "@/components/dedco/pages/become-artisan-page";
 
+// BLOC 6 — New pages (audit)
+import {
+  ArtisanDemandesPage,
+  ArtisanProjetsPage,
+  ArtisanWalletPage,
+  ArtisanAvisPage,
+  ArtisanCertificationPage,
+  ArtisanAbonnementPage,
+  ArtisanParametresPage,
+} from "@/components/dedco/pages/artisan/artisan-extended-pages";
+import {
+  AdminKYCPage,
+  AdminMessagesPage,
+  AdminLitigesPage,
+  AdminScenesPage,
+  AdminCollectionsPage,
+  AdminCertificationPage,
+  AdminParametresPage,
+} from "@/components/dedco/pages/admin/admin-extended-pages";
+import {
+  DesignerWalletPage,
+  DesignerPortfolioPage,
+  DesignerAbonnementPage,
+  ClientProjetsPage,
+  BriefDesignerPage,
+  AvisLivraisonPage,
+  PlansTarifsPage,
+} from "@/components/dedco/pages/client-and-designer-pages";
+
 // Layouts
 import { ArtisanLayout } from "@/components/dedco/pages/artisan/artisan-layout";
 import { DesignerLayout } from "@/components/dedco/pages/designer/designer-layout";
+import { AdminLayout } from "@/components/dedco/pages/admin/admin-layout";
 
 // ============================================================
 // Bridge: AppRoute ↔ Route
@@ -110,9 +140,18 @@ function routeToAppRoute(r: Route): AppRoute {
 // Dashboard page sets (for layout wrapping)
 // ============================================================
 
-const ARTISAN_PAGES = new Set(["artisan-dashboard","artisan-products","artisan-orders","artisan-profile","artisan-stats"]);
-const DESIGNER_PAGES = new Set(["designer-dashboard","designer-projects","designer-briefs","designer-profile","designer-settings","brief-detail"]);
-const ADMIN_PAGES = new Set(["admin-dashboard","admin-users","admin-products","admin-orders","admin-analytics","admin-content"]);
+const ARTISAN_PAGES = new Set([
+  "artisan-dashboard","artisan-products","artisan-orders","artisan-profile","artisan-stats",
+  "artisan-demandes","artisan-projets","artisan-wallet","artisan-avis","artisan-certification","artisan-abonnement","artisan-parametres",
+]);
+const DESIGNER_PAGES = new Set([
+  "designer-dashboard","designer-projects","designer-briefs","designer-profile","designer-settings","brief-detail",
+  "designer-wallet","designer-portfolio","designer-abonnement",
+]);
+const ADMIN_PAGES = new Set([
+  "admin-dashboard","admin-users","admin-products","admin-orders","admin-analytics","admin-content",
+  "admin-kyc","admin-messages","admin-litiges","admin-scenes","admin-collections","admin-certification","admin-parametres",
+]);
 
 export function isDashboardPage(page: string): boolean {
   return ARTISAN_PAGES.has(page) || DESIGNER_PAGES.has(page) || ADMIN_PAGES.has(page) || page === "maison-dashboard";
@@ -289,6 +328,28 @@ export function DedcoRouter() {
       case "artisan-stats":
         return <ArtisanLayout><ArtisanStatsPage /></ArtisanLayout>;
 
+      // BLOC 6 — New artisan pages
+      case "artisan-demandes":
+        return <ArtisanLayout><ArtisanDemandesPage /></ArtisanLayout>;
+
+      case "artisan-projets":
+        return <ArtisanLayout><ArtisanProjetsPage /></ArtisanLayout>;
+
+      case "artisan-wallet":
+        return <ArtisanLayout><ArtisanWalletPage /></ArtisanLayout>;
+
+      case "artisan-avis":
+        return <ArtisanLayout><ArtisanAvisPage /></ArtisanLayout>;
+
+      case "artisan-certification":
+        return <ArtisanLayout><ArtisanCertificationPage /></ArtisanLayout>;
+
+      case "artisan-abonnement":
+        return <ArtisanLayout><ArtisanAbonnementPage /></ArtisanLayout>;
+
+      case "artisan-parametres":
+        return <ArtisanLayout><ArtisanParametresPage /></ArtisanLayout>;
+
       // ════════════════════════════════════════
       // DESIGNER DASHBOARD (wrapped in DesignerLayout)
       // ════════════════════════════════════════
@@ -306,6 +367,16 @@ export function DedcoRouter() {
 
       case "designer-settings":
         return <DesignerLayout><DesignerSettingsPage /></DesignerLayout>;
+
+      // BLOC 6 — New designer pages
+      case "designer-wallet":
+        return <DesignerLayout><DesignerWalletPage /></DesignerLayout>;
+
+      case "designer-portfolio":
+        return <DesignerLayout><DesignerPortfolioPage /></DesignerLayout>;
+
+      case "designer-abonnement":
+        return <DesignerLayout><DesignerAbonnementPage /></DesignerLayout>;
 
       // ════════════════════════════════════════
       // ADMIN DASHBOARD (already wrapped in AdminLayout internally)
@@ -327,6 +398,41 @@ export function DedcoRouter() {
 
       case "admin-content":
         return <AdminContentPage />;
+
+      // BLOC 6 — New admin pages (wrapped in AdminLayout)
+      case "admin-kyc":
+        return <AdminLayout><AdminKYCPage /></AdminLayout>;
+
+      case "admin-messages":
+        return <AdminLayout><AdminMessagesPage /></AdminLayout>;
+
+      case "admin-litiges":
+        return <AdminLayout><AdminLitigesPage /></AdminLayout>;
+
+      case "admin-scenes":
+        return <AdminLayout><AdminScenesPage /></AdminLayout>;
+
+      case "admin-collections":
+        return <AdminLayout><AdminCollectionsPage /></AdminLayout>;
+
+      case "admin-certification":
+        return <AdminLayout><AdminCertificationPage /></AdminLayout>;
+
+      case "admin-parametres":
+        return <AdminLayout><AdminParametresPage /></AdminLayout>;
+
+      // BLOC 6 — Client pages
+      case "client-projets":
+        return <ClientProjetsPage />;
+
+      case "brief-designer":
+        return <BriefDesignerPage designerId={route.designerId} />;
+
+      case "avis-livraison":
+        return <AvisLivraisonPage orderId={route.orderId} />;
+
+      case "plans-tarifs":
+        return <PlansTarifsPage />;
 
       // ════════════════════════════════════════
       // MAISON DASHBOARD

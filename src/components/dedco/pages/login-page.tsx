@@ -3,9 +3,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useDedcoStore } from "@/lib/store";
-import { Mail, Lock, Eye, EyeOff, Shield, Wrench, Palette, Briefcase, ChevronRight } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, Shield, Wrench, Palette, Briefcase, ChevronRight, Home } from "lucide-react";
 
 const DEMO_ROLES = [
+  { page: "profile" as const, label: "Client", desc: "Espace personnel", icon: <Home size={20} />, color: "var(--text-1)", bg: "var(--bg-warm)" },
   { page: "admin-dashboard" as const, label: "Admin", desc: "Gestion plateforme", icon: <Shield size={20} />, color: "var(--terracotta)", bg: "var(--terracotta-pale)" },
   { page: "artisan-dashboard" as const, label: "Artisan", desc: "Espace vendeur", icon: <Wrench size={20} />, color: "var(--forest)", bg: "var(--forest-pale)" },
   { page: "designer-dashboard" as const, label: "Designer", desc: "Espace créatif", icon: <Palette size={20} />, color: "var(--amber-dark)", bg: "var(--amber-pale)" },

@@ -82,7 +82,8 @@ export function ProfilePage() {
   const handleTabClick = (tab: ProfileTab) => {
     setActiveTab(tab);
     if (tab === "orders") {
-      // stay on profile page
+      // BLOC 8 — Voir mes projets → client-projets
+      navigate({ page: "client-projets" });
     } else if (tab === "favorites") {
       navigate({ page: "favorites" });
     } else if (tab === "wallet") {

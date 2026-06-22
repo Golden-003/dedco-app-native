@@ -43,6 +43,7 @@ export function Navbar({
 }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const navigate = useDedcoStore((s) => s.navigate);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -141,6 +142,21 @@ export function Navbar({
             >
               Créer mon brief
             </button>
+            {/* BLOC 8 — Boutons connexion/inscription */}
+            <button
+              type="button"
+              onClick={() => navigate({ page: "login" })}
+              className="hidden sm:inline-flex dedco-btn dedco-btn-ghost dedco-btn-sm"
+            >
+              Connexion
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate({ page: "register" })}
+              className="hidden sm:inline-flex dedco-btn dedco-btn-secondary dedco-btn-sm"
+            >
+              S'inscrire
+            </button>
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
@@ -205,6 +221,29 @@ export function Navbar({
               >
                 Créer mon brief
               </button>
+              {/* BLOC 8 — Connexion/Inscription mobile */}
+              <div className="grid grid-cols-2 gap-2 mt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigate({ page: "login" });
+                    setMobileOpen(false);
+                  }}
+                  className="dedco-btn dedco-btn-ghost w-full"
+                >
+                  Connexion
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigate({ page: "register" });
+                    setMobileOpen(false);
+                  }}
+                  className="dedco-btn dedco-btn-secondary w-full"
+                >
+                  S'inscrire
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -415,8 +454,14 @@ export function Footer({
                 </button>
               </li>
               <li>
-                <button type="button" onClick={() => navigate({ page: "messages" })} className="hover:text-amber transition-colors">
-                  Contact
+                <button type="button" onClick={() => navigate({ page: "plans-tarifs" })} className="hover:text-amber transition-colors">
+                  Plans et tarifs
+                </button>
+              </li>
+              {/* BLOC 8 — Contact → support (help-center) au lieu de messages (DM) */}
+              <li>
+                <button type="button" onClick={() => navigate({ page: "help-center" })} className="hover:text-amber transition-colors">
+                  Contact support
                 </button>
               </li>
             </ul>

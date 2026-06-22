@@ -3,6 +3,7 @@
 import { X, ShoppingBag, Plus, Minus, Trash2 } from "lucide-react";
 import { formatFCFA } from "@/lib/dedco-data";
 import type { CartItem } from "@/lib/dedco-types";
+import { useDedcoStore } from "@/lib/store";
 
 export function CartSidebar({
   open,
@@ -19,6 +20,7 @@ export function CartSidebar({
   onDecrement: (id: number) => void;
   onRemove: (id: number) => void;
 }) {
+  const navigate = useDedcoStore((s) => s.navigate);
   if (!open) return null;
   const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0);
   const shipping = subtotal === 0 || subtotal >= 50000 ? 0 : 2500;
@@ -169,6 +171,10 @@ export function CartSidebar({
             </div>
             <button
               type="button"
+              onClick={() => {
+                onClose();
+                navigate({ page: "checkout" });
+              }}
               className="dedco-btn dedco-btn-primary w-full dedco-btn-lg"
             >
               Passer commande

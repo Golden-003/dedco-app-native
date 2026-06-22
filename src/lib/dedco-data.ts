@@ -32,6 +32,9 @@ export const ARTISANS: Artisan[] = [
       "https://images.unsplash.com/photo-1566921895456-1cee64031c33?w=300&q=80",
     ],
     trust: 90,
+    wallet_solde: 245000,
+    nb_livraisons: 87,
+    abonnement: "pro",
   },
   {
     id: 2,
@@ -42,7 +45,7 @@ export const ARTISANS: Artisan[] = [
       "https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&crop=faces&w=240&q=85",
     rating: 4.8,
     reviews: 64,
-    level: "N3",
+    level: "N2",
     verified: true,
     experience: "8 ans",
     bio: "Artisan spécialisée dans la vannerie et le mobilier en rotin, Amara perpétue un savoir-faire familial transmis sur 3 générations. Ses créations sont exportées en France et au Sénégal.",
@@ -52,6 +55,9 @@ export const ARTISANS: Artisan[] = [
       "https://images.unsplash.com/photo-1528789386055-75c4b717bad1?auto=format&fit=crop&crop=entropy&w=300&q=80",
     ],
     trust: 85,
+    wallet_solde: 178000,
+    nb_livraisons: 64,
+    abonnement: "pro",
   },
   {
     id: 3,
@@ -62,7 +68,7 @@ export const ARTISANS: Artisan[] = [
       "https://images.unsplash.com/photo-1507152927179-bc4ebfef7103?auto=format&fit=crop&crop=faces&w=240&q=85",
     rating: 4.7,
     reviews: 52,
-    level: "N2",
+    level: "N1",
     verified: true,
     experience: "5 ans",
     bio: "Créatrice lumineuse qui associe les textiles traditionnels bogolan et wax à des luminaires contemporains. Ses pièces apportent une ambiance chaleureuse unique.",
@@ -72,6 +78,9 @@ export const ARTISANS: Artisan[] = [
       "https://images.unsplash.com/photo-1648809895588-c0bd7e06a61c?auto=format&fit=crop&crop=entropy&w=300&q=80",
     ],
     trust: 72,
+    wallet_solde: 56000,
+    nb_livraisons: 18,
+    abonnement: "gratuit",
   },
   {
     id: 4,
@@ -92,6 +101,9 @@ export const ARTISANS: Artisan[] = [
       "https://images.unsplash.com/photo-1611078295948-10b3961e1e40?auto=format&fit=crop&crop=entropy&w=300&q=80",
     ],
     trust: 65,
+    wallet_solde: 92000,
+    nb_livraisons: 32,
+    abonnement: "gratuit",
   },
   {
     id: 5,
@@ -112,6 +124,9 @@ export const ARTISANS: Artisan[] = [
       "https://images.unsplash.com/photo-1618722060945-b87f7326995b?auto=format&fit=crop&crop=entropy&w=300&q=80",
     ],
     trust: 45,
+    wallet_solde: 18000,
+    nb_livraisons: 7,
+    abonnement: "gratuit",
   },
   {
     id: 6,
@@ -122,7 +137,7 @@ export const ARTISANS: Artisan[] = [
       "https://images.unsplash.com/photo-1612214070442-3c806a722f0b?auto=format&fit=crop&crop=faces&w=240&q=85",
     rating: 4.8,
     reviews: 35,
-    level: "N2",
+    level: "N4",
     verified: true,
     experience: "15 ans",
     bio: "Maître sculpteur de Parakou, Théodore transforme le bois local en sculptures fonctionnelles et décoratives. Son atelier forme les jeunes artisans du nord Bénin.",
@@ -131,7 +146,10 @@ export const ARTISANS: Artisan[] = [
       "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?auto=format&fit=crop&crop=entropy&w=300&q=80",
     ],
-    trust: 78,
+    trust: 95,
+    wallet_solde: 412000,
+    nb_livraisons: 142,
+    abonnement: "boutique",
   },
   {
     id: 7,
@@ -152,6 +170,9 @@ export const ARTISANS: Artisan[] = [
       "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&w=1200&q=85",
     ],
     trust: 88,
+    wallet_solde: 312000,
+    nb_livraisons: 71,
+    abonnement: "pro",
   },
   {
     id: 8,
@@ -172,6 +193,9 @@ export const ARTISANS: Artisan[] = [
       "https://images.unsplash.com/photo-1510828561531-05a3388f6d3d?auto=format&fit=crop&crop=entropy&w=300&q=80",
     ],
     trust: 70,
+    wallet_solde: 84000,
+    nb_livraisons: 28,
+    abonnement: "gratuit",
   },
 ];
 
@@ -828,6 +852,22 @@ export const levelLabel = (level: string) => {
       return "Certifié Plateforme";
     default:
       return level;
+  }
+};
+
+// BLOC 7.2 — Couleurs des badges niveau (selon audit)
+export const levelBadgeStyle = (level: string): { bg: string; text: string; label: string } => {
+  switch (level) {
+    case "N1":
+      return { bg: "#F2EDE4", text: "#7A6E65", label: "N1 Nouveau" };
+    case "N2":
+      return { bg: "#E8F1FA", text: "#3B6EA5", label: "N2 Confirmé ✓✓" };
+    case "N3":
+      return { bg: "#FEF5E9", text: "#B8702F", label: "N3 Expert ⭐" };
+    case "N4":
+      return { bg: "#1E1813", text: "#FFFFFF", label: "N4 Certifié 🏆" };
+    default:
+      return { bg: "#F2EDE4", text: "#7A6E65", label: level };
   }
 };
 

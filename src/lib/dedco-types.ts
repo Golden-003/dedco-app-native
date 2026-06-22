@@ -35,6 +35,9 @@ export type Artisan = {
   bio: string;
   portfolio: string[];
   trust: number;
+  wallet_solde?: number;
+  nb_livraisons?: number;
+  abonnement?: "gratuit" | "pro" | "boutique";
 };
 
 export type Designer = {
