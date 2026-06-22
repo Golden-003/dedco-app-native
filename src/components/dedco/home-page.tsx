@@ -11,6 +11,7 @@ import {
   heroAvatars,
 } from "@/lib/dedco-data";
 import type { Route } from "@/lib/dedco-types";
+import { useDedcoStore } from "@/lib/store";
 import {
   ProductCard,
   SceneCard,
@@ -37,6 +38,7 @@ export function HomePage({
   savedScenes: Set<string>;
   toggleSaveScene: (slug: string) => void;
 }) {
+  const navigateStore = useDedcoStore((s) => s.navigate);
   const featuredScenes = SCENES.slice(0, 5);
   const featuredArtisans = ARTISANS.slice(0, 4);
   const featuredProducts = PRODUCTS.filter((p) => p.badge).slice(0, 8);
@@ -208,13 +210,22 @@ export function HomePage({
       {/* ARTISANS SECTION */}
       <section className="py-12 lg:py-16" style={{ background: "var(--bg-warm)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <div className="section-eyebrow">Talents locaux</div>
-            <h2 className="display-lg mb-2">Artisans à découvrir</h2>
-            <p className="text-sm text-ink-soft max-w-lg mx-auto">
-              Des créateurs béninois vérifiés, du novice au maître artisan,
-              réunis sur une seule plateforme.
-            </p>
+          <div className="flex items-end justify-between mb-8 gap-4">
+            <div>
+              <div className="section-eyebrow">Talents locaux</div>
+              <h2 className="display-lg mb-2">Artisans à découvrir</h2>
+              <p className="text-sm text-ink-soft max-w-lg mx-auto">
+                Des créateurs béninois vérifiés, du novice au maître artisan,
+                réunis sur une seule plateforme.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => navigateStore({ page: "artisans" })}
+              className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold text-amber hover:text-amber-dark transition-colors"
+            >
+              Tous les artisans <ArrowRight size={16} />
+            </button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {featuredArtisans.map((artisan) => (
@@ -380,7 +391,20 @@ export function HomePage({
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {MAGAZINE.slice(0, 4).map((article) => (
-              <MagazineCard key={article.id} article={article} />
+              <button key={article.id} type="button" onClick={() => navigateStore({ page: "article", id: article.id })} className="dedco-card overflow-hidden text-left cursor-pointer hover:shadow-md transition-shadow">
+                <div className="aspect-[4/3] overflow-hidden bg-warm">
+                  <img src={article.image} alt={article.title} className="w-full h-full object-cover" />
+                </div>
+                <div className="p-4">
+                  <div className="flex items-center gap-2 text-xs text-ink-mute mb-2">
+                    <span>{article.category}</span>
+                    <span>·</span>
+                    <span>{article.readTime}</span>
+                  </div>
+                  <h3 className="font-display font-bold text-sm mb-1">{article.title}</h3>
+                  <p className="text-xs text-ink-mute">{article.author} · {article.date}</p>
+                </div>
+              </button>
             ))}
           </div>
         </div>

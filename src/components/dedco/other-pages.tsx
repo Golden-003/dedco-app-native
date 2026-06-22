@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Search } from "lucide-react";
+import { useDedcoStore } from "@/lib/store";
 import {
   SCENES,
   DESIGNERS,
@@ -436,6 +437,7 @@ export function ArtisanDetailPage({
 // ============================================================
 
 export function MagazinePage() {
+  const navigate = useDedcoStore((s) => s.navigate);
   const featured = MAGAZINE.find((m) => m.featured) ?? MAGAZINE[0];
   const others = MAGAZINE.filter((m) => m.id !== featured.id);
 
@@ -476,7 +478,7 @@ export function MagazinePage() {
             <p className="text-xs text-ink-mute">
               Par {featured.author} · {featured.date}
             </p>
-            <button type="button" className="dedco-btn dedco-btn-primary self-start mt-4">
+            <button type="button" onClick={() => navigate({ page: "article", id: featured.id })} className="dedco-btn dedco-btn-primary self-start mt-4">
               Lire l'article
             </button>
           </div>
@@ -486,7 +488,21 @@ export function MagazinePage() {
       {/* Others */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {others.map((article) => (
-          <MagazineCard key={article.id} article={article} />
+          <button key={article.id} type="button" onClick={() => navigate({ page: "article", id: article.id })} className="dedco-card overflow-hidden text-left cursor-pointer hover:shadow-md transition-shadow">
+            <div className="aspect-[4/3] overflow-hidden bg-warm">
+              <img src={article.image} alt={article.title} className="w-full h-full object-cover" />
+            </div>
+            <div className="p-4">
+              <div className="flex items-center gap-2 text-xs text-ink-mute mb-2">
+                <span>{article.category}</span>
+                <span>·</span>
+                <span>{article.readTime}</span>
+              </div>
+              <h3 className="font-display font-bold text-base mb-2">{article.title}</h3>
+              <p className="text-sm text-ink-soft line-clamp-2">{article.excerpt}</p>
+              <p className="text-xs text-ink-mute mt-2">{article.author} · {article.date}</p>
+            </div>
+          </button>
         ))}
       </div>
     </div>

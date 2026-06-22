@@ -1,250 +1,137 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import type { Route, CartItem } from "@/lib/dedco-types";
+import { useEffect, useCallback } from "react";
+import { useDedcoStore, type AppRoute } from "@/lib/store";
+import type { Route } from "@/lib/dedco-types";
 import {
   Navbar,
   BottomNav,
   Footer,
 } from "@/components/dedco/layout";
-import { HomePage } from "@/components/dedco/home-page";
-import { MarketplacePage } from "@/components/dedco/marketplace-page";
-import { ProductPage } from "@/components/dedco/product-page";
-import { ScenePage } from "@/components/dedco/scene-page";
-import {
-  InspirationsPage,
-  DesignersPage,
-  DesignerDetailPage,
-  ArtisanDetailPage,
-  MagazinePage,
-  FavoritesPage,
-} from "@/components/dedco/other-pages";
-import { BriefPage } from "@/components/dedco/brief-page";
+import { DedcoRouter, isDashboardPage } from "@/components/dedco/dedco-router";
 import { CartSidebar, SearchOverlay } from "@/components/dedco/cart-search";
 
-export default function Home() {
-  const [route, setRoute] = useState<Route>({ name: "home" });
-  const [history, setHistory] = useState<Route[]>([]);
-  const [favorites, setFavorites] = useState<Set<number>>(
-    new Set([2, 10, 16]),
-  );
-  const [savedScenes, setSavedScenes] = useState<Set<string>>(new Set());
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [cartOpen, setCartOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
+// ============================================================
+// Bridge helpers: AppRoute ↔ Route
+// ============================================================
 
-  // Scroll to top on route change
+function appRouteToRoute(ar: AppRoute): Route {
+  const map: Record<string, Route> = {
+    home: { name: "home" },
+    marketplace: { name: "marketplace" },
+    "marketplace-category": { name: "marketplace" },
+    inspirations: { name: "inspirations" },
+    artisans: { name: "marketplace" },
+    designers: { name: "designers" },
+    magazine: { name: "magazine" },
+    favorites: { name: "favorites" },
+    brief: { name: "brief" },
+    "brief-create": { name: "brief" },
+    "brief-detail": { name: "brief" },
+  };
+
+  if (ar.page === "product") return { name: "product", id: ar.id };
+  if (ar.page === "scene") return { name: "scene", slug: ar.slug };
+  if (ar.page === "artisan") return { name: "artisan", id: ar.id };
+  if (ar.page === "designer") return { name: "designer", id: ar.id };
+
+  return map[ar.page] ?? { name: "home" };
+}
+
+function routeToAppRoute(r: Route): AppRoute {
+  switch (r.name) {
+    case "home": return { page: "home" };
+    case "marketplace": return { page: "marketplace" };
+    case "product": return { page: "product", id: r.id };
+    case "inspirations": return { page: "inspirations" };
+    case "scene": return { page: "scene", slug: r.slug };
+    case "artisan": return { page: "artisan", id: r.id };
+    case "designers": return { page: "designers" };
+    case "designer": return { page: "designer", id: r.id };
+    case "magazine": return { page: "magazine" };
+    case "favorites": return { page: "favorites" };
+    case "brief": return { page: "brief" };
+    default: return { page: "home" };
+  }
+}
+
+// ============================================================
+// Root Page — single route, internal SPA routing via Zustand
+// ============================================================
+
+export default function Home() {
+  const route = useDedcoStore((s) => s.route);
+  const navigate = useDedcoStore((s) => s.navigate);
+  const goBack = useDedcoStore((s) => s.goBack);
+  const cart = useDedcoStore((s) => s.cart);
+  const favorites = useDedcoStore((s) => s.favorites);
+  const cartOpen = useDedcoStore((s) => s.cartOpen);
+  const searchOpen = useDedcoStore((s) => s.searchOpen);
+  const setCartOpen = useDedcoStore((s) => s.setCartOpen);
+  const setSearchOpen = useDedcoStore((s) => s.setSearchOpen);
+  const incrementCart = useDedcoStore((s) => s.incrementCart);
+  const decrementCart = useDedcoStore((s) => s.decrementCart);
+  const removeFromCart = useDedcoStore((s) => s.removeFromCart);
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       window.scrollTo({ top: 0, behavior: "instant" });
     }
   }, [route]);
 
-  const navigate = useCallback(
-    (next: Route) => {
-      setHistory((h) => [...h, route]);
-      setRoute(next);
-    },
-    [route],
+  const navigateBridge = useCallback(
+    (r: Route) => navigate(routeToAppRoute(r)),
+    [navigate],
   );
 
-  const back = useCallback(() => {
-    setHistory((h) => {
-      if (h.length === 0) {
-        setRoute({ name: "home" });
-        return h;
-      }
-      const prev = h[h.length - 1];
-      setRoute(prev);
-      return h.slice(0, -1);
-    });
-  }, []);
-
-  const toggleFav = useCallback((id: number) => {
-    setFavorites((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  }, []);
-
-  const toggleSaveScene = useCallback((slug: string) => {
-    setSavedScenes((prev) => {
-      const next = new Set(prev);
-      if (next.has(slug)) next.delete(slug);
-      else next.add(slug);
-      return next;
-    });
-  }, []);
-
-  const addToCart = useCallback((item: CartItem) => {
-    setCart((prev) => {
-      const existing = prev.find(
-        (x) => x.id === item.id && x.selectedColor === item.selectedColor,
-      );
-      if (existing) {
-        return prev.map((x) =>
-          x.id === item.id && x.selectedColor === item.selectedColor
-            ? { ...x, qty: x.qty + item.qty }
-            : x,
-        );
-      }
-      return [...prev, item];
-    });
-    setCartOpen(true);
-  }, []);
-
-  const incrementCart = useCallback((id: number) => {
-    setCart((prev) =>
-      prev.map((x) => (x.id === id ? { ...x, qty: x.qty + 1 } : x)),
-    );
-  }, []);
-
-  const decrementCart = useCallback((id: number) => {
-    setCart((prev) =>
-      prev
-        .map((x) => (x.id === id ? { ...x, qty: x.qty - 1 } : x))
-        .filter((x) => x.qty > 0),
-    );
-  }, []);
-
-  const removeFromCart = useCallback((id: number) => {
-    setCart((prev) => prev.filter((x) => x.id !== id));
-  }, []);
-
+  const legacyRoute = appRouteToRoute(route);
   const cartCount = cart.reduce((s, x) => s + x.qty, 0);
-
-  const renderRoute = () => {
-    switch (route.name) {
-      case "home":
-        return (
-          <HomePage
-            onNavigate={navigate}
-            favorites={favorites}
-            toggleFav={toggleFav}
-            savedScenes={savedScenes}
-            toggleSaveScene={toggleSaveScene}
-          />
-        );
-      case "marketplace":
-        return (
-          <MarketplacePage
-            onNavigate={navigate}
-            favorites={favorites}
-            toggleFav={toggleFav}
-          />
-        );
-      case "product":
-        return (
-          <ProductPage
-            productId={route.id}
-            onNavigate={navigate}
-            onBack={back}
-            favorites={favorites}
-            toggleFav={toggleFav}
-            onAddToCart={addToCart}
-          />
-        );
-      case "scene":
-        return (
-          <ScenePage
-            slug={route.slug}
-            onNavigate={navigate}
-            onBack={back}
-            favorites={favorites}
-            toggleFav={toggleFav}
-            onAddToCart={addToCart}
-          />
-        );
-      case "inspirations":
-        return (
-          <InspirationsPage
-            onNavigate={navigate}
-            savedScenes={savedScenes}
-            toggleSaveScene={toggleSaveScene}
-          />
-        );
-      case "designers":
-        return <DesignersPage onNavigate={navigate} />;
-      case "designer":
-        return (
-          <DesignerDetailPage
-            designerId={route.id}
-            onNavigate={navigate}
-            onBack={back}
-          />
-        );
-      case "artisan":
-        return (
-          <ArtisanDetailPage
-            artisanId={route.id}
-            onNavigate={navigate}
-            onBack={back}
-            favorites={favorites}
-            toggleFav={toggleFav}
-          />
-        );
-      case "magazine":
-        return <MagazinePage />;
-      case "brief":
-        return <BriefPage onNavigate={navigate} onBack={back} />;
-      case "favorites":
-        return (
-          <FavoritesPage
-            onNavigate={navigate}
-            favorites={favorites}
-            toggleFav={toggleFav}
-          />
-        );
-      default:
-        return (
-          <HomePage
-            onNavigate={navigate}
-            favorites={favorites}
-            toggleFav={toggleFav}
-            savedScenes={savedScenes}
-            toggleSaveScene={toggleSaveScene}
-          />
-        );
-    }
-  };
+  const showPublicNav = !isDashboardPage(route.page);
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: "var(--bg-cream)" }}>
-      <Navbar
-        currentRoute={route}
-        onNavigate={navigate}
-        cartCount={cartCount}
-        favCount={favorites.size}
-        onOpenSearch={() => setSearchOpen(true)}
-        onOpenCart={() => setCartOpen(true)}
-        onOpenFavorites={() => navigate({ name: "favorites" })}
-      />
+      {showPublicNav && (
+        <Navbar
+          currentRoute={legacyRoute}
+          onNavigate={navigateBridge}
+          cartCount={cartCount}
+          favCount={favorites.length}
+          onOpenSearch={() => setSearchOpen(true)}
+          onOpenCart={() => setCartOpen(true)}
+          onOpenFavorites={() => navigate({ page: "favorites" })}
+        />
+      )}
 
-      <main className="flex-1 pb-16 lg:pb-0">{renderRoute()}</main>
+      <main className="flex-1 pb-16 lg:pb-0">
+        <DedcoRouter />
+      </main>
 
-      <Footer onNavigate={navigate} />
-      <BottomNav currentRoute={route} onNavigate={navigate} />
+      {showPublicNav && <Footer onNavigate={navigateBridge} />}
+      {showPublicNav && <BottomNav currentRoute={legacyRoute} onNavigate={navigateBridge} />}
 
-      <CartSidebar
-        open={cartOpen}
-        items={cart}
-        onClose={() => setCartOpen(false)}
-        onIncrement={incrementCart}
-        onDecrement={decrementCart}
-        onRemove={removeFromCart}
-      />
+      {showPublicNav && (
+        <CartSidebar
+          open={cartOpen}
+          items={cart}
+          onClose={() => setCartOpen(false)}
+          onIncrement={incrementCart}
+          onDecrement={decrementCart}
+          onRemove={removeFromCart}
+        />
+      )}
 
-      <SearchOverlay
-        open={searchOpen}
-        onClose={() => setSearchOpen(false)}
-        onSearch={() => {
-          navigate({ name: "marketplace" });
-        }}
-        onOpenProduct={() => {}}
-        onNavigateMarketplace={() => navigate({ name: "marketplace" })}
-      />
+      {showPublicNav && (
+        <SearchOverlay
+          open={searchOpen}
+          onClose={() => setSearchOpen(false)}
+          onSearch={(query) => {
+            setSearchOpen(false);
+            navigate({ page: "search", query });
+          }}
+          onOpenProduct={() => {}}
+          onNavigateMarketplace={() => navigate({ page: "marketplace" })}
+        />
+      )}
     </div>
   );
 }

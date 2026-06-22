@@ -95,6 +95,44 @@ export type Route =
   | { name: "artisan"; id: number }
   | { name: "designer"; id: number }
   | { name: "favorites" }
-  | { name: "brief" };
+  | { name: "brief" }
+  | { name: "artisans" }
+  | { name: "article"; id: number };
 
 export type CartItem = Product & { qty: number; selectedColor?: string };
+
+// ============================================================
+// Brief & Project types (for designer brief system)
+// ============================================================
+
+export type Brief = {
+  id: number;
+  title: string;
+  description: string;
+  clientName: string;
+  budget: { min: number; max: number };
+  room: string;
+  style: string;
+  status: 'open' | 'matched' | 'closed';
+  createdAt: string;
+  responses: number;
+  urgency: 'normal' | 'urgent' | 'flexible';
+  requirements: string[];
+};
+
+export type Project = {
+  id: number;
+  title: string;
+  clientName: string;
+  designerName: string;
+  designerId: number;
+  status: 'en_cours' | 'terminé' | 'en_attente';
+  progress: number;
+  budget: number;
+  paid: number;
+  startDate: string;
+  endDate?: string;
+  images: string[];
+  room: string;
+  style: string;
+};

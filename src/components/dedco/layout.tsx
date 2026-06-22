@@ -10,6 +10,7 @@ import {
   ChevronLeft,
 } from "lucide-react";
 import type { Route } from "@/lib/dedco-types";
+import { useDedcoStore, type AppRoute } from "@/lib/store";
 
 // ============================================================
 // Navbar (desktop) + mobile menu
@@ -307,6 +308,8 @@ export function Footer({
 }: {
   onNavigate: (route: Route) => void;
 }) {
+  const navigate = useDedcoStore((s) => s.navigate);
+
   return (
     <footer
       className="mt-auto text-white pt-12 pb-16 lg:pb-12"
@@ -340,38 +343,27 @@ export function Footer({
             <h4 className="text-white font-semibold mb-3 text-sm">Explorer</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigate({ name: "marketplace" })}
-                  className="hover:text-amber transition-colors"
-                >
+                <button type="button" onClick={() => onNavigate({ name: "marketplace" })} className="hover:text-amber transition-colors">
                   Marketplace
                 </button>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigate({ name: "inspirations" })}
-                  className="hover:text-amber transition-colors"
-                >
+                <button type="button" onClick={() => onNavigate({ name: "inspirations" })} className="hover:text-amber transition-colors">
                   Inspirations
                 </button>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigate({ name: "designers" })}
-                  className="hover:text-amber transition-colors"
-                >
+                <button type="button" onClick={() => onNavigate({ name: "designers" })} className="hover:text-amber transition-colors">
                   Designers
                 </button>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigate({ name: "magazine" })}
-                  className="hover:text-amber transition-colors"
-                >
+                <button type="button" onClick={() => navigate({ page: "artisans" })} className="hover:text-amber transition-colors">
+                  Artisans
+                </button>
+              </li>
+              <li>
+                <button type="button" onClick={() => onNavigate({ name: "magazine" })} className="hover:text-amber transition-colors">
                   Magazine
                 </button>
               </li>
@@ -382,22 +374,22 @@ export function Footer({
             <h4 className="text-white font-semibold mb-3 text-sm">Artisans</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <button className="hover:text-amber transition-colors">
+                <button type="button" onClick={() => navigate({ page: "become-artisan" })} className="hover:text-amber transition-colors">
                   Devenir artisan
                 </button>
               </li>
               <li>
-                <button className="hover:text-amber transition-colors">
+                <button type="button" onClick={() => navigate({ page: "become-artisan" })} className="hover:text-amber transition-colors">
                   Niveaux de confiance
                 </button>
               </li>
               <li>
-                <button className="hover:text-amber transition-colors">
+                <button type="button" onClick={() => onNavigate({ name: "marketplace" })} className="hover:text-amber transition-colors">
                   Abonnements
                 </button>
               </li>
               <li>
-                <button className="hover:text-amber transition-colors">
+                <button type="button" onClick={() => navigate({ page: "help-center" })} className="hover:text-amber transition-colors">
                   Centre d'aide
                 </button>
               </li>
@@ -408,22 +400,22 @@ export function Footer({
             <h4 className="text-white font-semibold mb-3 text-sm">À propos</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <button className="hover:text-amber transition-colors">
+                <button type="button" onClick={() => navigate({ page: "about" })} className="hover:text-amber transition-colors">
                   Notre mission
                 </button>
               </li>
               <li>
-                <button className="hover:text-amber transition-colors">
+                <button type="button" onClick={() => navigate({ page: "about" })} className="hover:text-amber transition-colors">
                   Sécurité & confiance
                 </button>
               </li>
               <li>
-                <button className="hover:text-amber transition-colors">
+                <button type="button" onClick={() => navigate({ page: "help-center" })} className="hover:text-amber transition-colors">
                   CGU & CGV
                 </button>
               </li>
               <li>
-                <button className="hover:text-amber transition-colors">
+                <button type="button" onClick={() => navigate({ page: "messages" })} className="hover:text-amber transition-colors">
                   Contact
                 </button>
               </li>
@@ -460,13 +452,13 @@ export function Footer({
         <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
           <p>© 2026 Dedco · Cotonou, Bénin · Tous droits réservés</p>
           <div className="flex gap-4">
-            <button className="hover:text-amber transition-colors">
+            <button type="button" onClick={() => navigate({ page: "about" })} className="hover:text-amber transition-colors">
               Mentions légales
             </button>
-            <button className="hover:text-amber transition-colors">
+            <button type="button" onClick={() => navigate({ page: "settings" })} className="hover:text-amber transition-colors">
               Confidentialité
             </button>
-            <button className="hover:text-amber transition-colors">
+            <button type="button" onClick={() => navigate({ page: "help-center" })} className="hover:text-amber transition-colors">
               Cookies
             </button>
           </div>
