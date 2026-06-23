@@ -9,7 +9,6 @@ import {
   ChevronRight,
   Calendar,
 } from "lucide-react";
-import { AdminLayout } from "./admin-layout";
 import { useDedcoStore } from "@/lib/store";
 import { formatFCFA } from "@/lib/dedco-data";
 
@@ -97,8 +96,7 @@ export function AdminOrdersPage() {
   const paginated = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
   return (
-    <AdminLayout>
-      <motion.div variants={stagger} initial="initial" animate="animate">
+          <motion.div variants={stagger} initial="initial" animate="animate">
         <motion.div variants={fadeUp} className="mb-6">
           <h1 className="font-display text-2xl md:text-3xl font-semibold text-[var(--text-1)]">
             Commandes
@@ -321,6 +319,5 @@ export function AdminOrdersPage() {
           )}
         </motion.div>
       </motion.div>
-    </AdminLayout>
-  );
+      );
 }

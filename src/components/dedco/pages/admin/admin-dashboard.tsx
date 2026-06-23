@@ -14,7 +14,6 @@ import {
   AlertTriangle,
   Clock,
 } from "lucide-react";
-import { AdminLayout } from "./admin-layout";
 import { formatFCFA } from "@/lib/dedco-data";
 
 // ── KPI data ──
@@ -142,8 +141,7 @@ const fadeUp = {
 
 export function AdminDashboardPage() {
   return (
-    <AdminLayout>
-      <motion.div variants={stagger} initial="initial" animate="animate">
+          <motion.div variants={stagger} initial="initial" animate="animate">
         <motion.div variants={fadeUp} className="mb-6">
           <h1 className="font-display text-2xl md:text-3xl font-semibold text-[var(--text-1)]">
             Tableau de bord
@@ -279,6 +277,5 @@ export function AdminDashboardPage() {
           </div>
         </motion.div>
       </motion.div>
-    </AdminLayout>
-  );
+      );
 }

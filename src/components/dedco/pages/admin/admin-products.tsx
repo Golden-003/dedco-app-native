@@ -11,7 +11,6 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { AdminLayout } from "./admin-layout";
 import { PRODUCTS, ARTISANS, formatFCFA } from "@/lib/dedco-data";
 import type { Product } from "@/lib/dedco-types";
 
@@ -97,8 +96,7 @@ export function AdminProductsPage() {
   };
 
   return (
-    <AdminLayout>
-      <motion.div variants={stagger} initial="initial" animate="animate">
+          <motion.div variants={stagger} initial="initial" animate="animate">
         <motion.div variants={fadeUp} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
           <div>
             <h1 className="font-display text-2xl md:text-3xl font-semibold text-[var(--text-1)]">
@@ -304,6 +302,5 @@ export function AdminProductsPage() {
           </div>
         </motion.div>
       </motion.div>
-    </AdminLayout>
-  );
+      );
 }

@@ -193,7 +193,7 @@ export function ArtisanDemandesPage() {
                     </span>
                   </p>
                   <button
-                    onClick={() => navigate({ page: "brief-detail", id: parseInt(brief.id.replace("BRF-", "")) || 1 })}
+                    onClick={() => navigate({ page: "artisan-brief-recu", briefId: brief.id })}
                     className="dedco-btn dedco-btn-primary dedco-btn-sm"
                   >
                     Voir le brief <ChevronRight size={14} />

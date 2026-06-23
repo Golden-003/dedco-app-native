@@ -89,21 +89,27 @@ import {
   AvisLivraisonPage,
   PlansTarifsPage,
 } from "@/components/dedco/pages/client-and-designer-pages";
-// Workflow designer (refonte parcours)
+// Workflow designer (simplifié)
 import {
   DesignerProjetAttentePage,
   DesignerBriefRecuPage,
-  DesignerCadrageCreatePage,
-  ClientCadrageRecuPage,
-  CadragePaiementPage,
-  CadrageRendezVousPage,
-  CadrageCompteRenduPage,
-  DesignerPropositionFinalePage,
-  ClientPropositionFinalePage,
+  DesignerPropositionMissionPage,
+  ClientPropositionRecuePage,
   ProjetPaiementPage,
   ProjetDetailPage,
   ProjetLivraisonPage,
 } from "@/components/dedco/pages/designer-workflow-pages";
+// Artisan brief workflow
+import {
+  ArtisanBriefRecuPage,
+  ArtisanDevisCreatePage,
+} from "@/components/dedco/pages/artisan/artisan-brief-workflow";
+// Order system (facture + suivi)
+import {
+  OrderConfirmationPage,
+  InvoicePage,
+  OrderTrackingPage as NewOrderTrackingPage,
+} from "@/components/dedco/pages/order-pages";
 
 // Layouts
 import { ArtisanLayout } from "@/components/dedco/pages/artisan/artisan-layout";
@@ -158,6 +164,7 @@ function routeToAppRoute(r: Route): AppRoute {
 const ARTISAN_PAGES = new Set([
   "artisan-dashboard","artisan-products","artisan-orders","artisan-profile","artisan-stats",
   "artisan-demandes","artisan-projets","artisan-wallet","artisan-avis","artisan-certification","artisan-abonnement","artisan-parametres",
+  "artisan-brief-recu","artisan-devis-create",
 ]);
 const DESIGNER_PAGES = new Set([
   "designer-dashboard","designer-projects","designer-briefs","designer-profile","designer-settings","brief-detail",
@@ -284,7 +291,7 @@ export function DedcoRouter() {
         return <ProfilePage />;
 
       case "order-tracking":
-        return <OrderTrackingPage orderId={route.id} />;
+        return <NewOrderTrackingPage orderId={route.id} />;
 
       case "order-history":
         return <OrderHistoryPage />;
@@ -329,69 +336,69 @@ export function DedcoRouter() {
       // ARTISAN DASHBOARD (wrapped in ArtisanLayout)
       // ════════════════════════════════════════
       case "artisan-dashboard":
-        return <ArtisanLayout><ArtisanDashboardPage /></ArtisanLayout>;
+        return <ArtisanDashboardPage />;
 
       case "artisan-products":
-        return <ArtisanLayout><ArtisanProductsPage /></ArtisanLayout>;
+        return <ArtisanProductsPage />;
 
       case "artisan-orders":
-        return <ArtisanLayout><ArtisanOrdersPage /></ArtisanLayout>;
+        return <ArtisanOrdersPage />;
 
       case "artisan-profile":
-        return <ArtisanLayout><ArtisanProfilePage /></ArtisanLayout>;
+        return <ArtisanProfilePage />;
 
       case "artisan-stats":
-        return <ArtisanLayout><ArtisanStatsPage /></ArtisanLayout>;
+        return <ArtisanStatsPage />;
 
       // BLOC 6 — New artisan pages
       case "artisan-demandes":
-        return <ArtisanLayout><ArtisanDemandesPage /></ArtisanLayout>;
+        return <ArtisanDemandesPage />;
 
       case "artisan-projets":
-        return <ArtisanLayout><ArtisanProjetsPage /></ArtisanLayout>;
+        return <ArtisanProjetsPage />;
 
       case "artisan-wallet":
-        return <ArtisanLayout><ArtisanWalletPage /></ArtisanLayout>;
+        return <ArtisanWalletPage />;
 
       case "artisan-avis":
-        return <ArtisanLayout><ArtisanAvisPage /></ArtisanLayout>;
+        return <ArtisanAvisPage />;
 
       case "artisan-certification":
-        return <ArtisanLayout><ArtisanCertificationPage /></ArtisanLayout>;
+        return <ArtisanCertificationPage />;
 
       case "artisan-abonnement":
-        return <ArtisanLayout><ArtisanAbonnementPage /></ArtisanLayout>;
+        return <ArtisanAbonnementPage />;
 
       case "artisan-parametres":
-        return <ArtisanLayout><ArtisanParametresPage /></ArtisanLayout>;
+        return <ArtisanParametresPage />;
 
       // ════════════════════════════════════════
       // DESIGNER DASHBOARD (wrapped in DesignerLayout)
       // ════════════════════════════════════════
       case "designer-dashboard":
-        return <DesignerLayout><DesignerDashboardPage /></DesignerLayout>;
+        return <DesignerDashboardPage />;
 
       case "designer-projects":
-        return <DesignerLayout><DesignerProjectsPage /></DesignerLayout>;
+        return <DesignerProjectsPage />;
 
       case "designer-briefs":
-        return <DesignerLayout><DesignerBriefsPage /></DesignerLayout>;
+        return <DesignerBriefsPage />;
 
       case "designer-profile":
-        return <DesignerLayout><DesignerProfilePage /></DesignerLayout>;
+        return <DesignerProfilePage />;
 
       case "designer-settings":
-        return <DesignerLayout><DesignerSettingsPage /></DesignerLayout>;
+        return <DesignerSettingsPage />;
 
       // BLOC 6 — New designer pages
       case "designer-wallet":
-        return <DesignerLayout><DesignerWalletPage /></DesignerLayout>;
+        return <DesignerWalletPage />;
 
       case "designer-portfolio":
-        return <DesignerLayout><DesignerPortfolioPage /></DesignerLayout>;
+        return <DesignerPortfolioPage />;
 
       case "designer-abonnement":
-        return <DesignerLayout><DesignerAbonnementPage /></DesignerLayout>;
+        return <DesignerAbonnementPage />;
 
       // ════════════════════════════════════════
       // ADMIN DASHBOARD (already wrapped in AdminLayout internally)
@@ -416,25 +423,25 @@ export function DedcoRouter() {
 
       // BLOC 6 — New admin pages (wrapped in AdminLayout)
       case "admin-kyc":
-        return <AdminLayout><AdminKYCPage /></AdminLayout>;
+        return <AdminKYCPage />;
 
       case "admin-messages":
-        return <AdminLayout><AdminMessagesPage /></AdminLayout>;
+        return <AdminMessagesPage />;
 
       case "admin-litiges":
-        return <AdminLayout><AdminLitigesPage /></AdminLayout>;
+        return <AdminLitigesPage />;
 
       case "admin-scenes":
-        return <AdminLayout><AdminScenesPage /></AdminLayout>;
+        return <AdminScenesPage />;
 
       case "admin-collections":
-        return <AdminLayout><AdminCollectionsPage /></AdminLayout>;
+        return <AdminCollectionsPage />;
 
       case "admin-certification":
-        return <AdminLayout><AdminCertificationPage /></AdminLayout>;
+        return <AdminCertificationPage />;
 
       case "admin-parametres":
-        return <AdminLayout><AdminParametresPage /></AdminLayout>;
+        return <AdminParametresPage />;
 
       // BLOC 6 — Client pages
       case "client-projets":
@@ -450,34 +457,19 @@ export function DedcoRouter() {
         return <PlansTarifsPage />;
 
       // ════════════════════════════════════════
-      // WORKFLOW DESIGNER (refonte parcours)
+      // WORKFLOW DESIGNER (simplifié)
       // ════════════════════════════════════════
       case "designer-projet-attente":
         return <DesignerProjetAttentePage projectId={route.projectId} />;
 
       case "designer-brief-recu":
-        return <DesignerLayout><DesignerBriefRecuPage briefId={route.briefId} /></DesignerLayout>;
+        return <DesignerBriefRecuPage briefId={route.briefId} />;
 
-      case "designer-cadrage-create":
-        return <DesignerLayout><DesignerCadrageCreatePage briefId={route.briefId} /></DesignerLayout>;
+      case "designer-proposition-mission":
+        return <DesignerPropositionMissionPage briefId={route.briefId} />;
 
-      case "client-cadrage-recu":
-        return <ClientCadrageRecuPage proposalId={route.proposalId} />;
-
-      case "cadrage-paiement":
-        return <CadragePaiementPage proposalId={route.proposalId} />;
-
-      case "cadrage-rendez-vous":
-        return <CadrageRendezVousPage cadrageId={route.cadrageId} />;
-
-      case "cadrage-compte-rendu":
-        return <CadrageCompteRenduPage cadrageId={route.cadrageId} />;
-
-      case "designer-proposition-finale":
-        return <DesignerLayout><DesignerPropositionFinalePage cadrageId={route.cadrageId} /></DesignerLayout>;
-
-      case "client-proposition-finale":
-        return <ClientPropositionFinalePage proposalId={route.proposalId} />;
+      case "client-proposition-recue":
+        return <ClientPropositionRecuePage proposalId={route.proposalId} />;
 
       case "projet-paiement":
         return <ProjetPaiementPage proposalId={route.proposalId} />;
@@ -487,6 +479,24 @@ export function DedcoRouter() {
 
       case "projet-livraison":
         return <ProjetLivraisonPage projectId={route.projectId} />;
+
+      // ════════════════════════════════════════
+      // ARTISAN BRIEF WORKFLOW
+      // ════════════════════════════════════════
+      case "artisan-brief-recu":
+        return <ArtisanBriefRecuPage briefId={route.briefId} />;
+
+      case "artisan-devis-create":
+        return <ArtisanDevisCreatePage briefId={route.briefId} />;
+
+      // ════════════════════════════════════════
+      // ORDER SYSTEM
+      // ════════════════════════════════════════
+      case "order-confirmation":
+        return <OrderConfirmationPage orderId={route.orderId} />;
+
+      case "invoice":
+        return <InvoicePage orderId={route.orderId} />;
 
       // ════════════════════════════════════════
       // MAISON DASHBOARD
@@ -499,15 +509,23 @@ export function DedcoRouter() {
     }
   };
 
+  const isArtisan = ARTISAN_PAGES.has(route.page);
+  const isDesigner = DESIGNER_PAGES.has(route.page);
+  const isAdmin = ADMIN_PAGES.has(route.page);
+
+  if (isArtisan) return <ArtisanLayout key="artisan-layout">{renderPage()}</ArtisanLayout>;
+  if (isDesigner) return <DesignerLayout key="designer-layout">{renderPage()}</DesignerLayout>;
+  if (isAdmin) return <AdminLayout key="admin-layout">{renderPage()}</AdminLayout>;
+
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        key={JSON.stringify(route)}
+        key={route.page}
         variants={pageVariants}
         initial="initial"
         animate="animate"
         exit="exit"
-        transition={{ duration: 0.25, ease: "easeOut" }}
+        transition={{ duration: 0.15, ease: "easeOut" }}
         className="min-h-screen"
       >
         {renderPage()}

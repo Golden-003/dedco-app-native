@@ -12,7 +12,6 @@ import {
   ChevronRight,
   MoreHorizontal,
 } from "lucide-react";
-import { AdminLayout } from "./admin-layout";
 
 // ── Mock users ──
 type UserRole = "client" | "artisan" | "designer" | "admin";
@@ -200,8 +199,7 @@ export function AdminUsersPage() {
   const paginated = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
   return (
-    <AdminLayout>
-      <motion.div variants={stagger} initial="initial" animate="animate">
+          <motion.div variants={stagger} initial="initial" animate="animate">
         <motion.div variants={fadeUp} className="mb-6">
           <h1 className="font-display text-2xl md:text-3xl font-semibold text-[var(--text-1)]">
             Utilisateurs
@@ -429,6 +427,5 @@ export function AdminUsersPage() {
           )}
         </motion.div>
       </motion.div>
-    </AdminLayout>
-  );
+      );
 }

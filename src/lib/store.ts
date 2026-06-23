@@ -85,25 +85,26 @@ export type AppRoute =
   | { page: 'brief-designer'; designerId: number }
   | { page: 'avis-livraison'; orderId: string }
   | { page: 'plans-tarifs' }
-  // ── DESIGNER WORKFLOW (refonte parcours designer)
+  // ── DESIGNER WORKFLOW (version simplifiée)
   | { page: 'designer-projet-attente'; projectId: string }
   | { page: 'designer-brief-recu'; briefId: string }
-  | { page: 'designer-cadrage-create'; briefId: string }
-  | { page: 'client-cadrage-recu'; proposalId: string }
-  | { page: 'cadrage-paiement'; proposalId: string }
-  | { page: 'cadrage-rendez-vous'; cadrageId: string }
-  | { page: 'cadrage-compte-rendu'; cadrageId: string }
-  | { page: 'designer-proposition-finale'; cadrageId: string }
-  | { page: 'client-proposition-finale'; proposalId: string }
+  | { page: 'designer-proposition-mission'; briefId: string }
+  | { page: 'client-proposition-recue'; proposalId: string }
   | { page: 'projet-paiement'; proposalId: string }
   | { page: 'projet-detail'; projectId: string }
-  | { page: 'projet-livraison'; projectId: string };
+  | { page: 'projet-livraison'; projectId: string }
+  // ── ORDER SYSTEM
+  | { page: 'order-confirmation'; orderId: string }
+  | { page: 'invoice'; orderId: string }
+  // ── ARTISAN BRIEF WORKFLOW
+  | { page: 'artisan-brief-recu'; briefId: string }
+  | { page: 'artisan-devis-create'; briefId: string };
 
 // ============================================================
 // ProjectScope — type d'accompagnement (pivot économique)
 // ============================================================
 
-export type ProjectScope = "quick_advice" | "room_design" | "full_project";
+export type ProjectScope = "prototype" | "standard" | "premium";
 
 // ============================================================
 // CurrentUser — distinguishes visitor vs logged-in (client/artisan/designer/admin/maison)

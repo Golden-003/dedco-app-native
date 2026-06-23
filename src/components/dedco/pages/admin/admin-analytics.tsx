@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { TrendingUp, ShoppingCart, Award, AlertTriangle } from "lucide-react";
-import { AdminLayout } from "./admin-layout";
 import { formatFCFA } from "@/lib/dedco-data";
 
 type Period = "7j" | "30j" | "3mo" | "1an";
@@ -84,8 +83,7 @@ export function AdminAnalyticsPage() {
   const [period, setPeriod] = useState<Period>("30j");
 
   return (
-    <AdminLayout>
-      <motion.div variants={stagger} initial="initial" animate="animate">
+          <motion.div variants={stagger} initial="initial" animate="animate">
         <motion.div variants={fadeUp} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
           <div>
             <h1 className="font-display text-2xl md:text-3xl font-semibold text-[var(--text-1)]">
@@ -356,6 +354,5 @@ export function AdminAnalyticsPage() {
           </div>
         </motion.div>
       </motion.div>
-    </AdminLayout>
-  );
+      );
 }

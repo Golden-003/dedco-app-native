@@ -322,7 +322,7 @@ export function PaymentPage() {
                   <div className="flex flex-col sm:flex-row gap-3">
                     <button
                       onClick={() =>
-                        navigate({ page: "order-tracking", id: "ORD-001" })
+                        navigate({ page: "order-confirmation", orderId: orderId })
                       }
                       className="dedco-btn dedco-btn-primary dedco-btn-lg flex-1"
                     >

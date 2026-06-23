@@ -13,7 +13,6 @@ import {
   Layout,
   Newspaper,
 } from "lucide-react";
-import { AdminLayout } from "./admin-layout";
 import { MAGAZINE } from "@/lib/dedco-data";
 
 type ContentTab = "magazine" | "moodboards" | "scenes" | "banners";
@@ -73,8 +72,7 @@ export function AdminContentPage() {
   const [tab, setTab] = useState<ContentTab>("magazine");
 
   return (
-    <AdminLayout>
-      <motion.div variants={stagger} initial="initial" animate="animate">
+          <motion.div variants={stagger} initial="initial" animate="animate">
         <motion.div variants={fadeUp} className="mb-6">
           <h1 className="font-display text-2xl md:text-3xl font-semibold text-[var(--text-1)]">
             Contenu
@@ -371,6 +369,5 @@ export function AdminContentPage() {
           )}
         </AnimatePresence>
       </motion.div>
-    </AdminLayout>
-  );
+      );
 }
