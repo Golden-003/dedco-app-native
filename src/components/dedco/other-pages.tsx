@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search } from "lucide-react";
+import { Search, MapPin } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
 import {
   SCENES,
@@ -243,14 +243,12 @@ export function DesignerDetailPage({
               </h2>
               <ol className="space-y-3">
                 {[
-                  { title: "Brief initial (gratuit)", desc: "Vous décrivez votre besoin et choisissez un format de premier échange : à distance, visite sur site, ou recommandation du designer." },
-                  { title: "Proposition de cadrage", desc: "Le designer analyse votre brief et propose un premier échange avec un prix clair (visite, consultation). Aucun engagement sur le projet complet." },
-                  { title: "Paiement du cadrage", desc: "Vous acceptez et payez le cadrage (avec 1,5% de frais de garantie Dedco). L'adresse exacte est révélée si visite sur site." },
-                  { title: "Rendez-vous", desc: "Consultation à distance (visio/appel) ou visite sur site. Les deux parties confirment que l'échange a eu lieu." },
-                  { title: "Compte rendu", desc: "Le designer rédige un court compte rendu : besoin retenu, contraintes, orientation proposée. Le paiement du cadrage est libéré." },
-                  { title: "Proposition finale de mission", desc: "Le designer propose la mission complète : livrables, étapes, délai, révisions, honoraires. Transparence totale (commission 10% côté designer)." },
-                  { title: "Paiement et exécution", desc: "Vous validez et payez (acompte 50%, solde à la livraison). Le projet démarre avec messagerie, calendrier et jalons." },
-                  { title: "Livraison et achats", desc: "Le designer livre les livrables (moodboard, plans, sélection produits). Vous validez, le paiement est libéré. Vous pouvez acheter les produits recommandés via Dedco." },
+                  { title: "Brief initial (gratuit)", desc: "Vous choisissez un niveau de projet (Prototype, Standard, Premium) et décrivez votre besoin. Aucun paiement." },
+                  { title: "Réponse du designer", desc: "Le designer accepte et propose, pose des questions, ou refuse. Réponse sous 24-48h." },
+                  { title: "Proposition de mission", desc: "Le designer envoie une proposition complète : objectif, livrables, étapes, délai, prix, inclusions et exclusions." },
+                  { title: "Paiement", desc: "Vous acceptez et payez (avec 1,5% de frais de garantie Dedco). Le projet démarre immédiatement." },
+                  { title: "Projet", desc: "Exécution selon la mission validée. Messagerie, calendrier, jalons et achats recommandés." },
+                  { title: "Livraison", desc: "Le designer livre les livrables définis. Vous validez ou demandez un ajustement. Le paiement est libéré." },
                 ].map((step, i) => (
                   <li key={i} className="flex gap-3">
                     <span className="w-6 h-6 rounded-full bg-amber text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
@@ -301,11 +299,11 @@ export function DesignerDetailPage({
                 <span className="block text-[10px] font-normal opacity-80">À partir de {designer.hourlyRate.toLocaleString("fr-FR")} FCFA</span>
               </button>
               <p className="text-xs text-ink-soft text-center mb-4 px-2">
-                Décrivez votre besoin. Le designer vous proposera un premier format de cadrage adapté avant tout engagement sur le projet complet.
+                Décrivez votre besoin. Le designer vous répondra puis vous enverra une proposition de mission avec prix.
               </p>
 
               <p className="text-xs text-ink-mute leading-relaxed">
-                💡 Le brief est gratuit. Le cadrage est payant après proposition explicite du designer. Le projet complet est payé après acceptation de la proposition finale. Paiement sécurisé via Fedapay avec 1,5% de frais de garantie Dedco.
+                Le brief est gratuit. Le paiement se fait uniquement après acceptation de la proposition de mission. Paiement sécurisé via Fedapay avec 1,5% de frais de garantie Dedco.
               </p>
             </div>
           </aside>
@@ -361,7 +359,7 @@ export function ArtisanDetailPage({
               <h1 className="display-lg">{artisan.name}</h1>
               {artisan.verified && (
                 <span className="dedco-badge dedco-badge-forest">
-                  ✓ Vérifié
+                  Vérifié
                 </span>
               )}
               <span className="dedco-badge dedco-badge-amber">
@@ -370,7 +368,7 @@ export function ArtisanDetailPage({
             </div>
             <p className="text-sm text-ink-soft mb-2">{artisan.specialty}</p>
             <p className="text-xs text-ink-mute mb-3">
-              📍 {artisan.city} · {artisan.experience} d'expérience
+              <MapPin size={12} className="inline" />{artisan.city} · {artisan.experience} d'expérience
             </p>
             <div className="flex flex-wrap gap-4 text-sm">
               <div>

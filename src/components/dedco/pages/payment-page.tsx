@@ -327,7 +327,7 @@ export function PaymentPage() {
                       className="dedco-btn dedco-btn-primary dedco-btn-lg flex-1"
                     >
                       <Package size={16} />
-                      Suivre ma commande
+                      Voir ma commande
                       <ArrowRight size={16} />
                     </button>
                     <button

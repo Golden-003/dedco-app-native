@@ -10,6 +10,7 @@ import {
   ShoppingBag,
   ArrowRight,
   ArrowLeft,
+  ChevronLeft,
   Package,
 } from "lucide-react";
 
@@ -60,6 +61,12 @@ export function CartPage() {
 
   return (
     <div className="px-4 py-6 md:py-10 max-w-6xl mx-auto">
+      <button
+        onClick={() => navigate({ page: "marketplace" })}
+        className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1"
+      >
+        <ChevronLeft size={16} /> Continuer mes achats
+      </button>
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}

@@ -26,6 +26,15 @@ import {
   Video,
   MapPin,
   AlertTriangle,
+  Zap,
+  Sofa,
+  Home,
+  Lightbulb,
+  Palette,
+  Ruler,
+  ShoppingCart,
+  Monitor,
+  HardHat,
 } from "lucide-react";
 import { useDedcoStore, type ProjectScope } from "@/lib/store";
 import { formatFCFA, DESIGNERS, ARTISANS, PRODUCTS, getProduct } from "@/lib/dedco-data";
@@ -349,7 +358,7 @@ export function DesignerAbonnementPage() {
     },
     {
       id: "pro", name: "Pro", price: 25000,
-      features: ["Tout Essentiel", "Projets illimités", "Priorité +20%", "Badge Pro ⭐", "Accès B2B", "Stats avancées"],
+      features: ["Tout Essentiel", "Projets illimités", "Priorité +20%", "Badge Pro ", "Accès B2B", "Stats avancées"],
       current: true,
     },
     {
@@ -511,144 +520,71 @@ export function ClientProjetsPage() {
 }
 
 // ============================================================
-// PAGE: brief-designer — Type d'accompagnement + brief adaptatif 6 étapes
+// PAGE: brief-designer — Niveau de projet + brief adapté (workflow simplifié)
 // ============================================================
 
 export function BriefDesignerPage({ designerId }: { designerId: number }) {
   const navigate = useDedcoStore((s) => s.navigate);
   const designer = DESIGNERS.find((d) => d.id === designerId) || DESIGNERS[0];
-  const [step, setStep] = useState(0); // 0 = type accompagnement, 1-5 = brief
+  const [step, setStep] = useState(0); // 0 = niveau, 1 = brief, 2 = récap
   const [submitted, setSubmitted] = useState(false);
 
-  // Étape 0 — Type d'accompagnement (PIVOT ÉCONOMIQUE)
+  // Étape 0 — Niveau de projet
   const [scope, setScope] = useState<ProjectScope | "">("");
 
-  // Étape 1 — Votre projet
-  const [besoinType, setBesoinType] = useState<string>("");
-  const [lieuType, setLieuType] = useState<string>("");
-  const [piece, setPiece] = useState("");
-  const [surface, setSurface] = useState(25);
-  const [ville, setVille] = useState("");
-  const [quartier, setQuartier] = useState("");
-
-  // Étape 2 — Votre besoin
-  const [souhaits, setSouhaits] = useState("");
-  const [style, setStyle] = useState("");
-  const [contraintes, setContraintes] = useState("");
-  const [budget, setBudget] = useState<string>("");
-  const [echeance, setEcheance] = useState<string>("");
-
-  // Étape 3 — Inspirations
-  const [photos, setPhotos] = useState<string[]>([]);
-  const [inspirations, setInspirations] = useState<string[]>([]);
-  const [commentaire, setCommentaire] = useState("");
-
-  // Étape 4 — Premier échange (filtré par scope)
-  const [format, setFormat] = useState<"distance" | "visite" | "recommandation" | "">("");
-
-  // Champs avancés (full_project uniquement)
-  const [planLogement, setPlanLogement] = useState<string[]>([]);
+  // Champs brief (communs + adaptatifs)
+  const [besoin, setBesoin] = useState("");
+  const [objectifs, setObjectifs] = useState<string[]>([]);
+  const [espace, setEspace] = useState("");
   const [espacesMultiples, setEspacesMultiples] = useState("");
-  const [contraintesTechniques, setContraintesTechniques] = useState("");
-  const [niveauSuivi, setNiveauSuivi] = useState<string>("");
+  const [contraintes, setContraintes] = useState("");
+  const [inspirations, setInspirations] = useState<string[]>([]);
+  const [photos, setPhotos] = useState<string[]>([]);
 
-  const BESOIN_TYPES = [
-    "Conseils décoration",
-    "Aménagement d'une pièce",
-    "Aménagement de plusieurs pièces",
-    "Rénovation / transformation",
-    "Projet professionnel",
-    "Autre",
+  const PRESTATIONS = [
+    { id: "moodboard", label: "Moodboard", icon: Palette },
+    { id: "plan", label: "Plan d'implantation", icon: Ruler },
+    { id: "selection", label: "Sélection mobilier & déco", icon: Sofa },
+    { id: "liste-achats", label: "Liste d'achats Dedco", icon: ShoppingCart },
+    { id: "3d", label: "Rendu 3D", icon: Monitor },
+    { id: "suivi", label: "Visite de suivi", icon: MapPin },
+    { id: "coordination", label: "Coordination chantier", icon: HardHat },
+    { id: "conseil", label: "Conseil déco", icon: Lightbulb },
   ];
-  const LIEU_TYPES = ["Maison", "Appartement", "Studio", "Bureau", "Commerce", "Restaurant / hôtel", "Autre"];
-  const BUDGETS_QUICK = ["moins de 50 000 FCFA", "50 000 - 150 000 FCFA", "150 000 - 300 000 FCFA", "je ne sais pas encore"];
-  const BUDGETS_ROOM = ["moins de 250 000 FCFA", "250 000 à 750 000 FCFA", "750 000 à 1 500 000 FCFA", "plus de 1 500 000 FCFA", "je ne sais pas encore"];
-  const BUDGETS_FULL = ["moins de 500 000 FCFA", "500 000 - 2 000 000 FCFA", "2 000 000 - 5 000 000 FCFA", "plus de 5 000 000 FCFA", "sur devis"];
-  const ECHEANCES = ["< 1 mois", "1-3 mois", "3-6 mois", "> 6 mois", "Pas pressé"];
-  const NIVEAUX_SUIVI = ["Conseil ponctuel", "Suivi régulier", "Coordination complète chantier"];
 
-  // Config selon le scope choisi
+  const toggleObjectif = (id: string) => {
+    setObjectifs(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+  };
+
   const SCOPE_CONFIG: Record<ProjectScope, {
-    title: string;
-    desc: string;
-    icon: string;
-    triggers: string[];
-    priceLabel: string;
-    formats: { id: "distance" | "visite" | "recommandation"; label: string; desc: string; default?: boolean; recommended?: boolean }[];
-    needsLocation: boolean;
-    needsSurface: boolean;
-    needsPlan: boolean;
-    needsMultiSpaces: boolean;
-    budgets: string[];
+    label: string; icon: typeof Zap; desc: string;
+    needsEspace: boolean; needsMultiples: boolean; needsContraintes: boolean; inspirationsOptional: boolean;
   }> = {
-    quick_advice: {
-      title: "Conseil rapide",
-      desc: "Réponses à des questions ponctuelles, ajustements décoratifs, optimisation d'un espace existant. Sans engagement lourd.",
-      icon: "💡",
-      triggers: ["Cadrage léger", "Possible 100% à distance", "Peu ou pas de visite", "Livrable simple (recommandations)"],
-      priceLabel: "À partir de 15 000 – 50 000 FCFA",
-      formats: [
-        { id: "distance", label: "À distance (visio)", desc: "Échange par visio ou appel. Idéal pour conseil rapide.", default: true, recommended: true },
-        { id: "recommandation", label: "Recommandation designer", desc: "Le designer choisira le format adapté." },
-      ],
-      needsLocation: false,
-      needsSurface: false,
-      needsPlan: false,
-      needsMultiSpaces: false,
-      budgets: BUDGETS_QUICK,
+    prototype: {
+      label: "Prototype", icon: Zap,
+      desc: "Petit besoin simple. Ajustement ponctuel ou conseil rapide.",
+      needsEspace: false, needsMultiples: false, needsContraintes: false, inspirationsOptional: true,
     },
-    room_design: {
-      title: "Aménagement d'un espace",
-      desc: "Une pièce ou zone définie. Transformation ou optimisation. Choix mobilier + décoration. Possibilité de visite.",
-      icon: "🛋️",
-      triggers: ["Cadrage standard obligatoire", "Visite possible si nécessaire", "Proposition complète après cadrage"],
-      priceLabel: "À partir de 30 000 – 150 000 FCFA (cadrage + projet)",
-      formats: [
-        { id: "distance", label: "À distance (visio)", desc: "Échange par visio ou appel." },
-        { id: "visite", label: "Visite sur site", desc: "Le designer découvre l'espace avant de proposer." },
-        { id: "recommandation", label: "Recommandation designer", desc: "Le designer choisira le format le plus pertinent.", default: true, recommended: true },
-      ],
-      needsLocation: true,
-      needsSurface: true,
-      needsPlan: false,
-      needsMultiSpaces: false,
-      budgets: BUDGETS_ROOM,
+    standard: {
+      label: "Standard", icon: Sofa,
+      desc: "Aménagement d'une pièce. Transformation ou optimisation d'un espace défini.",
+      needsEspace: true, needsMultiples: false, needsContraintes: false, inspirationsOptional: false,
     },
-    full_project: {
-      title: "Projet complet",
-      desc: "Maison / appartement entier / bureau / commerce. Conception globale. Coordination possible. Forte probabilité de visite terrain.",
-      icon: "🏠",
-      triggers: ["Cadrage structuré obligatoire", "Visite quasi systématique si terrain", "Proposition détaillée obligatoire"],
-      priceLabel: "À partir de 100 000 FCFA + projet sur devis",
-      formats: [
-        { id: "visite", label: "Visite sur site (fortement suggérée)", desc: "Cadrage terrain prioritaire pour projet complet.", default: true, recommended: true },
-        { id: "recommandation", label: "Recommandation designer", desc: "Le designer confirmera la nécessité de visite." },
-      ],
-      needsLocation: true,
-      needsSurface: true,
-      needsPlan: true,
-      needsMultiSpaces: true,
-      budgets: BUDGETS_FULL,
+    premium: {
+      label: "Premium", icon: Home,
+      desc: "Projet complet ou plusieurs espaces. Conception globale avec coordination possible.",
+      needsEspace: false, needsMultiples: true, needsContraintes: true, inspirationsOptional: false,
     },
   };
 
   const scopeConfig = scope ? SCOPE_CONFIG[scope] : null;
-  const TOTAL_STEPS = 5; // brief steps (0 = type, 1-5 = brief)
-  const TOTAL_PROGRESS = 6; // 0 + 5 brief steps
+  const ScopeIcon = scopeConfig?.icon;
+  const TOTAL_STEPS = 2; // 0=niveau, 1=brief, 2=récap
 
   const canNext = () => {
     if (step === 0) return scope !== "";
-    if (step === 1) {
-      if (!besoinType) return false;
-      if (scopeConfig?.needsLocation && (!ville || !quartier)) return false;
-      if (scopeConfig?.needsSurface && !piece) return false;
-      return true;
-    }
-    if (step === 2) return souhaits.length >= 10 && budget;
-    if (step === 3) return true;
-    if (step === 4) return format !== "";
-    if (step === 5) return true;
-    return false;
+    if (step === 1) return besoin.length >= 10 && objectifs.length >= 1;
+    return true;
   };
 
   if (submitted) {
@@ -659,10 +595,10 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
         </div>
         <h1 className="display-xl mb-3">Brief envoyé !</h1>
         <p className="text-sm text-[var(--text-2)] mb-2">
-          Votre brief <strong>{scopeConfig?.title}</strong> a été transmis à <strong>{designer.name}</strong>.
+          Votre projet <strong>{scopeConfig?.label}</strong> a été transmis à <strong>{designer.name}</strong>.
         </p>
         <p className="text-xs text-[var(--text-3)] mb-6">
-          Vous recevrez une proposition de cadrage sous 24-48h. Aucun paiement à cette étape.
+          Le designer va répondre sous 24-48h. Aucun paiement à cette étape.
         </p>
         <button
           onClick={() => navigate({ page: "designer-projet-attente", projectId: "BRF-2026-001" })}
@@ -688,32 +624,33 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
         </div>
       </div>
 
-      {/* Stepper 0-5 (6 steps total) */}
+      {/* Stepper 0-2 */}
       <div className="flex items-center justify-between mb-6">
-        {[0, 1, 2, 3, 4, 5].map((n) => (
+        {[0, 1, 2].map((n) => (
           <div key={n} className="flex items-center flex-1 last:flex-none">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 ${
               n < step ? "bg-[var(--forest)] text-white" : n === step ? "bg-[var(--amber)] text-white" : "bg-[var(--bg-warm)] text-[var(--text-3)]"
             }`}>
               {n < step ? <Check size={14} /> : n}
             </div>
-            {n < 5 && <div className={`h-0.5 flex-1 mx-1 ${n < step ? "bg-[var(--forest)]" : "bg-[var(--bg-warm)]"}`} />}
+            {n < 2 && <div className={`h-0.5 flex-1 mx-1 ${n < step ? "bg-[var(--forest)]" : "bg-[var(--bg-warm)]"}`} />}
           </div>
         ))}
       </div>
       <p className="text-xs text-[var(--text-3)] mb-5 font-numeric">
-        Étape {step}/{TOTAL_PROGRESS} — {step === 0 ? "Type d'accompagnement" : ["Votre projet", "Votre besoin", "Inspirations", "Premier échange", "Envoi"][step - 1]}
+        Étape {step}/{TOTAL_STEPS} — {step === 0 ? "Niveau de projet" : step === 1 ? "Votre besoin" : "Envoi"}
       </p>
 
       <div className="dedco-card p-5 mb-5">
-        {/* STEP 0 — Type d'accompagnement (PIVOT) */}
+        {/* STEP 0 — Niveau de projet */}
         {step === 0 && (
           <div>
-            <h2 className="display-sm mb-2">Quel type de projet souhaitez-vous réaliser ?</h2>
-            <p className="text-xs text-[var(--text-3)] mb-4">Cela permet au designer d'adapter son approche, son prix et le niveau d'intervention dès le début.</p>
+            <h2 className="display-sm mb-2">Quel niveau de projet ?</h2>
+            <p className="text-xs text-[var(--text-3)] mb-4">Cela permet au designer d'adapter son approche et son prix.</p>
             <div className="space-y-3">
               {(Object.keys(SCOPE_CONFIG) as ProjectScope[]).map((key) => {
                 const cfg = SCOPE_CONFIG[key];
+                const ScopeIcon = cfg.icon;
                 const active = scope === key;
                 return (
                   <button
@@ -723,285 +660,140 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
                       active ? "border-[var(--amber)] bg-[var(--amber-pale)]/30" : "border-[var(--border)] hover:border-[var(--text-3)]"
                     }`}
                   >
-                    <div className="flex items-start gap-3 mb-2">
-                      <span className="text-2xl">{cfg.icon}</span>
+                    <div className="flex items-start gap-3">
+                      <ScopeIcon size={24} className="text-[var(--amber)]" />
                       <div className="flex-1">
-                        <p className="font-display font-semibold text-base">{cfg.title}</p>
+                        <p className="font-display font-semibold text-base">{cfg.label}</p>
                         <p className="text-xs text-[var(--text-3)] mt-0.5">{cfg.desc}</p>
                       </div>
                       {active && <Check size={18} className="text-[var(--amber)] flex-shrink-0" />}
                     </div>
-                    <div className="ml-9">
-                      <p className="font-numeric font-bold text-sm text-[var(--amber)] mb-1">{cfg.priceLabel}</p>
-                      <div className="flex flex-wrap gap-1">
-                        {cfg.triggers.map((t) => (
-                          <span key={t} className="dedco-badge dedco-badge-gray text-[10px]">{t}</span>
-                        ))}
-                      </div>
-                    </div>
                   </button>
                 );
               })}
             </div>
-            <div className="mt-4 p-3 bg-[var(--bg-warm)] rounded-md flex items-start gap-2">
-              <AlertTriangle size={14} className="text-[var(--amber)] flex-shrink-0 mt-0.5" />
-              <p className="text-xs text-[var(--text-2)]">
-                <strong>Règle d'or :</strong> Aucun projet ne peut être traité sans type d'accompagnement défini. Ce choix pilote toute la suite (brief, format d'échange, prix, cadrage).
-              </p>
-            </div>
           </div>
         )}
 
-        {/* STEP 1 — Votre projet (adapté selon scope) */}
+        {/* STEP 1 — Brief adapté au niveau */}
         {step === 1 && scopeConfig && (
           <div>
-            <h2 className="display-sm mb-1">Votre projet</h2>
-            <p className="text-xs text-[var(--text-3)] mb-4 flex items-center gap-1">
-              <span className="dedco-badge dedco-badge-amber">{scopeConfig.icon} {scopeConfig.title}</span>
-            </p>
-            <div className="space-y-4">
-              <div>
-                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Type de besoin</label>
-                <select value={besoinType} onChange={(e) => setBesoinType(e.target.value)} className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white">
-                  <option value="">— Sélectionnez —</option>
-                  {BESOIN_TYPES.map((b) => <option key={b}>{b}</option>)}
-                </select>
-              </div>
-              <div>
-                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Type de lieu</label>
-                <select value={lieuType} onChange={(e) => setLieuType(e.target.value)} className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white">
-                  <option value="">— Sélectionnez —</option>
-                  {LIEU_TYPES.map((l) => <option key={l}>{l}</option>)}
-                </select>
-              </div>
-              {/* Champs adaptatifs */}
-              {(scopeConfig.needsSurface || true) && (
-                <div className="grid sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">
-                      Pièce / espace concerné {!scopeConfig.needsSurface && <span className="text-[var(--text-3)] italic">(facultatif)</span>}
-                    </label>
-                    <input value={piece} onChange={(e) => setPiece(e.target.value)} placeholder="Ex: Salon" className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white" />
-                  </div>
-                  {scopeConfig.needsSurface && (
-                    <div>
-                      <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Surface approx. (m²)</label>
-                      <input type="number" value={surface} onChange={(e) => setSurface(Number(e.target.value))} className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white font-numeric" />
-                    </div>
-                  )}
-                </div>
-              )}
-              {/* Espaces multiples (full_project) */}
-              {scopeConfig.needsMultiSpaces && (
-                <div>
-                  <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Espaces à aménager (plusieurs possibles)</label>
-                  <input value={espacesMultiples} onChange={(e) => setEspacesMultiples(e.target.value)} placeholder="Ex: Salon, cuisine, 2 chambres" className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white" />
-                </div>
-              )}
-              {/* Localisation (sauf quick_advice) */}
-              {scopeConfig.needsLocation && (
-                <div className="grid sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Ville</label>
-                    <input value={ville} onChange={(e) => setVille(e.target.value)} placeholder="Cotonou" className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white" />
-                  </div>
-                  <div>
-                    <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Quartier</label>
-                    <input value={quartier} onChange={(e) => setQuartier(e.target.value)} placeholder="Akpakpa" className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white" />
-                  </div>
-                </div>
-              )}
-              {!scopeConfig.needsLocation && (
-                <p className="text-xs text-[var(--text-3)] italic">💡 Pour un conseil rapide, la localisation n'est pas obligatoire.</p>
-              )}
-              <p className="text-xs text-[var(--text-3)] italic">L'adresse exacte ne sera pas demandée à cette étape.</p>
-            </div>
-          </div>
-        )}
-
-        {/* STEP 2 — Votre besoin (adapté selon scope) */}
-        {step === 2 && scopeConfig && (
-          <div>
-            <h2 className="display-sm mb-1">Votre besoin</h2>
+            <h2 className="display-sm mb-1">Décrivez votre besoin</h2>
             <p className="text-xs text-[var(--text-3)] mb-4">
-              <span className="dedco-badge dedco-badge-amber">{scopeConfig.icon} {scopeConfig.title}</span>
+              <span className="dedco-badge dedco-badge-amber"><ScopeIcon size={12} /> {scopeConfig.label}</span>
             </p>
             <div className="space-y-4">
               <div>
-                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Ce que vous souhaitez changer</label>
-                <textarea value={souhaits} onChange={(e) => setSouhaits(e.target.value.slice(0, 500))} rows={3} placeholder="Ex: Moderniser mon salon en gardant une touche africaine..." className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white resize-none" />
-                <p className="text-xs text-[var(--text-3)] text-right font-numeric">{souhaits.length}/500</p>
+                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">
+                  {scope === "premium" ? "Décrivez votre projet complet" : "Décrivez votre besoin"}
+                </label>
+                <textarea value={besoin} onChange={(e) => setBesoin(e.target.value.slice(0, 500))} rows={3} placeholder="Ex: Moderniser mon salon en gardant une touche africaine..." className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white resize-none" />
+                <p className="text-xs text-[var(--text-3)] text-right font-numeric">{besoin.length}/500</p>
               </div>
-              <div>
-                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Style recherché</label>
-                <input value={style} onChange={(e) => setStyle(e.target.value)} placeholder="Ex: Afro-contemporain, minimaliste..." className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white" />
-              </div>
-              <div>
-                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Contraintes connues {!scopeConfig.needsPlan && <span className="italic">(facultatif)</span>}</label>
-                <input value={contraintes} onChange={(e) => setContraintes(e.target.value)} placeholder="Ex: Budget limité, animaux, etc." className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white" />
-              </div>
-              {/* Contraintes techniques (full_project) */}
-              {scopeConfig.needsPlan && (
-                <>
-                  <div>
-                    <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Contraintes techniques (facultatif)</label>
-                    <input value={contraintesTechniques} onChange={(e) => setContraintesTechniques(e.target.value)} placeholder="Ex: Plomberie à refaire, électricité ancienne..." className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white" />
-                  </div>
-                  <div>
-                    <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Niveau de suivi souhaité</label>
-                    <select value={niveauSuivi} onChange={(e) => setNiveauSuivi(e.target.value)} className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white">
-                      <option value="">— Sélectionnez —</option>
-                      {NIVEAUX_SUIVI.map((n) => <option key={n}>{n}</option>)}
-                    </select>
-                  </div>
-                </>
-              )}
-              <div>
-                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Budget global estimatif</label>
-                <select value={budget} onChange={(e) => setBudget(e.target.value)} className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white">
-                  <option value="">— Sélectionnez —</option>
-                  {scopeConfig.budgets.map((b) => <option key={b}>{b}</option>)}
-                </select>
-              </div>
-              <div>
-                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Échéance souhaitée</label>
-                <select value={echeance} onChange={(e) => setEcheance(e.target.value)} className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white">
-                  <option value="">— Sélectionnez —</option>
-                  {ECHEANCES.map((e) => <option key={e}>{e}</option>)}
-                </select>
-              </div>
-            </div>
-          </div>
-        )}
 
-        {/* STEP 3 — Inspirations (+ plan pour full_project) */}
-        {step === 3 && scopeConfig && (
-          <div>
-            <h2 className="display-sm mb-1">Inspirations</h2>
-            <p className="text-xs text-[var(--text-3)] mb-4">
-              <span className="dedco-badge dedco-badge-amber">{scopeConfig.icon} {scopeConfig.title}</span>
-            </p>
-            <div className="space-y-4">
-              {/* Plan du logement (full_project) */}
-              {scopeConfig.needsPlan && (
+              {scopeConfig.needsEspace && (
                 <div>
-                  <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Plan du logement (facultatif)</label>
-                  <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-6 text-center cursor-pointer hover:border-[var(--amber)] bg-white">
-                    <Upload size={24} className="mx-auto text-[var(--text-3)] mb-2" />
-                    <p className="text-sm font-semibold">Ajouter un plan</p>
-                    <p className="text-xs text-[var(--text-3)]">{planLogement.length} fichier(s)</p>
-                    <input type="file" multiple accept="image/*,application/pdf" className="sr-only" onChange={(e) => {
+                  <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Espace concerné</label>
+                  <input value={espace} onChange={(e) => setEspace(e.target.value)} placeholder="Ex: Salon 25m²" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
+                </div>
+              )}
+
+              {scopeConfig.needsMultiples && (
+                <div>
+                  <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Espaces concernés</label>
+                  <input value={espacesMultiples} onChange={(e) => setEspacesMultiples(e.target.value)} placeholder="Ex: Salon, cuisine, 2 chambres, entrée" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
+                </div>
+              )}
+
+              <div>
+                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">
+                  Prestations souhaitées <span className="italic normal-case">(sélectionnez une ou plusieurs)</span>
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {PRESTATIONS.map((p) => {
+                    const active = objectifs.includes(p.id);
+                    const PIcon = p.icon;
+                    return (
+                      <button
+                        key={p.id}
+                        type="button"
+                        onClick={() => toggleObjectif(p.id)}
+                        className={`px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all flex items-center gap-1.5 ${
+                          active
+                            ? "border-[var(--amber)] bg-[var(--amber-pale)] text-[var(--amber-dark)]"
+                            : "border-[var(--border)] bg-white text-[var(--text-2)] hover:border-[var(--text-3)]"
+                        }`}
+                      >
+                        <PIcon size={16} />
+                        <span>{p.label}</span>
+                        {active && <Check size={14} className="text-[var(--amber)]" />}
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="text-xs text-[var(--text-3)] mt-2 font-numeric">{objectifs.length} prestation(s) sélectionnée(s)</p>
+              </div>
+
+              {scopeConfig.needsContraintes && (
+                <div>
+                  <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Contraintes (facultatif)</label>
+                  <input value={contraintes} onChange={(e) => setContraintes(e.target.value)} placeholder="Ex: Budget limité, travaux en cours..." className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
+                </div>
+              )}
+
+              <div>
+                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">
+                  Inspirations {!scopeConfig.inspirationsOptional && ""}{scopeConfig.inspirationsOptional && <span className="italic">(optionnel)</span>}
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-4 text-center cursor-pointer hover:border-[var(--amber)] bg-white">
+                    <Upload size={20} className="mx-auto text-[var(--text-3)] mb-1" />
+                    <p className="text-xs font-semibold">Photos de l'espace</p>
+                    <p className="text-[10px] text-[var(--text-3)]">{photos.length} fichier(s)</p>
+                    <input type="file" multiple accept="image/*" className="sr-only" onChange={(e) => {
                       const files = Array.from(e.target.files || []);
-                      setPlanLogement(files.map((f) => URL.createObjectURL(f)));
+                      setPhotos(files.map((f) => URL.createObjectURL(f)));
+                    }} />
+                  </label>
+                  <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-4 text-center cursor-pointer hover:border-[var(--amber)] bg-white">
+                    <Sparkles size={20} className="mx-auto text-[var(--text-3)] mb-1" />
+                    <p className="text-xs font-semibold">Images d'inspiration</p>
+                    <p className="text-[10px] text-[var(--text-3)]">{inspirations.length} fichier(s)</p>
+                    <input type="file" multiple accept="image/*" className="sr-only" onChange={(e) => {
+                      const files = Array.from(e.target.files || []);
+                      setInspirations(files.map((f) => URL.createObjectURL(f)));
                     }} />
                   </label>
                 </div>
-              )}
-              <div>
-                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Photos de votre espace</label>
-                <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-6 text-center cursor-pointer hover:border-[var(--amber)] bg-white">
-                  <Upload size={24} className="mx-auto text-[var(--text-3)] mb-2" />
-                  <p className="text-sm font-semibold">Ajouter des photos</p>
-                  <p className="text-xs text-[var(--text-3)]">{photos.length} photo(s)</p>
-                  <input type="file" multiple accept="image/*" className="sr-only" onChange={(e) => {
-                    const files = Array.from(e.target.files || []);
-                    setPhotos(files.map((f) => URL.createObjectURL(f)));
-                  }} />
-                </label>
-              </div>
-              <div>
-                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Images d'inspiration</label>
-                <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-6 text-center cursor-pointer hover:border-[var(--amber)] bg-white">
-                  <Sparkles size={24} className="mx-auto text-[var(--text-3)] mb-2" />
-                  <p className="text-sm font-semibold">Ajouter des inspirations</p>
-                  <p className="text-xs text-[var(--text-3)]">{inspirations.length} image(s)</p>
-                  <input type="file" multiple accept="image/*" className="sr-only" onChange={(e) => {
-                    const files = Array.from(e.target.files || []);
-                    setInspirations(files.map((f) => URL.createObjectURL(f)));
-                  }} />
-                </label>
-              </div>
-              <div>
-                <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Commentaire (facultatif)</label>
-                <textarea value={commentaire} onChange={(e) => setCommentaire(e.target.value)} rows={3} placeholder="Précisez vos envies, références..." className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white resize-none" />
               </div>
             </div>
           </div>
         )}
 
-        {/* STEP 4 — Premier échange (filtré par scope) */}
-        {step === 4 && scopeConfig && (
-          <div>
-            <h2 className="display-sm mb-2">Comment souhaitez-vous commencer ?</h2>
-            <p className="text-xs text-[var(--text-3)] mb-4">
-              <span className="dedco-badge dedco-badge-amber">{scopeConfig.icon} {scopeConfig.title}</span>
-              <span className="ml-2">Format filtré selon votre type de projet.</span>
-            </p>
-            <div className="space-y-3">
-              {scopeConfig.formats.map((f) => {
-                const icons: Record<string, React.ReactNode> = {
-                  distance: <Video size={24} />,
-                  visite: <MapPin size={24} />,
-                  recommandation: <Sparkles size={24} />,
-                };
-                const active = format === f.id;
-                return (
-                  <button
-                    key={f.id}
-                    onClick={() => setFormat(f.id)}
-                    className={`w-full p-4 rounded-lg border-2 text-left transition-all ${
-                      active ? "border-[var(--amber)] bg-[var(--amber-pale)]/30" : "border-[var(--border)] hover:border-[var(--text-3)]"
-                    }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-                        active ? "bg-[var(--amber)] text-white" : "bg-[var(--bg-warm)] text-[var(--text-2)]"
-                      }`}>
-                        {icons[f.id]}
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-display font-semibold text-sm mb-0.5 flex items-center gap-2">
-                          {f.label}
-                          {f.recommended && <span className="dedco-badge dedco-badge-forest text-[10px]">Recommandé</span>}
-                        </p>
-                        <p className="text-xs text-[var(--text-3)]">{f.desc}</p>
-                      </div>
-                      {active && <Check size={16} className="text-[var(--amber)] flex-shrink-0" />}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-            <div className="mt-4 p-3 bg-[var(--amber-pale)]/30 rounded-md flex items-start gap-2">
-              <Sparkles size={14} className="text-[var(--amber)] flex-shrink-0 mt-0.5" />
-              <p className="text-xs text-[var(--text-2)]">
-                Le format, le contenu et le prix de cette première étape seront confirmés par le designer avant paiement.
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* STEP 5 — Récapitulatif + envoi */}
-        {step === 5 && scopeConfig && (
+        {/* STEP 2 — Récapitulatif */}
+        {step === 2 && scopeConfig && (
           <div>
             <h2 className="display-sm mb-2">Récapitulatif</h2>
             <p className="text-xs text-[var(--text-3)] mb-4">
-              <span className="dedco-badge dedco-badge-amber">{scopeConfig.icon} {scopeConfig.title}</span>
+              <span className="dedco-badge dedco-badge-amber"><ScopeIcon size={12} /> {scopeConfig.label}</span>
             </p>
             <dl className="space-y-2 text-sm">
-              <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Type de projet</dt><dd className="text-right font-semibold">{scopeConfig.title}</dd></div>
-              <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Besoin</dt><dd className="text-right">{besoinType}</dd></div>
-              {piece && <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Pièce</dt><dd className="text-right">{piece}</dd></div>}
-              {scopeConfig.needsSurface && <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Surface</dt><dd className="text-right font-numeric">{surface} m²</dd></div>}
-              {scopeConfig.needsLocation && ville && <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Lieu</dt><dd className="text-right">{quartier}, {ville}</dd></div>}
-              {scopeConfig.needsMultiSpaces && espacesMultiples && <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Espaces</dt><dd className="text-right">{espacesMultiples}</dd></div>}
-              <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Budget</dt><dd className="text-right font-numeric">{budget}</dd></div>
-              <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Format souhaité</dt><dd className="text-right">{format === "distance" ? "À distance" : format === "visite" ? "Visite sur site" : "Recommandation designer"}</dd></div>
-              <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Photos</dt><dd className="text-right font-numeric">{photos.length + inspirations.length + planLogement.length} fichier(s)</dd></div>
+              <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Niveau</dt><dd className="text-right font-semibold">{scopeConfig.label}</dd></div>
+              <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Besoin</dt><dd className="text-right max-w-[60%]">{besoin.slice(0, 60)}{besoin.length > 60 ? "..." : ""}</dd></div>
+              {espace && <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Espace</dt><dd className="text-right">{espace}</dd></div>}
+              {espacesMultiples && <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Espaces</dt><dd className="text-right">{espacesMultiples}</dd></div>}
+              <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded">
+                <dt className="text-[var(--text-3)]">Prestations</dt>
+                <dd className="text-right max-w-[60%]">
+                  {objectifs.map(id => PRESTATIONS.find(p => p.id === id)?.label).filter(Boolean).join(", ")}
+                </dd>
+              </div>
+              {contraintes && <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Contraintes</dt><dd className="text-right">{contraintes}</dd></div>}
+              <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Fichiers</dt><dd className="text-right font-numeric">{photos.length + inspirations.length}</dd></div>
             </dl>
             <div className="mt-4 p-3 bg-[var(--forest-pale)]/30 rounded-md flex items-start gap-2">
               <CheckCircle2 size={14} className="text-[var(--forest)] flex-shrink-0 mt-0.5" />
-              <p className="text-xs text-[var(--text-2)]"><strong>Aucun paiement à cette étape.</strong> Le designer analysera votre brief et vous proposera un cadrage (avec prix) avant tout engagement.</p>
+              <p className="text-xs text-[var(--text-2)]"><strong>Aucun paiement à cette étape.</strong> Le designer va répondre puis vous envoyer une proposition de mission avec prix.</p>
             </div>
           </div>
         )}
@@ -1012,18 +804,14 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
           {step === 0 ? "Annuler" : "Précédent"}
         </button>
         <button
-          onClick={() => step < 5 ? setStep(step + 1) : setSubmitted(true)}
+          onClick={() => step < 2 ? setStep(step + 1) : setSubmitted(true)}
           disabled={!canNext()}
           className="dedco-btn dedco-btn-primary flex-1"
         >
-          {step < 5 ? "Continuer" : "Envoyer mon brief"}
-          {step < 5 && <ChevronRight size={16} />}
+          {step < 2 ? "Continuer" : "Envoyer mon brief"}
+          {step < 2 && <ChevronRight size={16} />}
         </button>
       </div>
-
-      <p className="text-xs text-[var(--text-3)] text-center mt-4">
-        Brief transmis directement au designer · Proposition de cadrage sous 24-48h · Aucun paiement
-      </p>
     </div>
   );
 }
@@ -1075,7 +863,7 @@ export function AvisLivraisonPage({ orderId }: { orderId: string }) {
       {/* Avis obligatoire */}
       <div className="dedco-card p-5 border-t-4" style={{ borderTopColor: "var(--amber)", borderTopWidth: "3px" }}>
         <p className="text-sm font-semibold text-[var(--terracotta)] mb-3 flex items-center gap-2">
-          ⚠ Votre avis est requis avant de continuer sur Dedco.
+          Votre avis est requis avant de continuer sur Dedco.
         </p>
         <h2 className="display-md mb-4">Notez votre commande</h2>
         <div className="flex items-center gap-2 mb-5 justify-center">
@@ -1170,7 +958,7 @@ export function PlansTarifsPage() {
 
   const artisanPlans = [
     { id: "gratuit", name: "Gratuit", price: 0, features: ["3 produits max", "Profil basique", "Résultats standard"] },
-    { id: "pro", name: "Artisan Pro", price: 5000, features: ["Produits illimités", "Priorité +15%", "Badge Pro ⭐", "Stats avancées"] },
+    { id: "pro", name: "Artisan Pro", price: 5000, features: ["Produits illimités", "Priorité +15%", "Badge Pro ", "Stats avancées"] },
     { id: "boutique", name: "Boutique", price: 15000, features: ["Page marque", "20 produits max", "Messagerie client", "B2B Phase 3"] },
   ];
   const designerPlans = [

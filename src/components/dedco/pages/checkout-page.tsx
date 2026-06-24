@@ -423,7 +423,7 @@ export function CheckoutPage() {
                     </p>
                     {indication && (
                       <p className="text-xs mt-1" style={{ color: "var(--text-3)" }}>
-                        💡 {indication}
+                        {indication}
                       </p>
                     )}
                   </div>
