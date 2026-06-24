@@ -628,7 +628,7 @@ export function AdminScenesPage() {
             ))}
           </div>
           <p className="text-xs text-center text-[var(--text-3)] mt-2">
-            Hotspots actifs : <span className="font-numeric font-semibold text-[var(--forest)]">{hotspots.length}/3 ✅</span> (minimum 2 requis)
+            Hotspots actifs : <span className="font-numeric font-semibold text-[var(--forest)]">{hotspots.length}/3 (OK)</span> (minimum 2 requis)
           </p>
         </div>
 

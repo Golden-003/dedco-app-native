@@ -28,6 +28,12 @@ import { WalletPage } from "@/components/dedco/pages/wallet-page";
 import { KYCPage } from "@/components/dedco/pages/kyc-page";
 import { BriefListPage } from "@/components/dedco/pages/brief-list-page";
 import { BriefCreatePage } from "@/components/dedco/pages/brief-create-page";
+import { BriefPage } from "@/components/dedco/brief-page";
+import {
+  OrderConfirmationPage,
+  InvoicePage,
+  OrderTrackingPage as NewOrderTrackingPage,
+} from "@/components/dedco/pages/order-pages";
 import { DesignerDashboardPage } from "@/components/dedco/pages/designer/designer-dashboard";
 import { DesignerProjectsPage } from "@/components/dedco/pages/designer/designer-projects";
 import { DesignerBriefsPage } from "@/components/dedco/pages/designer/designer-briefs";
@@ -72,6 +78,10 @@ import {
   ArtisanParametresPage,
 } from "@/components/dedco/pages/artisan/artisan-extended-pages";
 import {
+  ArtisanBriefRecuPage,
+  ArtisanDevisCreatePage,
+} from "@/components/dedco/pages/artisan/artisan-brief-workflow";
+import {
   AdminKYCPage,
   AdminMessagesPage,
   AdminLitigesPage,
@@ -89,7 +99,7 @@ import {
   AvisLivraisonPage,
   PlansTarifsPage,
 } from "@/components/dedco/pages/client-and-designer-pages";
-// Workflow designer (simplifié)
+// Workflow designer (version simplifiée)
 import {
   DesignerProjetAttentePage,
   DesignerBriefRecuPage,
@@ -99,17 +109,6 @@ import {
   ProjetDetailPage,
   ProjetLivraisonPage,
 } from "@/components/dedco/pages/designer-workflow-pages";
-// Artisan brief workflow
-import {
-  ArtisanBriefRecuPage,
-  ArtisanDevisCreatePage,
-} from "@/components/dedco/pages/artisan/artisan-brief-workflow";
-// Order system (facture + suivi)
-import {
-  OrderConfirmationPage,
-  InvoicePage,
-  OrderTrackingPage as NewOrderTrackingPage,
-} from "@/components/dedco/pages/order-pages";
 
 // Layouts
 import { ArtisanLayout } from "@/components/dedco/pages/artisan/artisan-layout";
@@ -293,6 +292,12 @@ export function DedcoRouter() {
       case "order-tracking":
         return <NewOrderTrackingPage orderId={route.id} />;
 
+      case "order-confirmation":
+        return <OrderConfirmationPage orderId={route.orderId} />;
+
+      case "invoice":
+        return <InvoicePage orderId={route.orderId} />;
+
       case "order-history":
         return <OrderHistoryPage />;
 
@@ -324,6 +329,9 @@ export function DedcoRouter() {
       // BRIEF SYSTEM
       // ════════════════════════════════════════
       case "brief":
+        return <BriefPage onNavigate={navigateBridge} onBack={goBack} />;
+
+      case "brief-list":
         return <BriefListPage />;
 
       case "brief-create":
@@ -371,6 +379,13 @@ export function DedcoRouter() {
 
       case "artisan-parametres":
         return <ArtisanParametresPage />;
+
+      // ARTISAN BRIEF WORKFLOW
+      case "artisan-brief-recu":
+        return <ArtisanBriefRecuPage briefId={route.briefId} />;
+
+      case "artisan-devis-create":
+        return <ArtisanDevisCreatePage briefId={route.briefId} />;
 
       // ════════════════════════════════════════
       // DESIGNER DASHBOARD (wrapped in DesignerLayout)
@@ -457,7 +472,7 @@ export function DedcoRouter() {
         return <PlansTarifsPage />;
 
       // ════════════════════════════════════════
-      // WORKFLOW DESIGNER (simplifié)
+      // WORKFLOW DESIGNER (version simplifiée)
       // ════════════════════════════════════════
       case "designer-projet-attente":
         return <DesignerProjetAttentePage projectId={route.projectId} />;
@@ -481,24 +496,6 @@ export function DedcoRouter() {
         return <ProjetLivraisonPage projectId={route.projectId} />;
 
       // ════════════════════════════════════════
-      // ARTISAN BRIEF WORKFLOW
-      // ════════════════════════════════════════
-      case "artisan-brief-recu":
-        return <ArtisanBriefRecuPage briefId={route.briefId} />;
-
-      case "artisan-devis-create":
-        return <ArtisanDevisCreatePage briefId={route.briefId} />;
-
-      // ════════════════════════════════════════
-      // ORDER SYSTEM
-      // ════════════════════════════════════════
-      case "order-confirmation":
-        return <OrderConfirmationPage orderId={route.orderId} />;
-
-      case "invoice":
-        return <InvoicePage orderId={route.orderId} />;
-
-      // ════════════════════════════════════════
       // MAISON DASHBOARD
       // ════════════════════════════════════════
       case "maison-dashboard":
@@ -512,11 +509,20 @@ export function DedcoRouter() {
   const isArtisan = ARTISAN_PAGES.has(route.page);
   const isDesigner = DESIGNER_PAGES.has(route.page);
   const isAdmin = ADMIN_PAGES.has(route.page);
+  const isDashboard = isArtisan || isDesigner || isAdmin || route.page === "maison-dashboard";
 
-  if (isArtisan) return <ArtisanLayout key="artisan-layout">{renderPage()}</ArtisanLayout>;
-  if (isDesigner) return <DesignerLayout key="designer-layout">{renderPage()}</DesignerLayout>;
-  if (isAdmin) return <AdminLayout key="admin-layout">{renderPage()}</AdminLayout>;
+  // ── Dashboard pages: stable Layout, only children change ──
+  if (isArtisan) {
+    return <ArtisanLayout key="artisan-layout">{renderPage()}</ArtisanLayout>;
+  }
+  if (isDesigner) {
+    return <DesignerLayout key="designer-layout">{renderPage()}</DesignerLayout>;
+  }
+  if (isAdmin) {
+    return <AdminLayout key="admin-layout">{renderPage()}</AdminLayout>;
+  }
 
+  // ── Public pages: with animation ──
   return (
     <AnimatePresence mode="wait">
       <motion.div

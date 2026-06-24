@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, Sparkles, Users, ShieldCheck, Truck } from "lucide-react";
+import { ArrowRight, Sparkles, Users, ShieldCheck, Truck, Hammer, Palette, Check } from "lucide-react";
 import {
   ARTISANS,
   PRODUCTS,
@@ -338,37 +338,76 @@ export function HomePage({
             "linear-gradient(135deg, var(--amber) 0%, var(--terracotta) 100%)",
         }}
       >
-        <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          <h2 className="display-xl mb-4 text-white">
-            Vous avez un projet
-            <br />
-            d'aménagement ?
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <h2 className="display-xl mb-3 text-white">
+            Deux façons de créer
           </h2>
-          <p className="text-base sm:text-lg opacity-90 mb-8 max-w-xl mx-auto">
-            Décrivez votre vision en 6 étapes. Recevez 5 à 15 propositions
-            d'artisans qualifiés sous 48h. Paiement sécurisé, livraison tracée.
+          <p className="text-base sm:text-lg opacity-90 mb-10 max-w-xl mx-auto">
+            Que vous cherchiez un meuble sur mesure ou un aménagement complet, Dedco vous accompagne.
           </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <button
-              type="button"
-              onClick={() => onNavigate({ name: "brief" })}
-              className="dedco-btn dedco-btn-light dedco-btn-xl"
-            >
-              Créer mon brief gratuit
-              <ArrowRight size={18} />
-            </button>
-            <button
-              type="button"
-              onClick={() => onNavigate({ name: "designers" })}
-              className="dedco-btn dedco-btn-xl"
-              style={{
-                background: "transparent",
-                color: "white",
-                border: "2px solid rgba(255,255,255,0.5)",
-              }}
-            >
-              Voir les designers
-            </button>
+
+          {/* 2 cartes distinctes */}
+          <div className="grid sm:grid-cols-2 gap-5 text-left">
+
+            {/* CARTE 1 — BRIEF ARTISAN (commande personnalisée) */}
+            <div className="bg-white/10 backdrop-blur rounded-2xl p-6 border border-white/20">
+              <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mb-4">
+                <Hammer size={24} className="text-white" />
+              </div>
+              <h3 className="font-display font-bold text-xl text-white mb-2">
+                Commander sur mesure
+              </h3>
+              <p className="text-sm opacity-80 mb-4">
+                Vous voulez un mobilier, un objet de décoration ou un aménagement fabriqué par un artisan ? 
+                Décrivez votre besoin en 6 étapes, recevez des propositions d'artisans qualifiés sous 48h.
+              </p>
+              <ul className="space-y-1.5 mb-5 text-sm opacity-90">
+                <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> Mobilier, décoration, aménagement sur mesure</li>
+                <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> 5 à 15 artisans qualifiés notifiés (N2+, note ≥ 4.0)</li>
+                <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> Sélection, paiement séquestré, livraison 3 temps photo</li>
+              </ul>
+              <button
+                type="button"
+                onClick={() => onNavigate({ name: "brief" })}
+                className="dedco-btn dedco-btn-light dedco-btn-lg w-full"
+              >
+                Créer un brief artisan
+                <ArrowRight size={18} />
+              </button>
+            </div>
+
+            {/* CARTE 2 — BRIEF DESIGNER (projet d'aménagement) */}
+            <div className="bg-white/10 backdrop-blur rounded-2xl p-6 border border-white/20">
+              <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mb-4">
+                <Palette size={24} className="text-white" />
+              </div>
+              <h3 className="font-display font-bold text-xl text-white mb-2">
+                Projet d'aménagement
+              </h3>
+              <p className="text-sm opacity-80 mb-4">
+                Vous voulez aménager un espace ou transformer une pièce ? 
+                Travaillez avec un designer professionnel de votre choix.
+              </p>
+              <ul className="space-y-1.5 mb-5 text-sm opacity-90">
+                <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> Choix du designer, niveau de projet</li>
+                <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> Proposition de mission avec prix</li>
+                <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> Paiement après acceptation</li>
+              </ul>
+              <button
+                type="button"
+                onClick={() => onNavigate({ name: "designers" })}
+                className="dedco-btn dedco-btn-xl w-full"
+                style={{
+                  background: "transparent",
+                  color: "white",
+                  border: "2px solid rgba(255,255,255,0.5)",
+                }}
+              >
+                Voir les designers
+                <ArrowRight size={18} />
+              </button>
+            </div>
+
           </div>
         </div>
       </section>

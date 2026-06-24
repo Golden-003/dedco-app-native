@@ -93,7 +93,7 @@ export type AppRoute =
   | { page: 'projet-paiement'; proposalId: string }
   | { page: 'projet-detail'; projectId: string }
   | { page: 'projet-livraison'; projectId: string }
-  // ── ORDER SYSTEM
+  // ── ORDER SYSTEM (commande, facture, suivi)
   | { page: 'order-confirmation'; orderId: string }
   | { page: 'invoice'; orderId: string }
   // ── ARTISAN BRIEF WORKFLOW
@@ -101,7 +101,7 @@ export type AppRoute =
   | { page: 'artisan-devis-create'; briefId: string };
 
 // ============================================================
-// ProjectScope — type d'accompagnement (pivot économique)
+// ProjectScope — niveau de projet (pivot économique simplifié)
 // ============================================================
 
 export type ProjectScope = "prototype" | "standard" | "premium";

@@ -650,7 +650,7 @@ export function ArtisanCertificationPage() {
             <Award size={32} className="text-[var(--amber)]" />
             <div>
               <h2 className="font-display font-bold text-xl">Certification Niveau 4</h2>
-              <p className="text-sm opacity-80">Certifié Plateforme 🏆</p>
+              <p className="text-sm opacity-80">Certifié Plateforme</p>
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
@@ -751,7 +751,7 @@ export function ArtisanAbonnementPage() {
       id: "pro",
       name: "Pro",
       price: 5000,
-      features: ["Produits illimités", "Priorité +15%", "Badge Pro ⭐", "Stats avancées", "Support prioritaire"],
+      features: ["Produits illimités", "Priorité +15%", "Badge Pro", "Stats avancées", "Support prioritaire"],
       highlighted: true,
       current: true,
     },
@@ -831,9 +831,9 @@ export function ArtisanAbonnementPage() {
               {[
                 ["Produits max", "3", "Illimité", "20"],
                 ["Priorité recherche", "Standard", "+15%", "+25%"],
-                ["Badge", "—", "Pro ⭐", "Boutique"],
-                ["Stats avancées", "—", "✓", "✓"],
-                ["Page marque", "—", "—", "✓"],
+                ["Badge", "—", "Pro", "Boutique"],
+                ["Stats avancées", "—", "Oui", "Oui"],
+                ["Page marque", "—", "—", "Oui"],
                 ["Accès B2B", "—", "—", "Phase 3"],
               ].map((row) => (
                 <tr key={row[0]} className="border-b border-[var(--border)]">

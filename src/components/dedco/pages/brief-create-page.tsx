@@ -353,7 +353,7 @@ function StepDescription({
         <span className={descLen < 50 ? "text-[var(--terracotta)]" : "text-[var(--forest)]"}>
           {descLen < 50
             ? `Encore ${50 - descLen} caractères minimum`
-            : "✓ Description valide"}
+            : "Description valide"}
         </span>
         <span className="text-[var(--text-3)] font-numeric">{descLen} / 1000</span>
       </div>

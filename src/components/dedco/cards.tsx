@@ -1,6 +1,6 @@
 "use client";
 
-import { Star, BadgeCheck, MapPin } from "lucide-react";
+import { Star, BadgeCheck, MapPin, Table2, Armchair, Lightbulb, Shirt, Flower2, BookOpen, Sofa, BedDouble } from "lucide-react";
 import { formatFCFA, getArtisan } from "@/lib/dedco-data";
 import type { Product } from "@/lib/dedco-types";
 
@@ -482,19 +482,26 @@ export function CategoryCard({
   category: import("@/lib/dedco-types").Category;
   onOpen: (slug: string) => void;
 }) {
+  const ICON_MAP: Record<string, typeof Table2> = {
+    Table2, Armchair, Lightbulb, Shirt, Flower2, BookOpen, Sofa, BedDouble,
+  };
+  const CatIcon = ICON_MAP[category.icon] || Table2;
+
   return (
     <button
       type="button"
       onClick={() => onOpen(category.slug)}
-      className="dedco-card p-4 sm:p-5 text-center hover:shadow-lg hover:border-amber transition-all cursor-pointer group"
+      className="dedco-card p-5 sm:p-6 text-center hover:shadow-lg hover:border-amber transition-all cursor-pointer group flex flex-col items-center justify-center gap-2"
     >
-      <div className="text-3xl sm:text-4xl mb-2 group-hover:scale-110 transition-transform">
-        {category.icon}
+      <div className="w-12 h-12 rounded-full bg-[var(--amber-pale)] flex items-center justify-center group-hover:scale-110 transition-transform">
+        <CatIcon size={24} className="text-[var(--amber)]" strokeWidth={1.5} />
       </div>
-      <h3 className="font-display font-semibold text-sm sm:text-base">
+      <h3 className="font-display font-semibold text-sm leading-tight">
         {category.name}
       </h3>
-      <p className="text-xs text-ink-mute mt-0.5 font-numeric">{category.count} produits</p>
+      <p className="text-xs text-[var(--text-3)] font-numeric">
+        {category.count} {category.count > 1 ? "produits" : "produit"}
+      </p>
     </button>
   );
 }

@@ -14,83 +14,98 @@ import {
   AlertTriangle,
   Upload,
   X,
+  Hammer,
+  Palette,
+  ShoppingBag,
+  MapPin,
+  Phone,
 } from "lucide-react";
 import type { Route } from "@/lib/dedco-types";
 import { BackButton } from "./layout";
 
 // ============================================================
-// BRIEF ARTISAN — Formulaire guidé en 6 étapes
-// Selon architecture V3 §4.6
+// BRIEF ARTISAN — Demande de fabrication sur mesure
+// Logique métier réelle : matières adaptées à la catégorie,
+// budget indicatif adapté au type d'objet
 // ============================================================
 
 type BriefData = {
-  type: string;
-  room: string;
-  styles: string[];
-  budgetMin: number;
-  budgetMax: number;
+  categorie: string;
+  titre: string;
+  matiere: string;
+  dimensions: string;
+  couleur: string;
+  quantite: number;
   description: string;
   references: string[];
-  delay: "pas_urgent" | "moyen" | "urgent";
+  ville: string;
+  quartier: string;
+  delai: "pas_urgent" | "moyen" | "urgent";
+  budget: string;
 };
 
-const TYPES = [
-  {
-    id: "mobilier",
-    label: "Mobilier",
-    desc: "Table, chaise, canapé, lit...",
-    icon: <Sofa size={32} />,
-  },
-  {
-    id: "decoration",
-    label: "Décoration",
-    desc: "Miroir, vase, objet d'art...",
-    icon: <Sparkles size={32} />,
-  },
-  {
-    id: "amenagement",
-    label: "Aménagement",
-    desc: "Rangement, bibliothèque, dressing...",
-    icon: <Ruler size={32} />,
-  },
-  {
-    id: "autre",
-    label: "Autre",
-    desc: "Luminaires, textile, sur-mesure...",
-    icon: <Lamp size={32} />,
-  },
+const CATEGORIES = [
+  { id: "mobilier", label: "Mobilier", desc: "Table, chaise, canapé, lit...", icon: <Sofa size={28} /> },
+  { id: "decoration", label: "Décoration", desc: "Miroir, vase, panier, objet d'art...", icon: <Sparkles size={28} /> },
+  { id: "luminaire", label: "Luminaire", desc: "Lampe, suspension, applique...", icon: <Lamp size={28} /> },
+  { id: "textile", label: "Textile", desc: "Coussins, rideaux, tapis...", icon: <Palette size={28} /> },
+  { id: "amenagement", label: "Aménagement", desc: "Bibliothèque, commode, rangement...", icon: <Ruler size={28} /> },
+  { id: "autre", label: "Autre", desc: "Je ne sais pas encore", icon: <Hammer size={28} /> },
 ];
 
-const ROOMS = [
-  "Salon",
-  "Chambre",
-  "Cuisine",
-  "Salle à manger",
-  "Bureau",
-  "Entrée",
-  "Salle de bain",
-  "Extérieur",
-  "Commercial",
-];
+// Matières adaptées à chaque catégorie — pas de "wax" pour du mobilier en bois
+const MATIERES_PAR_CATEGORIE: Record<string, string[]> = {
+  mobilier: ["Bois (iroko, teck, acajou)", "Rotin / Osier", "Métal / Fer forgé", "Bambou", "Bois + Métal", "Autre"],
+  decoration: ["Bois sculpté", "Terre cuite / Céramique", "Raffia", "Métal / Laiton", "Bois + Raffia", "Autre"],
+  luminaire: ["Bambou", "Métal / Laiton", "Tissu (bogolan)", "Bois", "Céramique", "Autre"],
+  textile: ["Wax 100% coton", "Kente", "Bogolan", "Laine", "Coton naturel", "Autre"],
+  amenagement: ["Bois (iroko, teck)", "Contreplaqué laqué", "Métal + Bois", "Rotin", "Autre"],
+  autre: ["Bois", "Métal", "Tissu", "Terre cuite", "Bambou", "Raffia", "Autre"],
+};
 
-const STYLE_OPTIONS = [
-  { id: "afro-contemporain", label: "Afro-contemporain", img: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=400&q=80" },
-  { id: "minimaliste", label: "Minimaliste", img: "https://images.unsplash.com/photo-1616627452792-20384b0f7d9b?auto=format&fit=crop&w=400&q=80" },
-  { id: "tropical", label: "Tropical", img: "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=400&q=80" },
-  { id: "industriel", label: "Industriel", img: "https://images.unsplash.com/photo-1611269154421-4e2729ac711a?auto=format&fit=crop&w=400&q=80" },
-  { id: "scandinave", label: "Scandinave", img: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=80" },
-  { id: "boheme", label: "Bohème", img: "https://images.unsplash.com/photo-1615874959474-d609969a20ed?auto=format&fit=crop&w=400&q=80" },
-  { id: "wax-color", label: "Wax & Couleur", img: "https://images.unsplash.com/photo-1579656592043-a20e25a4aa4b?auto=format&fit=crop&w=400&q=80" },
-  { id: "zen-bio", label: "Zen & Biophilique", img: "https://images.unsplash.com/photo-1528789386055-75c4b717bad1?auto=format&fit=crop&w=400&q=80" },
-];
+// Budgets adaptés à la catégorie — modèle paliers (moins de / fourchettes / plus de)
+const BUDGETS_PAR_CATEGORIE: Record<string, string[]> = {
+  mobilier: [
+    "Moins de 50 000 FCFA",
+    "50 000 – 150 000 FCFA",
+    "150 000 – 400 000 FCFA",
+    "Plus de 400 000 FCFA",
+  ],
+  decoration: [
+    "Moins de 25 000 FCFA",
+    "25 000 – 80 000 FCFA",
+    "80 000 – 200 000 FCFA",
+    "Plus de 200 000 FCFA",
+  ],
+  luminaire: [
+    "Moins de 30 000 FCFA",
+    "30 000 – 80 000 FCFA",
+    "80 000 – 150 000 FCFA",
+    "Plus de 150 000 FCFA",
+  ],
+  textile: [
+    "Moins de 20 000 FCFA",
+    "20 000 – 80 000 FCFA",
+    "80 000 – 200 000 FCFA",
+    "Plus de 200 000 FCFA",
+  ],
+  amenagement: [
+    "Moins de 100 000 FCFA",
+    "100 000 – 300 000 FCFA",
+    "300 000 – 600 000 FCFA",
+    "Plus de 600 000 FCFA",
+  ],
+  autre: [
+    "Moins de 50 000 FCFA",
+    "50 000 – 200 000 FCFA",
+    "200 000 – 500 000 FCFA",
+    "Plus de 500 000 FCFA",
+  ],
+};
 
-const DELAYS = [
-  { id: "pas_urgent", label: "Pas urgent", desc: "Plus de 2 mois", icon: <Clock size={20} /> },
-  { id: "moyen", label: "Moyen", desc: "3 à 8 semaines", icon: <Clock size={20} /> },
-  { id: "urgent", label: "Urgent", desc: "Moins de 3 semaines", icon: <AlertTriangle size={20} />, warning: true },
-];
+const VILLES = ["Cotonou", "Porto-Novo", "Abomey", "Parakou", "Abomey-Calavi", "Ouidah", "Autre"];
 
-const TOTAL_STEPS = 6;
+const TOTAL_STEPS = 5;
 
 export function BriefPage({
   onNavigate,
@@ -101,14 +116,18 @@ export function BriefPage({
 }) {
   const [step, setStep] = useState(1);
   const [data, setData] = useState<BriefData>({
-    type: "",
-    room: "",
-    styles: [],
-    budgetMin: 50000,
-    budgetMax: 300000,
+    categorie: "",
+    titre: "",
+    matiere: "",
+    dimensions: "",
+    couleur: "",
+    quantite: 1,
     description: "",
     references: [],
-    delay: "moyen",
+    ville: "",
+    quartier: "",
+    delai: "moyen",
+    budget: "",
   });
   const [submitted, setSubmitted] = useState(false);
   const [descLen, setDescLen] = useState(0);
@@ -117,31 +136,25 @@ export function BriefPage({
     setData((prev) => ({ ...prev, [key]: value }));
   };
 
-  const toggleStyle = (id: string) => {
-    setData((prev) => ({
-      ...prev,
-      styles: prev.styles.includes(id)
-        ? prev.styles.filter((s) => s !== id)
-        : [...prev.styles, id],
-    }));
+  // Quand on change de catégorie, reset la matière et le budget
+  const selectCategorie = (catId: string) => {
+    update("categorie", catId);
+    update("matiere", "");
+    update("budget", "");
   };
+
+  const matieresDisponibles = data.categorie ? MATIERES_PAR_CATEGORIE[data.categorie] || [] : [];
+  const budgetsDisponibles = data.categorie ? BUDGETS_PAR_CATEGORIE[data.categorie] || [] : [];
+  const catLabel = CATEGORIES.find(c => c.id === data.categorie)?.label || "";
 
   const canNext = () => {
     switch (step) {
-      case 1:
-        return !!data.type;
-      case 2:
-        return !!data.room && data.styles.length > 0;
-      case 3:
-        return data.budgetMax > data.budgetMin;
-      case 4:
-        return descLen >= 50 && descLen <= 1000;
-      case 5:
-        return true; // références optionnelles
-      case 6:
-        return !!data.delay;
-      default:
-        return false;
+      case 1: return !!data.categorie;
+      case 2: return data.titre.length >= 3 && !!data.matiere;
+      case 3: return descLen >= 30;
+      case 4: return true;
+      case 5: return !!data.ville && !!data.budget;
+      default: return false;
     }
   };
 
@@ -161,51 +174,36 @@ export function BriefPage({
           <Check size={40} className="text-forest" />
         </div>
         <h1 className="display-xl mb-4">Brief envoyé !</h1>
-        <p className="text-base text-ink-soft mb-6 max-w-md mx-auto">
-          Votre brief a été transmis à <strong>5 à 15 artisans qualifiés</strong>{" "}
-          correspondant à votre demande. Vous recevrez leurs propositions sous{" "}
-          <strong>48 heures</strong> dans votre dashboard.
+        <p className="text-sm text-ink-soft mb-6 max-w-md mx-auto">
+          Votre demande de fabrication a été transmise à <strong>5 à 15 artisans qualifiés</strong>.
+          Vous recevrez leurs propositions (prix + délai) sous <strong>48h</strong>.
         </p>
-        <div className="dedco-card p-5 mb-6 text-left">
+        <div className="dedco-card p-5 mb-6 text-left max-w-md mx-auto">
           <h3 className="font-display font-bold mb-3">Récapitulatif</h3>
           <dl className="grid grid-cols-2 gap-3 text-sm">
-            <dt className="text-ink-mute">Type</dt>
-            <dd className="font-medium capitalize">
-              {TYPES.find((t) => t.id === data.type)?.label || data.type}
-            </dd>
-            <dt className="text-ink-mute">Pièce</dt>
-            <dd className="font-medium">{data.room}</dd>
-            <dt className="text-ink-mute">Styles</dt>
-            <dd className="font-medium">
-              {data.styles
-                .map((s) => STYLE_OPTIONS.find((o) => o.id === s)?.label)
-                .filter(Boolean)
-                .join(", ")}
-            </dd>
+            <dt className="text-ink-mute">Catégorie</dt>
+            <dd className="font-medium">{catLabel}</dd>
+            <dt className="text-ink-mute">Objet</dt>
+            <dd className="font-medium">{data.titre}</dd>
+            <dt className="text-ink-mute">Matière</dt>
+            <dd className="font-medium">{data.matiere}</dd>
+            {data.dimensions && <><dt className="text-ink-mute">Dimensions</dt><dd className="font-medium font-numeric">{data.dimensions}</dd></>}
+            {data.couleur && <><dt className="text-ink-mute">Couleur</dt><dd className="font-medium">{data.couleur}</dd></>}
+            <dt className="text-ink-mute">Quantité</dt>
+            <dd className="font-medium font-numeric">{data.quantite}</dd>
             <dt className="text-ink-mute">Budget</dt>
-            <dd className="font-medium">
-              {data.budgetMin.toLocaleString("fr-FR")} —{" "}
-              {data.budgetMax.toLocaleString("fr-FR")} FCFA
-            </dd>
+            <dd className="font-medium text-amber">{data.budget}</dd>
+            <dt className="text-ink-mute">Livraison</dt>
+            <dd className="font-medium">{data.quartier}, {data.ville}</dd>
             <dt className="text-ink-mute">Délai</dt>
-            <dd className="font-medium">
-              {DELAYS.find((d) => d.id === data.delay)?.label}
-            </dd>
+            <dd className="font-medium">{data.delai === "urgent" ? "Urgent" : data.delai === "moyen" ? "Normal" : "Flexible"}</dd>
           </dl>
         </div>
         <div className="flex gap-3 justify-center">
-          <button
-            type="button"
-            onClick={() => onNavigate({ name: "home" })}
-            className="dedco-btn dedco-btn-primary"
-          >
+          <button onClick={() => onNavigate({ name: "home" })} className="dedco-btn dedco-btn-primary">
             Retour à l'accueil
           </button>
-          <button
-            type="button"
-            onClick={() => onNavigate({ name: "marketplace" })}
-            className="dedco-btn dedco-btn-ghost"
-          >
+          <button onClick={() => onNavigate({ name: "marketplace" })} className="dedco-btn dedco-btn-ghost">
             Voir la marketplace
           </button>
         </div>
@@ -214,15 +212,13 @@ export function BriefPage({
   }
 
   return (
-    <div className="dedco-fade-in max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div className="dedco-fade-in max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <BackButton onBack={onBack} />
 
-      {/* Header */}
       <div className="mb-6">
-        <h1 className="display-lg mb-2">Créer mon brief</h1>
+        <h1 className="display-lg mb-2">Commander sur mesure</h1>
         <p className="text-sm text-ink-soft">
-          Décrivez votre projet en {TOTAL_STEPS} étapes. Recevez 5 à 15
-          propositions d'artisans qualifiés sous 48h.
+          Décrivez ce que vous voulez faire fabriquer. Les artisans qualifiés vous répondent sous 48h.
         </p>
       </div>
 
@@ -247,11 +243,7 @@ export function BriefPage({
                   {done ? <Check size={16} /> : n}
                 </div>
                 {n < TOTAL_STEPS && (
-                  <div
-                    className={`h-0.5 flex-1 mx-1 ${
-                      done ? "bg-forest" : "bg-warm"
-                    }`}
-                  />
+                  <div className={`h-0.5 flex-1 mx-1 ${done ? "bg-forest" : "bg-warm"}`} />
                 )}
               </div>
             );
@@ -259,201 +251,138 @@ export function BriefPage({
         </div>
         <p className="text-xs text-ink-mute">
           Étape <span className="font-numeric">{step}</span> / <span className="font-numeric">{TOTAL_STEPS}</span> —{" "}
-          {[
-            "Type de projet",
-            "Contexte & style",
-            "Budget",
-            "Description",
-            "Références",
-            "Délai",
-          ][step - 1]}
+          {["Que voulez-vous fabriquer ?", "Détails de la pièce", "Description", "Photos (optionnel)", "Livraison & budget"][step - 1]}
         </p>
       </div>
 
       {/* Step content */}
       <div className="dedco-card p-5 sm:p-8 mb-6">
-        {/* STEP 1 — Type */}
+        {/* STEP 1 — Catégorie */}
         {step === 1 && (
           <div>
-            <h2 className="display-sm mb-1">Quel type de projet ?</h2>
+            <h2 className="display-sm mb-1">Que voulez-vous fabriquer ?</h2>
             <p className="text-sm text-ink-soft mb-5">
-              Sélectionnez la catégorie qui correspond le mieux à votre besoin.
+              Sélectionnez la catégorie de votre demande.
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {TYPES.map((t) => (
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {CATEGORIES.map((c) => (
                 <button
-                  key={t.id}
+                  key={c.id}
                   type="button"
-                  onClick={() => update("type", t.id)}
-                  className={`p-5 rounded-lg border-2 text-center transition-all ${
-                    data.type === t.id
+                  onClick={() => selectCategorie(c.id)}
+                  className={`p-4 rounded-lg border-2 text-center transition-all ${
+                    data.categorie === c.id
                       ? "border-amber bg-amber-pale"
                       : "border-border bg-white hover:border-ink-mute"
                   }`}
                 >
-                  <div
-                    className={`mx-auto mb-2 ${
-                      data.type === t.id ? "text-amber" : "text-ink-soft"
-                    }`}
-                  >
-                    {t.icon}
+                  <div className={`mx-auto mb-2 ${data.categorie === c.id ? "text-amber" : "text-ink-soft"}`}>
+                    {c.icon}
                   </div>
-                  <p className="font-display font-semibold text-sm">{t.label}</p>
-                  <p className="text-xs text-ink-mute mt-1">{t.desc}</p>
+                  <p className="font-display font-semibold text-sm">{c.label}</p>
+                  <p className="text-xs text-ink-mute mt-1">{c.desc}</p>
                 </button>
               ))}
             </div>
           </div>
         )}
 
-        {/* STEP 2 — Room + Style */}
+        {/* STEP 2 — Détails de la pièce */}
         {step === 2 && (
           <div>
-            <h2 className="display-sm mb-1">Décrivez le contexte</h2>
+            <h2 className="display-sm mb-1">Détails de la pièce</h2>
             <p className="text-sm text-ink-soft mb-5">
-              Choisissez la pièce concernée et les styles que vous aimez.
+              Décrivez l'objet que vous voulez faire fabriquer.
             </p>
-
-            <label className="block text-xs text-ink-mute uppercase tracking-wide mb-2">
-              Pièce concernée
-            </label>
-            <select
-              value={data.room}
-              onChange={(e) => update("room", e.target.value)}
-              className="w-full px-3 py-2.5 mb-5 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-amber"
-            >
-              <option value="">— Sélectionnez —</option>
-              {ROOMS.map((r) => (
-                <option key={r} value={r}>
-                  {r}
-                </option>
-              ))}
-            </select>
-
-            <label className="block text-xs text-ink-mute uppercase tracking-wide mb-2">
-              Styles de référence ({data.styles.length} sélectionné
-              {data.styles.length > 1 ? "s" : ""})
-            </label>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              {STYLE_OPTIONS.map((s) => {
-                const active = data.styles.includes(s.id);
-                return (
-                  <button
-                    key={s.id}
-                    type="button"
-                    onClick={() => toggleStyle(s.id)}
-                    className={`relative rounded-lg overflow-hidden border-2 transition-all aspect-[4/5] ${
-                      active ? "border-amber" : "border-transparent"
-                    }`}
-                    aria-pressed={active}
-                  >
-                    <img
-                      src={s.img}
-                      alt={s.label}
-                      loading="lazy"
-                      className="w-full h-full object-cover"
-                    />
-                    <div
-                      className="absolute inset-0"
-                      style={{
-                        background:
-                          "linear-gradient(to top, rgba(30,24,19,0.85) 0%, transparent 60%)",
-                      }}
-                    />
-                    <div className="absolute bottom-2 left-2 right-2 text-white text-xs font-semibold">
-                      {s.label}
-                    </div>
-                    {active && (
-                      <div className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-amber text-white flex items-center justify-center">
-                        <Check size={14} />
-                      </div>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* STEP 3 — Budget */}
-        {step === 3 && (
-          <div>
-            <h2 className="display-sm mb-1">Quel est votre budget ?</h2>
-            <p className="text-sm text-ink-soft mb-5">
-              Faites glisser pour définir votre fourchette. Les artisans
-              s'adapteront à votre budget.
-            </p>
-
-            <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="space-y-4">
               <div>
-                <label className="block text-xs text-ink-mute uppercase tracking-wide mb-2">
-                  Budget minimum
+                <label className="block text-xs text-ink-mute uppercase tracking-wide mb-1.5">
+                  Quoi exactement ? <span className="text-ink-mute normal-case">(pour {catLabel})</span>
                 </label>
                 <input
-                  type="number"
-                  value={data.budgetMin}
-                  onChange={(e) => update("budgetMin", Number(e.target.value))}
-                  step={10000}
-                  min={0}
+                  value={data.titre}
+                  onChange={(e) => update("titre", e.target.value)}
+                  placeholder="Ex : Table basse en bois iroko avec plateau wax"
                   className="w-full px-3 py-2.5 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-amber"
                 />
               </div>
+
               <div>
-                <label className="block text-xs text-ink-mute uppercase tracking-wide mb-2">
-                  Budget maximum
+                <label className="block text-xs text-ink-mute uppercase tracking-wide mb-1.5">
+                  Matière souhaitée
                 </label>
-                <input
-                  type="number"
-                  value={data.budgetMax}
-                  onChange={(e) => update("budgetMax", Number(e.target.value))}
-                  step={10000}
-                  min={data.budgetMin}
+                <select
+                  value={data.matiere}
+                  onChange={(e) => update("matiere", e.target.value)}
                   className="w-full px-3 py-2.5 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-amber"
-                />
-              </div>
-            </div>
-
-            <div className="dedco-card p-4 bg-warm/50 mb-4">
-              <div className="flex justify-between items-baseline">
-                <span className="text-sm text-ink-soft">Fourchette</span>
-                <span className="font-display font-bold text-amber text-lg">
-                  {data.budgetMin.toLocaleString("fr-FR")} —{" "}
-                  {data.budgetMax.toLocaleString("fr-FR")} FCFA
-                </span>
-              </div>
-            </div>
-
-            <p className="text-xs text-ink-mute mb-2">Suggestions :</p>
-            <div className="flex flex-wrap gap-2">
-              {[
-                { label: "Petit budget", min: 20000, max: 80000 },
-                { label: "Confort", min: 80000, max: 250000 },
-                { label: "Premium", min: 250000, max: 600000 },
-                { label: "Haut de gamme", min: 600000, max: 1500000 },
-              ].map((sug) => (
-                <button
-                  key={sug.label}
-                  type="button"
-                  onClick={() => {
-                    update("budgetMin", sug.min);
-                    update("budgetMax", sug.max);
-                  }}
-                  className="dedco-badge dedco-badge-gray hover:dedco-badge-amber cursor-pointer"
                 >
-                  {sug.label}
-                </button>
-              ))}
+                  <option value="">— Sélectionnez —</option>
+                  {matieresDisponibles.map((m) => (
+                    <option key={m} value={m}>{m}</option>
+                  ))}
+                </select>
+                <p className="text-xs text-ink-mute mt-1">
+                  Les matières proposées correspondent à la catégorie &laquo; {catLabel} &raquo;.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs text-ink-mute uppercase tracking-wide mb-1.5">
+                    Dimensions (si connues)
+                  </label>
+                  <input
+                    value={data.dimensions}
+                    onChange={(e) => update("dimensions", e.target.value)}
+                    placeholder="Ex : 120 x 60 x 45 cm"
+                    className="w-full px-3 py-2.5 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-amber"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-ink-mute uppercase tracking-wide mb-1.5">
+                    Couleur / Finition
+                  </label>
+                  <input
+                    value={data.couleur}
+                    onChange={(e) => update("couleur", e.target.value)}
+                    placeholder="Ex : Naturel + wax bleu"
+                    className="w-full px-3 py-2.5 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-amber"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs text-ink-mute uppercase tracking-wide mb-1.5">
+                  Quantité
+                </label>
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => update("quantite", Math.max(1, data.quantite - 1))}
+                    className="w-10 h-10 rounded-md border border-border bg-white text-lg text-ink-soft hover:text-ink"
+                  >
+                    -
+                  </button>
+                  <span className="font-display font-bold text-lg font-numeric">{data.quantite}</span>
+                  <button
+                    type="button"
+                    onClick={() => update("quantite", data.quantite + 1)}
+                    className="w-10 h-10 rounded-md border border-border bg-white text-lg text-ink-soft hover:text-ink"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         )}
 
-        {/* STEP 4 — Description */}
-        {step === 4 && (
+        {/* STEP 3 — Description */}
+        {step === 3 && (
           <div>
             <h2 className="display-sm mb-1">Décrivez votre projet</h2>
             <p className="text-sm text-ink-soft mb-5">
-              Plus vous êtes précis, meilleures seront les propositions
-              (50 à 1000 caractères).
+              Plus vous êtes précis, meilleures seront les propositions des artisans (min 30 caractères).
             </p>
             <textarea
               value={data.description}
@@ -462,28 +391,25 @@ export function BriefPage({
                 update("description", v);
                 setDescLen(v.length);
               }}
-              rows={8}
-              placeholder="Ex : Je souhaite une table basse en bois iroko avec plateau wax bleu Ankara pour mon salon de 25m². Style afro-contemporain, dimensions 120×60×45cm environ. J'aimerais un tiroir de rangement..."
+              rows={6}
+              placeholder="Ex : Je veux une table basse pour mon salon de 25m². Plateau en bois iroko avec insert en tissu wax bleu Ankara. Pieds en bois massif. Un tiroir de rangement sur le côté droit. Finition naturelle mate."
               className="w-full px-4 py-3 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-amber resize-none"
             />
             <div className="flex justify-between items-center mt-2 text-xs">
-              <span className={descLen < 50 ? "text-terracotta" : "text-forest"}>
-                {descLen < 50
-                  ? `Encore ${50 - descLen} caractères minimum`
-                  : "✓ Description valide"}
+              <span className={descLen < 30 ? "text-terracotta" : "text-forest"}>
+                {descLen < 30 ? `Encore ${30 - descLen} caractères minimum` : "Description valide"}
               </span>
-              <span className="text-ink-mute">{descLen} / 1000</span>
+              <span className="text-ink-mute font-numeric">{descLen} / 1000</span>
             </div>
           </div>
         )}
 
-        {/* STEP 5 — References */}
-        {step === 5 && (
+        {/* STEP 4 — Photos (optionnel) */}
+        {step === 4 && (
           <div>
-            <h2 className="display-sm mb-1">Ajoutez des photos</h2>
+            <h2 className="display-sm mb-1">Photos d'inspiration</h2>
             <p className="text-sm text-ink-soft mb-5">
-              Optionnel — jusqu'à 5 photos d'inspiration pour aider l'artisan à
-              comprendre votre vision (0-5 photos).
+              Optionnel — Ajoutez des photos pour aider l'artisan à comprendre votre vision.
             </p>
 
             <label
@@ -491,12 +417,8 @@ export function BriefPage({
               className="block border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer hover:border-amber transition-colors bg-white"
             >
               <Upload size={28} className="mx-auto text-ink-mute mb-2" />
-              <p className="text-sm font-semibold mb-1">
-                Cliquez pour ajouter des photos
-              </p>
-              <p className="text-xs text-ink-mute">
-                PNG, JPG ou WebP · Max 5 photos · 800px redimensionnées auto
-              </p>
+              <p className="text-sm font-semibold mb-1">Cliquez pour ajouter des photos</p>
+              <p className="text-xs text-ink-mute">Max 5 photos</p>
               <input
                 id="brief-upload"
                 type="file"
@@ -504,10 +426,7 @@ export function BriefPage({
                 accept="image/*"
                 className="sr-only"
                 onChange={(e) => {
-                  const files = Array.from(e.target.files || []).slice(
-                    0,
-                    5 - data.references.length,
-                  );
+                  const files = Array.from(e.target.files || []).slice(0, 5 - data.references.length);
                   const urls = files.map((f) => URL.createObjectURL(f));
                   update("references", [...data.references, ...urls]);
                 }}
@@ -517,23 +436,11 @@ export function BriefPage({
             {data.references.length > 0 && (
               <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 mt-4">
                 {data.references.map((ref, i) => (
-                  <div
-                    key={i}
-                    className="relative aspect-square rounded-md overflow-hidden bg-warm"
-                  >
-                    <img
-                      src={ref}
-                      alt={`Référence ${i + 1}`}
-                      className="w-full h-full object-cover"
-                    />
+                  <div key={i} className="relative aspect-square rounded-md overflow-hidden bg-warm">
+                    <img src={ref} alt={`Référence ${i + 1}`} className="w-full h-full object-cover" />
                     <button
                       type="button"
-                      onClick={() =>
-                        update(
-                          "references",
-                          data.references.filter((_, idx) => idx !== i),
-                        )
-                      }
+                      onClick={() => update("references", data.references.filter((_, idx) => idx !== i))}
                       className="absolute top-1 right-1 w-6 h-6 rounded-full bg-white/90 flex items-center justify-center text-ink hover:text-terracotta"
                       aria-label={`Supprimer la référence ${i + 1}`}
                     >
@@ -547,82 +454,125 @@ export function BriefPage({
             <div className="mt-5 dedco-card p-3 bg-forest-pale/40 flex items-start gap-2">
               <ImageIcon size={16} className="text-forest flex-shrink-0 mt-0.5" />
               <p className="text-xs text-ink-soft">
-                Astuce : des photos de votre pièce actuelle, d'objets similaires
-                vus ailleurs, ou de moodboards Pinterest augmentent la qualité
-                des propositions reçues.
+                Astuce : une photo d'un objet similaire, d'un moodboard ou de votre pièce actuelle
+                aide l'artisan à proposer le bon prix et le bon délai.
               </p>
             </div>
           </div>
         )}
 
-        {/* STEP 6 — Delay */}
-        {step === 6 && (
+        {/* STEP 5 — Livraison & Budget */}
+        {step === 5 && (
           <div>
-            <h2 className="display-sm mb-1">Quel est votre délai ?</h2>
+            <h2 className="display-sm mb-1">Livraison & budget</h2>
             <p className="text-sm text-ink-soft mb-5">
-              Soyez honnête — un délai réaliste permet d'obtenir de meilleures
-              propositions.
+              Où livrer et quel est votre budget indicatif ?
             </p>
 
-            <div className="space-y-3">
-              {DELAYS.map((d) => {
-                const active = data.delay === d.id;
-                return (
-                  <button
-                    key={d.id}
-                    type="button"
-                    onClick={() => update("delay", d.id as BriefData["delay"])}
-                    className={`w-full flex items-center gap-3 p-4 rounded-lg border-2 text-left transition-all ${
-                      active
-                        ? "border-amber bg-amber-pale"
-                        : "border-border bg-white hover:border-ink-mute"
-                    }`}
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs text-ink-mute uppercase tracking-wide mb-1.5">
+                    Ville
+                  </label>
+                  <select
+                    value={data.ville}
+                    onChange={(e) => update("ville", e.target.value)}
+                    className="w-full px-3 py-2.5 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-amber"
                   >
-                    <div
-                      className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-                        active
-                          ? "bg-amber text-white"
+                    <option value="">— Sélectionnez —</option>
+                    {VILLES.map((v) => <option key={v} value={v}>{v}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs text-ink-mute uppercase tracking-wide mb-1.5">
+                    Quartier
+                  </label>
+                  <input
+                    value={data.quartier}
+                    onChange={(e) => update("quartier", e.target.value)}
+                    placeholder="Ex : Akpakpa"
+                    className="w-full px-3 py-2.5 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-amber"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs text-ink-mute uppercase tracking-wide mb-1.5">
+                  Délai souhaité
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { id: "pas_urgent", label: "Flexible", desc: "+ de 2 mois", icon: <Clock size={16} /> },
+                    { id: "moyen", label: "Normal", desc: "3-8 semaines", icon: <Clock size={16} /> },
+                    { id: "urgent", label: "Urgent", desc: "- de 3 semaines", icon: <AlertTriangle size={16} />, warning: true },
+                  ].map((d) => (
+                    <button
+                      key={d.id}
+                      type="button"
+                      onClick={() => update("delai", d.id as BriefData["delai"])}
+                      className={`p-3 rounded-lg border-2 text-center transition-all ${
+                        data.delai === d.id
+                          ? "border-amber bg-amber-pale"
                           : d.warning
-                            ? "bg-amber-pale text-amber-dark"
-                            : "bg-warm text-ink-soft"
+                            ? "border-border hover:border-terracotta"
+                            : "border-border hover:border-ink-mute"
                       }`}
                     >
-                      {d.icon}
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-display font-semibold">{d.label}</p>
+                      <div className={`mx-auto mb-1 ${data.delai === d.id ? "text-amber" : "text-ink-soft"}`}>
+                        {d.icon}
+                      </div>
+                      <p className="font-display font-semibold text-sm">{d.label}</p>
                       <p className="text-xs text-ink-mute">{d.desc}</p>
-                    </div>
-                    {active && <Check size={20} className="text-amber" />}
-                  </button>
-                );
-              })}
-            </div>
+                    </button>
+                  ))}
+                </div>
+                {data.delai === "urgent" && (
+                  <div className="mt-3 p-3 bg-terracotta-pale rounded-md flex items-start gap-2">
+                    <AlertTriangle size={14} className="text-terracotta flex-shrink-0 mt-0.5" />
+                    <p className="text-xs text-ink-soft">
+                      Un délai urgent peut limiter le nombre d'artisans disponibles et augmenter le prix.
+                    </p>
+                  </div>
+                )}
+              </div>
 
-            {data.delay === "urgent" && (
-              <div className="mt-4 dedco-card p-3 bg-terracotta-pale flex items-start gap-2">
-                <AlertTriangle
-                  size={16}
-                  className="text-terracotta flex-shrink-0 mt-0.5"
-                />
-                <p className="text-xs text-ink-soft">
-                  <strong>Attention :</strong> un délai urgent peut limiter le
-                  nombre d'artisans disponibles et augmenter le prix. Pensez à
-                  étendre le délai si possible.
+              <div>
+                <label className="block text-xs text-ink-mute uppercase tracking-wide mb-1.5">
+                  Budget estimatif — pour {catLabel.toLowerCase()}
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  {budgetsDisponibles.map((b) => {
+                    const active = data.budget === b;
+                    return (
+                      <button
+                        key={b}
+                        type="button"
+                        onClick={() => update("budget", b)}
+                        className={`px-4 py-3 rounded-lg border-2 text-sm font-medium transition-all text-center ${
+                          active
+                            ? "border-amber bg-amber-pale text-amber-dark"
+                            : "border-border bg-white text-ink-soft hover:border-ink-mute"
+                        }`}
+                      >
+                        {b}
+                        {active && <Check size={14} className="inline ml-1 text-amber" />}
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="text-xs text-ink-mute mt-2">
+                  Le budget est indicatif. L'artisan fixera son prix dans son devis. Négociation possible (max 2 allers-retours).
                 </p>
               </div>
-            )}
+            </div>
           </div>
         )}
       </div>
 
       {/* Navigation */}
       <div className="flex gap-3">
-        <button
-          type="button"
-          onClick={prev}
-          className="dedco-btn dedco-btn-ghost"
-        >
+        <button type="button" onClick={prev} className="dedco-btn dedco-btn-ghost">
           <ArrowLeft size={16} />
           {step === 1 ? "Annuler" : "Précédent"}
         </button>
@@ -637,11 +587,8 @@ export function BriefPage({
         </button>
       </div>
 
-      {/* Reassurance footer */}
       <p className="text-xs text-ink-mute text-center mt-4">
-        🔒 Votre brief est transmis uniquement aux artisans qualifiés (niveau N2+,
-        note ≥4.0). Aucun engagement tant que vous n'avez pas accepté une
-        proposition. Paiement 100% sécurisé via séquestre Fedapay.
+        Votre brief est transmis aux artisans qualifiés (N2+, note ≥ 4.0). Aucun engagement tant que vous n'avez pas accepté un devis. Paiement séquestré, livraison 3 temps.
       </p>
     </div>
   );
