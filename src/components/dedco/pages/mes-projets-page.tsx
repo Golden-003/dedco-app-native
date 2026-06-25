@@ -51,7 +51,7 @@ function navigateTo(route: MesProjetsRoute) {
   if (route.page === "brief-detail" && route.id) {
     store.navigate({ page: "artisan-brief-recu", briefId: route.id });
   } else if (route.page === "projet-detail" && route.projectId) {
-    store.navigate({ page: "projet-detail", projectId: route.projectId });
+    store.navigate({ page: "projet-artisan-detail", projectId: route.projectId });
   } else if (route.page === "projet-paiement" && route.proposalId) {
     store.navigate({ page: "projet-paiement", proposalId: route.proposalId });
   } else if (route.page === "payment" && route.orderId) {

@@ -98,7 +98,8 @@ export type AppRoute =
   | { page: 'invoice'; orderId: string }
   // ── ARTISAN BRIEF WORKFLOW
   | { page: 'artisan-brief-recu'; briefId: string }
-  | { page: 'artisan-devis-create'; briefId: string };
+  | { page: 'artisan-devis-create'; briefId: string }
+  | { page: 'projet-artisan-detail'; projectId: string };
 
 // ============================================================
 // ProjectScope — niveau de projet (pivot économique simplifié)

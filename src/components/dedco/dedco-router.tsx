@@ -29,6 +29,7 @@ import { KYCPage } from "@/components/dedco/pages/kyc-page";
 import { BriefListPage } from "@/components/dedco/pages/brief-list-page";
 import { BriefCreatePage } from "@/components/dedco/pages/brief-create-page";
 import { BriefPage } from "@/components/dedco/brief-page";
+import { ProjetArtisanDetailPage } from "@/components/dedco/pages/projet-artisan-detail";
 import {
   OrderConfirmationPage,
   InvoicePage,
@@ -490,7 +491,10 @@ export function DedcoRouter() {
         return <ProjetPaiementPage proposalId={route.proposalId} />;
 
       case "projet-detail":
-        return <ProjetDetailPage projectId={route.projectId} />;
+        return <ProjetArtisanDetailPage projectId={route.projectId} />;
+
+      case "projet-artisan-detail":
+        return <ProjetArtisanDetailPage projectId={route.projectId} />;
 
       case "projet-livraison":
         return <ProjetLivraisonPage projectId={route.projectId} />;
