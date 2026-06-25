@@ -47,12 +47,9 @@ import {
 // ============================================================
 
 function navigateTo(route: MesProjetsRoute) {
-  // Le store accepte un AppRoute générique ; on caste car les routes
-  // spécifiques (brief-artisan, projet-artisan, etc.) seront ajoutées à
-  // l'étape 2. Pour l'étape 1 on navigue vers la page la plus proche.
   const store = useDedcoStore.getState();
   if (route.page === "brief-detail" && route.id) {
-    store.navigate({ page: "brief-detail", id: Number(route.id) });
+    store.navigate({ page: "artisan-brief-recu", briefId: route.id });
   } else if (route.page === "projet-detail" && route.projectId) {
     store.navigate({ page: "projet-detail", projectId: route.projectId });
   } else if (route.page === "projet-paiement" && route.proposalId) {
@@ -65,8 +62,10 @@ function navigateTo(route: MesProjetsRoute) {
     store.navigate({ page: "order-tracking", id: route.id });
   } else if (route.page === "marketplace") {
     store.navigate({ page: "marketplace" });
+  } else if (route.page === "brief") {
+    store.navigate({ page: "brief" });
   } else {
-    store.navigate({ page: "client-projets" });
+    store.navigate({ page: "home" });
   }
 }
 
@@ -483,7 +482,7 @@ function TermineCard({ item }: { item: MesProjetsItem }) {
             {item.isCancelled ? "Dupliquer la commande" : "Voir le projet"}
           </button>
           {!item.isCancelled && (
-            <button onClick={() => navigateTo({ page: "brief-create" })} className="dedco-btn dedco-btn-secondary dedco-btn-sm flex items-center gap-1.5">
+            <button onClick={() => navigateTo({ page: "brief" })} className="dedco-btn dedco-btn-secondary dedco-btn-sm flex items-center gap-1.5">
               <ArrowRight size={14} />
               Refaire une demande similaire
             </button>

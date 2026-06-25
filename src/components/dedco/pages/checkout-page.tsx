@@ -89,7 +89,8 @@ export function CheckoutPage() {
   };
 
   const handlePay = () => {
-    navigate({ page: "payment", orderId: "ORD-001" });
+    const orderId = `CMD-2026-${String(Math.floor(1000 + Math.random() * 9000))}`;
+    navigate({ page: "payment", orderId });
   };
 
   const canProceed = () => {
