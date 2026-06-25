@@ -265,7 +265,6 @@ function EnCoursCard({ item }: { item: MesProjetsItem }) {
 // ============================================================
 
 function BriefProposalsCard({ brief }: { brief: ArtisanBriefWithProposals }) {
-  const navigate = useDedcoStore((s) => s.navigate);
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -273,86 +272,155 @@ function BriefProposalsCard({ brief }: { brief: ArtisanBriefWithProposals }) {
       <div className="p-4 sm:p-5">
         {/* Header du brief */}
         <div className="flex gap-4">
-          <img src={brief.briefImage} alt={brief.briefTitle} className="w-20 h-20 rounded-lg object-cover flex-shrink-0" />
+          <img src={brief.briefImage} alt={brief.briefTitle} className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg object-cover flex-shrink-0" />
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex items-center gap-2 mb-1 flex-wrap">
               <TypeBadge type="ARTISAN_BRIEF" />
               <span className="text-[10px] font-numeric text-[var(--text-3)]">{brief.briefId}</span>
             </div>
             <h3 className="font-display font-semibold text-sm sm:text-base leading-tight">{brief.briefTitle}</h3>
-            <div className="flex items-center gap-3 mt-1.5 text-[11px] text-[var(--text-3)]">
+            <div className="flex items-center gap-3 mt-1.5 text-[11px] text-[var(--text-3)] flex-wrap">
               <span>{brief.category}</span>
               <span className="text-[var(--border)]">|</span>
               <span>{brief.zone}</span>
               <span className="text-[var(--border)]">|</span>
-              <span className="font-numeric">{formatFCFA(brief.budgetMin)} - {formatFCFA(brief.budgetMax)}</span>
+              <span className="font-numeric">{formatFCFA(brief.budgetMin)} – {formatFCFA(brief.budgetMax)}</span>
             </div>
           </div>
         </div>
 
-        {/* Compteur propositions */}
-        <div className="mt-3 p-3 rounded-lg" style={{ backgroundColor: "var(--amber-pale)" }}>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Package size={14} style={{ color: "var(--amber-dark)" }} />
-              <span className="text-xs font-semibold" style={{ color: "var(--amber-dark)" }}>
-                <span className="font-numeric">{brief.proposals.length}</span> proposition{brief.proposals.length > 1 ? "s" : ""} reçue{brief.proposals.length > 1 ? "s" : ""}
-              </span>
-            </div>
-            <button
-              onClick={() => setExpanded(!expanded)}
-              className="dedco-btn dedco-btn-primary dedco-btn-sm flex items-center gap-1"
-            >
-              <GitCompareArrows size={14} />
-              Comparer les propositions
-            </button>
+        {/* Bandeau propositions reçues */}
+        <div className="mt-3 p-3 rounded-lg flex items-center justify-between gap-3" style={{ backgroundColor: "var(--amber-pale)" }}>
+          <div className="flex items-center gap-2 min-w-0">
+            <Package size={14} style={{ color: "var(--amber-dark)" }} className="flex-shrink-0" />
+            <span className="text-xs font-semibold truncate" style={{ color: "var(--amber-dark)" }}>
+              <span className="font-numeric">{brief.proposals.length}</span> proposition{brief.proposals.length > 1 ? "s" : ""} reçue{brief.proposals.length > 1 ? "s" : ""}
+            </span>
           </div>
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="dedco-btn dedco-btn-primary dedco-btn-sm flex items-center gap-1 flex-shrink-0"
+          >
+            <GitCompareArrows size={14} />
+            {expanded ? "Masquer" : "Comparer les propositions"}
+          </button>
         </div>
 
-        {/* Propositions dépliées */}
+        {/* Propositions dépliées — grille 3 colonnes + tableau comparatif */}
         {expanded && (
-          <div className="mt-4 space-y-3">
-            {brief.proposals.map((prop: ArtisanProposal) => (
-              <div key={prop.id} className="p-4 rounded-lg border border-[var(--border)] bg-[var(--bg-card)]">
-                <div className="flex gap-3">
-                  <img src={prop.artisanAvatar} alt={prop.artisanName} className="w-12 h-12 rounded-full object-cover flex-shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <h4 className="font-display font-semibold text-sm truncate">{prop.artisanName}</h4>
-                      {prop.artisanVerified && <ShieldCheck size={14} style={{ color: "var(--forest)", flexShrink: 0 }} />}
-                    </div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "var(--amber-pale)", color: "var(--amber-dark)" }}>
-                        {prop.artisanLevel}
-                      </span>
-                      <span className="text-[11px] text-[var(--text-3)] font-numeric">{prop.deliveryTime}</span>
+          <div className="mt-4 space-y-4">
+            {/* Mini-cartes en grille */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {brief.proposals.map((prop: ArtisanProposal) => (
+                <div key={prop.id} className="p-4 rounded-lg border border-[var(--border)] bg-[var(--bg-card)] flex flex-col">
+                  {/* En-tête artisan */}
+                  <div className="flex items-start gap-3 mb-3">
+                    <img src={prop.artisanAvatar} alt={prop.artisanName} className="w-12 h-12 rounded-full object-cover flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5 mb-0.5">
+                        <h4 className="font-display font-semibold text-sm truncate">{prop.artisanName}</h4>
+                        {prop.artisanVerified && <ShieldCheck size={12} style={{ color: "var(--forest)", flexShrink: 0 }} />}
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "var(--amber-pale)", color: "var(--amber-dark)" }}>
+                          {prop.artisanLevel}
+                        </span>
+                        {!prop.artisanVerified && (
+                          <span className="text-[10px] text-[var(--text-3)]">Non vérifié</span>
+                        )}
+                      </div>
                     </div>
                   </div>
-                  <div className="text-right flex-shrink-0">
-                    <p className="font-numeric text-base font-bold" style={{ color: "var(--amber-dark)" }}>{formatFCFA(prop.price)}</p>
-                    <p className="text-[10px] text-[var(--text-3)]">TTC</p>
+
+                  {/* Prix + délai */}
+                  <div className="grid grid-cols-2 gap-2 mb-3 pb-3 border-b border-[var(--border)]">
+                    <div>
+                      <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Prix</p>
+                      <p className="font-numeric text-sm font-bold" style={{ color: "var(--amber-dark)" }}>{formatFCFA(prop.price)}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Délai</p>
+                      <p className="font-numeric text-sm font-semibold text-[var(--text-1)]">{prop.deliveryTime}</p>
+                    </div>
                   </div>
+
+                  {/* Matériaux + paiement */}
+                  <div className="space-y-1.5 mb-3 text-xs flex-1">
+                    <p className="text-[var(--text-2)]">
+                      <span className="font-medium text-[var(--text-1)]">Matériaux :</span> {prop.materials}
+                    </p>
+                    <p className="text-[var(--text-2)]">
+                      <span className="font-medium text-[var(--text-1)]">Paiement :</span> {prop.paymentConditions}
+                    </p>
+                  </div>
+
+                  {/* Image exemple */}
+                  {prop.images.length > 0 && (
+                    <img src={prop.images[0]} alt="Exemple" className="w-full h-24 object-cover rounded-lg mb-3" />
+                  )}
+
+                  {/* Action */}
+                  <button
+                    onClick={() => navigateTo({ page: "projet-paiement-artisan", proposalId: prop.id })}
+                    className="dedco-btn dedco-btn-primary dedco-btn-sm w-full flex items-center justify-center gap-1.5 mt-auto"
+                  >
+                    <CheckCircle2 size={14} />
+                    Choisir
+                  </button>
                 </div>
-                <div className="mt-2 space-y-1.5">
-                  <p className="text-xs text-[var(--text-2)]">
-                    <span className="font-medium text-[var(--text-1)]">Matériaux :</span> {prop.materials}
-                  </p>
-                  <p className="text-xs text-[var(--text-2)]">
-                    <span className="font-medium text-[var(--text-1)]">Paiement :</span> {prop.paymentConditions}
-                  </p>
-                </div>
-                {prop.images.length > 0 && (
-                  <img src={prop.images[0]} alt="Exemple" className="w-full h-28 object-cover rounded-lg mt-2" />
-                )}
-                <button
-                  onClick={() => navigateTo({ page: "projet-paiement-artisan", proposalId: prop.id })}
-                  className="dedco-btn dedco-btn-primary dedco-btn-sm w-full mt-3 flex items-center justify-center gap-1.5"
-                >
-                  <CheckCircle2 size={14} />
-                  Choisir cette proposition
-                </button>
-              </div>
-            ))}
+              ))}
+            </div>
+
+            {/* Tableau comparatif synthétique */}
+            <div className="overflow-x-auto dedco-hide-scroll rounded-lg border border-[var(--border)]">
+              <table className="w-full text-xs min-w-[600px]">
+                <thead>
+                  <tr className="bg-[var(--bg-warm)] text-[var(--text-3)]">
+                    <th className="text-left px-3 py-2 font-semibold">Artisan</th>
+                    <th className="text-right px-3 py-2 font-semibold">Prix</th>
+                    <th className="text-right px-3 py-2 font-semibold">Délai</th>
+                    <th className="text-left px-3 py-2 font-semibold">Acompte</th>
+                    <th className="text-left px-3 py-2 font-semibold">Vérifié</th>
+                    <th className="text-right px-3 py-2 font-semibold">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {brief.proposals.map((prop: ArtisanProposal) => {
+                    // Extraction % acompte depuis "50 % acompte..."
+                    const acompte = prop.paymentConditions.match(/(\d+)\s*%/);
+                    const acomptePct = acompte ? `${acompte[1]} %` : "—";
+                    return (
+                      <tr key={prop.id} className="border-t border-[var(--border)]">
+                        <td className="px-3 py-2.5 font-medium text-[var(--text-1)]">
+                          <div className="flex items-center gap-2">
+                            <span className="truncate">{prop.artisanName}</span>
+                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "var(--amber-pale)", color: "var(--amber-dark)" }}>
+                              {prop.artisanLevel}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-3 py-2.5 text-right font-numeric font-bold" style={{ color: "var(--amber-dark)" }}>{formatFCFA(prop.price)}</td>
+                        <td className="px-3 py-2.5 text-right font-numeric text-[var(--text-2)]">{prop.deliveryTime}</td>
+                        <td className="px-3 py-2.5 font-numeric text-[var(--text-2)]">{acomptePct}</td>
+                        <td className="px-3 py-2.5">
+                          {prop.artisanVerified
+                            ? <ShieldCheck size={14} className="text-[var(--forest)]" />
+                            : <span className="text-[var(--text-3)] text-[11px]">Non</span>}
+                        </td>
+                        <td className="px-3 py-2.5 text-right">
+                          <button
+                            onClick={() => navigateTo({ page: "projet-paiement-artisan", proposalId: prop.id })}
+                            className="dedco-btn dedco-btn-primary dedco-btn-sm"
+                          >
+                            Choisir
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
 
@@ -361,6 +429,9 @@ function BriefProposalsCard({ brief }: { brief: ArtisanBriefWithProposals }) {
           <span className="text-[11px] text-[var(--text-3)]">
             <Clock size={10} className="inline mr-1" style={{ verticalAlign: "middle" }} />
             MAJ <span className="font-numeric">{brief.lastUpdate}</span>
+          </span>
+          <span className="text-[11px] text-[var(--text-3)]">
+            Sans choix sous <span className="font-numeric">14 jours</span>, le brief expire.
           </span>
         </div>
       </div>
@@ -664,43 +735,74 @@ function TabEnCours() {
 // ============================================================
 
 function TabAChoisir() {
+  const hasArtisan = true; // brief avec propositions
+  const hasDesigner = MOCK_PRESTATIONS_DESIGNER.length > 0 || MOCK_PAIEMENTS_EN_ATTENTE.some(p => p.parentBriefId?.startsWith("BD"));
+
   return (
-    <div className="space-y-6">
-      {/* Section ARTISAN — propositions regroupées sous 1 brief */}
-      <section>
-        <div className="flex items-center gap-2 mb-3 pb-2 border-b-2" style={{ borderColor: "var(--amber)" }}>
-          <Hammer size={14} style={{ color: "var(--amber-dark)" }} />
-          <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: "var(--amber-dark)" }}>Artisan</span>
-        </div>
-        <SectionHeader icon={Package} title="Briefs avec propositions" count={1} description="Comparez les propositions et choisissez un artisan" accentColor="var(--amber)" />
-        <BriefProposalsCard brief={MOCK_BRIEF_WITH_PROPOSALS} />
-      </section>
-
-      {/* Section DESIGNER — prestations à réserver + paiements */}
-      <section>
-        <div className="flex items-center gap-2 mb-3 pb-2 border-b-2" style={{ borderColor: "var(--forest)" }}>
-          <Palette size={14} style={{ color: "var(--forest)" }} />
-          <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: "var(--forest)" }}>Designer</span>
-        </div>
-
-        {MOCK_PRESTATIONS_DESIGNER.length > 0 && (
-          <div className="mb-6">
-            <SectionHeader icon={LayoutGrid} title="Prestations designer acceptées" count={MOCK_PRESTATIONS_DESIGNER.length} description="Un designer a accepté — réservez la prestation" accentColor="var(--forest)" />
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {MOCK_PRESTATIONS_DESIGNER.map((p) => <PrestationDesignerCard key={p.id} prestation={p} />)}
-            </div>
+    <div className="space-y-8">
+      {/* Section ARTISAN */}
+      {hasArtisan && (
+        <section>
+          <div className="flex items-center gap-2 mb-4 pb-2 border-b-2" style={{ borderColor: "var(--amber)" }}>
+            <Hammer size={14} style={{ color: "var(--amber-dark)" }} />
+            <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: "var(--amber-dark)" }}>Artisan</span>
           </div>
-        )}
+          <SectionHeader icon={Package} title="Briefs avec propositions" count={1} description="Comparez les propositions et choisissez un artisan" accentColor="var(--amber)" />
+          <BriefProposalsCard brief={MOCK_BRIEF_WITH_PROPOSALS} />
 
-        {MOCK_PAIEMENTS_EN_ATTENTE.length > 0 && (
-          <div>
-            <SectionHeader icon={CreditCard} title="Paiements en attente" count={MOCK_PAIEMENTS_EN_ATTENTE.length} description="Finalisez vos paiements pour démarrer" accentColor="var(--forest)" />
-            <div className="space-y-3 max-w-xl">
-              {MOCK_PAIEMENTS_EN_ATTENTE.map((p) => <PaiementEnAttenteCard key={p.id} paiement={p} />)}
+          {/* Paiements acompte artisan */}
+          {MOCK_PAIEMENTS_EN_ATTENTE.filter(p => p.sourceType === "ARTISAN_BRIEF").length > 0 && (
+            <div className="mt-6">
+              <SectionHeader icon={CreditCard} title="Acomptes artisan à régler" count={MOCK_PAIEMENTS_EN_ATTENTE.filter(p => p.sourceType === "ARTISAN_BRIEF").length} description="Proposition sélectionnée — payez l'acompte pour démarrer la fabrication" accentColor="var(--amber)" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {MOCK_PAIEMENTS_EN_ATTENTE.filter(p => p.sourceType === "ARTISAN_BRIEF").map((p) => (
+                  <PaiementEnAttenteCard key={p.id} paiement={p} />
+                ))}
+              </div>
             </div>
+          )}
+        </section>
+      )}
+
+      {/* Section DESIGNER */}
+      {hasDesigner && (
+        <section>
+          <div className="flex items-center gap-2 mb-4 pb-2 border-b-2" style={{ borderColor: "var(--forest)" }}>
+            <Palette size={14} style={{ color: "var(--forest)" }} />
+            <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: "var(--forest)" }}>Designer</span>
           </div>
-        )}
-      </section>
+
+          {MOCK_PRESTATIONS_DESIGNER.length > 0 && (
+            <div className="mb-6">
+              <SectionHeader icon={LayoutGrid} title="Prestations designer acceptées" count={MOCK_PRESTATIONS_DESIGNER.length} description="Un designer a accepté — réservez la prestation" accentColor="var(--forest)" />
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {MOCK_PRESTATIONS_DESIGNER.map((p) => <PrestationDesignerCard key={p.id} prestation={p} />)}
+              </div>
+            </div>
+          )}
+
+          {MOCK_PAIEMENTS_EN_ATTENTE.filter(p => p.sourceType === "DESIGNER_BRIEF").length > 0 && (
+            <div>
+              <SectionHeader icon={CreditCard} title="Paiements designer en attente" count={MOCK_PAIEMENTS_EN_ATTENTE.filter(p => p.sourceType === "DESIGNER_BRIEF").length} description="Finalisez le règlement pour confirmer la mission" accentColor="var(--forest)" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {MOCK_PAIEMENTS_EN_ATTENTE.filter(p => p.sourceType === "DESIGNER_BRIEF").map((p) => (
+                  <PaiementEnAttenteCard key={p.id} paiement={p} />
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* Empty state global si rien à choisir */}
+      {!hasArtisan && !hasDesigner && (
+        <EmptyState
+          title="Aucune décision à prendre"
+          description="Lorsque vous recevrez des propositions artisan ou des acceptations designer, elles apparaîtront ici."
+          actionLabel="Explorer la marketplace"
+          onAction={() => navigateTo({ page: "marketplace" })}
+        />
+      )}
     </div>
   );
 }

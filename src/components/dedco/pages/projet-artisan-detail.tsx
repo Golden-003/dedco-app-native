@@ -68,6 +68,8 @@ type ArtisanProjectMock = {
   jalons: JalonMock[];
   // Modifications
   modifications: ModificationMock[];
+  // Liaison proposition (pour le bouton "Payer l'acompte")
+  proposalId?: string;
 };
 
 const MOCK_PROJECTS: Record<string, ArtisanProjectMock> = {
@@ -192,7 +194,7 @@ const MOCK_PROJECTS: Record<string, ArtisanProjectMock> = {
     briefId: "BRF-ART-005",
     status: "IN_PRODUCTION",
     title: "Tabouret Tamtam x2",
-    image: "https://images.unsplash.com/photo-1566921895456-1cee6-8cee6f646-1cee6-8cee6f646-1cee6-8cee6f646-1cee6-8cee6f646-1cee6-8cee6f646?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1566921895456-1cee6-8cee6f646?auto=format&fit=crop&w=600&q=80",
     clientName: "Sophie Kossou",
     clientAvatar: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=120&q=80",
     artisanName: "Brice Gogan",
@@ -254,21 +256,49 @@ const MOCK_PROJECTS: Record<string, ArtisanProjectMock> = {
 };
 
 // ============================================================
-// PAGE: Projet Artisan Détail
+// PAGE: Projet Artisan Détail — tous les boutons fonctionnels
 // ============================================================
 
 export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
   const project = MOCK_PROJECTS[projectId] || MOCK_PROJECTS["PA-001"];
-  const [activeTab, setActiveTab] = useState<"avancement" | "details" | "modifications" | "messages">("avancement");
-  const statusConfig = PROJET_ARTISAN_STATUS[project.status];
 
-  // Onglet automatique : si modification en attente, on commence par "modifications"
+  // Onglet automatique si modification en attente
   const initialTab = project.modifications.some(m => m.status === "CHANGE_PENDING_CLIENT") ? "modifications" : "avancement";
   const [currentTab, setCurrentTab] = useState<"avancement" | "details" | "modifications" | "messages">(initialTab);
 
+  // États locaux pour actions inline (pas de boutons morts)
+  const [modStatuses, setModStatuses] = useState<Record<string, "CHANGE_PENDING_CLIENT" | "CHANGE_ACCEPTED" | "CHANGE_REJECTED">>(
+    Object.fromEntries(project.modifications.map(m => [m.id, m.status]))
+  );
+  const [deliveryConfirmed, setDeliveryConfirmed] = useState(false);
+  const [messages, setMessages] = useState<{ from: "artisan" | "me"; text: string; time: string }[]>([
+    { from: "artisan", text: "Bonjour ! J'ai commencé le travail. Voici une photo d'avancement.", time: "il y a 2h" },
+  ]);
+  const [newMessage, setNewMessage] = useState("");
+  const [toast, setToast] = useState<string | null>(null);
+
+  const statusConfig = PROJET_ARTISAN_STATUS[project.status];
+
+  // Helper : afficher un toast
+  function showToast(msg: string) {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  }
+
+  // Helper : envoyer un message
+  function sendMessage() {
+    if (!newMessage.trim()) return;
+    setMessages(prev => [...prev, { from: "me", text: newMessage.trim(), time: "à l'instant" }]);
+    setNewMessage("");
+  }
+
+  // Statut affiché (surcharge locale si action effectuée)
+  const displayedStatus: ProjetArtisanStatus = deliveryConfirmed ? "DELIVERED_CONFIRMED" : project.status;
+  const displayedStatusConfig = PROJET_ARTISAN_STATUS[displayedStatus];
+
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-6 max-w-4xl mx-auto relative">
       <button onClick={() => navigate({ page: "client-projets" })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
         <ChevronRight size={16} className="rotate-180" /> Mes projets
       </button>
@@ -277,10 +307,10 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
       <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
         <div>
           <div className="flex items-center gap-2 mb-1 flex-wrap">
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-full" style={{ color: statusConfig.color, backgroundColor: statusConfig.bgColor }}>
-              {statusConfig.label}
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-full" style={{ color: displayedStatusConfig.color, backgroundColor: displayedStatusConfig.bgColor }}>
+              {displayedStatusConfig.label}
             </span>
-            {statusConfig.isUrgent && <span className="dedco-badge dedco-badge-terra">Urgent</span>}
+            {displayedStatusConfig.isUrgent && <span className="dedco-badge dedco-badge-terra">Urgent</span>}
           </div>
           <h1 className="display-lg">{project.title}</h1>
           <p className="text-sm text-[var(--text-2)] font-numeric">{project.id} · Brief {project.briefId}</p>
@@ -295,7 +325,12 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
           <p className="font-display font-semibold">{project.artisanName}</p>
           <p className="text-xs text-[var(--text-3)] flex items-center gap-1"><MapPin size={11} /> {project.artisanCity}</p>
         </div>
-        <button className="dedco-btn dedco-btn-ghost dedco-btn-sm"><MessageSquare size={14} /> Contacter</button>
+        <button
+          onClick={() => navigate({ page: "messages", conversationId: `proj-${project.id}` })}
+          className="dedco-btn dedco-btn-ghost dedco-btn-sm"
+        >
+          <MessageSquare size={14} /> Contacter
+        </button>
       </div>
 
       {/* Tabs */}
@@ -303,7 +338,7 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
         {[
           { id: "avancement", label: "Avancement" },
           { id: "details", label: "Détails" },
-          { id: "modifications", label: `Modifications${project.modifications.filter(m => m.status === "CHANGE_PENDING_CLIENT").length > 0 ? ` (${project.modifications.filter(m => m.status === "CHANGE_PENDING_CLIENT").length})` : ""}` },
+          { id: "modifications", label: `Modifications${project.modifications.filter(m => modStatuses[m.id] === "CHANGE_PENDING_CLIENT").length > 0 ? ` (${project.modifications.filter(m => modStatuses[m.id] === "CHANGE_PENDING_CLIENT").length})` : ""}` },
           { id: "messages", label: "Messagerie" },
         ].map((t) => (
           <button key={t.id} onClick={() => setCurrentTab(t.id as typeof currentTab)} className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${currentTab === t.id ? "bg-[var(--ink)] text-white" : "bg-white border border-[var(--border)] text-[var(--text-2)]"}`}>
@@ -334,7 +369,6 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
                     <p className="text-xs text-[var(--text-3)] mb-1">{jalonInfo.description}</p>
                     <p className="text-xs text-[var(--text-3)] font-numeric">{jalon.date}</p>
 
-                    {/* Progress bar pour fabrication */}
                     {jalon.current && jalon.progress !== undefined && (
                       <div className="mt-2">
                         <div className="flex items-center justify-between text-xs mb-1">
@@ -347,7 +381,6 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
                       </div>
                     )}
 
-                    {/* Photos */}
                     {jalon.photos && jalon.photos.length > 0 && (
                       <div className="flex gap-2 mt-2">
                         {jalon.photos.map((photo, pi) => (
@@ -356,12 +389,10 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
                       </div>
                     )}
 
-                    {/* Commentaire */}
                     {jalon.commentaire && (
                       <p className="text-xs text-[var(--text-2)] mt-2 p-2 bg-[var(--bg-warm)] rounded-md">{jalon.commentaire}</p>
                     )}
 
-                    {/* Dimensions confirmées */}
                     {jalon.dimensionsConfirmees && (
                       <p className="text-xs text-[var(--text-3)] mt-1 flex items-center gap-1"><Ruler size={11} /> Dimensions confirmées : <span className="font-numeric">{jalon.dimensionsConfirmees}</span></p>
                     )}
@@ -411,66 +442,82 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
               <p className="text-sm text-[var(--text-3)]">Aucune modification demandée pour ce projet.</p>
             </div>
           ) : (
-            project.modifications.map((mod) => (
-              <div key={mod.id} className="dedco-card p-5 border-l-4" style={{ borderLeftColor: mod.status === "CHANGE_PENDING_CLIENT" ? "var(--terracotta)" : "var(--forest)" }}>
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-display font-semibold text-sm">Modification proposée par {project.artisanName}</h3>
-                  <span className={`dedco-badge ${mod.status === "CHANGE_PENDING_CLIENT" ? "dedco-badge-terra" : "dedco-badge-forest"}`}>
-                    {mod.status === "CHANGE_PENDING_CLIENT" ? "En attente de validation" : mod.status === "CHANGE_ACCEPTED" ? "Acceptée" : "Refusée"}
-                  </span>
-                </div>
-
-                {/* Comparaison */}
-                <div className="grid sm:grid-cols-2 gap-3 mb-4">
-                  <div className="p-3 bg-[var(--bg-warm)] rounded-md">
-                    <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Valeur initiale</p>
-                    <p className="text-sm font-medium">{mod.valeurInitiale}</p>
+            project.modifications.map((mod) => {
+              const status = modStatuses[mod.id] || mod.status;
+              const isPending = status === "CHANGE_PENDING_CLIENT";
+              return (
+                <div key={mod.id} className="dedco-card p-5 border-l-4" style={{ borderLeftColor: isPending ? "var(--terracotta)" : status === "CHANGE_ACCEPTED" ? "var(--forest)" : "var(--text-3)" }}>
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="font-display font-semibold text-sm">Modification proposée par {project.artisanName}</h3>
+                    <span className={`dedco-badge ${isPending ? "dedco-badge-terra" : status === "CHANGE_ACCEPTED" ? "dedco-badge-forest" : "dedco-badge-ghost"}`}>
+                      {isPending ? "En attente de validation" : status === "CHANGE_ACCEPTED" ? "Acceptée" : "Refusée"}
+                    </span>
                   </div>
-                  <div className="p-3 rounded-md" style={{ backgroundColor: "var(--amber-pale)" }}>
-                    <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Nouvelle valeur</p>
-                    <p className="text-sm font-medium text-[var(--amber-dark)]">{mod.nouvelleValeur}</p>
-                  </div>
-                </div>
 
-                {/* Impact */}
-                <div className="grid sm:grid-cols-2 gap-3 mb-4 text-sm">
-                  <div>
-                    <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Impact prix</p>
-                    <p className="font-numeric font-semibold text-[var(--terracotta)]">+{formatFCFA(mod.impactPrix)}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Impact délai</p>
-                    <p className="font-numeric">{mod.impactDelai}</p>
-                  </div>
-                </div>
-
-                {/* Motif */}
-                <div className="mb-4">
-                  <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Motif</p>
-                  <p className="text-sm p-2 bg-[var(--bg-warm)] rounded-md">{mod.motif}</p>
-                </div>
-
-                {/* Deadline + actions si en attente */}
-                {mod.status === "CHANGE_PENDING_CLIENT" && (
-                  <>
-                    <div className="p-3 rounded-md mb-4" style={{ backgroundColor: "var(--terracotta-pale)" }}>
-                      <p className="text-xs text-[var(--terracotta)] flex items-center gap-1">
-                        <Clock size={12} /> Réponse attendue avant le 26 juin 2026.
-                        Sans réponse, la modification est refusée automatiquement.
-                      </p>
+                  <div className="grid sm:grid-cols-2 gap-3 mb-4">
+                    <div className="p-3 bg-[var(--bg-warm)] rounded-md">
+                      <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Valeur initiale</p>
+                      <p className="text-sm font-medium">{mod.valeurInitiale}</p>
                     </div>
-                    <div className="flex gap-2">
-                      <button className="dedco-btn dedco-btn-ghost flex-1">
-                        <X size={14} /> Refuser
-                      </button>
-                      <button className="dedco-btn dedco-btn-primary flex-1">
-                        <Check size={14} /> Accepter la modification
-                      </button>
+                    <div className="p-3 rounded-md" style={{ backgroundColor: "var(--amber-pale)" }}>
+                      <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Nouvelle valeur</p>
+                      <p className="text-sm font-medium text-[var(--amber-dark)]">{mod.nouvelleValeur}</p>
                     </div>
-                  </>
-                )}
-              </div>
-            ))
+                  </div>
+
+                  <div className="grid sm:grid-cols-2 gap-3 mb-4 text-sm">
+                    <div>
+                      <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Impact prix</p>
+                      <p className="font-numeric font-semibold text-[var(--terracotta)]">+{formatFCFA(mod.impactPrix)}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Impact délai</p>
+                      <p className="font-numeric">{mod.impactDelai}</p>
+                    </div>
+                  </div>
+
+                  <div className="mb-4">
+                    <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Motif</p>
+                    <p className="text-sm p-2 bg-[var(--bg-warm)] rounded-md">{mod.motif}</p>
+                  </div>
+
+                  {isPending ? (
+                    <>
+                      <div className="p-3 rounded-md mb-4" style={{ backgroundColor: "var(--terracotta-pale)" }}>
+                        <p className="text-xs text-[var(--terracotta)] flex items-center gap-1">
+                          <Clock size={12} /> Réponse attendue avant le 26 juin 2026.
+                          Sans réponse, la modification est refusée automatiquement.
+                        </p>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => {
+                            setModStatuses(prev => ({ ...prev, [mod.id]: "CHANGE_REJECTED" }));
+                            showToast("Modification refusée. L'artisan conserve les valeurs initiales.");
+                          }}
+                          className="dedco-btn dedco-btn-ghost flex-1"
+                        >
+                          <X size={14} /> Refuser
+                        </button>
+                        <button
+                          onClick={() => {
+                            setModStatuses(prev => ({ ...prev, [mod.id]: "CHANGE_ACCEPTED" }));
+                            showToast("Modification acceptée. Nouveau prix et délai appliqués.");
+                          }}
+                          className="dedco-btn dedco-btn-primary flex-1"
+                        >
+                          <Check size={14} /> Accepter la modification
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="text-xs text-[var(--text-3)] italic">
+                      Décision enregistrée le 22 juin 2026.
+                    </div>
+                  )}
+                </div>
+              );
+            })
           )}
         </div>
       )}
@@ -479,33 +526,78 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
       {currentTab === "messages" && (
         <div className="dedco-card p-5">
           <h2 className="font-display font-bold mb-4">Messagerie projet</h2>
-          <div className="space-y-3 mb-4 min-h-[150px]">
-            <div className="flex gap-2">
-              <img src={project.artisanAvatar} alt="" className="w-8 h-8 rounded-full" />
-              <div className="flex-1 p-3 bg-[var(--bg-warm)] rounded-md">
-                <p className="text-xs text-[var(--text-3)] mb-1">{project.artisanName} · il y a 2h</p>
-                <p className="text-sm">Bonjour ! J'ai commencé le travail. Voici une photo d'avancement.</p>
+          <div className="space-y-3 mb-4 min-h-[200px]">
+            {messages.map((m, i) => (
+              <div key={i} className={`flex gap-2 ${m.from === "me" ? "flex-row-reverse" : ""}`}>
+                {m.from === "artisan" && <img src={project.artisanAvatar} alt="" className="w-8 h-8 rounded-full flex-shrink-0" />}
+                <div className={`max-w-[75%] p-3 rounded-md ${m.from === "me" ? "bg-[var(--amber)] text-white" : "bg-[var(--bg-warm)]"}`}>
+                  <p className="text-xs text-[var(--text-3)] mb-1">{m.from === "artisan" ? project.artisanName : "Vous"} · {m.time}</p>
+                  <p className="text-sm">{m.text}</p>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
           <div className="flex gap-2">
-            <input placeholder="Votre message..." className="flex-1 px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
-            <button className="dedco-btn dedco-btn-primary dedco-btn-sm"><Send size={14} /></button>
+            <input
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") sendMessage(); }}
+              placeholder="Votre message..."
+              className="flex-1 px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white"
+            />
+            <button
+              onClick={sendMessage}
+              className="dedco-btn dedco-btn-primary dedco-btn-sm"
+              disabled={!newMessage.trim()}
+            >
+              <Send size={14} />
+            </button>
           </div>
         </div>
       )}
 
-      {/* Actions selon statut */}
+      {/* Actions selon statut — tous fonctionnels */}
       <div className="flex gap-3 flex-wrap mt-4">
-        {project.status === "DELIVERED_PENDING_CONFIRMATION" && (
-          <button className="dedco-btn dedco-btn-primary"><CheckCircle2 size={16} /> Confirmer la réception</button>
+        {project.status === "DELIVERED_PENDING_CONFIRMATION" && !deliveryConfirmed && (
+          <button
+            onClick={() => {
+              setDeliveryConfirmed(true);
+              showToast("Réception confirmée. Le solde sera libéré sous 48 h.");
+            }}
+            className="dedco-btn dedco-btn-primary"
+          >
+            <CheckCircle2 size={16} /> Confirmer la réception
+          </button>
         )}
-        {project.status === "AWAITING_DEPOSIT" && (
-          <button className="dedco-btn dedco-btn-primary"><CheckCircle2 size={16} /> Payer l'acompte</button>
+        {project.status === "AWAITING_DEPOSIT" && project.proposalId && (
+          <button
+            onClick={() => navigate({ page: "projet-paiement-artisan", proposalId: project.proposalId! })}
+            className="dedco-btn dedco-btn-primary"
+          >
+            <CheckCircle2 size={16} /> Payer l'acompte
+          </button>
         )}
-        <button className="dedco-btn dedco-btn-ghost text-[var(--terracotta)]"><AlertTriangle size={16} /> Ouvrir un litige</button>
-        <button className="dedco-btn dedco-btn-ghost"><FileText size={16} /> Voir la facture</button>
+        <button
+          onClick={() => navigate({ page: "litige", id: `REC-${project.id}` })}
+          className="dedco-btn dedco-btn-ghost text-[var(--terracotta)]"
+        >
+          <AlertTriangle size={16} /> Ouvrir un litige
+        </button>
+        <button
+          onClick={() => navigate({ page: "invoice", orderId: project.id })}
+          className="dedco-btn dedco-btn-ghost"
+        >
+          <FileText size={16} /> Voir la facture
+        </button>
       </div>
+
+      {/* Toast inline */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 dedco-card px-4 py-3 shadow-lg flex items-center gap-2" style={{ backgroundColor: "var(--forest-pale)", borderColor: "var(--forest)" }}>
+          <CheckCircle2 size={16} className="text-[var(--forest)] flex-shrink-0" />
+          <p className="text-sm text-[var(--text-1)]">{toast}</p>
+        </div>
+      )}
     </div>
   );
 }

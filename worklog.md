@@ -36,3 +36,28 @@ Stage Summary:
 - Tri priorité + deadline, statuts cohérents, routes dédiées par type d'objet
 - Liaison métier complète : brief → proposition → projet → réclamation
 - Prêt pour étape 2 : machine d'états du brief artisan
+
+---
+Task ID: audit-achoisir-routes-v8
+Agent: main
+Task: Améliorer section "À choisir" + finaliser toutes les routes (zéro bouton non fonctionnel)
+
+Work Log:
+- Audit BriefProposalsCard : layout vertical encombrant, pas de comparaison synthétique
+- Audit boutons : 13 boutons sans onClick dans projet-artisan-detail.tsx et projet-designer-detail.tsx (Contacter, Refuser, Accepter, Confirmer, Payer acompte, Télécharger, Demander révision, Préparer RDV, Ouvrir litige, Voir facture, Messages)
+- Amélioration BriefProposalsCard : grille 3 colonnes en desktop + mini-cartes par proposition avec prix/délai/matériaux/paiement/image + bouton "Choisir" + tableau comparatif synthétique (Artisan | Prix | Délai | Acompte | Vérifié | Action)
+- Restructuration TabAChoisir : sections Artisan/Designer clairement séparées, paiements acompte artisan isolés dans leur propre sous-section, empty state global si rien à choisir
+- Finalisation projet-artisan-detail.tsx : ajout states locaux (modStatuses, deliveryConfirmed, messages, newMessage, toast), tous les boutons ont un onClick — Contacter → messages, Refuser/Accepter mod → toast + update state, Confirmer réception → toast + update state, Payer acompte → projet-paiement-artisan, Ouvrir litige → litige, Voir facture → invoice, Messagerie avec state local (envoi + Enter key)
+- Finalisation projet-designer-detail.tsx : ajout states locaux (revisions, messages, newMessage, showRevisionForm, revisionMotif, toast), tous les boutons ont un onClick — Contacter → messages, Télécharger → toast factice, Demander révision → formulaire inline + ajout à la liste, Préparer RDV → switch onglet "details", Ouvrir litige → litige, Voir facture → invoice, Messagerie avec state local
+- Vérification : 0 bouton sans onClick dans les 4 fichiers critiques (projet-artisan-detail, projet-designer-detail, projet-paiement-artisan, mes-projets-page)
+- Build Next.js réussi
+- Zip sécurisé dedco-v8-achoisir-routes.zip créé dans download/ (787K) ET upload/ (787K)
+
+Stage Summary:
+- Section "À choisir" visuellement structurée : grille 3 colonnes + tableau comparatif
+- 0 bouton non fonctionnel sur les 41 boutons audités des 4 fichiers
+- Toasts inline pour retours utilisateurs (acceptation mod, confirmation réception, révision demandée, téléchargement démarré)
+- Messagerie projet fonctionnelle avec state local (envoi + Enter)
+- Routes cibles vérifiées : messages, litige, invoice, projet-paiement-artisan, projet-livraison existent toutes
+- Prêt pour étape 2 : machine d'états brief artisan
+

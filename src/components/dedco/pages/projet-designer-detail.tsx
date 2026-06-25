@@ -199,7 +199,52 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
   const project = MOCK_PROJECTS[projectId] || MOCK_PROJECTS["PD-001"];
   const [activeTab, setActiveTab] = useState<"livrables" | "details" | "revisions" | "messages">("livrables");
+
+  // États locaux pour actions inline (pas de boutons morts)
+  const [revisions, setRevisions] = useState(project.revisions);
+  const [messages, setMessages] = useState<{ from: "designer" | "me"; text: string; time: string }[]>([
+    { from: "designer", text: "Bonjour ! J'ai bien reçu votre brief. Pour le rendez-vous de cadrage, préparez vos photos d'inspiration si possible.", time: "il y a 2h" },
+  ]);
+  const [newMessage, setNewMessage] = useState("");
+  const [showRevisionForm, setShowRevisionForm] = useState(false);
+  const [revisionMotif, setRevisionMotif] = useState("");
+  const [toast, setToast] = useState<string | null>(null);
+
   const statusConfig = STATUS_CONFIG[project.status];
+
+  // Helper : afficher un toast
+  function showToast(msg: string) {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  }
+
+  // Helper : envoyer un message
+  function sendMessage() {
+    if (!newMessage.trim()) return;
+    setMessages(prev => [...prev, { from: "me", text: newMessage.trim(), time: "à l'instant" }]);
+    setNewMessage("");
+  }
+
+  // Helper : demander une révision
+  function submitRevision() {
+    if (!revisionMotif.trim()) return;
+    const nextRound = revisions.length + 1;
+    setRevisions(prev => [...prev, {
+      id: `R${nextRound}`,
+      round: nextRound,
+      requestedAt: "22 juin",
+      motif: revisionMotif.trim(),
+      status: "in_progress",
+    }]);
+    setRevisionMotif("");
+    setShowRevisionForm(false);
+    showToast("Révision demandée. Le designer a 3 jours pour répondre.");
+  }
+
+  // Helper : télécharger un livrable (factice)
+  function downloadLivrable(name: string) {
+    showToast(`Téléchargement de « ${name} » démarré.`);
+  }
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
@@ -230,7 +275,12 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
           <p className="font-display font-semibold">{project.designerName}</p>
           <p className="text-xs text-[var(--text-3)] flex items-center gap-1"><MapPin size={11} /> {project.designerCity}</p>
         </div>
-        <button className="dedco-btn dedco-btn-ghost dedco-btn-sm"><MessageSquare size={14} /> Contacter</button>
+        <button
+          onClick={() => navigate({ page: "messages", conversationId: `proj-${project.id}` })}
+          className="dedco-btn dedco-btn-ghost dedco-btn-sm"
+        >
+          <MessageSquare size={14} /> Contacter
+        </button>
       </div>
 
       {/* Alerte rendez-vous de cadrage si KICKOFF_SCHEDULED */}
@@ -294,7 +344,11 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
                     </div>
                     <div className="flex items-center justify-between mt-2">
                       <span className="text-[11px] text-[var(--text-3)] font-numeric">Mis en ligne le {l.date}</span>
-                      <button className="dedco-btn dedco-btn-ghost dedco-btn-sm" title="Télécharger">
+                      <button
+                        onClick={() => downloadLivrable(l.name)}
+                        className="dedco-btn dedco-btn-ghost dedco-btn-sm"
+                        title="Télécharger"
+                      >
                         <Download size={12} />
                       </button>
                     </div>
@@ -426,9 +480,42 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
           )}
 
           {project.livrables.length > 0 && project.status !== "COMPLETED" && (
-            <button className="dedco-btn dedco-btn-secondary dedco-btn-sm mt-4 w-full">
-              <PencilLine size={14} /> Demander une révision
-            </button>
+            <>
+              {!showRevisionForm ? (
+                <button
+                  onClick={() => setShowRevisionForm(true)}
+                  className="dedco-btn dedco-btn-secondary dedco-btn-sm mt-4 w-full"
+                >
+                  <PencilLine size={14} /> Demander une révision
+                </button>
+              ) : (
+                <div className="mt-4 p-3 border border-[var(--border)] rounded-lg bg-[var(--bg-card)]">
+                  <p className="text-xs font-semibold mb-2">Motif de la révision</p>
+                  <textarea
+                    value={revisionMotif}
+                    onChange={(e) => setRevisionMotif(e.target.value)}
+                    placeholder="Ex. : la palette est trop froide, ajouter des touches terracotta"
+                    rows={3}
+                    className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white mb-2"
+                  />
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => { setShowRevisionForm(false); setRevisionMotif(""); }}
+                      className="dedco-btn dedco-btn-ghost dedco-btn-sm flex-1"
+                    >
+                      Annuler
+                    </button>
+                    <button
+                      onClick={submitRevision}
+                      disabled={!revisionMotif.trim()}
+                      className="dedco-btn dedco-btn-primary dedco-btn-sm flex-1"
+                    >
+                      <Send size={14} /> Envoyer
+                    </button>
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
       )}
@@ -437,23 +524,37 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
       {activeTab === "messages" && (
         <div className="dedco-card p-5">
           <h2 className="font-display font-bold mb-4">Messagerie projet</h2>
-          <div className="space-y-3 mb-4 min-h-[150px]">
-            <div className="flex gap-2">
-              <img src={project.designerAvatar} alt="" className="w-8 h-8 rounded-full" />
-              <div className="flex-1 p-3 bg-[var(--bg-warm)] rounded-md">
-                <p className="text-xs text-[var(--text-3)] mb-1">{project.designerName} · il y a 2h</p>
-                <p className="text-sm">Bonjour ! J'ai bien reçu votre brief. Pour le rendez-vous de cadrage, préparez vos photos d'inspiration si possible.</p>
+          <div className="space-y-3 mb-4 min-h-[200px]">
+            {messages.map((m, i) => (
+              <div key={i} className={`flex gap-2 ${m.from === "me" ? "flex-row-reverse" : ""}`}>
+                {m.from === "designer" && <img src={project.designerAvatar} alt="" className="w-8 h-8 rounded-full flex-shrink-0" />}
+                <div className={`max-w-[75%] p-3 rounded-md ${m.from === "me" ? "bg-[var(--forest)] text-white" : "bg-[var(--bg-warm)]"}`}>
+                  <p className="text-xs text-[var(--text-3)] mb-1">{m.from === "designer" ? project.designerName : "Vous"} · {m.time}</p>
+                  <p className="text-sm">{m.text}</p>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
           <div className="flex gap-2">
-            <input placeholder="Votre message..." className="flex-1 px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
-            <button className="dedco-btn dedco-btn-primary dedco-btn-sm"><Send size={14} /></button>
+            <input
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") sendMessage(); }}
+              placeholder="Votre message..."
+              className="flex-1 px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white"
+            />
+            <button
+              onClick={sendMessage}
+              disabled={!newMessage.trim()}
+              className="dedco-btn dedco-btn-primary dedco-btn-sm"
+            >
+              <Send size={14} />
+            </button>
           </div>
         </div>
       )}
 
-      {/* Actions selon statut */}
+      {/* Actions selon statut — tous fonctionnels */}
       <div className="flex gap-3 flex-wrap mt-4">
         {project.status === "DELIVERABLE_READY" && (
           <button onClick={() => navigate({ page: "projet-livraison", projectId: project.id })} className="dedco-btn dedco-btn-primary">
@@ -461,13 +562,34 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
           </button>
         )}
         {project.status === "KICKOFF_SCHEDULED" && (
-          <button className="dedco-btn dedco-btn-primary">
+          <button
+            onClick={() => setActiveTab("details")}
+            className="dedco-btn dedco-btn-primary"
+          >
             <Eye size={16} /> Préparer le rendez-vous
           </button>
         )}
-        <button className="dedco-btn dedco-btn-ghost text-[var(--terracotta)]"><AlertTriangle size={16} /> Ouvrir un litige</button>
-        <button className="dedco-btn dedco-btn-ghost"><FileText size={16} /> Voir la facture</button>
+        <button
+          onClick={() => navigate({ page: "litige", id: `REC-${project.id}` })}
+          className="dedco-btn dedco-btn-ghost text-[var(--terracotta)]"
+        >
+          <AlertTriangle size={16} /> Ouvrir un litige
+        </button>
+        <button
+          onClick={() => navigate({ page: "invoice", orderId: project.id })}
+          className="dedco-btn dedco-btn-ghost"
+        >
+          <FileText size={16} /> Voir la facture
+        </button>
       </div>
+
+      {/* Toast inline */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 dedco-card px-4 py-3 shadow-lg flex items-center gap-2" style={{ backgroundColor: "var(--forest-pale)", borderColor: "var(--forest)" }}>
+          <CheckCircle2 size={16} className="text-[var(--forest)] flex-shrink-0" />
+          <p className="text-sm text-[var(--text-1)]">{toast}</p>
+        </div>
+      )}
     </div>
   );
 }
