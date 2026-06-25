@@ -54,3 +54,15 @@ server.log
 /skills/
 # Local uploads (PAT, secrets, etc.)
 /upload/
+
+# Backup & sandbox artifacts (à ne JAMAIS pousser)
+/download/
+/upload/
+/tool-results/
+/src_backup_*/
+/public_backup_*/
+/.zscripts/
+/mini-services/
+chat_content.json
+worklog.md
+*.log
