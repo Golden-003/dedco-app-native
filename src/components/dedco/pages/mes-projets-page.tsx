@@ -42,6 +42,7 @@ import {
   MOCK_RECLAMATIONS,
   PRIORITY_CONFIG,
   TYPE_LABELS,
+  parseFrDate,
 } from "@/lib/mes-projets-data";
 
 // ============================================================
@@ -374,6 +375,12 @@ function BriefProposalsCard({ brief }: { brief: ArtisanBriefWithProposals }) {
 function PrestationDesignerCard({ prestation }: { prestation: DesignerPrestation }) {
   return (
     <div className="dedco-card p-4 sm:p-5 hover:shadow-md transition-shadow">
+      {/* Badge statut AWAITING_PAYMENT */}
+      <div className="mb-3">
+        <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ color: "var(--terracotta)", backgroundColor: "var(--terracotta-pale)" }}>
+          Paiement à effectuer
+        </span>
+      </div>
       <div className="flex gap-4">
         <img src={prestation.designerAvatar} alt={prestation.designerName} className="w-14 h-14 rounded-full object-cover flex-shrink-0" />
         <div className="flex-1 min-w-0">
@@ -619,8 +626,18 @@ function EmptyState({ title, description, actionLabel, onAction }: { title: stri
 // ============================================================
 
 function TabEnCours() {
+  // Tri : priorité d'abord, deadline départage les égalités
   const sorted = useMemo(
-    () => [...MOCK_EN_COURS].sort((a, b) => (ACTION_PRIORITY_ORDER[a.priority] ?? 8) - (ACTION_PRIORITY_ORDER[b.priority] ?? 8)),
+    () =>
+      [...MOCK_EN_COURS].sort((a, b) => {
+        const pa = ACTION_PRIORITY_ORDER[a.priority] ?? 8;
+        const pb = ACTION_PRIORITY_ORDER[b.priority] ?? 8;
+        if (pa !== pb) return pa - pb;
+        // Même priorité : la deadline la plus proche d'abord
+        const da = a.priorityDeadline ? parseFrDate(a.priorityDeadline) : Number.MAX_SAFE_INTEGER;
+        const db = b.priorityDeadline ? parseFrDate(b.priorityDeadline) : Number.MAX_SAFE_INTEGER;
+        return da - db;
+      }),
     [],
   );
   const urgentCount = sorted.filter((i) => ACTION_PRIORITY_ORDER[i.priority] <= 3).length;

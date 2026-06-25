@@ -6,30 +6,33 @@ Agent: main
 Task: Audit des incohérences "Mes projets" - confusion artisan/designer
 
 Work Log:
-- Lecture mes-projets-page.tsx, mes-projets-data.ts, projet-artisan-detail.tsx, dedco-router.tsx, dedco-types.ts, dedco-status.tsx, designer-workflow-pages.tsx, store.ts
-- 7 incohérences identifiées :
-  1. Route "projet-detail" redirigeait vers ProjetArtisanDetailPage même pour les projets designer (PD-)
-  2. ProjetArtisanDetailPage avait un MOCK_PROJECT hardcoded (toujours PA-001)
-  3. Route "projet-paiement" (page designer) était utilisée pour les acomptes artisan (PROP-*)
-  4. Route "brief" (artisan) était utilisée pour "Refaire une demande similaire" sur projets designer terminés
-  5. Statut PD-002 était "IN_PRODUCTION" (statut artisan) au lieu d'un statut designer
-  6. Aucune séparation visuelle claire artisan/designer dans onglet "À choisir"
-  7. Route "brief-list" manquait dans type AppRoute (bug pré-existant)
-- Création projet-designer-detail.tsx (mocks PD-001, PD-002, PD-010, onglets Livrables/Détails/Révisions/Messages)
-- Création projet-paiement-artisan.tsx (mocks PROP-K1, PROP-A1/A2/A3, acompte % + solde %, garantie Dedco)
-- Refonte projet-artisan-detail.tsx avec mocks distincts (PA-001, PA-002, PA-004, PA-005, PA-010)
-- store.ts : ajout routes projet-designer-detail + projet-paiement-artisan
-- dedco-router.tsx : routing intelligent PD- vs PA- pour projet-detail, nouveaux cases
-- mes-projets-data.ts : statut PD-002 corrigé (DELIVERABLE_READY), route BA-003 acompte corrigée
-- mes-projets-page.tsx : navigateTo détecte PD-/PA-, boutons contextuels, SectionHeader avec accentColor, séparation visuelle Artisan/Designer
-- Imports Hammer + Palette ajoutés
-- Fix bug pré-existant brief-list manquant dans AppRoute
+- 7 incohérences corrigées (séparation artisan/designer, mocks distincts par projectId, routes dédiées)
+- Création projet-designer-detail.tsx, projet-paiement-artisan.tsx, refonte projet-artisan-detail.tsx
+- Build propre, zip dedco-v6-mes-projets.zip
+
+---
+Task ID: audit-pilotage-v7
+Agent: main
+Task: 7 ajustements de pilotage "Mes projets" avant étape 2 (machine d'états)
+
+Work Log:
+- 1A. Statut AWAITING_PAYMENT explicite ajouté aux prestations designer (badge "Paiement à effectuer" sur PrestationDesignerCard)
+- 1A. KICKOFF_SCHEDULED (PD-001) confirmé avec bouton "Préparer mon projet" (pas de paiement)
+- 1B. BA-001 (3 propositions) déjà regroupé sous 1 carte dans MOCK_BRIEF_WITH_PROPOSALS (vérifié, pas de modification)
+- 2. Aucune carte mes-projets ne pointe vers order-tracking (vérifié par grep) — routes projet-detail intelligentes (PD-→designer, PA-→artisan), projet-paiement-artisan pour acomptes
+- 3. Tri secondaire par deadline ajouté dans TabEnCours : `parseFrDate()` convertit "26 juin 2026" → timestamp, départage les priorités égales
+- 4. BA-003 (AWAITING_DEPOSIT) déplacé de MOCK_EN_COURS vers MOCK_PAIEMENTS_EN_ATTENTE (PAY-A-003, acompte 92500 FCFA) — frontière "À choisir" respectée
+- 5. Filtre secondaire "Tous / Réalisés / Annulés" déjà en place (vérifié)
+- 6. Champs sourceType/sourceId/parentBriefId/linkedProjectId ajoutés à MesProjetsItem + ArtisanBriefWithProposals + DesignerPrestation + PendingPayment + Reclamation dans dedco-types.ts
+- 6. Tous les mocks remplis avec leurs liaisons (BA-001 → PROP-A1/A2/A3, PA-001 → BA-001, REC-001 → PA-011, etc.)
+- 7. Publication auto brief artisan inchangée (DRAFT → SUBMITTED → PUBLISHED → PROPOSALS_RECEIVED → IN_DISCUSSION → ARTISAN_SELECTED → AWAITING_DEPOSIT → CONVERTED_TO_PROJECT)
+- Helper parseFrDate ajouté dans mes-projets-data.ts (mois FR → timestamp)
 - Build Next.js réussi (0 erreur bloquante)
-- Zip sécurisé dedco-v6-mes-projets.zip créé dans download/ (783K) ET upload/ (783K)
+- Zip sécurisé dedco-v7-pilotage.zip créé dans download/ (784K) ET upload/ (784K)
 
 Stage Summary:
-- Workflow artisan et designer totalement séparés dans "Mes projets"
-- Chaque projectId (PA-xxx ou PD-xxx) a son propre mock
-- Routes dédiées : projet-artisan-detail, projet-designer-detail, projet-paiement, projet-paiement-artisan
-- Onglet "À choisir" scindé visuellement : section "Artisan" (ambre) + section "Designer" (forest)
-- Build propre, zip sécurisé disponible
+- "Mes projets" devient la vraie couche de pilotage client
+- Frontières onglets claires : En cours (actifs) / À choisir (décisions+acomptes) / Terminés (réalisés vs annulés séparés) / Réclamations
+- Tri priorité + deadline, statuts cohérents, routes dédiées par type d'objet
+- Liaison métier complète : brief → proposition → projet → réclamation
+- Prêt pour étape 2 : machine d'états du brief artisan

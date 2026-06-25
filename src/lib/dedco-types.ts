@@ -293,6 +293,16 @@ export type MesProjetsItem = {
   budgetMax?: number;
   /** Pour les éléments terminés/annulés */
   isCancelled?: boolean;
+
+  // ── Liaison métier (chaîne brief → proposition → projet → réclamation) ──
+  /** Type de l'objet source affiché (redondant avec `type` mais explicite pour la future machine d'états) */
+  sourceType: ClientProjectType;
+  /** ID de l'objet source affiché */
+  sourceId: string;
+  /** ID du brief parent si l'objet vient d'un brief (artisan ou designer) */
+  parentBriefId?: string;
+  /** ID du projet lié si l'objet est une réclamation ou un projet converti */
+  linkedProjectId?: string;
 };
 
 // ── Propositions artisan (regroupées sous un brief) ──
@@ -321,6 +331,9 @@ export type ArtisanBriefWithProposals = {
   budgetMax: number;
   proposals: ArtisanProposal[];
   lastUpdate: string;
+  /** Liaison métier — l'objet affiché est un brief artisan */
+  sourceType: ClientProjectType;
+  sourceId: string;
 };
 
 // ── Prestations designer à réserver ──
@@ -336,6 +349,10 @@ export type DesignerPrestation = {
   deliveryTime: string;
   availability: string;
   nextActionRoute: MesProjetsRoute;
+  /** Liaison métier — l'objet affiché est un brief designer en attente de paiement */
+  sourceType: ClientProjectType;
+  sourceId: string;
+  parentBriefId?: string;
 };
 
 // ── Paiements en attente ──
@@ -348,6 +365,10 @@ export type PendingPayment = {
   dueDate: string;
   paymentMethod: string;
   nextActionRoute: MesProjetsRoute;
+  /** Liaison métier — acompte artisan ou prestation designer */
+  sourceType: ClientProjectType;
+  sourceId: string;
+  parentBriefId?: string;
 };
 
 // ── Réclamations ──
@@ -376,4 +397,8 @@ export type Reclamation = {
   amount: number;
   attachments: number;
   nextActionRoute: MesProjetsRoute;
+  /** Liaison métier — projet artisan ou designer concerné */
+  sourceType: ClientProjectType;
+  sourceId: string;
+  linkedProjectId?: string;
 };

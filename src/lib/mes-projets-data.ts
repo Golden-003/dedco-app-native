@@ -1,13 +1,16 @@
 // ============================================================
-// DEDCO — Mock data "Mes Projets" (v2 — conforme feedback)
+// DEDCO — Mock data "Mes Projets" (v3 — conforme audit pilotage)
 //
-// Onglet "En cours"     : 7 éléments
-// Onglet "A choisir"    : 5 éléments (1 brief + 3 props groupées, 1 prestation designer, 1 paiement)
-// Onglet "Terminés"     : 3 éléments (2 réussis + 1 annulé)
-// Onglet "Réclamations" : 2 éléments
+// RÈGLES DE FRONTIÈRE :
+//   "En cours"  → briefs publiés sans proposition, projets en fabrication, RDV planifiés, livraison à confirmer
+//   "À choisir" → propositions reçues, artisan sélectionné + acompte à payer, prestation designer à réserver
+//   "Terminés"  → projets livrés, prestations réussies, commandes reçues (+ filtre annulés/expirés)
+//   "Réclamations" → dossiers ouverts
 //
-// Les routes sont dédiées par type, pas génériques.
-// Les propositions artisan sont regroupées sous un seul brief.
+// LIAISON MÉTIER :
+//   sourceType / sourceId / parentBriefId / linkedProjectId
+//   Permet de reconstituer la chaîne :
+//   Brief BA-001 → Proposition PROP-A1 → Projet PRA-001 → Réclamation REC-001
 // ============================================================
 
 import type {
@@ -20,36 +23,11 @@ import type {
 } from "./dedco-types";
 
 // ────────────────────────────────────────────────────────────
-// ONGLET "EN COURS" — 7 éléments, triés par ACTION_PRIORITY_ORDER
+// ONGLET "EN COURS" — projets actifs (pas d'engagement à confirmer)
 // ────────────────────────────────────────────────────────────
 
 export const MOCK_EN_COURS: MesProjetsItem[] = [
-  // 1. Acompte artisan à payer (priorité 1)
-  {
-    id: "BA-003",
-    type: "ARTISAN_BRIEF",
-    title: "Table basse sur mesure",
-    image: "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=300&q=80",
-    status: "AWAITING_DEPOSIT",
-    statusLabel: "Acompte à payer",
-    statusColor: "var(--terracotta)",
-    statusBgColor: "var(--terracotta-pale)",
-    partnerName: "Atelier Kossi",
-    partnerAvatar: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&w=80&q=80",
-    partnerType: "artisan",
-    amount: 185000,
-    securedAmount: 0,
-    estimatedDate: "18 juil. 2026",
-    lastUpdate: "22 juin 2026",
-    nextAction: "Payer l'acompte",
-    nextActionRoute: { page: "projet-paiement-artisan", proposalId: "PROP-K1" },
-    priority: "PAYMENT_REQUIRED",
-    priorityDeadline: "28 juin 2026",
-    priorityConsequence: "Sans paiement, la proposition expire.",
-    category: "Tables",
-    zone: "Cotonou",
-  },
-  // 2. Modification de matériau à valider (priorité 2)
+  // 1. Modification de matériau à valider (priorité 2)
   {
     id: "PA-001",
     type: "ARTISAN_PROJECT",
@@ -74,8 +52,11 @@ export const MOCK_EN_COURS: MesProjetsItem[] = [
     progress: 60,
     category: "Sièges",
     zone: "Parakou",
+    sourceType: "ARTISAN_PROJECT",
+    sourceId: "PA-001",
+    parentBriefId: "BA-001",
   },
-  // 3. Livraison à confirmer (priorité 3)
+  // 2. Livraison à confirmer (priorité 3)
   {
     id: "PA-002",
     type: "ARTISAN_PROJECT",
@@ -99,8 +80,11 @@ export const MOCK_EN_COURS: MesProjetsItem[] = [
     progress: 95,
     category: "Luminaires",
     zone: "Ouidah",
+    sourceType: "ARTISAN_PROJECT",
+    sourceId: "PA-002",
+    parentBriefId: "BA-002",
   },
-  // 4. Projet artisan en fabrication (priorité 7)
+  // 3. Projet artisan en fabrication (priorité 7)
   {
     id: "PA-004",
     type: "ARTISAN_PROJECT",
@@ -123,13 +107,16 @@ export const MOCK_EN_COURS: MesProjetsItem[] = [
     progress: 35,
     category: "Décoration murale",
     zone: "Cotonou",
+    sourceType: "ARTISAN_PROJECT",
+    sourceId: "PA-004",
+    parentBriefId: "BA-004",
   },
-  // 5. Projet artisan avec mise à jour récente (priorité 7)
+  // 4. Projet artisan avec mise à jour récente (priorité 7)
   {
     id: "PA-005",
     type: "ARTISAN_PROJECT",
     title: "Tabouret Tamtam x2",
-    image: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=300&q=80",
+    image: "https://images.unsplash.com/photo-1566921895456-1cee6-8cee6f646-1cee6-8cee6f646-1cee6-8cee6f646?auto=format&fit=crop&w=300&q=80",
     status: "IN_PRODUCTION",
     statusLabel: "En fabrication",
     statusColor: "var(--amber-dark)",
@@ -147,8 +134,11 @@ export const MOCK_EN_COURS: MesProjetsItem[] = [
     progress: 50,
     category: "Sièges",
     zone: "Cotonou",
+    sourceType: "ARTISAN_PROJECT",
+    sourceId: "PA-005",
+    parentBriefId: "BA-005",
   },
-  // 6. Rendez-vous designer planifié (priorité 5)
+  // 5. Rendez-vous designer planifié (priorité 5) — designer PAYÉ, RDV planifié → EN COURS
   {
     id: "PD-001",
     type: "DESIGNER_PROJECT",
@@ -172,8 +162,11 @@ export const MOCK_EN_COURS: MesProjetsItem[] = [
     priorityConsequence: "Le rendez-vous est le 28 juin à 10 h.",
     progress: 10,
     category: "Aménagement",
+    sourceType: "DESIGNER_PROJECT",
+    sourceId: "PD-001",
+    parentBriefId: "BD-001",
   },
-  // 7. Livrable designer disponible (priorité 5)
+  // 6. Livrable designer disponible (priorité 5)
   {
     id: "PD-002",
     type: "DESIGNER_PROJECT",
@@ -194,14 +187,17 @@ export const MOCK_EN_COURS: MesProjetsItem[] = [
     priority: "DESIGNER_MEETING_OR_DELIVERABLE",
     progress: 80,
     category: "Aménagement",
+    sourceType: "DESIGNER_PROJECT",
+    sourceId: "PD-002",
+    parentBriefId: "BD-002",
   },
 ];
 
 // ────────────────────────────────────────────────────────────
-// ONGLET "A CHOISIR" — propositions groupées + prestation + paiement
+// ONGLET "A CHOISIR" — décisions et paiements à effectuer
 // ────────────────────────────────────────────────────────────
 
-/** 3 propositions regroupées sous 1 brief artisan */
+/** 3 propositions regroupées sous 1 brief artisan — affiché comme 1 seule carte */
 export const MOCK_BRIEF_WITH_PROPOSALS: ArtisanBriefWithProposals = {
   briefId: "BA-001",
   briefTitle: "Dressing sur mesure chambre",
@@ -252,9 +248,11 @@ export const MOCK_BRIEF_WITH_PROPOSALS: ArtisanBriefWithProposals = {
       paymentConditions: "30 % acompte, 70 % à la livraison",
     },
   ],
+  sourceType: "ARTISAN_BRIEF",
+  sourceId: "BA-001",
 };
 
-/** 1 prestation designer acceptée mais non réservée */
+/** Prestations designer acceptées mais non réservées — statut AWAITING_PAYMENT explicite */
 export const MOCK_PRESTATIONS_DESIGNER: DesignerPrestation[] = [
   {
     id: "PRES-D1",
@@ -267,19 +265,39 @@ export const MOCK_PRESTATIONS_DESIGNER: DesignerPrestation[] = [
     deliveryTime: "10 jours ouvrables",
     availability: "Disponible à partir du 28 juin",
     nextActionRoute: { page: "projet-paiement", proposalId: "PRES-D1" },
+    sourceType: "DESIGNER_BRIEF",
+    sourceId: "PRES-D1",
+    parentBriefId: "BD-003",
   },
 ];
 
-/** 1 paiement designer à effectuer */
+/** Paiements acompte en attente — inclut l'acompte artisan (BA-003 sélectionné, acompte à payer) */
 export const MOCK_PAIEMENTS_EN_ATTENTE: PendingPayment[] = [
+  // Acompte artisan — Proposition PROP-K1 sélectionnée pour BA-003
+  {
+    id: "PAY-A-003",
+    projectTitle: "Table basse sur mesure",
+    projectImage: "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=200&q=80",
+    amount: 92500, // 50% acompte
+    dueDate: "28 juin 2026",
+    paymentMethod: "MTN MoMo / Moov Money / Carte",
+    nextActionRoute: { page: "projet-paiement-artisan", proposalId: "PROP-K1" },
+    sourceType: "ARTISAN_BRIEF",
+    sourceId: "PAY-A-003",
+    parentBriefId: "BA-003",
+  },
+  // Paiement designer — prestation PRES-D1
   {
     id: "PAY-D1",
     projectTitle: "Décoration chambre enfant",
     projectImage: "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=200&q=80",
     amount: 120000,
     dueDate: "30 juin 2026",
-    paymentMethod: "Mobile Money / Carte bancaire",
+    paymentMethod: "MTN MoMo / Moov Money / Carte",
     nextActionRoute: { page: "payment", orderId: "PAY-D1" },
+    sourceType: "DESIGNER_BRIEF",
+    sourceId: "PAY-D1",
+    parentBriefId: "BD-003",
   },
 ];
 
@@ -310,6 +328,9 @@ export const MOCK_TERMINES: MesProjetsItem[] = [
     category: "Sièges",
     zone: "Cotonou",
     isCancelled: false,
+    sourceType: "ARTISAN_PROJECT",
+    sourceId: "PA-010",
+    parentBriefId: "BA-010",
   },
   // Prestation designer terminée
   {
@@ -332,8 +353,11 @@ export const MOCK_TERMINES: MesProjetsItem[] = [
     progress: 100,
     category: "Aménagement",
     isCancelled: false,
+    sourceType: "DESIGNER_PROJECT",
+    sourceId: "PD-010",
+    parentBriefId: "BD-010",
   },
-  // Commande catalogue annulée
+  // Commande catalogue annulée — isolée dans le filtre "Annulés / expirés"
   {
     id: "CMD-ANN-01",
     type: "CATALOG_ORDER",
@@ -352,6 +376,8 @@ export const MOCK_TERMINES: MesProjetsItem[] = [
     nextActionRoute: { page: "marketplace" },
     priority: "NO_ACTION_REQUIRED",
     isCancelled: true,
+    sourceType: "CATALOG_ORDER",
+    sourceId: "CMD-ANN-01",
   },
 ];
 
@@ -375,6 +401,9 @@ export const MOCK_RECLAMATIONS: Reclamation[] = [
     amount: 120000,
     attachments: 3,
     nextActionRoute: { page: "litige", id: "REC-001" },
+    sourceType: "COMPLAINT",
+    sourceId: "REC-001",
+    linkedProjectId: "PA-011",
   },
   {
     id: "REC-002",
@@ -391,6 +420,9 @@ export const MOCK_RECLAMATIONS: Reclamation[] = [
     amount: 85000,
     attachments: 1,
     nextActionRoute: { page: "litige", id: "REC-002" },
+    sourceType: "COMPLAINT",
+    sourceId: "REC-002",
+    linkedProjectId: "PA-012",
   },
 ];
 
@@ -418,3 +450,23 @@ export const TYPE_LABELS: Record<string, { label: string; color: string; bg: str
   CATALOG_ORDER: { label: "Commande", color: "var(--text-2)", bg: "var(--bg-warm)" },
   COMPLAINT: { label: "Réclamation", color: "var(--terracotta)", bg: "var(--terracotta-pale)" },
 };
+
+// ────────────────────────────────────────────────────────────
+// HELPER — conversion date FR → timestamp pour le tri secondaire
+// ────────────────────────────────────────────────────────────
+
+/** Convertit "26 juin 2026" en timestamp pour départager les priorités égales */
+export function parseFrDate(dateStr: string): number {
+  const months: Record<string, number> = {
+    "janv": 0, "févr": 1, "mars": 2, "avr": 3, "mai": 4, "juin": 5,
+    "juil": 6, "août": 7, "sept": 8, "oct": 9, "nov": 10, "déc": 11,
+  };
+  // Format attendu : "26 juin 2026" ou "28 juin 2026"
+  const match = dateStr.match(/^(\d{1,2})\s+([a-zéû]+)\s+(\d{4})$/i);
+  if (!match) return Number.MAX_SAFE_INTEGER;
+  const day = parseInt(match[1], 10);
+  const monthKey = match[2].toLowerCase().slice(0, 4);
+  const month = months[monthKey] ?? 0;
+  const year = parseInt(match[3], 10);
+  return new Date(year, month, day).getTime();
+}
