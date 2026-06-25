@@ -19,6 +19,7 @@ import {
   Palette,
   Shield,
   Home as HomeIcon,
+  FolderKanban,
 } from "lucide-react";
 import type { Route } from "@/lib/dedco-types";
 import { useDedcoStore, type AppRoute, type CurrentUser, type UserRole } from "@/lib/store";
@@ -186,6 +187,14 @@ function UserMenu({
                 <button
                   type="button"
                   onClick={() => { navigate({ page: "client-projets" }); setOpen(false); }}
+                  className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-ink hover:bg-warm transition-colors"
+                >
+                  <FolderKanban size={16} className="text-amber" />
+                  Mes projets
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { navigate({ page: "order-history" }); setOpen(false); }}
                   className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-ink hover:bg-warm transition-colors"
                 >
                   <OrdersIcon size={16} className="text-amber" />

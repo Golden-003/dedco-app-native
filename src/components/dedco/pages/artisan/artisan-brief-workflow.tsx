@@ -2,36 +2,26 @@
 
 import { useState } from "react";
 import {
-  Check,
-  CheckCircle2,
-  Clock,
-  ChevronRight,
-  X,
-  AlertTriangle,
-  ShieldCheck,
-  Send,
-  MessageSquare,
-  FileText,
-  Hammer,
-  Ruler,
-  MapPin,
-  Calendar,
-  Package,
+  Check, CheckCircle2, Clock, ChevronRight, X, AlertTriangle,
+  ShieldCheck, Send, MessageSquare, FileText, Hammer, Ruler,
+  MapPin, Calendar, Package, Truck, ArrowRight, ArrowLeft,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
 import { formatFCFA } from "@/lib/dedco-data";
 
 // ============================================================
-// MOCK — Brief artisan reçu
+// WORKFLOW ARTISAN — Spécifique à la fabrication sur mesure
+// DIFFÉRENT du designer :
+// - Designer : brief → choix prestation → proposition de mission → paiement → exécution → livraison PDF
+// - Artisan : demande de fabrication → devis (prix+délai+matières) → négociation → paiement → fabrication → T1/T2/T3 → validation
 // ============================================================
 
-const MOCK_ARTISAN_BRIEF = {
+const MOCK_BRIEF = {
   id: "BRF-ART-001",
   clientName: "Sophie Kossou",
   clientAvatar: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=120&q=80",
   clientVille: "Cotonou",
   clientQuartier: "Akpakpa",
-  // Détails de la pièce à fabriquer
   categorie: "Mobilier",
   titre: "Table basse en bois iroko avec plateau wax",
   matiere: "Bois (iroko, teck, acajou)",
@@ -41,25 +31,20 @@ const MOCK_ARTISAN_BRIEF = {
   description: "Table basse pour salon de 25m². Plateau en bois iroko avec insert en tissu wax bleu Ankara. Pieds en bois massif. Un tiroir de rangement sur le côté droit. Finition naturelle mate.",
   budget: "150 000 – 400 000 FCFA",
   delai: "Normal (3-8 semaines)",
-  photos: [
-    "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1579656592043-a20e25a4aa4b?auto=format&fit=crop&w=400&q=80",
-  ],
+  photos: ["https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=400&q=80"],
   sentAt: "Il y a 2h",
+  countdown: "47h restantes",
 };
 
 // ============================================================
-// PAGE: artisan-brief-recu — Artisan reçoit un brief de fabrication
+// PAGE: artisan-brief-recu — Demande de fabrication reçue
 // ============================================================
 
 export function ArtisanBriefRecuPage({ briefId }: { briefId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
-  const brief = MOCK_ARTISAN_BRIEF;
+  const brief = MOCK_BRIEF;
   const [showQuestions, setShowQuestions] = useState(false);
   const [questions, setQuestions] = useState(["", "", ""]);
-
-  // 3 ACTIONS — comme le designer mais adapté à l'artisan
-  const canAct = true; // Pas de choix de prestation nécessaire — l'artisan fabrique
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
@@ -69,9 +54,14 @@ export function ArtisanBriefRecuPage({ briefId }: { briefId: string }) {
           <span className="dedco-badge dedco-badge-amber">{brief.categorie}</span>
         </div>
         <p className="text-sm text-[var(--text-2)] font-numeric">{brief.id} · Reçu {brief.sentAt}</p>
+        {brief.countdown && (
+          <p className="text-xs text-[var(--terracotta)] mt-1 flex items-center gap-1">
+            <Clock size={11} /> {brief.countdown}
+          </p>
+        )}
       </header>
 
-      {/* 1. RÉSUMÉ DU BRIEF — adapté à une commande de fabrication */}
+      {/* Client */}
       <div className="dedco-card p-5 mb-4">
         <div className="flex items-center gap-3 mb-4">
           <img src={brief.clientAvatar} alt={brief.clientName} className="w-12 h-12 rounded-full object-cover" />
@@ -83,15 +73,16 @@ export function ArtisanBriefRecuPage({ briefId }: { briefId: string }) {
           </div>
         </div>
 
+        {/* Détails de fabrication — spécifique artisan */}
         <dl className="space-y-3 text-sm">
-          <div>
+          <div className="pb-3 border-b border-[var(--border)]">
             <dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Objet à fabriquer</dt>
             <dd className="font-semibold text-base">{brief.titre}</dd>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-3">
             <div>
-              <dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Matière</dt>
+              <dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Matière demandée</dt>
               <dd className="flex items-center gap-1"><Hammer size={12} className="text-[var(--amber)]" /> {brief.matiere}</dd>
             </div>
             <div>
@@ -122,7 +113,7 @@ export function ArtisanBriefRecuPage({ briefId }: { briefId: string }) {
 
           <div className="grid sm:grid-cols-2 gap-3 pt-2 border-t border-[var(--border)]">
             <div>
-              <dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Budget estimatif</dt>
+              <dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Budget du client</dt>
               <dd className="font-numeric font-semibold text-[var(--amber)]">{brief.budget}</dd>
             </div>
             <div>
@@ -132,25 +123,24 @@ export function ArtisanBriefRecuPage({ briefId }: { briefId: string }) {
           </div>
         </dl>
 
-        {/* Photos */}
         {brief.photos.length > 0 && (
           <div className="mt-4 pt-3 border-t border-[var(--border)]">
-            <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">Photos fournies par le client</p>
+            <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">Photos de référence</p>
             <div className="grid grid-cols-2 gap-2">
               {brief.photos.map((p, i) => (
-                <img key={i} src={p} alt={`Référence ${i + 1}`} className="w-full aspect-video object-cover rounded-md" />
+                <img key={i} src={p} alt={`Référence ${i+1}`} className="w-full aspect-video object-cover rounded-md" />
               ))}
             </div>
           </div>
         )}
       </div>
 
-      {/* 2. ACTIONS — 3 UNIQUEMENT (adapté à l'artisan) */}
+      {/* Actions — 3 SEULEMENT, adaptées à l'artisan */}
       {!showQuestions ? (
         <div className="dedco-card p-5">
           <h3 className="font-display font-bold mb-4">Votre réponse</h3>
           <div className="space-y-2">
-            {/* Proposer un devis */}
+            {/* 1. Proposer un devis */}
             <button
               onClick={() => navigate({ page: "artisan-devis-create", briefId: brief.id })}
               className="w-full p-4 rounded-lg border-2 border-[var(--amber)] bg-[var(--amber-pale)]/30 hover:bg-[var(--amber-pale)] text-left transition-all flex items-center gap-3 cursor-pointer"
@@ -158,13 +148,14 @@ export function ArtisanBriefRecuPage({ briefId }: { briefId: string }) {
               <div className="w-10 h-10 rounded-full bg-[var(--amber)] text-white flex items-center justify-center flex-shrink-0">
                 <FileText size={18} />
               </div>
-              <div>
+              <div className="flex-1">
                 <p className="font-display font-semibold text-sm">Proposer un devis</p>
-                <p className="text-xs text-[var(--text-3)]">Envoyer votre prix, votre délai de fabrication et vos conditions</p>
+                <p className="text-xs text-[var(--text-3)]">Votre prix, votre délai de fabrication, vos conditions</p>
               </div>
+              <ChevronRight size={16} className="text-[var(--amber)]" />
             </button>
 
-            {/* Poser des questions */}
+            {/* 2. Poser des questions */}
             <button
               onClick={() => setShowQuestions(true)}
               className="w-full p-4 rounded-lg border-2 border-[var(--border)] hover:border-[var(--text-3)] text-left transition-all flex items-center gap-3 cursor-pointer"
@@ -172,13 +163,13 @@ export function ArtisanBriefRecuPage({ briefId }: { briefId: string }) {
               <div className="w-10 h-10 rounded-full bg-[var(--bg-warm)] text-[var(--text-2)] flex items-center justify-center flex-shrink-0">
                 <MessageSquare size={18} />
               </div>
-              <div>
-                <p className="font-display font-semibold text-sm">Poser max 3 questions</p>
-                <p className="text-xs text-[var(--text-3)]">Demander des précisions sur les dimensions, la matière, etc.</p>
+              <div className="flex-1">
+                <p className="font-display font-semibold text-sm">Demander des précisions</p>
+                <p className="text-xs text-[var(--text-3)]">Sur les dimensions, la matière, la finition... (max 3 questions)</p>
               </div>
             </button>
 
-            {/* Refuser */}
+            {/* 3. Refuser */}
             <button
               onClick={() => navigate({ page: "artisan-dashboard" })}
               className="w-full p-4 rounded-lg border-2 border-[var(--terracotta)]/30 hover:bg-[var(--terracotta-pale)] text-left transition-all flex items-center gap-3 cursor-pointer"
@@ -186,29 +177,31 @@ export function ArtisanBriefRecuPage({ briefId }: { briefId: string }) {
               <div className="w-10 h-10 rounded-full bg-[var(--terracotta-pale)] text-[var(--terracotta)] flex items-center justify-center flex-shrink-0">
                 <X size={18} />
               </div>
-              <div>
+              <div className="flex-1">
                 <p className="font-display font-semibold text-sm text-[var(--terracotta)]">Refuser</p>
-                <p className="text-xs text-[var(--text-3)]">Décliner cette demande</p>
+                <p className="text-xs text-[var(--text-3)]">Si vous ne pouvez pas fabriquer cette pièce</p>
               </div>
             </button>
           </div>
         </div>
       ) : (
         <div className="dedco-card p-5">
-          <h3 className="font-display font-bold mb-3">Poser vos questions (max 3)</h3>
+          <h3 className="font-display font-bold mb-3">Vos questions (max 3)</h3>
           <div className="space-y-3 mb-4">
             {questions.map((q, i) => (
               <input
                 key={i}
                 value={q}
                 onChange={(e) => setQuestions(questions.map((qq, idx) => idx === i ? e.target.value : qq))}
-                placeholder={`Question ${i + 1}`}
+                placeholder={`Question ${i+1}`}
                 className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white"
               />
             ))}
           </div>
           <div className="flex gap-2">
-            <button onClick={() => setShowQuestions(false)} className="dedco-btn dedco-btn-ghost">Annuler</button>
+            <button onClick={() => setShowQuestions(false)} className="dedco-btn dedco-btn-ghost">
+              <ArrowLeft size={14} /> Annuler
+            </button>
             <button onClick={() => navigate({ page: "artisan-dashboard" })} className="dedco-btn dedco-btn-primary flex-1">
               <Send size={14} /> Envoyer les questions
             </button>
@@ -216,26 +209,36 @@ export function ArtisanBriefRecuPage({ briefId }: { briefId: string }) {
         </div>
       )}
 
-      <p className="text-xs text-[var(--text-3)] text-center mt-4">
-        Le client recevra votre devis. S'il accepte, le paiement est séquestré via Fedapay. Négociation possible (max 2 allers-retours).
-      </p>
+      {/* Note spécifique artisan */}
+      <div className="mt-4 p-3 bg-[var(--bg-warm)] rounded-md">
+        <p className="text-xs text-[var(--text-3)] leading-relaxed">
+          <ShieldCheck size={12} className="inline text-[var(--forest)]" />
+          {" "}Le client recevra votre devis. S'il accepte, le paiement est <strong>séquestré via Fedapay</strong>.
+          Vous fabriquez, puis livrez en <strong>3 temps photo</strong> (T1 : produit prêt, T2 : en transit, T3 : remise client).
+          Négociation possible (max 2 allers-retours).
+        </p>
+      </div>
     </div>
   );
 }
 
 // ============================================================
-// PAGE: artisan-devis-create — Artisan crée un devis
+// PAGE: artisan-devis-create — Devis de fabrication
+// DIFFÉRENT du designer : pas de "proposition de mission"
+// mais un vrai devis de fabrication avec matériaux, processus, conditions
 // ============================================================
 
 export function ArtisanDevisCreatePage({ briefId }: { briefId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
-  const brief = MOCK_ARTISAN_BRIEF;
+  const brief = MOCK_BRIEF;
+
   const [form, setForm] = useState({
     prixUnitaire: 185000,
     quantite: brief.quantite,
     delaiFabrication: "3 semaines",
-    description: "Fabrication en bois iroko massif, plateau avec insert wax bleu Ankara. Tiroir avec coulisses métal. Finition naturelle mate (vernis).",
-    conditions: "Acompte de 30% à la commande, solde à la livraison. Possibilité d'ajustement dimensions (±5cm).",
+    materiauxUtilises: "Bois iroko massif, tissu wax bleu Ankara, colle bois, vernis naturel",
+    processus: "1. Sélection du bois (2j) 2. Découpe et assemblage (5j) 3. Insert wax (3j) 4. Tiroir et finition (4j)",
+    conditions: "Acompte 30% à la commande, solde à la livraison. Ajustement dimensions possible (±5cm). Garantie 6 mois sur la fabrication.",
   });
 
   const total = form.prixUnitaire * form.quantite;
@@ -247,13 +250,25 @@ export function ArtisanDevisCreatePage({ briefId }: { briefId: string }) {
   return (
     <div className="p-6 max-w-2xl mx-auto">
       <button onClick={() => navigate({ page: "artisan-brief-recu", briefId })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
-        <ChevronRight size={16} className="rotate-180" /> Retour au brief
+        <ArrowLeft size={16} /> Retour à la demande
       </button>
 
       <header className="mb-6">
-        <h1 className="display-lg mb-1">Proposer un devis</h1>
+        <h1 className="display-lg mb-1">Devis de fabrication</h1>
         <p className="text-sm text-[var(--text-2)]">Pour {brief.clientName} — {brief.titre}</p>
       </header>
+
+      {/* Rappel de la demande */}
+      <div className="dedco-card p-4 mb-4 bg-[var(--bg-warm)]">
+        <div className="grid grid-cols-2 gap-3 text-xs">
+          <div><span className="text-[var(--text-3)]">Demandé :</span> {brief.titre}</div>
+          <div><span className="text-[var(--text-3)]">Matière :</span> {brief.matiere}</div>
+          {brief.dimensions && <div><span className="text-[var(--text-3)]">Dimensions :</span> <span className="font-numeric">{brief.dimensions}</span></div>}
+          <div><span className="text-[var(--text-3)]">Qté :</span> <span className="font-numeric">{brief.quantite}</span></div>
+          <div><span className="text-[var(--text-3)]">Budget client :</span> <span className="font-numeric text-[var(--amber)]">{brief.budget}</span></div>
+          <div><span className="text-[var(--text-3)]">Délai souhaité :</span> {brief.delai}</div>
+        </div>
+      </div>
 
       <div className="dedco-card p-5 space-y-4">
         {/* Prix */}
@@ -281,7 +296,7 @@ export function ArtisanDevisCreatePage({ briefId }: { briefId: string }) {
           </div>
         </div>
 
-        {/* Délai */}
+        {/* Délai de fabrication */}
         <div>
           <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Délai de fabrication</label>
           <input
@@ -292,20 +307,33 @@ export function ArtisanDevisCreatePage({ briefId }: { briefId: string }) {
           />
         </div>
 
-        {/* Description */}
+        {/* Matériaux utilisés — spécifique artisan */}
         <div>
-          <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Description de votre proposition</label>
+          <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Matériaux que vous utiliserez</label>
           <textarea
-            value={form.description}
-            onChange={(e) => setForm({ ...form, description: e.target.value })}
+            value={form.materiauxUtilises}
+            onChange={(e) => setForm({ ...form, materiauxUtilises: e.target.value })}
+            rows={2}
+            placeholder="Ex : Bois iroko massif, tissu wax, vernis..."
+            className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white resize-none focus:outline-none focus:border-[var(--amber)]"
+          />
+        </div>
+
+        {/* Processus de fabrication — spécifique artisan */}
+        <div>
+          <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Processus de fabrication</label>
+          <textarea
+            value={form.processus}
+            onChange={(e) => setForm({ ...form, processus: e.target.value })}
             rows={3}
+            placeholder="Ex : 1. Sélection bois 2. Découpe 3. Assemblage 4. Finition"
             className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white resize-none focus:outline-none focus:border-[var(--amber)]"
           />
         </div>
 
         {/* Conditions */}
         <div>
-          <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Conditions (acompte, ajustements, etc.)</label>
+          <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Conditions (acompte, garantie, ajustements)</label>
           <textarea
             value={form.conditions}
             onChange={(e) => setForm({ ...form, conditions: e.target.value })}
@@ -317,7 +345,7 @@ export function ArtisanDevisCreatePage({ briefId }: { briefId: string }) {
         {/* Transparence financière */}
         <div className="grid sm:grid-cols-2 gap-3">
           <div className="p-3 bg-[var(--amber-pale)]/30 rounded-md">
-            <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">Côté client</p>
+            <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">Ce que paie le client</p>
             <div className="space-y-1 text-xs">
               <div className="flex justify-between"><span>Prix fabrication</span><span className="font-numeric">{formatFCFA(total)}</span></div>
               <div className="flex justify-between text-[var(--text-2)]"><span className="flex items-center gap-1">Garantie 1,5%<ShieldCheck size={10} className="text-[var(--forest)]" /></span><span className="font-numeric">{formatFCFA(garantie)}</span></div>
@@ -325,7 +353,7 @@ export function ArtisanDevisCreatePage({ briefId }: { briefId: string }) {
             </div>
           </div>
           <div className="p-3 bg-[var(--bg-warm)] rounded-md">
-            <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">Côté artisan (vous)</p>
+            <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">Ce que vous recevez</p>
             <div className="space-y-1 text-xs">
               <div className="flex justify-between"><span>Montant vente</span><span className="font-numeric">{formatFCFA(total)}</span></div>
               <div className="flex justify-between text-[var(--terracotta)]"><span>Commission Dedco 10%</span><span className="font-numeric">-{formatFCFA(commission)}</span></div>
@@ -334,14 +362,18 @@ export function ArtisanDevisCreatePage({ briefId }: { briefId: string }) {
           </div>
         </div>
 
+        {/* Rappel du workflow */}
+        <div className="p-3 bg-[var(--forest-pale)]/30 rounded-md">
+          <p className="text-xs text-[var(--text-2)]">
+            <strong>Après acceptation du client :</strong>
+            {" "}Paiement séquestre → Fabrication → T1 (photo produit prêt) → T2 (photo transit) → T3 (photo remise) → Validation → Paiement libéré
+          </p>
+        </div>
+
         <button onClick={() => navigate({ page: "artisan-dashboard" })} className="dedco-btn dedco-btn-primary w-full">
           <Send size={16} /> Envoyer le devis
         </button>
       </div>
-
-      <p className="text-xs text-[var(--text-3)] text-center mt-4">
-        Le client recevra votre devis. Il peut accepter, négocier (max 2 allers-retours) ou refuser. En cas d'acceptation, le paiement est séquestré.
-      </p>
     </div>
   );
 }

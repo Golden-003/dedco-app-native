@@ -94,11 +94,11 @@ import {
   DesignerWalletPage,
   DesignerPortfolioPage,
   DesignerAbonnementPage,
-  ClientProjetsPage,
   BriefDesignerPage,
   AvisLivraisonPage,
   PlansTarifsPage,
 } from "@/components/dedco/pages/client-and-designer-pages";
+import { MesProjetsPage } from "@/components/dedco/pages/mes-projets-page";
 // Workflow designer (version simplifiée)
 import {
   DesignerProjetAttentePage,
@@ -460,7 +460,7 @@ export function DedcoRouter() {
 
       // BLOC 6 — Client pages
       case "client-projets":
-        return <ClientProjetsPage />;
+        return <MesProjetsPage />;
 
       case "brief-designer":
         return <BriefDesignerPage designerId={route.designerId} />;

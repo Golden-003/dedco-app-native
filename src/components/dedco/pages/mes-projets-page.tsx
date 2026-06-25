@@ -1,0 +1,849 @@
+"use client";
+
+import { useState, useMemo } from "react";
+import {
+  Clock,
+  ChevronRight,
+  CreditCard,
+  FileText,
+  Gavel,
+  Image as ImageIcon,
+  LayoutGrid,
+  Package,
+  AlertTriangle,
+  CheckCircle2,
+  Eye,
+  ShieldCheck,
+  ArrowRight,
+  GitCompareArrows,
+  Paperclip,
+  Timer,
+} from "lucide-react";
+import { useDedcoStore } from "@/lib/store";
+import { formatFCFA } from "@/lib/dedco-data";
+import { ACTION_PRIORITY_ORDER } from "@/lib/dedco-types";
+import type {
+  MesProjetsItem,
+  MesProjetsRoute,
+  ArtisanBriefWithProposals,
+  ArtisanProposal,
+  DesignerPrestation,
+  PendingPayment,
+  Reclamation,
+} from "@/lib/dedco-types";
+import {
+  MOCK_EN_COURS,
+  MOCK_BRIEF_WITH_PROPOSALS,
+  MOCK_PRESTATIONS_DESIGNER,
+  MOCK_PAIEMENTS_EN_ATTENTE,
+  MOCK_TERMINES,
+  MOCK_RECLAMATIONS,
+  PRIORITY_CONFIG,
+  TYPE_LABELS,
+} from "@/lib/mes-projets-data";
+
+// ============================================================
+// HELPERS
+// ============================================================
+
+function navigateTo(route: MesProjetsRoute) {
+  // Le store accepte un AppRoute générique ; on caste car les routes
+  // spécifiques (brief-artisan, projet-artisan, etc.) seront ajoutées à
+  // l'étape 2. Pour l'étape 1 on navigue vers la page la plus proche.
+  const store = useDedcoStore.getState();
+  if (route.page === "brief-detail" && route.id) {
+    store.navigate({ page: "brief-detail", id: Number(route.id) });
+  } else if (route.page === "projet-detail" && route.projectId) {
+    store.navigate({ page: "projet-detail", projectId: route.projectId });
+  } else if (route.page === "projet-paiement" && route.proposalId) {
+    store.navigate({ page: "projet-paiement", proposalId: route.proposalId });
+  } else if (route.page === "payment" && route.orderId) {
+    store.navigate({ page: "payment", orderId: route.orderId });
+  } else if (route.page === "litige" && route.id) {
+    store.navigate({ page: "litige", id: route.id });
+  } else if (route.page === "order-tracking" && route.id) {
+    store.navigate({ page: "order-tracking", id: route.id });
+  } else if (route.page === "marketplace") {
+    store.navigate({ page: "marketplace" });
+  } else {
+    store.navigate({ page: "client-projets" });
+  }
+}
+
+// ============================================================
+// TYPE BADGE — Brief artisan / Projet artisan / etc.
+// ============================================================
+
+function TypeBadge({ type }: { type: MesProjetsItem["type"] }) {
+  const cfg = TYPE_LABELS[type];
+  if (!cfg) return null;
+  return (
+    <span
+      className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full"
+      style={{ color: cfg.color, backgroundColor: cfg.bg }}
+    >
+      {cfg.label}
+    </span>
+  );
+}
+
+// ============================================================
+// PRIORITY BANNER — badge + échéance + conséquence
+// ============================================================
+
+function PriorityBanner({
+  priority,
+  deadline,
+  consequence,
+}: {
+  priority: string;
+  deadline?: string;
+  consequence?: string;
+}) {
+  const cfg = PRIORITY_CONFIG[priority];
+  if (!cfg || !cfg.label) return null;
+  const isUrgent = priority === "PAYMENT_REQUIRED" || priority === "CHANGE_REQUEST_PENDING" || priority === "DELIVERY_CONFIRMATION_REQUIRED";
+
+  return (
+    <div className="mt-3 p-3 rounded-lg" style={{ backgroundColor: cfg.bgColor }}>
+      <div className="flex items-start gap-2">
+        <AlertTriangle size={14} style={{ color: cfg.color, flexShrink: 0, marginTop: 2 }} />
+        <div className="flex-1 min-w-0">
+          <p className="text-xs font-semibold" style={{ color: cfg.color }}>
+            {cfg.label}
+            {deadline && (
+              <>
+                {" "}avant le <span className="font-numeric">{deadline}</span>
+              </>
+            )}
+          </p>
+          {consequence && (
+            <p className="text-[11px] mt-1" style={{ color: "var(--text-2)" }}>
+              {consequence}
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// CARTES ONGLET "EN COURS"
+// ============================================================
+
+function EnCoursCard({ item }: { item: MesProjetsItem }) {
+  const isUrgent = item.priority === "PAYMENT_REQUIRED" || item.priority === "CHANGE_REQUEST_PENDING" || item.priority === "DELIVERY_CONFIRMATION_REQUIRED";
+
+  const actionIcon = (() => {
+    switch (item.priority) {
+      case "PAYMENT_REQUIRED": return <CreditCard size={14} />;
+      case "CHANGE_REQUEST_PENDING": return <GitCompareArrows size={14} />;
+      case "DELIVERY_CONFIRMATION_REQUIRED": return <CheckCircle2 size={14} />;
+      case "RESPONSE_REQUIRED": return <Eye size={14} />;
+      case "DESIGNER_MEETING_OR_DELIVERABLE": return <Eye size={14} />;
+      default: return <Eye size={14} />;
+    }
+  })();
+
+  return (
+    <div className="dedco-card overflow-hidden hover:shadow-md transition-shadow">
+      {/* Bande urgente */}
+      {isUrgent && <div className="h-1 w-full" style={{ backgroundColor: "var(--terracotta)" }} />}
+
+      <div className="p-4 sm:p-5">
+        <div className="flex gap-4">
+          <img src={item.image} alt={item.title} className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg object-cover flex-shrink-0" />
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <TypeBadge type={item.type} />
+              <span className="text-[10px] font-numeric text-[var(--text-3)]">{item.id}</span>
+            </div>
+            <h3 className="font-display font-semibold text-sm sm:text-base leading-tight truncate">{item.title}</h3>
+            {item.partnerName && (
+              <div className="flex items-center gap-2 mt-1.5">
+                {item.partnerAvatar && <img src={item.partnerAvatar} alt={item.partnerName} className="w-5 h-5 rounded-full object-cover" />}
+                <span className="text-xs text-[var(--text-2)] truncate">{item.partnerName}</span>
+                <span className="text-xs text-[var(--text-3)]">
+                  {item.partnerType === "artisan" && "— Artisan"}
+                  {item.partnerType === "designer" && "— Designer"}
+                  {item.partnerType === "maison" && "— Maison deco"}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Ligne stats */}
+        <div className="flex items-center gap-4 mt-3 pt-3 border-t border-[var(--border)]">
+          {item.amount > 0 && (
+            <div>
+              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Montant</p>
+              <p className="font-numeric text-sm font-bold text-[var(--text-1)]">{formatFCFA(item.amount)}</p>
+            </div>
+          )}
+          {item.securedAmount !== undefined && item.securedAmount > 0 && (
+            <div>
+              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Sécurisé</p>
+              <p className="font-numeric text-sm font-semibold" style={{ color: "var(--forest)" }}>{formatFCFA(item.securedAmount)}</p>
+            </div>
+          )}
+          {item.estimatedDate && (
+            <div>
+              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Échéance</p>
+              <p className="font-numeric text-xs font-medium text-[var(--text-2)]">{item.estimatedDate}</p>
+            </div>
+          )}
+        </div>
+
+        {/* Progression + statut */}
+        {item.progress !== undefined && item.type !== "ARTISAN_BRIEF" && item.type !== "DESIGNER_BRIEF" && (
+          <div className="mt-3">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ color: item.statusColor, backgroundColor: item.statusBgColor }}>
+                {item.statusLabel}
+              </span>
+              {item.progress < 100 && <span className="text-[10px] font-numeric text-[var(--text-3)]">{item.progress} %</span>}
+            </div>
+            {item.progress < 100 && (
+              <div className="h-1.5 bg-[var(--bg-warm)] rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-500"
+                  style={{
+                    width: `${item.progress}%`,
+                    backgroundColor: isUrgent ? "var(--terracotta)" : item.progress >= 80 ? "var(--forest)" : "var(--amber)",
+                  }}
+                />
+              </div>
+            )}
+          </div>
+        )}
+
+        {(item.type === "ARTISAN_BRIEF" || item.type === "DESIGNER_BRIEF") && (
+          <div className="mt-3">
+            <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ color: item.statusColor, backgroundColor: item.statusBgColor }}>
+              {item.statusLabel}
+            </span>
+          </div>
+        )}
+
+        {/* Priorité urgente */}
+        <PriorityBanner priority={item.priority} deadline={item.priorityDeadline} consequence={item.priorityConsequence} />
+
+        {/* Footer : MAJ + bouton action */}
+        <div className="flex items-center justify-between mt-3 pt-3 border-t border-[var(--border)]">
+          <span className="text-[11px] text-[var(--text-3)]">
+            <Clock size={10} className="inline mr-1" style={{ verticalAlign: "middle" }} />
+            MAJ <span className="font-numeric">{item.lastUpdate}</span>
+          </span>
+          <button
+            onClick={() => navigateTo(item.nextActionRoute)}
+            className="dedco-btn dedco-btn-primary dedco-btn-sm flex items-center gap-1.5"
+          >
+            {actionIcon}
+            {item.nextAction}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// ONGLET "A CHOISIR" — Brief avec propositions groupées
+// ============================================================
+
+function BriefProposalsCard({ brief }: { brief: ArtisanBriefWithProposals }) {
+  const navigate = useDedcoStore((s) => s.navigate);
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div className="dedco-card overflow-hidden hover:shadow-md transition-shadow">
+      <div className="p-4 sm:p-5">
+        {/* Header du brief */}
+        <div className="flex gap-4">
+          <img src={brief.briefImage} alt={brief.briefTitle} className="w-20 h-20 rounded-lg object-cover flex-shrink-0" />
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <TypeBadge type="ARTISAN_BRIEF" />
+              <span className="text-[10px] font-numeric text-[var(--text-3)]">{brief.briefId}</span>
+            </div>
+            <h3 className="font-display font-semibold text-sm sm:text-base leading-tight">{brief.briefTitle}</h3>
+            <div className="flex items-center gap-3 mt-1.5 text-[11px] text-[var(--text-3)]">
+              <span>{brief.category}</span>
+              <span className="text-[var(--border)]">|</span>
+              <span>{brief.zone}</span>
+              <span className="text-[var(--border)]">|</span>
+              <span className="font-numeric">{formatFCFA(brief.budgetMin)} - {formatFCFA(brief.budgetMax)}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Compteur propositions */}
+        <div className="mt-3 p-3 rounded-lg" style={{ backgroundColor: "var(--amber-pale)" }}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Package size={14} style={{ color: "var(--amber-dark)" }} />
+              <span className="text-xs font-semibold" style={{ color: "var(--amber-dark)" }}>
+                <span className="font-numeric">{brief.proposals.length}</span> proposition{brief.proposals.length > 1 ? "s" : ""} reçue{brief.proposals.length > 1 ? "s" : ""}
+              </span>
+            </div>
+            <button
+              onClick={() => setExpanded(!expanded)}
+              className="dedco-btn dedco-btn-primary dedco-btn-sm flex items-center gap-1"
+            >
+              <GitCompareArrows size={14} />
+              Comparer les propositions
+            </button>
+          </div>
+        </div>
+
+        {/* Propositions dépliées */}
+        {expanded && (
+          <div className="mt-4 space-y-3">
+            {brief.proposals.map((prop: ArtisanProposal) => (
+              <div key={prop.id} className="p-4 rounded-lg border border-[var(--border)] bg-[var(--bg-card)]">
+                <div className="flex gap-3">
+                  <img src={prop.artisanAvatar} alt={prop.artisanName} className="w-12 h-12 rounded-full object-cover flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <h4 className="font-display font-semibold text-sm truncate">{prop.artisanName}</h4>
+                      {prop.artisanVerified && <ShieldCheck size={14} style={{ color: "var(--forest)", flexShrink: 0 }} />}
+                    </div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "var(--amber-pale)", color: "var(--amber-dark)" }}>
+                        {prop.artisanLevel}
+                      </span>
+                      <span className="text-[11px] text-[var(--text-3)] font-numeric">{prop.deliveryTime}</span>
+                    </div>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    <p className="font-numeric text-base font-bold" style={{ color: "var(--amber-dark)" }}>{formatFCFA(prop.price)}</p>
+                    <p className="text-[10px] text-[var(--text-3)]">TTC</p>
+                  </div>
+                </div>
+                <div className="mt-2 space-y-1.5">
+                  <p className="text-xs text-[var(--text-2)]">
+                    <span className="font-medium text-[var(--text-1)]">Matériaux :</span> {prop.materials}
+                  </p>
+                  <p className="text-xs text-[var(--text-2)]">
+                    <span className="font-medium text-[var(--text-1)]">Paiement :</span> {prop.paymentConditions}
+                  </p>
+                </div>
+                {prop.images.length > 0 && (
+                  <img src={prop.images[0]} alt="Exemple" className="w-full h-28 object-cover rounded-lg mt-2" />
+                )}
+                <button
+                  onClick={() => navigateTo({ page: "projet-paiement", proposalId: prop.id })}
+                  className="dedco-btn dedco-btn-primary dedco-btn-sm w-full mt-3 flex items-center justify-center gap-1.5"
+                >
+                  <CheckCircle2 size={14} />
+                  Choisir cette proposition
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Footer */}
+        <div className="flex items-center justify-between mt-3 pt-3 border-t border-[var(--border)]">
+          <span className="text-[11px] text-[var(--text-3)]">
+            <Clock size={10} className="inline mr-1" style={{ verticalAlign: "middle" }} />
+            MAJ <span className="font-numeric">{brief.lastUpdate}</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// ONGLET "A CHOISIR" — Prestation designer
+// ============================================================
+
+function PrestationDesignerCard({ prestation }: { prestation: DesignerPrestation }) {
+  return (
+    <div className="dedco-card p-4 sm:p-5 hover:shadow-md transition-shadow">
+      <div className="flex gap-4">
+        <img src={prestation.designerAvatar} alt={prestation.designerName} className="w-14 h-14 rounded-full object-cover flex-shrink-0" />
+        <div className="flex-1 min-w-0">
+          <h3 className="font-display font-semibold text-sm truncate">{prestation.designerName}</h3>
+          <p className="text-xs text-[var(--text-2)] mt-0.5">{prestation.prestation}</p>
+        </div>
+        <div className="text-right flex-shrink-0">
+          <p className="font-numeric text-base font-bold" style={{ color: "var(--amber-dark)" }}>{formatFCFA(prestation.price)}</p>
+        </div>
+      </div>
+      <div className="mt-3 flex flex-wrap gap-1.5">
+        {prestation.livrables.map((l) => (
+          <span key={l} className="text-[10px] px-2 py-0.5 rounded-full border border-[var(--border)] text-[var(--text-2)]">{l}</span>
+        ))}
+      </div>
+      <div className="flex items-center gap-4 text-[11px] text-[var(--text-3)] mt-2">
+        <span className="font-numeric">
+          <FileText size={10} className="inline mr-1" style={{ verticalAlign: "middle" }} />
+          {prestation.revisions} révision{prestation.revisions > 1 ? "s" : ""} incluse{prestation.revisions > 1 ? "s" : ""}
+        </span>
+        <span className="font-numeric">
+          <Clock size={10} className="inline mr-1" style={{ verticalAlign: "middle" }} />
+          {prestation.deliveryTime}
+        </span>
+      </div>
+      <p className="text-[11px] text-[var(--text-3)] mt-1">Disponibilité : {prestation.availability}</p>
+      <button
+        onClick={() => navigateTo(prestation.nextActionRoute)}
+        className="dedco-btn dedco-btn-primary dedco-btn-sm w-full mt-4 flex items-center justify-center gap-1.5"
+      >
+        <CreditCard size={14} />
+        Réserver la prestation
+      </button>
+    </div>
+  );
+}
+
+// ============================================================
+// ONGLET "A CHOISIR" — Paiement en attente
+// ============================================================
+
+function PaiementEnAttenteCard({ paiement }: { paiement: PendingPayment }) {
+  return (
+    <div className="dedco-card overflow-hidden hover:shadow-md transition-shadow">
+      <div className="h-1 w-full bg-[var(--terracotta)]" />
+      <div className="p-4 sm:p-5">
+        <div className="flex gap-4">
+          <img src={paiement.projectImage} alt={paiement.projectTitle} className="w-16 h-16 rounded-lg object-cover flex-shrink-0" />
+          <div className="flex-1 min-w-0">
+            <h3 className="font-display font-semibold text-sm truncate">{paiement.projectTitle}</h3>
+            <p className="text-[11px] text-[var(--text-3)] mt-0.5 font-numeric">
+              <Timer size={10} className="inline mr-1" style={{ verticalAlign: "middle" }} />
+              Échéance : {paiement.dueDate}
+            </p>
+            <p className="text-[11px] text-[var(--text-3)] mt-0.5">{paiement.paymentMethod}</p>
+          </div>
+        </div>
+        <div className="flex items-center justify-between mt-4 pt-3 border-t border-[var(--border)]">
+          <p className="font-numeric text-lg font-bold" style={{ color: "var(--terracotta)" }}>{formatFCFA(paiement.amount)}</p>
+          <button
+            onClick={() => navigateTo(paiement.nextActionRoute)}
+            className="dedco-btn dedco-btn-terracotta dedco-btn-sm flex items-center gap-1.5"
+          >
+            <CreditCard size={14} />
+            Payer maintenant
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// ONGLET "TERMINÉS" — carte projet
+// ============================================================
+
+function TermineCard({ item }: { item: MesProjetsItem }) {
+  return (
+    <div className="dedco-card overflow-hidden hover:shadow-md transition-shadow">
+      <div className="h-1 w-full" style={{ backgroundColor: item.isCancelled ? "var(--text-3)" : "var(--forest)" }} />
+      <div className="p-4 sm:p-5">
+        <div className="flex gap-4">
+          <img src={item.image} alt={item.title} className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg object-cover flex-shrink-0" />
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <TypeBadge type={item.type} />
+              <span className="text-[10px] font-numeric text-[var(--text-3)]">{item.id}</span>
+            </div>
+            <h3 className="font-display font-semibold text-sm sm:text-base leading-tight truncate">{item.title}</h3>
+            {item.partnerName && (
+              <div className="flex items-center gap-2 mt-1.5">
+                {item.partnerAvatar && <img src={item.partnerAvatar} alt={item.partnerName} className="w-4 h-4 rounded-full object-cover" />}
+                <span className="text-xs text-[var(--text-2)]">{item.partnerName}</span>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="flex items-center gap-4 mt-3 pt-3 border-t border-[var(--border)]">
+          <div>
+            <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Montant</p>
+            <p className="font-numeric text-sm font-bold text-[var(--text-1)]">{formatFCFA(item.amount)}</p>
+          </div>
+          {item.estimatedDate && (
+            <div>
+              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Clôture</p>
+              <p className="font-numeric text-xs font-medium text-[var(--text-2)]">{item.estimatedDate}</p>
+            </div>
+          )}
+          <div className="flex-1" />
+          <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ color: item.statusColor, backgroundColor: item.statusBgColor }}>
+            {item.statusLabel}
+          </span>
+        </div>
+        <div className="flex gap-2 mt-4 pt-3 border-t border-[var(--border)]">
+          <button onClick={() => navigateTo(item.nextActionRoute)} className="dedco-btn dedco-btn-ghost dedco-btn-sm flex items-center gap-1.5">
+            <Eye size={14} />
+            {item.isCancelled ? "Dupliquer la commande" : "Voir le projet"}
+          </button>
+          {!item.isCancelled && (
+            <button onClick={() => navigateTo({ page: "brief-create" })} className="dedco-btn dedco-btn-secondary dedco-btn-sm flex items-center gap-1.5">
+              <ArrowRight size={14} />
+              Refaire une demande similaire
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// ONGLET "RÉCLAMATIONS" — carte réclamation
+// ============================================================
+
+function ReclamationCard({ rec }: { rec: Reclamation }) {
+  return (
+    <div className="dedco-card overflow-hidden hover:shadow-md transition-shadow">
+      <div className="h-1 w-full bg-[var(--terracotta)]" />
+      <div className="p-4 sm:p-5">
+        <div className="flex gap-4">
+          <img src={rec.projectImage} alt={rec.projectTitle} className="w-20 h-20 rounded-lg object-cover flex-shrink-0" />
+          <div className="flex-1 min-w-0">
+            <h3 className="font-display font-semibold text-sm leading-tight truncate">{rec.projectTitle}</h3>
+            <p className="text-xs text-[var(--text-2)] mt-1">{rec.partnerName}</p>
+            <p className="text-xs text-[var(--text-3)] mt-0.5 font-numeric">
+              <Gavel size={10} className="inline mr-1" style={{ verticalAlign: "middle" }} />
+              Ouvert le {rec.openedDate}
+            </p>
+          </div>
+        </div>
+        <div className="mt-3 p-3 rounded-lg" style={{ backgroundColor: "var(--bg-warm)" }}>
+          <p className="text-xs font-medium text-[var(--text-1)] mb-1">Motif</p>
+          <p className="text-sm text-[var(--text-2)]">{rec.motif}</p>
+        </div>
+        <div className="flex items-center gap-4 mt-3 pt-3 border-t border-[var(--border)]">
+          <div>
+            <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Montant</p>
+            <p className="font-numeric text-sm font-bold" style={{ color: "var(--terracotta)" }}>{formatFCFA(rec.amount)}</p>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Paperclip size={12} className="text-[var(--text-3)]" />
+            <span className="font-numeric text-xs text-[var(--text-3)]">{rec.attachments} pièce{rec.attachments > 1 ? "s" : ""}</span>
+          </div>
+          <div className="flex-1" />
+          <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ color: rec.statusColor, backgroundColor: rec.statusBgColor }}>
+            {rec.statusLabel}
+          </span>
+        </div>
+        {rec.lastAction && <p className="text-[11px] text-[var(--text-3)] mt-2 italic">Dernière action : {rec.lastAction}</p>}
+        {rec.dedcoDecision && (
+          <div className="mt-2 p-2 rounded-lg border" style={{ borderColor: "var(--forest)", backgroundColor: "var(--forest-pale)" }}>
+            <p className="text-xs font-medium" style={{ color: "var(--forest)" }}>Décision Dedco : {rec.dedcoDecision}</p>
+          </div>
+        )}
+        <div className="flex gap-2 mt-4 pt-3 border-t border-[var(--border)]">
+          <button onClick={() => navigateTo(rec.nextActionRoute)} className="dedco-btn dedco-btn-terracotta dedco-btn-sm flex items-center gap-1.5">
+            <Eye size={14} />
+            Voir le dossier
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// SECTION HEADER
+// ============================================================
+
+function SectionHeader({ icon: Icon, title, count, description }: { icon: React.ElementType; title: string; count: number; description?: string }) {
+  return (
+    <div className="flex items-center gap-3 mb-4">
+      <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: "var(--amber-pale)" }}>
+        <Icon size={16} style={{ color: "var(--amber-dark)" }} />
+      </div>
+      <div className="min-w-0">
+        <div className="flex items-center gap-2">
+          <h2 className="font-display font-semibold text-base">{title}</h2>
+          <span className="font-numeric text-xs font-bold px-2 py-0.5 rounded-full" style={{ backgroundColor: "var(--bg-warm)", color: "var(--text-2)" }}>{count}</span>
+        </div>
+        {description && <p className="text-xs text-[var(--text-3)] mt-0.5">{description}</p>}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// EMPTY STATE
+// ============================================================
+
+function EmptyState({ title, description, actionLabel, onAction }: { title: string; description: string; actionLabel?: string; onAction?: () => void }) {
+  const navigate = useDedcoStore((s) => s.navigate);
+  return (
+    <div className="dedco-card p-10 sm:p-14 text-center">
+      <div className="w-14 h-14 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: "var(--bg-warm)" }}>
+        <LayoutGrid size={24} className="text-[var(--text-3)]" />
+      </div>
+      <p className="font-display font-semibold text-base mb-1">{title}</p>
+      <p className="text-sm text-[var(--text-2)] mb-5 max-w-sm mx-auto">{description}</p>
+      {actionLabel && (
+        <button onClick={onAction || (() => navigate({ page: "marketplace" }))} className="dedco-btn dedco-btn-primary dedco-btn-sm">
+          {actionLabel}
+        </button>
+      )}
+    </div>
+  );
+}
+
+// ============================================================
+// ONGLET : EN COURS
+// ============================================================
+
+function TabEnCours() {
+  const sorted = useMemo(
+    () => [...MOCK_EN_COURS].sort((a, b) => (ACTION_PRIORITY_ORDER[a.priority] ?? 8) - (ACTION_PRIORITY_ORDER[b.priority] ?? 8)),
+    [],
+  );
+  const urgentCount = sorted.filter((i) => ACTION_PRIORITY_ORDER[i.priority] <= 3).length;
+
+  return (
+    <div>
+      {urgentCount > 0 && (
+        <div className="mb-5 p-3 rounded-lg flex items-center gap-2" style={{ backgroundColor: "var(--terracotta-pale)" }}>
+          <AlertTriangle size={16} style={{ color: "var(--terracotta)" }} />
+          <p className="text-xs font-medium" style={{ color: "var(--terracotta)" }}>
+            <span className="font-numeric">{urgentCount}</span> action{urgentCount > 1 ? "s" : ""} urgente{urgentCount > 1 ? "s" : ""} en attente
+          </p>
+        </div>
+      )}
+      <div className="space-y-3">
+        {sorted.map((item) => <EnCoursCard key={item.id} item={item} />)}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// ONGLET : A CHOISIR
+// ============================================================
+
+function TabAChoisir() {
+  return (
+    <div className="space-y-6">
+      {/* Propositions artisan — regroupées sous 1 brief */}
+      <section>
+        <SectionHeader icon={Package} title="Briefs avec propositions" count={1} description="Comparez les propositions et choisissez un artisan" />
+        <BriefProposalsCard brief={MOCK_BRIEF_WITH_PROPOSALS} />
+      </section>
+
+      {/* Prestations designer */}
+      {MOCK_PRESTATIONS_DESIGNER.length > 0 && (
+        <section>
+          <SectionHeader icon={LayoutGrid} title="Prestations designer acceptées" count={MOCK_PRESTATIONS_DESIGNER.length} description="Un designer a accepté — réservez la prestation" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {MOCK_PRESTATIONS_DESIGNER.map((p) => <PrestationDesignerCard key={p.id} prestation={p} />)}
+          </div>
+        </section>
+      )}
+
+      {/* Paiements en attente */}
+      {MOCK_PAIEMENTS_EN_ATTENTE.length > 0 && (
+        <section>
+          <SectionHeader icon={CreditCard} title="Paiements en attente" count={MOCK_PAIEMENTS_EN_ATTENTE.length} description="Finalisez vos paiements pour démarrer" />
+          <div className="space-y-3 max-w-xl">
+            {MOCK_PAIEMENTS_EN_ATTENTE.map((p) => <PaiementEnAttenteCard key={p.id} paiement={p} />)}
+          </div>
+        </section>
+      )}
+    </div>
+  );
+}
+
+// ============================================================
+// ONGLET : TERMINÉS — avec sous-filtre
+// ============================================================
+
+type TermineFilter = "tous" | "termines" | "annules";
+
+function TabTermines() {
+  const [filter, setFilter] = useState<TermineFilter>("tous");
+
+  const filtered = useMemo(() => {
+    switch (filter) {
+      case "termines": return MOCK_TERMINES.filter((i) => !i.isCancelled);
+      case "annules": return MOCK_TERMINES.filter((i) => i.isCancelled);
+      default: return MOCK_TERMINES;
+    }
+  }, [filter]);
+
+  const FILTERS: { key: TermineFilter; label: string }[] = [
+    { key: "tous", label: `Tous (${MOCK_TERMINES.length})` },
+    { key: "termines", label: `Terminés (${MOCK_TERMINES.filter((i) => !i.isCancelled).length})` },
+    { key: "annules", label: `Annulés / expirés (${MOCK_TERMINES.filter((i) => i.isCancelled).length})` },
+  ];
+
+  return (
+    <div>
+      <div className="flex gap-2 mb-5 overflow-x-auto dedco-hide-scroll -mx-4 px-4 sm:mx-0 sm:px-0">
+        {FILTERS.map((f) => (
+          <button
+            key={f.key}
+            onClick={() => setFilter(f.key)}
+            className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all cursor-pointer ${
+              filter === f.key
+                ? "bg-[var(--amber)] text-white"
+                : "bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-2)] hover:bg-[var(--bg-warm)]"
+            }`}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
+      {filtered.length === 0 ? (
+        <EmptyState title="Aucun élément" description="Aucun projet ne correspond à ce filtre." />
+      ) : (
+        <div className="space-y-3">
+          {filtered.map((item) => <TermineCard key={item.id} item={item} />)}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ============================================================
+// ONGLET : RÉCLAMATIONS
+// ============================================================
+
+function TabReclamations() {
+  return (
+    <div>
+      {MOCK_RECLAMATIONS.length === 0 ? (
+        <EmptyState title="Aucune réclamation ouverte" description="Aucun litige en cours. En cas de problème, ouvrez une réclamation depuis la page du projet concerné." />
+      ) : (
+        <div className="space-y-3">
+          {MOCK_RECLAMATIONS.map((rec) => <ReclamationCard key={rec.id} rec={rec} />)}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ============================================================
+// STATS HEADER
+// ============================================================
+
+function StatsHeader() {
+  const totalSuivi = MOCK_EN_COURS.length
+    + MOCK_BRIEF_WITH_PROPOSALS.proposals.length
+    + MOCK_PRESTATIONS_DESIGNER.length
+    + MOCK_PAIEMENTS_EN_ATTENTE.length
+    + MOCK_TERMINES.length
+    + MOCK_RECLAMATIONS.length;
+
+  const actionsEnCours = MOCK_EN_COURS.filter((i) => ACTION_PRIORITY_ORDER[i.priority] <= 3).length;
+  const decisionsAPrendre = MOCK_BRIEF_WITH_PROPOSALS.proposals.length
+    + MOCK_PRESTATIONS_DESIGNER.length
+    + MOCK_PAIEMENTS_EN_ATTENTE.length;
+  const reclamationsOuvertes = MOCK_RECLAMATIONS.length;
+
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+      {[
+        { label: "Éléments suivis", value: totalSuivi, color: "var(--text-1)" },
+        { label: "Actions en cours", value: actionsEnCours, color: "var(--terracotta)" },
+        { label: "Décisions à prendre", value: decisionsAPrendre, color: "var(--amber-dark)" },
+        { label: "Réclamations ouvertes", value: reclamationsOuvertes, color: reclamationsOuvertes > 0 ? "var(--terracotta)" : "var(--forest)" },
+      ].map((s) => (
+        <div key={s.label} className="dedco-card p-3 sm:p-4 text-center">
+          <p className="font-numeric text-xl sm:text-2xl font-bold" style={{ color: s.color }}>{s.value}</p>
+          <p className="text-[11px] text-[var(--text-3)] mt-0.5">{s.label}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ============================================================
+// PAGE PRINCIPALE — MES PROJETS
+// ============================================================
+
+type TabKey = "en_cours" | "a_choisir" | "termines" | "reclamations";
+
+const TABS: { key: TabKey; label: string; icon: React.ElementType }[] = [
+  { key: "en_cours", label: "En cours", icon: Clock },
+  { key: "a_choisir", label: "À choisir", icon: GitCompareArrows },
+  { key: "termines", label: "Terminés", icon: CheckCircle2 },
+  { key: "reclamations", label: "Réclamations", icon: Gavel },
+];
+
+function getTabCount(key: TabKey): number {
+  switch (key) {
+    case "en_cours": return MOCK_EN_COURS.length;
+    case "a_choisir": return MOCK_BRIEF_WITH_PROPOSALS.proposals.length + MOCK_PRESTATIONS_DESIGNER.length + MOCK_PAIEMENTS_EN_ATTENTE.length;
+    case "termines": return MOCK_TERMINES.length;
+    case "reclamations": return MOCK_RECLAMATIONS.length;
+  }
+}
+
+export function MesProjetsPage() {
+  const [activeTab, setActiveTab] = useState<TabKey>("en_cours");
+  const navigate = useDedcoStore((s) => s.navigate);
+
+  return (
+    <div className="min-h-screen" style={{ backgroundColor: "var(--bg-cream)" }}>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        {/* Header */}
+        <header className="mb-6">
+          <div className="flex items-center gap-3 mb-1">
+            <button onClick={() => navigate({ page: "home" })} className="p-1.5 rounded-lg hover:bg-[var(--bg-warm)] transition-colors" aria-label="Retour">
+              <ChevronRight size={18} className="text-[var(--text-2)] rotate-180" />
+            </button>
+            <h1 className="display-lg">Mes projets</h1>
+          </div>
+          <p className="text-sm text-[var(--text-2)] ml-10">Suivez vos briefs, projets, commandes et réclamations en un seul endroit.</p>
+        </header>
+
+        {/* Stats */}
+        <StatsHeader />
+
+        {/* Tabs */}
+        <div className="mb-6 overflow-x-auto dedco-hide-scroll -mx-4 px-4 sm:mx-0 sm:px-0">
+          <div className="flex gap-1 p-1 rounded-xl bg-[var(--bg-card)] border border-[var(--border)] min-w-max">
+            {TABS.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.key;
+              const count = getTabCount(tab.key);
+              const isReclamation = tab.key === "reclamations" && MOCK_RECLAMATIONS.length > 0;
+
+              return (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveTab(tab.key)}
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap cursor-pointer ${
+                    isActive
+                      ? "bg-[var(--amber)] text-white shadow-sm"
+                      : "text-[var(--text-2)] hover:bg-[var(--bg-warm)] hover:text-[var(--text-1)]"
+                  }`}
+                >
+                  <Icon size={16} />
+                  <span>{tab.label}</span>
+                  <span
+                    className={`font-numeric text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                      isActive ? "bg-white/20 text-white" : "bg-[var(--bg-warm)] text-[var(--text-3)]"
+                    }`}
+                    style={!isActive && isReclamation ? { backgroundColor: "var(--terracotta)", color: "white" } : undefined}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Content */}
+        {activeTab === "en_cours" && <TabEnCours />}
+        {activeTab === "a_choisir" && <TabAChoisir />}
+        {activeTab === "termines" && <TabTermines />}
+        {activeTab === "reclamations" && <TabReclamations />}
+      </div>
+    </div>
+  );
+}
