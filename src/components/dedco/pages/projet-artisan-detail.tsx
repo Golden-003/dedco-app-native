@@ -11,78 +11,246 @@ import { formatFCFA } from "@/lib/dedco-data";
 import { PROJET_ARTISAN_STATUS, JALON_LABELS, type ProjetArtisanStatus, type JalonType } from "@/lib/dedco-status";
 
 // ============================================================
-// MOCK — Projet artisan détaillé
+// MOCK — Projets artisan par ID (chaque projectId a son propre mock)
 // ============================================================
 
-const MOCK_PROJECT = {
-  id: "PA-001",
-  briefId: "BRF-ART-001",
-  status: "IN_PRODUCTION" as ProjetArtisanStatus,
-  title: "Fauteuil Sahel Tressé",
-  image: "https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&w=600&q=80",
-  clientName: "Sophie Kossou",
-  clientAvatar: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=120&q=80",
-  artisanName: "Amara Dossou",
-  artisanAvatar: "https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&crop=faces&w=120&q=80",
-  artisanCity: "Porto-Novo",
+type JalonMock = {
+  type: JalonType;
+  done: boolean;
+  current?: boolean;
+  date: string;
+  progress?: number;
+  photos?: string[];
+  commentaire?: string;
+  dimensionsConfirmees?: string;
+};
+
+type ModificationMock = {
+  id: string;
+  type: "materiaux" | "dimensions" | "prix" | "delai";
+  element: string;
+  valeurInitiale: string;
+  nouvelleValeur: string;
+  motif: string;
+  impactPrix: number;
+  impactDelai: string;
+  date: string;
+  status: "CHANGE_PENDING_CLIENT" | "CHANGE_ACCEPTED" | "CHANGE_REJECTED";
+};
+
+type ArtisanProjectMock = {
+  id: string;
+  briefId: string;
+  status: ProjetArtisanStatus;
+  title: string;
+  image: string;
+  clientName: string;
+  clientAvatar: string;
+  artisanName: string;
+  artisanAvatar: string;
+  artisanCity: string;
   // Détails du devis
-  prixInitial: 245000,
-  prixFinal: 245000,
-  acompte: 122500,
-  solde: 122500,
-  materiaux: "Rotin naturel, tissu coton, structure bois",
-  dimensions: "85 x 90 x 75 cm",
-  delaiInitial: "3 semaines",
-  delaiFinal: "3 semaines",
-  quantite: 1,
+  prixInitial: number;
+  prixFinal: number;
+  acomptePaye: number;
+  soldeAPayer: number;
+  acomptePercent: number;
+  soldePercent: number;
+  materiaux: string;
+  dimensions: string;
+  delaiInitial: string;
+  delaiFinal: string;
+  quantite: number;
   // Livraison
-  livraisonAdresse: "12 rue des Lagunes, Akpakpa, Cotonou",
-  livraisonPhone: "+229 01 97 45 23 10",
+  livraisonAdresse: string;
+  livraisonPhone: string;
   // Jalons
-  jalons: [
-    {
-      type: "PREPARATION" as JalonType,
-      done: true,
-      date: "21 juin 2026",
-      photos: ["https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&w=400&q=80"],
-      commentaire: "Matériaux confirmés : rotin naturel de qualité supérieure. Bois iroko pour la structure. Début fabrication prévu le 24 juin.",
-      dimensionsConfirmees: "85 x 90 x 75 cm",
-    },
-    {
-      type: "IN_PRODUCTION" as JalonType,
-      done: false,
-      current: true,
-      date: "En cours",
-      progress: 60,
-      photos: [],
-      commentaire: "",
-    },
-    {
-      type: "READY_FOR_DELIVERY" as JalonType,
-      done: false,
-      date: "Prévu vers le 10 juillet",
-    },
-    {
-      type: "DELIVERY" as JalonType,
-      done: false,
-      date: "Prévu vers le 12 juillet",
-    },
-  ],
+  jalons: JalonMock[];
   // Modifications
-  modifications: [
-    {
-      id: "MOD-001",
-      type: "materiaux" as const,
-      element: "Matériau principal",
-      valeurInitiale: "Rotin naturel",
-      nouvelleValeur: "Rotin tressé renforcé",
-      motif: "Rupture de stock fournisseur, qualité supérieure disponible",
-      impactPrix: 15000,
-      impactDelai: "0 jour",
-      date: "22 juin 2026",
-      status: "CHANGE_PENDING_CLIENT" as const,
-    },
-  ],
+  modifications: ModificationMock[];
+};
+
+const MOCK_PROJECTS: Record<string, ArtisanProjectMock> = {
+  "PA-001": {
+    id: "PA-001",
+    briefId: "BRF-ART-001",
+    status: "CHANGE_REQUEST_PENDING",
+    title: "Fauteuil Sahel Tressé",
+    image: "https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&w=600&q=80",
+    clientName: "Sophie Kossou",
+    clientAvatar: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=120&q=80",
+    artisanName: "Amara Dossou",
+    artisanAvatar: "https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&crop=faces&w=120&q=80",
+    artisanCity: "Porto-Novo",
+    prixInitial: 245000,
+    prixFinal: 260000,
+    acomptePaye: 122500,
+    soldeAPayer: 137500,
+    acomptePercent: 50,
+    soldePercent: 50,
+    materiaux: "Rotin naturel, tissu coton, structure bois",
+    dimensions: "85 x 90 x 75 cm",
+    delaiInitial: "3 semaines",
+    delaiFinal: "3 semaines + 4 jours",
+    quantite: 1,
+    livraisonAdresse: "12 rue des Lagunes, Akpakpa, Cotonou",
+    livraisonPhone: "+229 01 97 45 23 10",
+    jalons: [
+      {
+        type: "PREPARATION",
+        done: true,
+        date: "21 juin 2026",
+        photos: ["https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&w=400&q=80"],
+        commentaire: "Matériaux confirmés : rotin naturel de qualité supérieure. Bois iroko pour la structure. Début fabrication prévu le 24 juin.",
+        dimensionsConfirmees: "85 x 90 x 75 cm",
+      },
+      { type: "IN_PRODUCTION", done: false, current: true, date: "En cours", progress: 60, photos: [], commentaire: "" },
+      { type: "READY_FOR_DELIVERY", done: false, date: "Prévu vers le 10 juillet" },
+      { type: "DELIVERY", done: false, date: "Prévu vers le 14 juillet" },
+    ],
+    modifications: [
+      {
+        id: "MOD-001",
+        type: "materiaux",
+        element: "Matériau principal",
+        valeurInitiale: "Rotin naturel",
+        nouvelleValeur: "Rotin tressé renforcé",
+        motif: "Rupture de stock fournisseur, qualité supérieure disponible",
+        impactPrix: 15000,
+        impactDelai: "4 jours",
+        date: "22 juin 2026",
+        status: "CHANGE_PENDING_CLIENT",
+      },
+    ],
+  },
+  "PA-002": {
+    id: "PA-002",
+    briefId: "BRF-ART-002",
+    status: "DELIVERED_PENDING_CONFIRMATION",
+    title: "Lampe Abat-jour Bogolan",
+    image: "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?auto=format&fit=crop&w=600&q=80",
+    clientName: "Sophie Kossou",
+    clientAvatar: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=120&q=80",
+    artisanName: "Fatou Loko",
+    artisanAvatar: "https://images.unsplash.com/photo-1507152927179-bc4ebfef7103?auto=format&fit=crop&crop=faces&w=120&q=80",
+    artisanCity: "Ouidah",
+    prixInitial: 68000,
+    prixFinal: 68000,
+    acomptePaye: 34000,
+    soldeAPayer: 34000,
+    acomptePercent: 50,
+    soldePercent: 50,
+    materiaux: "Tissu bogolan, structure métal, douille porcelaine",
+    dimensions: "Ø 35 x 45 cm",
+    delaiInitial: "10 jours",
+    delaiFinal: "10 jours",
+    quantite: 1,
+    livraisonAdresse: "12 rue des Lagunes, Akpakpa, Cotonou",
+    livraisonPhone: "+229 01 97 45 23 10",
+    jalons: [
+      { type: "PREPARATION", done: true, date: "10 juin 2026", commentaire: "Tissu bogolan teint main, structure soudée." },
+      { type: "IN_PRODUCTION", done: true, date: "12-15 juin 2026", progress: 100, photos: ["https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?auto=format&fit=crop&w=400&q=80"] },
+      { type: "READY_FOR_DELIVERY", done: true, date: "16 juin 2026", photos: ["https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?auto=format&fit=crop&w=400&q=80"], commentaire: "Abat-jour monté, électrique testée." },
+      { type: "DELIVERY", done: false, current: true, date: "Livré le 21 juin — en attente de confirmation" },
+    ],
+    modifications: [],
+  },
+  "PA-004": {
+    id: "PA-004",
+    briefId: "BRF-ART-004",
+    status: "IN_PRODUCTION",
+    title: "Miroir Encadré Raffia",
+    image: "https://images.unsplash.com/photo-1510828561531-05a3388f6d3d?auto=format&fit=crop&w=600&q=80",
+    clientName: "Sophie Kossou",
+    clientAvatar: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=120&q=80",
+    artisanName: "Brice Gogan",
+    artisanAvatar: "https://images.unsplash.com/photo-1620932934088-fbdb2920e484?auto=format&fit=crop&crop=faces&w=120&q=80",
+    artisanCity: "Cotonou",
+    prixInitial: 95000,
+    prixFinal: 95000,
+    acomptePaye: 47500,
+    soldeAPayer: 47500,
+    acomptePercent: 50,
+    soldePercent: 50,
+    materiaux: "Raffia tressé, miroir biseauté, contreplaqué",
+    dimensions: "Ø 60 cm",
+    delaiInitial: "12 jours",
+    delaiFinal: "12 jours",
+    quantite: 1,
+    livraisonAdresse: "12 rue des Lagunes, Akpakpa, Cotonou",
+    livraisonPhone: "+229 01 97 45 23 10",
+    jalons: [
+      { type: "PREPARATION", done: true, date: "18 juin 2026", commentaire: "Raffia teint, miroir biseauté commandé." },
+      { type: "IN_PRODUCTION", done: false, current: true, date: "En cours", progress: 35, photos: [], commentaire: "Tressage en cours." },
+      { type: "READY_FOR_DELIVERY", done: false, date: "Prévu vers le 3 juillet" },
+      { type: "DELIVERY", done: false, date: "Prévu vers le 5 juillet" },
+    ],
+    modifications: [],
+  },
+  "PA-005": {
+    id: "PA-005",
+    briefId: "BRF-ART-005",
+    status: "IN_PRODUCTION",
+    title: "Tabouret Tamtam x2",
+    image: "https://images.unsplash.com/photo-1566921895456-1cee6-8cee6f646-1cee6-8cee6f646-1cee6-8cee6f646-1cee6-8cee6f646-1cee6-8cee6f646?auto=format&fit=crop&w=600&q=80",
+    clientName: "Sophie Kossou",
+    clientAvatar: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=120&q=80",
+    artisanName: "Brice Gogan",
+    artisanAvatar: "https://images.unsplash.com/photo-1620932934088-fbdb2920e484?auto=format&fit=crop&crop=faces&w=120&q=80",
+    artisanCity: "Cotonou",
+    prixInitial: 76000,
+    prixFinal: 76000,
+    acomptePaye: 38000,
+    soldeAPayer: 38000,
+    acomptePercent: 50,
+    soldePercent: 50,
+    materiaux: "Bois iroko, tissu wax, mousse haute densité",
+    dimensions: "Ø 40 x 45 cm (x2)",
+    delaiInitial: "15 jours",
+    delaiFinal: "15 jours",
+    quantite: 2,
+    livraisonAdresse: "12 rue des Lagunes, Akpakpa, Cotonou",
+    livraisonPhone: "+229 01 97 45 23 10",
+    jalons: [
+      { type: "PREPARATION", done: true, date: "16 juin 2026", commentaire: "Bois iroko coupé, wax sélectionné." },
+      { type: "IN_PRODUCTION", done: false, current: true, date: "En cours", progress: 50, photos: [], commentaire: "Assemblage des structures, garnissage en cours." },
+      { type: "READY_FOR_DELIVERY", done: false, date: "Prévu vers le 8 juillet" },
+      { type: "DELIVERY", done: false, date: "Prévu vers le 12 juillet" },
+    ],
+    modifications: [],
+  },
+  "PA-010": {
+    id: "PA-010",
+    briefId: "BRF-ART-010",
+    status: "COMPLETED",
+    title: "Canapé personnalisé Cotonou",
+    image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80",
+    clientName: "Sophie Kossou",
+    clientAvatar: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=120&q=80",
+    artisanName: "Atelier Kossi",
+    artisanAvatar: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=120&q=80",
+    artisanCity: "Cotonou",
+    prixInitial: 420000,
+    prixFinal: 420000,
+    acomptePaye: 420000,
+    soldeAPayer: 0,
+    acomptePercent: 50,
+    soldePercent: 50,
+    materiaux: "Bois massif iroko, tissu coton wax, mousse haute résilience",
+    dimensions: "220 x 95 x 85 cm",
+    delaiInitial: "4 semaines",
+    delaiFinal: "4 semaines",
+    quantite: 1,
+    livraisonAdresse: "12 rue des Lagunes, Akpakpa, Cotonou",
+    livraisonPhone: "+229 01 97 45 23 10",
+    jalons: [
+      { type: "PREPARATION", done: true, date: "5 mai 2026", commentaire: "Bois iroko sélectionné, tissu wax teint." },
+      { type: "IN_PRODUCTION", done: true, date: "8-22 mai 2026", progress: 100, photos: ["https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400&q=80"] },
+      { type: "READY_FOR_DELIVERY", done: true, date: "25 mai 2026", photos: ["https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400&q=80"], commentaire: "Canapé terminé, finitions contrôlées." },
+      { type: "DELIVERY", done: true, date: "10 juin 2026", commentaire: "Livré et installé chez le client." },
+    ],
+    modifications: [],
+  },
 };
 
 // ============================================================
@@ -91,9 +259,13 @@ const MOCK_PROJECT = {
 
 export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
-  const project = MOCK_PROJECT;
+  const project = MOCK_PROJECTS[projectId] || MOCK_PROJECTS["PA-001"];
   const [activeTab, setActiveTab] = useState<"avancement" | "details" | "modifications" | "messages">("avancement");
   const statusConfig = PROJET_ARTISAN_STATUS[project.status];
+
+  // Onglet automatique : si modification en attente, on commence par "modifications"
+  const initialTab = project.modifications.some(m => m.status === "CHANGE_PENDING_CLIENT") ? "modifications" : "avancement";
+  const [currentTab, setCurrentTab] = useState<"avancement" | "details" | "modifications" | "messages">(initialTab);
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
@@ -104,7 +276,7 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
         <div>
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex items-center gap-2 mb-1 flex-wrap">
             <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-full" style={{ color: statusConfig.color, backgroundColor: statusConfig.bgColor }}>
               {statusConfig.label}
             </span>
@@ -116,7 +288,7 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
         <img src={project.image} alt={project.title} className="w-20 h-20 rounded-lg object-cover" />
       </div>
 
-      {/* Partenaire */}
+      {/* Artisan partenaire */}
       <div className="dedco-card p-4 mb-4 flex items-center gap-3">
         <img src={project.artisanAvatar} alt={project.artisanName} className="w-12 h-12 rounded-full object-cover" />
         <div className="flex-1">
@@ -131,17 +303,17 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
         {[
           { id: "avancement", label: "Avancement" },
           { id: "details", label: "Détails" },
-          { id: "modifications", label: `Modifications${project.modifications.length > 0 ? ` (${project.modifications.length})` : ""}` },
+          { id: "modifications", label: `Modifications${project.modifications.filter(m => m.status === "CHANGE_PENDING_CLIENT").length > 0 ? ` (${project.modifications.filter(m => m.status === "CHANGE_PENDING_CLIENT").length})` : ""}` },
           { id: "messages", label: "Messagerie" },
         ].map((t) => (
-          <button key={t.id} onClick={() => setActiveTab(t.id as typeof activeTab)} className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${activeTab === t.id ? "bg-[var(--ink)] text-white" : "bg-white border border-[var(--border)] text-[var(--text-2)]"}`}>
+          <button key={t.id} onClick={() => setCurrentTab(t.id as typeof currentTab)} className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${currentTab === t.id ? "bg-[var(--ink)] text-white" : "bg-white border border-[var(--border)] text-[var(--text-2)]"}`}>
             {t.label}
           </button>
         ))}
       </div>
 
       {/* Tab: Avancement (Jalons) */}
-      {activeTab === "avancement" && (
+      {currentTab === "avancement" && (
         <div className="dedco-card p-5 mb-4">
           <h2 className="font-display font-bold mb-5">Jalons de fabrication</h2>
           <div className="space-y-4">
@@ -202,15 +374,15 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
       )}
 
       {/* Tab: Détails */}
-      {activeTab === "details" && (
+      {currentTab === "details" && (
         <div className="dedco-card p-5 mb-4">
           <h2 className="font-display font-bold mb-4">Détails du projet</h2>
           <dl className="space-y-3 text-sm">
             <div className="grid sm:grid-cols-2 gap-3">
               <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Prix initial</dt><dd className="font-numeric font-semibold">{formatFCFA(project.prixInitial)}</dd></div>
               <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Prix final</dt><dd className="font-numeric font-semibold text-[var(--amber)]">{formatFCFA(project.prixFinal)}</dd></div>
-              <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Acompte payé</dt><dd className="font-numeric text-[var(--forest)]">{formatFCFA(project.acompte)}</dd></div>
-              <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Solde à payer</dt><dd className="font-numeric text-[var(--terracotta)]">{formatFCFA(project.solde)}</dd></div>
+              <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Acompte payé ({project.acomptePercent}%)</dt><dd className="font-numeric text-[var(--forest)]">{formatFCFA(project.acomptePaye)}</dd></div>
+              <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Solde à payer ({project.soldePercent}%)</dt><dd className="font-numeric text-[var(--terracotta)]">{formatFCFA(project.soldeAPayer)}</dd></div>
             </div>
             <div className="pt-3 border-t border-[var(--border)]">
               <dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Matériaux</dt><dd className="flex items-center gap-1"><Hammer size={12} className="text-[var(--amber)]" /> {project.materiaux}</dd>
@@ -232,18 +404,20 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
       )}
 
       {/* Tab: Modifications */}
-      {activeTab === "modifications" && (
+      {currentTab === "modifications" && (
         <div className="space-y-4">
           {project.modifications.length === 0 ? (
             <div className="dedco-card p-8 text-center">
-              <p className="text-sm text-[var(--text-3)]">Aucune modification demandée.</p>
+              <p className="text-sm text-[var(--text-3)]">Aucune modification demandée pour ce projet.</p>
             </div>
           ) : (
             project.modifications.map((mod) => (
-              <div key={mod.id} className="dedco-card p-5 border-l-4" style={{ borderLeftColor: "var(--terracotta)" }}>
+              <div key={mod.id} className="dedco-card p-5 border-l-4" style={{ borderLeftColor: mod.status === "CHANGE_PENDING_CLIENT" ? "var(--terracotta)" : "var(--forest)" }}>
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="font-display font-semibold text-sm">Modification proposée par {project.artisanName}</h3>
-                  <span className="dedco-badge dedco-badge-terra">{mod.status === "CHANGE_PENDING_CLIENT" ? "En attente de validation" : mod.status}</span>
+                  <span className={`dedco-badge ${mod.status === "CHANGE_PENDING_CLIENT" ? "dedco-badge-terra" : "dedco-badge-forest"}`}>
+                    {mod.status === "CHANGE_PENDING_CLIENT" ? "En attente de validation" : mod.status === "CHANGE_ACCEPTED" ? "Acceptée" : "Refusée"}
+                  </span>
                 </div>
 
                 {/* Comparaison */}
@@ -252,7 +426,7 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
                     <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Valeur initiale</p>
                     <p className="text-sm font-medium">{mod.valeurInitiale}</p>
                   </div>
-                  <div className="p-3 bg-[var(--amber-pale)]/30 rounded-md">
+                  <div className="p-3 rounded-md" style={{ backgroundColor: "var(--amber-pale)" }}>
                     <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Nouvelle valeur</p>
                     <p className="text-sm font-medium text-[var(--amber-dark)]">{mod.nouvelleValeur}</p>
                   </div>
@@ -266,7 +440,7 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
                   </div>
                   <div>
                     <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Impact délai</p>
-                    <p>{mod.impactDelai}</p>
+                    <p className="font-numeric">{mod.impactDelai}</p>
                   </div>
                 </div>
 
@@ -276,23 +450,25 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
                   <p className="text-sm p-2 bg-[var(--bg-warm)] rounded-md">{mod.motif}</p>
                 </div>
 
-                {/* Deadline */}
-                <div className="p-3 bg-[var(--terracotta-pale)] rounded-md mb-4">
-                  <p className="text-xs text-[var(--terracotta)] flex items-center gap-1">
-                    <Clock size={12} /> Réponse attendue avant le 26 juin 2026.
-                    Sans réponse, la modification est refusée automatiquement.
-                  </p>
-                </div>
-
-                {/* Actions */}
-                <div className="flex gap-2">
-                  <button className="dedco-btn dedco-btn-ghost flex-1">
-                    <X size={14} /> Refuser
-                  </button>
-                  <button className="dedco-btn dedco-btn-primary flex-1">
-                    <Check size={14} /> Accepter la modification
-                  </button>
-                </div>
+                {/* Deadline + actions si en attente */}
+                {mod.status === "CHANGE_PENDING_CLIENT" && (
+                  <>
+                    <div className="p-3 rounded-md mb-4" style={{ backgroundColor: "var(--terracotta-pale)" }}>
+                      <p className="text-xs text-[var(--terracotta)] flex items-center gap-1">
+                        <Clock size={12} /> Réponse attendue avant le 26 juin 2026.
+                        Sans réponse, la modification est refusée automatiquement.
+                      </p>
+                    </div>
+                    <div className="flex gap-2">
+                      <button className="dedco-btn dedco-btn-ghost flex-1">
+                        <X size={14} /> Refuser
+                      </button>
+                      <button className="dedco-btn dedco-btn-primary flex-1">
+                        <Check size={14} /> Accepter la modification
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             ))
           )}
@@ -300,7 +476,7 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
       )}
 
       {/* Tab: Messages */}
-      {activeTab === "messages" && (
+      {currentTab === "messages" && (
         <div className="dedco-card p-5">
           <h2 className="font-display font-bold mb-4">Messagerie projet</h2>
           <div className="space-y-3 mb-4 min-h-[150px]">
@@ -308,7 +484,7 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
               <img src={project.artisanAvatar} alt="" className="w-8 h-8 rounded-full" />
               <div className="flex-1 p-3 bg-[var(--bg-warm)] rounded-md">
                 <p className="text-xs text-[var(--text-3)] mb-1">{project.artisanName} · il y a 2h</p>
-                <p className="text-sm">Bonjour ! J'ai commencé le tressage. Le rotin est de très bonne qualité. Voici une photo d'avancement.</p>
+                <p className="text-sm">Bonjour ! J'ai commencé le travail. Voici une photo d'avancement.</p>
               </div>
             </div>
           </div>
@@ -323,6 +499,9 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
       <div className="flex gap-3 flex-wrap mt-4">
         {project.status === "DELIVERED_PENDING_CONFIRMATION" && (
           <button className="dedco-btn dedco-btn-primary"><CheckCircle2 size={16} /> Confirmer la réception</button>
+        )}
+        {project.status === "AWAITING_DEPOSIT" && (
+          <button className="dedco-btn dedco-btn-primary"><CheckCircle2 size={16} /> Payer l'acompte</button>
         )}
         <button className="dedco-btn dedco-btn-ghost text-[var(--terracotta)]"><AlertTriangle size={16} /> Ouvrir un litige</button>
         <button className="dedco-btn dedco-btn-ghost"><FileText size={16} /> Voir la facture</button>

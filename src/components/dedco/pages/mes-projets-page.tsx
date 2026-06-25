@@ -18,6 +18,8 @@ import {
   GitCompareArrows,
   Paperclip,
   Timer,
+  Hammer,
+  Palette,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
 import { formatFCFA } from "@/lib/dedco-data";
@@ -51,7 +53,14 @@ function navigateTo(route: MesProjetsRoute) {
   if (route.page === "brief-detail" && route.id) {
     store.navigate({ page: "artisan-brief-recu", briefId: route.id });
   } else if (route.page === "projet-detail" && route.projectId) {
-    store.navigate({ page: "projet-artisan-detail", projectId: route.projectId });
+    // Routing intelligent : PD- → designer, PA- → artisan
+    if (route.projectId.startsWith("PD-")) {
+      store.navigate({ page: "projet-designer-detail", projectId: route.projectId });
+    } else {
+      store.navigate({ page: "projet-artisan-detail", projectId: route.projectId });
+    }
+  } else if (route.page === "projet-paiement-artisan" && route.proposalId) {
+    store.navigate({ page: "projet-paiement-artisan", proposalId: route.proposalId });
   } else if (route.page === "projet-paiement" && route.proposalId) {
     store.navigate({ page: "projet-paiement", proposalId: route.proposalId });
   } else if (route.page === "payment" && route.orderId) {
@@ -64,6 +73,8 @@ function navigateTo(route: MesProjetsRoute) {
     store.navigate({ page: "marketplace" });
   } else if (route.page === "brief") {
     store.navigate({ page: "brief" });
+  } else if (route.page === "brief-designer" && route.designerId) {
+    store.navigate({ page: "brief-designer", designerId: route.designerId });
   } else {
     store.navigate({ page: "home" });
   }
@@ -333,7 +344,7 @@ function BriefProposalsCard({ brief }: { brief: ArtisanBriefWithProposals }) {
                   <img src={prop.images[0]} alt="Exemple" className="w-full h-28 object-cover rounded-lg mt-2" />
                 )}
                 <button
-                  onClick={() => navigateTo({ page: "projet-paiement", proposalId: prop.id })}
+                  onClick={() => navigateTo({ page: "projet-paiement-artisan", proposalId: prop.id })}
                   className="dedco-btn dedco-btn-primary dedco-btn-sm w-full mt-3 flex items-center justify-center gap-1.5"
                 >
                   <CheckCircle2 size={14} />
@@ -482,7 +493,17 @@ function TermineCard({ item }: { item: MesProjetsItem }) {
             {item.isCancelled ? "Dupliquer la commande" : "Voir le projet"}
           </button>
           {!item.isCancelled && (
-            <button onClick={() => navigateTo({ page: "brief" })} className="dedco-btn dedco-btn-secondary dedco-btn-sm flex items-center gap-1.5">
+            <button
+              onClick={() => {
+                // Routing contextuel : projet designer → brief designer, sinon brief artisan
+                if (item.type === "DESIGNER_PROJECT" || item.type === "DESIGNER_BRIEF") {
+                  navigateTo({ page: "brief-designer", designerId: 1 });
+                } else {
+                  navigateTo({ page: "brief" });
+                }
+              }}
+              className="dedco-btn dedco-btn-secondary dedco-btn-sm flex items-center gap-1.5"
+            >
               <ArrowRight size={14} />
               Refaire une demande similaire
             </button>
@@ -552,11 +573,13 @@ function ReclamationCard({ rec }: { rec: Reclamation }) {
 // SECTION HEADER
 // ============================================================
 
-function SectionHeader({ icon: Icon, title, count, description }: { icon: React.ElementType; title: string; count: number; description?: string }) {
+function SectionHeader({ icon: Icon, title, count, description, accentColor }: { icon: React.ElementType; title: string; count: number; description?: string; accentColor?: string }) {
+  const bg = accentColor ? `${accentColor}20` : "var(--amber-pale)";
+  const color = accentColor || "var(--amber-dark)";
   return (
     <div className="flex items-center gap-3 mb-4">
-      <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: "var(--amber-pale)" }}>
-        <Icon size={16} style={{ color: "var(--amber-dark)" }} />
+      <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: bg }}>
+        <Icon size={16} style={{ color }} />
       </div>
       <div className="min-w-0">
         <div className="flex items-center gap-2">
@@ -626,31 +649,41 @@ function TabEnCours() {
 function TabAChoisir() {
   return (
     <div className="space-y-6">
-      {/* Propositions artisan — regroupées sous 1 brief */}
+      {/* Section ARTISAN — propositions regroupées sous 1 brief */}
       <section>
-        <SectionHeader icon={Package} title="Briefs avec propositions" count={1} description="Comparez les propositions et choisissez un artisan" />
+        <div className="flex items-center gap-2 mb-3 pb-2 border-b-2" style={{ borderColor: "var(--amber)" }}>
+          <Hammer size={14} style={{ color: "var(--amber-dark)" }} />
+          <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: "var(--amber-dark)" }}>Artisan</span>
+        </div>
+        <SectionHeader icon={Package} title="Briefs avec propositions" count={1} description="Comparez les propositions et choisissez un artisan" accentColor="var(--amber)" />
         <BriefProposalsCard brief={MOCK_BRIEF_WITH_PROPOSALS} />
       </section>
 
-      {/* Prestations designer */}
-      {MOCK_PRESTATIONS_DESIGNER.length > 0 && (
-        <section>
-          <SectionHeader icon={LayoutGrid} title="Prestations designer acceptées" count={MOCK_PRESTATIONS_DESIGNER.length} description="Un designer a accepté — réservez la prestation" />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {MOCK_PRESTATIONS_DESIGNER.map((p) => <PrestationDesignerCard key={p.id} prestation={p} />)}
-          </div>
-        </section>
-      )}
+      {/* Section DESIGNER — prestations à réserver + paiements */}
+      <section>
+        <div className="flex items-center gap-2 mb-3 pb-2 border-b-2" style={{ borderColor: "var(--forest)" }}>
+          <Palette size={14} style={{ color: "var(--forest)" }} />
+          <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: "var(--forest)" }}>Designer</span>
+        </div>
 
-      {/* Paiements en attente */}
-      {MOCK_PAIEMENTS_EN_ATTENTE.length > 0 && (
-        <section>
-          <SectionHeader icon={CreditCard} title="Paiements en attente" count={MOCK_PAIEMENTS_EN_ATTENTE.length} description="Finalisez vos paiements pour démarrer" />
-          <div className="space-y-3 max-w-xl">
-            {MOCK_PAIEMENTS_EN_ATTENTE.map((p) => <PaiementEnAttenteCard key={p.id} paiement={p} />)}
+        {MOCK_PRESTATIONS_DESIGNER.length > 0 && (
+          <div className="mb-6">
+            <SectionHeader icon={LayoutGrid} title="Prestations designer acceptées" count={MOCK_PRESTATIONS_DESIGNER.length} description="Un designer a accepté — réservez la prestation" accentColor="var(--forest)" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              {MOCK_PRESTATIONS_DESIGNER.map((p) => <PrestationDesignerCard key={p.id} prestation={p} />)}
+            </div>
           </div>
-        </section>
-      )}
+        )}
+
+        {MOCK_PAIEMENTS_EN_ATTENTE.length > 0 && (
+          <div>
+            <SectionHeader icon={CreditCard} title="Paiements en attente" count={MOCK_PAIEMENTS_EN_ATTENTE.length} description="Finalisez vos paiements pour démarrer" accentColor="var(--forest)" />
+            <div className="space-y-3 max-w-xl">
+              {MOCK_PAIEMENTS_EN_ATTENTE.map((p) => <PaiementEnAttenteCard key={p.id} paiement={p} />)}
+            </div>
+          </div>
+        )}
+      </section>
     </div>
   );
 }

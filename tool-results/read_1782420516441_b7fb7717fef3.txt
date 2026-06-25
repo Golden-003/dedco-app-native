@@ -1,0 +1,591 @@
+     1→     1→"use client";
+     2→     2→
+     3→     3→import { useState } from "react";
+     4→     4→import {
+     5→     5→  Check,
+     6→     6→  CheckCircle2,
+     7→     7→  Clock,
+     8→     8→  ChevronRight,
+     9→     9→  X,
+    10→    10→  AlertTriangle,
+    11→    11→  ShieldCheck,
+    12→    12→  Send,
+    13→    13→  MessageSquare,
+    14→    14→  Download,
+    15→    15→  FileText,
+    16→    16→  ShoppingBag,
+    17→    17→  Plus,
+    18→    18→  Zap,
+    19→    19→  Sofa,
+    20→    20→  Home,
+    21→    21→  Lightbulb,
+    22→    22→  MapPin,
+    23→    23→} from "lucide-react";
+    24→    24→import { useDedcoStore, type ProjectScope } from "@/lib/store";
+    25→    25→import { formatFCFA, PRODUCTS } from "@/lib/dedco-data";
+    26→    26→
+    27→    27→// ============================================================
+    28→    28→// MOCK DATA
+    29→    29→// ============================================================
+    30→    30→
+    31→    31→const SCOPE_INFO: Record<ProjectScope, { label: string; icon: typeof Zap }> = {
+    32→    32→  prototype: { label: "Prototype", icon: Zap },
+    33→    33→  standard: { label: "Standard", icon: Sofa },
+    34→    34→  premium: { label: "Premium", icon: Home },
+    35→    35→};
+    36→    36→
+    37→    37→function ScopeBadge({ scope }: { scope: ProjectScope }) {
+    38→    38→  const info = SCOPE_INFO[scope];
+    39→    39→  const Icon = info.icon;
+    40→    40→  return <span className="dedco-badge dedco-badge-amber"><Icon size={12} /> {info.label}</span>;
+    41→    41→}
+    42→    42→
+    43→    43→// Prestations que le designer DOIT choisir avant de répondre
+    44→    44→const PRESTATION_OPTIONS = [
+    45→    45→  { id: "consultation", label: "Consultation rapide", icon: Lightbulb, desc: "Conseil ponctuel, ajustement décoratif" },
+    46→    46→  { id: "espace", label: "Aménagement d'un espace", icon: Sofa, desc: "Une pièce ou zone définie" },
+    47→    47→  { id: "complet", label: "Projet complet", icon: Home, desc: "Plusieurs espaces, conception globale" },
+    48→    48→] as const;
+    49→    49→
+    50→    50→const MOCK_BRIEF = {
+    51→    51→  id: "BRF-2026-001",
+    52→    52→  designerName: "Ndèye Sarr",
+    53→    53→  designerAvatar: "https://images.unsplash.com/photo-1729355796906-10a9809e0864?auto=format&fit=crop&crop=faces&w=120&q=80",
+    54→    54→  clientName: "Sophie Kossou",
+    55→    55→  clientAvatar: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=120&q=80",
+    56→    56→  scope: "standard" as ProjectScope,
+    57→    57→  besoin: "Moderniser mon salon en gardant une touche africaine. Mobilier vieillissant, besoin de rangement.",
+    58→    58→  objectif: "Un salon convivial, moderne et ancré dans l'identité africaine contemporaine",
+    59→    59→  espace: "Salon 25m²",
+    60→    60→  prestationsSouhaitees: ["Moodboard", "Plan d'implantation", "Liste d'achats Dedco"],
+    61→    61→  sentAt: "Il y a 2h",
+    62→    62→};
+    63→    63→
+    64→    64→// ============================================================
+    65→    65→// PAGE 1: designer-projet-attente — Brief envoyé, en attente
+    66→    66→// ============================================================
+    67→    67→
+    68→    68→export function DesignerProjetAttentePage({ projectId }: { projectId: string }) {
+    69→    69→  const navigate = useDedcoStore((s) => s.navigate);
+    70→    70→  const brief = MOCK_BRIEF;
+    71→    71→
+    72→    72→  return (
+    73→    73→    <div className="p-6 max-w-2xl mx-auto">
+    74→    74→      <button onClick={() => navigate({ page: "home" })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
+    75→    75→        ← Retour à l'accueil
+    76→    76→      </button>
+    77→    77→
+    78→    78→      <div className="dedco-card p-5 mb-4 bg-[var(--amber-pale)]/50 border-l-4" style={{ borderLeftColor: "var(--amber)" }}>
+    79→    79→        <div className="flex items-start gap-3">
+    80→    80→          <div className="w-10 h-10 rounded-full bg-[var(--amber)] flex items-center justify-center flex-shrink-0">
+    81→    81→            <Clock size={20} className="text-white" />
+    82→    82→          </div>
+    83→    83→          <div>
+    84→    84→            <h1 className="font-display font-bold text-lg mb-1">Brief envoyé</h1>
+    85→    85→            <p className="text-sm text-[var(--text-2)]">En attente de la réponse du designer (24-48h)</p>
+    86→    86→          </div>
+    87→    87→        </div>
+    88→    88→      </div>
+    89→    89→
+    90→    90→      <div className="dedco-card p-5 mb-4">
+    91→    91→        <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+    92→    92→          <h2 className="font-display font-bold">Résumé du brief</h2>
+    93→    93→          <ScopeBadge scope={brief.scope} />
+    94→    94→        </div>
+    95→    95→        <dl className="space-y-2 text-sm">
+    96→    96→          <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Besoin</dt><dd>{brief.besoin}</dd></div>
+    97→    97→          <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Objectif</dt><dd>{brief.objectif}</dd></div>
+    98→    98→          {brief.espace && <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Espace</dt><dd>{brief.espace}</dd></div>}
+    99→    99→          <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Prestations souhaitées</dt><dd>{brief.prestationsSouhaitees.join(", ")}</dd></div>
+   100→   100→        </dl>
+   101→   101→      </div>
+   102→   102→
+   103→   103→      <p className="text-xs text-[var(--text-3)] text-center">Aucun paiement à cette étape. Le designer va répondre puis vous envoyer une proposition.</p>
+   104→   104→    </div>
+   105→   105→  );
+   106→   106→}
+   107→   107→
+   108→   108→// ============================================================
+   109→   109→// PAGE 2: designer-brief-recu — Brief reçu + Choix prestation + 3 actions
+   110→   110→// ============================================================
+   111→   111→
+   112→   112→export function DesignerBriefRecuPage({ briefId }: { briefId: string }) {
+   113→   113→  const navigate = useDedcoStore((s) => s.navigate);
+   114→   114→  const brief = MOCK_BRIEF;
+   115→   115→  const [prestation, setPrestation] = useState<string>("");
+   116→   116→  const [showQuestions, setShowQuestions] = useState(false);
+   117→   117→  const [questions, setQuestions] = useState(["", "", ""]);
+   118→   118→
+   119→   119→  // 3 ACTIONS UNIQUEMENT — pas d'autres options
+   120→   120→  const canAct = !!prestation; // Le designer DOIT choisir une prestation avant d'agir
+   121→   121→
+   122→   122→  return (
+   123→   123→    <div className="p-6 max-w-3xl mx-auto">
+   124→   124→      <header className="mb-6">
+   125→   125→        <div className="flex items-center gap-3 mb-1 flex-wrap">
+   126→   126→          <h1 className="display-lg mb-0">Brief reçu</h1>
+   127→   127→          <ScopeBadge scope={brief.scope} />
+   128→   128→        </div>
+   129→   129→        <p className="text-sm text-[var(--text-2)] font-numeric">{brief.id} · Reçu {brief.sentAt}</p>
+   130→   130→      </header>
+   131→   131→
+   132→   132→      {/* 1. RÉSUMÉ DU BRIEF — simple, pas de navigation */}
+   133→   133→      <div className="dedco-card p-5 mb-4">
+   134→   134→        <div className="flex items-center gap-3 mb-4">
+   135→   135→          <img src={brief.clientAvatar} alt={brief.clientName} className="w-12 h-12 rounded-full object-cover" />
+   136→   136→          <div><p className="font-display font-semibold">{brief.clientName}</p><p className="text-xs text-[var(--text-3)]">Client</p></div>
+   137→   137→        </div>
+   138→   138→        <dl className="space-y-2 text-sm">
+   139→   139→          <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide">Niveau</dt><dd className="font-semibold">{SCOPE_INFO[brief.scope].label}</dd></div>
+   140→   140→          <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide">Type</dt><dd>{brief.espace || "Non précisé"}</dd></div>
+   141→   141→          <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide">Besoin</dt><dd>{brief.besoin}</dd></div>
+   142→   142→          <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide">Objectif</dt><dd>{brief.objectif}</dd></div>
+   143→   143→          <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide">Prestations souhaitées</dt><dd>{brief.prestationsSouhaitees.join(", ")}</dd></div>
+   144→   144→        </dl>
+   145→   145→      </div>
+   146→   146→
+   147→   147→      {/* 2. CHOIX DE PRESTATION — OBLIGATOIRE avant toute action */}
+   148→   148→      <div className="dedco-card p-5 mb-4 border-l-4" style={{ borderLeftColor: "var(--amber)" }}>
+   149→   149→        <h2 className="font-display font-bold mb-1">Choix de prestation</h2>
+   150→   150→        <p className="text-xs text-[var(--text-3)] mb-4">Vous devez choisir une prestation avant de répondre au client.</p>
+   151→   151→        <div className="grid sm:grid-cols-3 gap-3">
+   152→   152→          {PRESTATION_OPTIONS.map((opt) => {
+   153→   153→            const active = prestation === opt.id;
+   154→   154→            const OptIcon = opt.icon;
+   155→   155→            return (
+   156→   156→              <button
+   157→   157→                key={opt.id}
+   158→   158→                onClick={() => setPrestation(opt.id)}
+   159→   159→                className={`p-4 rounded-lg border-2 text-center transition-all ${
+   160→   160→                  active ? "border-[var(--amber)] bg-[var(--amber-pale)]/30" : "border-[var(--border)] hover:border-[var(--text-3)]"
+   161→   161→                }`}
+   162→   162→              >
+   163→   163→                <div className="mb-1 flex justify-center"><OptIcon size={24} className="text-[var(--amber)]" /></div>
+   164→   164→                <p className="font-display font-semibold text-sm">{opt.label}</p>
+   165→   165→                <p className="text-[10px] text-[var(--text-3)] mt-0.5">{opt.desc}</p>
+   166→   166→                {active && <Check size={16} className="text-[var(--amber)] mx-auto mt-1" />}
+   167→   167→              </button>
+   168→   168→            );
+   169→   169→          })}
+   170→   170→        </div>
+   171→   171→      </div>
+   172→   172→
+   173→   173→      {/* 3. ACTIONS DESIGNER — 3 UNIQUEMENT */}
+   174→   174→      {!showQuestions ? (
+   175→   175→        <div className="dedco-card p-5">
+   176→   176→          <h3 className="font-display font-bold mb-4">Votre réponse</h3>
+   177→   177→          {!canAct && <p className="text-xs text-[var(--terracotta)] mb-3 flex items-center gap-1"><AlertTriangle size={12} /> Choisissez une prestation ci-dessus pour activer les actions.</p>}
+   178→   178→          <div className="space-y-2">
+   179→   179→            <button
+   180→   180→              disabled={!canAct}
+   181→   181→              onClick={() => navigate({ page: "designer-proposition-mission", briefId: brief.id })}
+   182→   182→              className={`w-full p-4 rounded-lg border-2 text-left transition-all flex items-center gap-3 ${
+   183→   183→                canAct ? "border-[var(--amber)] bg-[var(--amber-pale)]/30 hover:bg-[var(--amber-pale)] cursor-pointer" : "border-[var(--border)] opacity-40 cursor-not-allowed"
+   184→   184→              }`}
+   185→   185→            >
+   186→   186→              <div className="w-10 h-10 rounded-full bg-[var(--amber)] text-white flex items-center justify-center flex-shrink-0"><Check size={18} /></div>
+   187→   187→              <div><p className="font-display font-semibold text-sm">Proposer immédiatement</p><p className="text-xs text-[var(--text-3)]">Créer une proposition de mission avec prix</p></div>
+   188→   188→            </button>
+   189→   189→
+   190→   190→            <button
+   191→   191→              disabled={!canAct}
+   192→   192→              onClick={() => canAct && setShowQuestions(true)}
+   193→   193→              className={`w-full p-4 rounded-lg border-2 text-left transition-all flex items-center gap-3 ${
+   194→   194→                canAct ? "border-[var(--border)] hover:border-[var(--text-3)] cursor-pointer" : "border-[var(--border)] opacity-40 cursor-not-allowed"
+   195→   195→              }`}
+   196→   196→            >
+   197→   197→              <div className="w-10 h-10 rounded-full bg-[var(--bg-warm)] text-[var(--text-2)] flex items-center justify-center flex-shrink-0"><MessageSquare size={18} /></div>
+   198→   198→              <div><p className="font-display font-semibold text-sm">Poser max 3 questions</p><p className="text-xs text-[var(--text-3)]">Demander des précisions avant de proposer</p></div>
+   199→   199→            </button>
+   200→   200→
+   201→   201→            <button
+   202→   202→              disabled={!canAct}
+   203→   203→              onClick={() => canAct && navigate({ page: "designer-dashboard" })}
+   204→   204→              className={`w-full p-4 rounded-lg border-2 text-left transition-all flex items-center gap-3 ${
+   205→   205→                canAct ? "border-[var(--terracotta)]/30 hover:bg-[var(--terracotta-pale)] cursor-pointer" : "border-[var(--border)] opacity-40 cursor-not-allowed"
+   206→   206→              }`}
+   207→   207→            >
+   208→   208→              <div className="w-10 h-10 rounded-full bg-[var(--terracotta-pale)] text-[var(--terracotta)] flex items-center justify-center flex-shrink-0"><X size={18} /></div>
+   209→   209→              <div><p className="font-display font-semibold text-sm text-[var(--terracotta)]">Refuser</p><p className="text-xs text-[var(--text-3)]">Décliner ce projet</p></div>
+   210→   210→            </button>
+   211→   211→          </div>
+   212→   212→        </div>
+   213→   213→      ) : (
+   214→   214→        <div className="dedco-card p-5">
+   215→   215→          <h3 className="font-display font-bold mb-3">Poser vos questions (max 3)</h3>
+   216→   216→          <div className="space-y-3 mb-4">
+   217→   217→            {questions.map((q, i) => (
+   218→   218→              <input
+   219→   219→                key={i}
+   220→   220→                value={q}
+   221→   221→                onChange={(e) => setQuestions(questions.map((qq, idx) => idx === i ? e.target.value : qq))}
+   222→   222→                placeholder={`Question ${i + 1}`}
+   223→   223→                className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white"
+   224→   224→              />
+   225→   225→            ))}
+   226→   226→          </div>
+   227→   227→          <div className="flex gap-2">
+   228→   228→            <button onClick={() => setShowQuestions(false)} className="dedco-btn dedco-btn-ghost">Annuler</button>
+   229→   229→            <button onClick={() => navigate({ page: "designer-dashboard" })} className="dedco-btn dedco-btn-primary flex-1"><Send size={14} /> Envoyer les questions</button>
+   230→   230→          </div>
+   231→   231→        </div>
+   232→   232→      )}
+   233→   233→    </div>
+   234→   234→  );
+   235→   235→}
+   236→   236→
+   237→   237→// ============================================================
+   238→   238→// PAGE 3: designer-proposition-mission — Proposition (structure obligatoire)
+   239→   239→// ============================================================
+   240→   240→
+   241→   241→export function DesignerPropositionMissionPage({ briefId }: { briefId: string }) {
+   242→   242→  const navigate = useDedcoStore((s) => s.navigate);
+   243→   243→  const brief = MOCK_BRIEF;
+   244→   244→  const [form, setForm] = useState({
+   245→   245→    objectif: brief.objectif,
+   246→   246→    prestation: "Aménagement d'un espace",
+   247→   247→    livrables: "Moodboard, plan d'implantation, sélection mobilier, liste d'achats",
+   248→   248→    delai: "21 jours",
+   249→   249→    prix: 300000,
+   250→   250→    inclusions: "Moodboard, plan, sélection produits, 2 ajustements",
+   251→   251→    exclusions: "Achats produits, travaux, livraison, prestations artisans",
+   252→   252→    visite: false,
+   253→   253→  });
+   254→   254→
+   255→   255→  const garantie = Math.round(form.prix * 0.015);
+   256→   256→  const totalClient = form.prix + garantie;
+   257→   257→  const commission = Math.round(form.prix * 0.10);
+   258→   258→  const netDesigner = form.prix - commission;
+   259→   259→
+   260→   260→  return (
+   261→   261→    <div className="p-6 max-w-2xl mx-auto">
+   262→   262→      <button onClick={() => navigate({ page: "designer-brief-recu", briefId })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
+   263→   263→        ← Retour au brief
+   264→   264→      </button>
+   265→   265→
+   266→   266→      <header className="mb-6">
+   267→   267→        <h1 className="display-lg mb-1">Proposition de mission</h1>
+   268→   268→        <p className="text-sm text-[var(--text-2)]">Pour {brief.clientName}</p>
+   269→   269→      </header>
+   270→   270→
+   271→   271→      <div className="dedco-card p-5 space-y-4">
+   272→   272→        {/* Structure obligatoire */}
+   273→   273→        <div>
+   274→   274→          <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Objectif</label>
+   275→   275→          <input value={form.objectif} onChange={(e) => setForm({ ...form, objectif: e.target.value })} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
+   276→   276→        </div>
+   277→   277→
+   278→   278→        <div>
+   279→   279→          <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Prestation choisie</label>
+   280→   280→          <input value={form.prestation} onChange={(e) => setForm({ ...form, prestation: e.target.value })} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
+   281→   281→        </div>
+   282→   282→
+   283→   283→        <div>
+   284→   284→          <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Livrables</label>
+   285→   285→          <textarea value={form.livrables} onChange={(e) => setForm({ ...form, livrables: e.target.value })} rows={2} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white resize-none" />
+   286→   286→        </div>
+   287→   287→
+   288→   288→        <div className="grid sm:grid-cols-2 gap-3">
+   289→   289→          <div>
+   290→   290→            <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Délai</label>
+   291→   291→            <input value={form.delai} onChange={(e) => setForm({ ...form, delai: e.target.value })} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
+   292→   292→          </div>
+   293→   293→          <div>
+   294→   294→            <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Prix global (FCFA)</label>
+   295→   295→            <input type="number" value={form.prix} onChange={(e) => setForm({ ...form, prix: Number(e.target.value) })} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white font-numeric" />
+   296→   296→          </div>
+   297→   297→        </div>
+   298→   298→
+   299→   299→        <div className="grid sm:grid-cols-2 gap-3">
+   300→   300→          <div>
+   301→   301→            <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Inclusions</label>
+   302→   302→            <input value={form.inclusions} onChange={(e) => setForm({ ...form, inclusions: e.target.value })} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
+   303→   303→          </div>
+   304→   304→          <div>
+   305→   305→            <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Exclusions</label>
+   306→   306→            <input value={form.exclusions} onChange={(e) => setForm({ ...form, exclusions: e.target.value })} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
+   307→   307→          </div>
+   308→   308→        </div>
+   309→   309→
+   310→   310→        <label className="flex items-center gap-2 cursor-pointer p-3 bg-[var(--bg-warm)] rounded-md">
+   311→   311→          <input type="checkbox" checked={form.visite} onChange={(e) => setForm({ ...form, visite: e.target.checked })} className="w-4 h-4" style={{ accentColor: "var(--amber)" }} />
+   312→   312→          <span className="text-sm">Visite sur site incluse si nécessaire</span>
+   313→   313→        </label>
+   314→   314→
+   315→   315→        {/* Transparence financière */}
+   316→   316→        <div className="grid sm:grid-cols-2 gap-3">
+   317→   317→          <div className="p-3 bg-[var(--amber-pale)]/30 rounded-md">
+   318→   318→            <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">Côté client</p>
+   319→   319→            <div className="space-y-1 text-xs">
+   320→   320→              <div className="flex justify-between"><span>Honoraires</span><span className="font-numeric">{formatFCFA(form.prix)}</span></div>
+   321→   321→              <div className="flex justify-between text-[var(--text-2)]"><span>Garantie 1,5%</span><span className="font-numeric">{formatFCFA(garantie)}</span></div>
+   322→   322→              <div className="flex justify-between font-bold pt-1 border-t border-[var(--border)]"><span>Total</span><span className="font-numeric text-[var(--amber)]">{formatFCFA(totalClient)}</span></div>
+   323→   323→            </div>
+   324→   324→          </div>
+   325→   325→          <div className="p-3 bg-[var(--bg-warm)] rounded-md">
+   326→   326→            <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">Côté designer</p>
+   327→   327→            <div className="space-y-1 text-xs">
+   328→   328→              <div className="flex justify-between"><span>Montant mission</span><span className="font-numeric">{formatFCFA(form.prix)}</span></div>
+   329→   329→              <div className="flex justify-between text-[var(--terracotta)]"><span>Commission 10%</span><span className="font-numeric">-{formatFCFA(commission)}</span></div>
+   330→   330→              <div className="flex justify-between font-bold pt-1 border-t border-[var(--border)]"><span>Net reçu</span><span className="font-numeric text-[var(--forest)]">{formatFCFA(netDesigner)}</span></div>
+   331→   331→            </div>
+   332→   332→          </div>
+   333→   333→        </div>
+   334→   334→
+   335→   335→        <button onClick={() => navigate({ page: "designer-dashboard" })} className="dedco-btn dedco-btn-primary w-full">
+   336→   336→          <Send size={16} /> Envoyer la proposition
+   337→   337→        </button>
+   338→   338→      </div>
+   339→   339→    </div>
+   340→   340→  );
+   341→   341→}
+   342→   342→
+   343→   343→// ============================================================
+   344→   344→// PAGE 4: client-proposition-recue — Client voit proposition + paie
+   345→   345→// ============================================================
+   346→   346→
+   347→   347→export function ClientPropositionRecuePage({ proposalId }: { proposalId: string }) {
+   348→   348→  const navigate = useDedcoStore((s) => s.navigate);
+   349→   349→  const proposal = {
+   350→   350→    scope: "standard" as ProjectScope,
+   351→   351→    designerName: "Ndèye Sarr",
+   352→   352→    designerAvatar: "https://images.unsplash.com/photo-1729355796906-10a9809e0864?auto=format&fit=crop&crop=faces&w=120&q=80",
+   353→   353→    objectif: "Un salon convivial, moderne et ancré dans l'identité africaine contemporaine",
+   354→   354→    prestation: "Aménagement d'un espace",
+   355→   355→    livrables: ["Moodboard", "Plan d'implantation", "Sélection mobilier et décoration", "Liste d'achats Dedco"],
+   356→   356→    delai: "21 jours",
+   357→   357→    prix: 300000,
+   358→   358→    inclusions: "Moodboard, plan, sélection produits, 2 ajustements",
+   359→   359→    exclusions: "Achats produits, travaux, livraison, prestations artisans",
+   360→   360→    visite: false,
+   361→   361→  };
+   362→   362→  const garantie = Math.round(proposal.prix * 0.015);
+   363→   363→  const total = proposal.prix + garantie;
+   364→   364→
+   365→   365→  return (
+   366→   366→    <div className="p-6 max-w-2xl mx-auto">
+   367→   367→      <button onClick={() => navigate({ page: "client-projets" })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">← Mes projets</button>
+   368→   368→
+   369→   369→      <header className="mb-6">
+   370→   370→        <div className="flex items-center gap-2 mb-2 flex-wrap">
+   371→   371→          <span className="dedco-badge dedco-badge-amber">Proposition de mission</span>
+   372→   372→          <ScopeBadge scope={proposal.scope} />
+   373→   373→        </div>
+   374→   374→        <h1 className="display-lg mb-2">{proposal.objectif}</h1>
+   375→   375→        <div className="flex items-center gap-3">
+   376→   376→          <img src={proposal.designerAvatar} alt={proposal.designerName} className="w-10 h-10 rounded-full" />
+   377→   377→          <p className="text-sm">par <strong>{proposal.designerName}</strong></p>
+   378→   378→        </div>
+   379→   379→      </header>
+   380→   380→
+   381→   381→      <div className="dedco-card p-5 mb-4">
+   382→   382→        <dl className="space-y-3 text-sm">
+   383→   383→          <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Prestation</dt><dd className="font-semibold">{proposal.prestation}</dd></div>
+   384→   384→          <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Livrables</dt><dd><ul className="space-y-1">{proposal.livrables.map((l) => <li key={l} className="flex items-center gap-2"><Check size={14} className="text-[var(--forest)]" /> {l}</li>)}</ul></dd></div>
+   385→   385→          <div className="grid grid-cols-2 gap-3 pt-2 border-t border-[var(--border)]">
+   386→   386→            <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Délai</dt><dd className="font-numeric font-semibold">{proposal.delai}</dd></div>
+   387→   387→            <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Prix</dt><dd className="font-numeric font-semibold text-[var(--amber)]">{formatFCFA(proposal.prix)}</dd></div>
+   388→   388→          </div>
+   389→   389→          <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Inclus</dt><dd className="text-[var(--forest)]">{proposal.inclusions}</dd></div>
+   390→   390→          <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Non inclus</dt><dd className="text-[var(--terracotta)]">{proposal.exclusions}</dd></div>
+   391→   391→          {proposal.visite && <div className="p-2 bg-[var(--amber-pale)]/30 rounded text-xs flex items-center gap-1"><MapPin size={12} className="text-[var(--amber)]" /> Visite sur site incluse si nécessaire</div>}
+   392→   392→        </dl>
+   393→   393→      </div>
+   394→   394→
+   395→   395→      <div className="dedco-card p-5 mb-4">
+   396→   396→        <div className="space-y-2 text-sm">
+   397→   397→          <div className="flex justify-between"><span>Honoraires designer</span><span className="font-numeric font-semibold">{formatFCFA(proposal.prix)}</span></div>
+   398→   398→          <div className="flex justify-between text-[var(--text-2)]"><span className="flex items-center gap-1">Frais de garantie Dedco (1,5%)<ShieldCheck size={12} className="text-[var(--forest)]" /></span><span className="font-numeric">{formatFCFA(garantie)}</span></div>
+   399→   399→          <div className="flex justify-between font-display font-bold pt-2 border-t border-[var(--border)]"><span>Total</span><span className="font-numeric text-[var(--amber)] text-lg">{formatFCFA(total)}</span></div>
+   400→   400→        </div>
+   401→   401→      </div>
+   402→   402→
+   403→   403→      <div className="flex gap-2">
+   404→   404→        <button className="dedco-btn dedco-btn-ghost">Demander une modification</button>
+   405→   405→        <button className="dedco-btn dedco-btn-ghost text-[var(--terracotta)]">Refuser</button>
+   406→   406→        <button onClick={() => navigate({ page: "projet-paiement", proposalId })} className="dedco-btn dedco-btn-primary flex-1">Accepter et payer <ChevronRight size={16} /></button>
+   407→   407→      </div>
+   408→   408→    </div>
+   409→   409→  );
+   410→   410→}
+   411→   411→
+   412→   412→// ============================================================
+   413→   413→// PAGE 5: projet-paiement — Paiement
+   414→   414→// ============================================================
+   415→   415→
+   416→   416→export function ProjetPaiementPage({ proposalId }: { proposalId: string }) {
+   417→   417→  const navigate = useDedcoStore((s) => s.navigate);
+   418→   418→  const [operator, setOperator] = useState<"mtn" | "moov">("mtn");
+   419→   419→  const [done, setDone] = useState(false);
+   420→   420→  const total = 304500;
+   421→   421→
+   422→   422→  if (done) {
+   423→   423→    return (
+   424→   424→      <div className="p-8 max-w-xl mx-auto text-center">
+   425→   425→        <div className="w-20 h-20 rounded-full bg-[var(--forest-pale)] mx-auto flex items-center justify-center mb-5">
+   426→   426→          <CheckCircle2 size={40} className="text-[var(--forest)]" />
+   427→   427→        </div>
+   428→   428→        <h1 className="display-xl mb-3">Projet confirmé !</h1>
+   429→   429→        <p className="text-sm text-[var(--text-2)] mb-6">Le projet démarre maintenant.</p>
+   430→   430→        <button onClick={() => navigate({ page: "projet-detail", projectId: proposalId })} className="dedco-btn dedco-btn-primary">Suivre le projet <ChevronRight size={16} /></button>
+   431→   431→      </div>
+   432→   432→    );
+   433→   433→  }
+   434→   434→
+   435→   435→  return (
+   436→   436→    <div className="p-6 max-w-md mx-auto">
+   437→   437→      <header className="mb-6"><h1 className="display-lg mb-1">Paiement</h1><p className="text-sm text-[var(--text-2)]">Aménagement du salon</p></header>
+   438→   438→      <div className="dedco-card p-5 mb-4">
+   439→   439→        <div className="space-y-2 text-sm">
+   440→   440→          <div className="flex justify-between"><span>Honoraires</span><span className="font-numeric font-semibold">{formatFCFA(300000)}</span></div>
+   441→   441→          <div className="flex justify-between text-[var(--text-2)]"><span className="flex items-center gap-1">Garantie 1,5%<ShieldCheck size={12} className="text-[var(--forest)]" /></span><span className="font-numeric">{formatFCFA(4500)}</span></div>
+   442→   442→          <div className="flex justify-between font-display font-bold pt-2 border-t border-[var(--border)]"><span>Total</span><span className="font-numeric text-[var(--amber)] text-lg">{formatFCFA(total)}</span></div>
+   443→   443→        </div>
+   444→   444→      </div>
+   445→   445→      <div className="dedco-card p-5 mb-4">
+   446→   446→        <div className="grid grid-cols-2 gap-2 mb-4">
+   447→   447→          {[{ id: "mtn", label: "MTN MoMo", color: "#FFCC00", text: "#000" }, { id: "moov", label: "Moov Money", color: "#009BDB", text: "#fff" }].map((op) => (
+   448→   448→            <button key={op.id} onClick={() => setOperator(op.id as "mtn" | "moov")} className={`px-3 py-3 rounded-md text-sm font-semibold border-2 ${operator === op.id ? "border-[var(--ink)]" : "border-[var(--border)]"}`} style={{ backgroundColor: op.color, color: op.text }}>{op.label}</button>
+   449→   449→          ))}
+   450→   450→        </div>
+   451→   451→        <input defaultValue="+229 01 97 45 23 10" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white font-numeric" />
+   452→   452→      </div>
+   453→   453→      <button onClick={() => setDone(true)} className="dedco-btn dedco-btn-primary w-full dedco-btn-lg">Payer {formatFCFA(total)}</button>
+   454→   454→    </div>
+   455→   455→  );
+   456→   456→}
+   457→   457→
+   458→   458→// ============================================================
+   459→   459→// PAGE 6: projet-detail — Suivi projet (simple, pas de CRM)
+   460→   460→// ============================================================
+   461→   461→
+   462→   462→export function ProjetDetailPage({ projectId }: { projectId: string }) {
+   463→   463→  const navigate = useDedcoStore((s) => s.navigate);
+   464→   464→  const [tab, setTab] = useState<"progression" | "messages" | "achats">("progression");
+   465→   465→
+   466→   466→  const stages = [
+   467→   467→    { label: "Projet confirmé", done: true },
+   468→   468→    { label: "Moodboard", done: false, current: true },
+   469→   469→    { label: "Plan & sélection", done: false },
+   470→   470→    { label: "Livraison", done: false },
+   471→   471→  ];
+   472→   472→
+   473→   473→  return (
+   474→   474→    <div className="p-6 max-w-3xl mx-auto">
+   475→   475→      <button onClick={() => navigate({ page: "client-projets" })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-2 flex items-center gap-1">← Mes projets</button>
+   476→   476→      <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
+   477→   477→        <div>
+   478→   478→          <div className="flex items-center gap-2 mb-1"><span className="dedco-badge dedco-badge-amber">En cours</span><ScopeBadge scope="standard" /></div>
+   479→   479→          <h1 className="display-lg">Aménagement du salon</h1>
+   480→   480→        </div>
+   481→   481→        <button onClick={() => navigate({ page: "projet-livraison", projectId })} className="dedco-btn dedco-btn-ghost dedco-btn-sm"><ShoppingBag size={14} /> Livraison</button>
+   482→   482→      </div>
+   483→   483→
+   484→   484→      <div className="flex gap-2 mb-4">
+   485→   485→        {[{ id: "progression", label: "Progression" }, { id: "messages", label: "Messagerie" }, { id: "achats", label: "Achats recommandés" }].map((t) => (
+   486→   486→          <button key={t.id} onClick={() => setTab(t.id as typeof tab)} className={`px-4 py-2 rounded-full text-sm font-medium ${tab === t.id ? "bg-[var(--ink)] text-white" : "bg-white border border-[var(--border)] text-[var(--text-2)]"}`}>{t.label}</button>
+   487→   487→        ))}
+   488→   488→      </div>
+   489→   489→
+   490→   490→      {tab === "progression" && (
+   491→   491→        <div className="dedco-card p-5">
+   492→   492→          <div className="space-y-3">
+   493→   493→            {stages.map((s, i) => (
+   494→   494→              <div key={i} className="flex items-center gap-3">
+   495→   495→                <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${s.done ? "bg-[var(--forest)] text-white" : s.current ? "bg-[var(--amber)] text-white" : "bg-[var(--bg-warm)] text-[var(--text-3)]"}`}>
+   496→   496→                  {s.done ? <Check size={14} /> : <span className="font-numeric text-xs">{i + 1}</span>}
+   497→   497→                </div>
+   498→   498→                <span className={`text-sm ${s.done ? "text-[var(--text-2)]" : s.current ? "font-semibold" : "text-[var(--text-3)]"}`}>{s.label}</span>
+   499→   499→              </div>
+   500→   500→            ))}
+   501→   501→          </div>
+   502→   502→        </div>
+   503→   503→      )}
+   504→   504→
+   505→   505→      {tab === "messages" && (
+   506→   506→        <div className="dedco-card p-5">
+   507→   507→          <div className="space-y-3 mb-4 min-h-[120px]">
+   508→   508→            <div className="flex gap-2">
+   509→   509→              <img src="https://images.unsplash.com/photo-1729355796906-10a9809e0864?auto=format&fit=crop&crop=faces&w=80&q=80" alt="" className="w-8 h-8 rounded-full" />
+   510→   510→              <div className="flex-1 p-3 bg-[var(--bg-warm)] rounded-md"><p className="text-xs text-[var(--text-3)] mb-1">Ndèye · il y a 2h</p><p className="text-sm">Je démarre le moodboard. Palette terracotta + cream ?</p></div>
+   511→   511→            </div>
+   512→   512→          </div>
+   513→   513→          <div className="flex gap-2">
+   514→   514→            <input placeholder="Votre message..." className="flex-1 px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
+   515→   515→            <button className="dedco-btn dedco-btn-primary dedco-btn-sm"><Send size={14} /></button>
+   516→   516→          </div>
+   517→   517→        </div>
+   518→   518→      )}
+   519→   519→
+   520→   520→      {tab === "achats" && (
+   521→   521→        <div>
+   522→   522→          <div className="dedco-card p-3 mb-3 bg-[var(--amber-pale)]/30">
+   523→   523→            <p className="text-xs">Sélection recommandée par le designer. Vous êtes libre d'acheter ou non.</p>
+   524→   524→          </div>
+   525→   525→          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+   526→   526→            {PRODUCTS.slice(0, 4).map((p) => (
+   527→   527→              <button key={p.id} onClick={() => navigate({ page: "product", id: p.id })} className="dedco-card overflow-hidden text-left">
+   528→   528→                <img src={p.images[0]} alt={p.name} className="w-full aspect-square object-cover" />
+   529→   529→                <div className="p-2"><p className="text-xs font-medium line-clamp-1">{p.name}</p><p className="font-numeric font-bold text-xs text-[var(--amber)] mt-1">{formatFCFA(p.price)}</p></div>
+   530→   530→              </button>
+   531→   531→            ))}
+   532→   532→          </div>
+   533→   533→        </div>
+   534→   534→      )}
+   535→   535→
+   536→   536→      <button className="dedco-btn dedco-btn-ghost text-[var(--terracotta)] mt-4"><AlertTriangle size={14} /> Ouvrir un litige</button>
+   537→   537→    </div>
+   538→   538→  );
+   539→   539→}
+   540→   540→
+   541→   541→// ============================================================
+   542→   542→// PAGE 7: projet-livraison — Livraison + validation
+   543→   543→// ============================================================
+   544→   544→
+   545→   545→export function ProjetLivraisonPage({ projectId }: { projectId: string }) {
+   546→   546→  const navigate = useDedcoStore((s) => s.navigate);
+   547→   547→  const [validated, setValidated] = useState(false);
+   548→   548→  const livrables = [
+   549→   549→    { id: 1, name: "Moodboard.pdf", date: "25 juin" },
+   550→   550→    { id: 2, name: "Plan d'implantation.pdf", date: "30 juin" },
+   551→   551→    { id: 3, name: "Sélection mobilier.pdf", date: "3 juillet" },
+   552→   552→    { id: 4, name: "Liste d'achats.pdf", date: "10 juillet" },
+   553→   553→  ];
+   554→   554→
+   555→   555→  if (validated) {
+   556→   556→    return (
+   557→   557→      <div className="p-8 max-w-xl mx-auto text-center">
+   558→   558→        <div className="w-20 h-20 rounded-full bg-[var(--forest-pale)] mx-auto flex items-center justify-center mb-5"><CheckCircle2 size={40} className="text-[var(--forest)]" /></div>
+   559→   559→        <h1 className="display-xl mb-3">Livraison validée !</h1>
+   560→   560→        <p className="text-sm text-[var(--text-2)] mb-6">Paiement libéré au designer.</p>
+   561→   561→        <div className="flex gap-2 justify-center">
+   562→   562→          <button onClick={() => navigate({ page: "client-projets" })} className="dedco-btn dedco-btn-primary">Mes projets</button>
+   563→   563→          <button onClick={() => navigate({ page: "marketplace" })} className="dedco-btn dedco-btn-ghost">Marketplace</button>
+   564→   564→        </div>
+   565→   565→      </div>
+   566→   566→    );
+   567→   567→  }
+   568→   568→
+   569→   569→  return (
+   570→   570→    <div className="p-6 max-w-2xl mx-auto">
+   571→   571→      <button onClick={() => navigate({ page: "projet-detail", projectId })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">← Retour</button>
+   572→   572→      <header className="mb-6"><span className="dedco-badge dedco-badge-amber mb-2">Livrables à valider</span><h1 className="display-lg">Livraison du projet</h1></header>
+   573→   573→      <div className="dedco-card p-5 mb-4">
+   574→   574→        <ul className="space-y-2">
+   575→   575→          {livrables.map((l) => (
+   576→   576→            <li key={l.id} className="flex items-center gap-3 p-3 bg-[var(--bg-warm)] rounded-md">
+   577→   577→              <div className="w-10 h-10 rounded-md bg-white flex items-center justify-center text-[var(--amber)]"><FileText size={18} /></div>
+   578→   578→              <div className="flex-1 min-w-0"><p className="text-sm font-medium truncate">{l.name}</p><p className="text-xs text-[var(--text-3)] font-numeric">{l.date}</p></div>
+   579→   579→              <button className="dedco-btn dedco-btn-ghost dedco-btn-sm"><Download size={14} /></button>
+   580→   580→            </li>
+   581→   581→          ))}
+   582→   582→        </ul>
+   583→   583→      </div>
+   584→   584→      <div className="flex gap-2">
+   585→   585→        <button className="dedco-btn dedco-btn-ghost">Demander une révision</button>
+   586→   586→        <button onClick={() => setValidated(true)} className="dedco-btn dedco-btn-primary flex-1"><Check size={16} /> Valider la livraison</button>
+   587→   587→      </div>
+   588→   588→    </div>
+   589→   589→  );
+   590→   590→}
+   591→   591→

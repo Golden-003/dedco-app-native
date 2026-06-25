@@ -1,0 +1,848 @@
+     1→     1→"use client";
+     2→     2→
+     3→     3→import { useState, useMemo } from "react";
+     4→     4→import {
+     5→     5→  Clock,
+     6→     6→  ChevronRight,
+     7→     7→  CreditCard,
+     8→     8→  FileText,
+     9→     9→  Gavel,
+    10→    10→  Image as ImageIcon,
+    11→    11→  LayoutGrid,
+    12→    12→  Package,
+    13→    13→  AlertTriangle,
+    14→    14→  CheckCircle2,
+    15→    15→  Eye,
+    16→    16→  ShieldCheck,
+    17→    17→  ArrowRight,
+    18→    18→  GitCompareArrows,
+    19→    19→  Paperclip,
+    20→    20→  Timer,
+    21→    21→} from "lucide-react";
+    22→    22→import { useDedcoStore } from "@/lib/store";
+    23→    23→import { formatFCFA } from "@/lib/dedco-data";
+    24→    24→import { ACTION_PRIORITY_ORDER } from "@/lib/dedco-types";
+    25→    25→import type {
+    26→    26→  MesProjetsItem,
+    27→    27→  MesProjetsRoute,
+    28→    28→  ArtisanBriefWithProposals,
+    29→    29→  ArtisanProposal,
+    30→    30→  DesignerPrestation,
+    31→    31→  PendingPayment,
+    32→    32→  Reclamation,
+    33→    33→} from "@/lib/dedco-types";
+    34→    34→import {
+    35→    35→  MOCK_EN_COURS,
+    36→    36→  MOCK_BRIEF_WITH_PROPOSALS,
+    37→    37→  MOCK_PRESTATIONS_DESIGNER,
+    38→    38→  MOCK_PAIEMENTS_EN_ATTENTE,
+    39→    39→  MOCK_TERMINES,
+    40→    40→  MOCK_RECLAMATIONS,
+    41→    41→  PRIORITY_CONFIG,
+    42→    42→  TYPE_LABELS,
+    43→    43→} from "@/lib/mes-projets-data";
+    44→    44→
+    45→    45→// ============================================================
+    46→    46→// HELPERS
+    47→    47→// ============================================================
+    48→    48→
+    49→    49→function navigateTo(route: MesProjetsRoute) {
+    50→    50→  const store = useDedcoStore.getState();
+    51→    51→  if (route.page === "brief-detail" && route.id) {
+    52→    52→    store.navigate({ page: "artisan-brief-recu", briefId: route.id });
+    53→    53→  } else if (route.page === "projet-detail" && route.projectId) {
+    54→    54→    store.navigate({ page: "projet-artisan-detail", projectId: route.projectId });
+    55→    55→  } else if (route.page === "projet-paiement" && route.proposalId) {
+    56→    56→    store.navigate({ page: "projet-paiement", proposalId: route.proposalId });
+    57→    57→  } else if (route.page === "payment" && route.orderId) {
+    58→    58→    store.navigate({ page: "payment", orderId: route.orderId });
+    59→    59→  } else if (route.page === "litige" && route.id) {
+    60→    60→    store.navigate({ page: "litige", id: route.id });
+    61→    61→  } else if (route.page === "order-tracking" && route.id) {
+    62→    62→    store.navigate({ page: "order-tracking", id: route.id });
+    63→    63→  } else if (route.page === "marketplace") {
+    64→    64→    store.navigate({ page: "marketplace" });
+    65→    65→  } else if (route.page === "brief") {
+    66→    66→    store.navigate({ page: "brief" });
+    67→    67→  } else {
+    68→    68→    store.navigate({ page: "home" });
+    69→    69→  }
+    70→    70→}
+    71→    71→
+    72→    72→// ============================================================
+    73→    73→// TYPE BADGE — Brief artisan / Projet artisan / etc.
+    74→    74→// ============================================================
+    75→    75→
+    76→    76→function TypeBadge({ type }: { type: MesProjetsItem["type"] }) {
+    77→    77→  const cfg = TYPE_LABELS[type];
+    78→    78→  if (!cfg) return null;
+    79→    79→  return (
+    80→    80→    <span
+    81→    81→      className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full"
+    82→    82→      style={{ color: cfg.color, backgroundColor: cfg.bg }}
+    83→    83→    >
+    84→    84→      {cfg.label}
+    85→    85→    </span>
+    86→    86→  );
+    87→    87→}
+    88→    88→
+    89→    89→// ============================================================
+    90→    90→// PRIORITY BANNER — badge + échéance + conséquence
+    91→    91→// ============================================================
+    92→    92→
+    93→    93→function PriorityBanner({
+    94→    94→  priority,
+    95→    95→  deadline,
+    96→    96→  consequence,
+    97→    97→}: {
+    98→    98→  priority: string;
+    99→    99→  deadline?: string;
+   100→   100→  consequence?: string;
+   101→   101→}) {
+   102→   102→  const cfg = PRIORITY_CONFIG[priority];
+   103→   103→  if (!cfg || !cfg.label) return null;
+   104→   104→  const isUrgent = priority === "PAYMENT_REQUIRED" || priority === "CHANGE_REQUEST_PENDING" || priority === "DELIVERY_CONFIRMATION_REQUIRED";
+   105→   105→
+   106→   106→  return (
+   107→   107→    <div className="mt-3 p-3 rounded-lg" style={{ backgroundColor: cfg.bgColor }}>
+   108→   108→      <div className="flex items-start gap-2">
+   109→   109→        <AlertTriangle size={14} style={{ color: cfg.color, flexShrink: 0, marginTop: 2 }} />
+   110→   110→        <div className="flex-1 min-w-0">
+   111→   111→          <p className="text-xs font-semibold" style={{ color: cfg.color }}>
+   112→   112→            {cfg.label}
+   113→   113→            {deadline && (
+   114→   114→              <>
+   115→   115→                {" "}avant le <span className="font-numeric">{deadline}</span>
+   116→   116→              </>
+   117→   117→            )}
+   118→   118→          </p>
+   119→   119→          {consequence && (
+   120→   120→            <p className="text-[11px] mt-1" style={{ color: "var(--text-2)" }}>
+   121→   121→              {consequence}
+   122→   122→            </p>
+   123→   123→          )}
+   124→   124→        </div>
+   125→   125→      </div>
+   126→   126→    </div>
+   127→   127→  );
+   128→   128→}
+   129→   129→
+   130→   130→// ============================================================
+   131→   131→// CARTES ONGLET "EN COURS"
+   132→   132→// ============================================================
+   133→   133→
+   134→   134→function EnCoursCard({ item }: { item: MesProjetsItem }) {
+   135→   135→  const isUrgent = item.priority === "PAYMENT_REQUIRED" || item.priority === "CHANGE_REQUEST_PENDING" || item.priority === "DELIVERY_CONFIRMATION_REQUIRED";
+   136→   136→
+   137→   137→  const actionIcon = (() => {
+   138→   138→    switch (item.priority) {
+   139→   139→      case "PAYMENT_REQUIRED": return <CreditCard size={14} />;
+   140→   140→      case "CHANGE_REQUEST_PENDING": return <GitCompareArrows size={14} />;
+   141→   141→      case "DELIVERY_CONFIRMATION_REQUIRED": return <CheckCircle2 size={14} />;
+   142→   142→      case "RESPONSE_REQUIRED": return <Eye size={14} />;
+   143→   143→      case "DESIGNER_MEETING_OR_DELIVERABLE": return <Eye size={14} />;
+   144→   144→      default: return <Eye size={14} />;
+   145→   145→    }
+   146→   146→  })();
+   147→   147→
+   148→   148→  return (
+   149→   149→    <div className="dedco-card overflow-hidden hover:shadow-md transition-shadow">
+   150→   150→      {/* Bande urgente */}
+   151→   151→      {isUrgent && <div className="h-1 w-full" style={{ backgroundColor: "var(--terracotta)" }} />}
+   152→   152→
+   153→   153→      <div className="p-4 sm:p-5">
+   154→   154→        <div className="flex gap-4">
+   155→   155→          <img src={item.image} alt={item.title} className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg object-cover flex-shrink-0" />
+   156→   156→          <div className="flex-1 min-w-0">
+   157→   157→            <div className="flex items-center gap-2 mb-1">
+   158→   158→              <TypeBadge type={item.type} />
+   159→   159→              <span className="text-[10px] font-numeric text-[var(--text-3)]">{item.id}</span>
+   160→   160→            </div>
+   161→   161→            <h3 className="font-display font-semibold text-sm sm:text-base leading-tight truncate">{item.title}</h3>
+   162→   162→            {item.partnerName && (
+   163→   163→              <div className="flex items-center gap-2 mt-1.5">
+   164→   164→                {item.partnerAvatar && <img src={item.partnerAvatar} alt={item.partnerName} className="w-5 h-5 rounded-full object-cover" />}
+   165→   165→                <span className="text-xs text-[var(--text-2)] truncate">{item.partnerName}</span>
+   166→   166→                <span className="text-xs text-[var(--text-3)]">
+   167→   167→                  {item.partnerType === "artisan" && "— Artisan"}
+   168→   168→                  {item.partnerType === "designer" && "— Designer"}
+   169→   169→                  {item.partnerType === "maison" && "— Maison deco"}
+   170→   170→                </span>
+   171→   171→              </div>
+   172→   172→            )}
+   173→   173→          </div>
+   174→   174→        </div>
+   175→   175→
+   176→   176→        {/* Ligne stats */}
+   177→   177→        <div className="flex items-center gap-4 mt-3 pt-3 border-t border-[var(--border)]">
+   178→   178→          {item.amount > 0 && (
+   179→   179→            <div>
+   180→   180→              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Montant</p>
+   181→   181→              <p className="font-numeric text-sm font-bold text-[var(--text-1)]">{formatFCFA(item.amount)}</p>
+   182→   182→            </div>
+   183→   183→          )}
+   184→   184→          {item.securedAmount !== undefined && item.securedAmount > 0 && (
+   185→   185→            <div>
+   186→   186→              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Sécurisé</p>
+   187→   187→              <p className="font-numeric text-sm font-semibold" style={{ color: "var(--forest)" }}>{formatFCFA(item.securedAmount)}</p>
+   188→   188→            </div>
+   189→   189→          )}
+   190→   190→          {item.estimatedDate && (
+   191→   191→            <div>
+   192→   192→              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Échéance</p>
+   193→   193→              <p className="font-numeric text-xs font-medium text-[var(--text-2)]">{item.estimatedDate}</p>
+   194→   194→            </div>
+   195→   195→          )}
+   196→   196→        </div>
+   197→   197→
+   198→   198→        {/* Progression + statut */}
+   199→   199→        {item.progress !== undefined && item.type !== "ARTISAN_BRIEF" && item.type !== "DESIGNER_BRIEF" && (
+   200→   200→          <div className="mt-3">
+   201→   201→            <div className="flex items-center justify-between mb-1">
+   202→   202→              <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ color: item.statusColor, backgroundColor: item.statusBgColor }}>
+   203→   203→                {item.statusLabel}
+   204→   204→              </span>
+   205→   205→              {item.progress < 100 && <span className="text-[10px] font-numeric text-[var(--text-3)]">{item.progress} %</span>}
+   206→   206→            </div>
+   207→   207→            {item.progress < 100 && (
+   208→   208→              <div className="h-1.5 bg-[var(--bg-warm)] rounded-full overflow-hidden">
+   209→   209→                <div
+   210→   210→                  className="h-full rounded-full transition-all duration-500"
+   211→   211→                  style={{
+   212→   212→                    width: `${item.progress}%`,
+   213→   213→                    backgroundColor: isUrgent ? "var(--terracotta)" : item.progress >= 80 ? "var(--forest)" : "var(--amber)",
+   214→   214→                  }}
+   215→   215→                />
+   216→   216→              </div>
+   217→   217→            )}
+   218→   218→          </div>
+   219→   219→        )}
+   220→   220→
+   221→   221→        {(item.type === "ARTISAN_BRIEF" || item.type === "DESIGNER_BRIEF") && (
+   222→   222→          <div className="mt-3">
+   223→   223→            <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ color: item.statusColor, backgroundColor: item.statusBgColor }}>
+   224→   224→              {item.statusLabel}
+   225→   225→            </span>
+   226→   226→          </div>
+   227→   227→        )}
+   228→   228→
+   229→   229→        {/* Priorité urgente */}
+   230→   230→        <PriorityBanner priority={item.priority} deadline={item.priorityDeadline} consequence={item.priorityConsequence} />
+   231→   231→
+   232→   232→        {/* Footer : MAJ + bouton action */}
+   233→   233→        <div className="flex items-center justify-between mt-3 pt-3 border-t border-[var(--border)]">
+   234→   234→          <span className="text-[11px] text-[var(--text-3)]">
+   235→   235→            <Clock size={10} className="inline mr-1" style={{ verticalAlign: "middle" }} />
+   236→   236→            MAJ <span className="font-numeric">{item.lastUpdate}</span>
+   237→   237→          </span>
+   238→   238→          <button
+   239→   239→            onClick={() => navigateTo(item.nextActionRoute)}
+   240→   240→            className="dedco-btn dedco-btn-primary dedco-btn-sm flex items-center gap-1.5"
+   241→   241→          >
+   242→   242→            {actionIcon}
+   243→   243→            {item.nextAction}
+   244→   244→          </button>
+   245→   245→        </div>
+   246→   246→      </div>
+   247→   247→    </div>
+   248→   248→  );
+   249→   249→}
+   250→   250→
+   251→   251→// ============================================================
+   252→   252→// ONGLET "A CHOISIR" — Brief avec propositions groupées
+   253→   253→// ============================================================
+   254→   254→
+   255→   255→function BriefProposalsCard({ brief }: { brief: ArtisanBriefWithProposals }) {
+   256→   256→  const navigate = useDedcoStore((s) => s.navigate);
+   257→   257→  const [expanded, setExpanded] = useState(false);
+   258→   258→
+   259→   259→  return (
+   260→   260→    <div className="dedco-card overflow-hidden hover:shadow-md transition-shadow">
+   261→   261→      <div className="p-4 sm:p-5">
+   262→   262→        {/* Header du brief */}
+   263→   263→        <div className="flex gap-4">
+   264→   264→          <img src={brief.briefImage} alt={brief.briefTitle} className="w-20 h-20 rounded-lg object-cover flex-shrink-0" />
+   265→   265→          <div className="flex-1 min-w-0">
+   266→   266→            <div className="flex items-center gap-2 mb-1">
+   267→   267→              <TypeBadge type="ARTISAN_BRIEF" />
+   268→   268→              <span className="text-[10px] font-numeric text-[var(--text-3)]">{brief.briefId}</span>
+   269→   269→            </div>
+   270→   270→            <h3 className="font-display font-semibold text-sm sm:text-base leading-tight">{brief.briefTitle}</h3>
+   271→   271→            <div className="flex items-center gap-3 mt-1.5 text-[11px] text-[var(--text-3)]">
+   272→   272→              <span>{brief.category}</span>
+   273→   273→              <span className="text-[var(--border)]">|</span>
+   274→   274→              <span>{brief.zone}</span>
+   275→   275→              <span className="text-[var(--border)]">|</span>
+   276→   276→              <span className="font-numeric">{formatFCFA(brief.budgetMin)} - {formatFCFA(brief.budgetMax)}</span>
+   277→   277→            </div>
+   278→   278→          </div>
+   279→   279→        </div>
+   280→   280→
+   281→   281→        {/* Compteur propositions */}
+   282→   282→        <div className="mt-3 p-3 rounded-lg" style={{ backgroundColor: "var(--amber-pale)" }}>
+   283→   283→          <div className="flex items-center justify-between">
+   284→   284→            <div className="flex items-center gap-2">
+   285→   285→              <Package size={14} style={{ color: "var(--amber-dark)" }} />
+   286→   286→              <span className="text-xs font-semibold" style={{ color: "var(--amber-dark)" }}>
+   287→   287→                <span className="font-numeric">{brief.proposals.length}</span> proposition{brief.proposals.length > 1 ? "s" : ""} reçue{brief.proposals.length > 1 ? "s" : ""}
+   288→   288→              </span>
+   289→   289→            </div>
+   290→   290→            <button
+   291→   291→              onClick={() => setExpanded(!expanded)}
+   292→   292→              className="dedco-btn dedco-btn-primary dedco-btn-sm flex items-center gap-1"
+   293→   293→            >
+   294→   294→              <GitCompareArrows size={14} />
+   295→   295→              Comparer les propositions
+   296→   296→            </button>
+   297→   297→          </div>
+   298→   298→        </div>
+   299→   299→
+   300→   300→        {/* Propositions dépliées */}
+   301→   301→        {expanded && (
+   302→   302→          <div className="mt-4 space-y-3">
+   303→   303→            {brief.proposals.map((prop: ArtisanProposal) => (
+   304→   304→              <div key={prop.id} className="p-4 rounded-lg border border-[var(--border)] bg-[var(--bg-card)]">
+   305→   305→                <div className="flex gap-3">
+   306→   306→                  <img src={prop.artisanAvatar} alt={prop.artisanName} className="w-12 h-12 rounded-full object-cover flex-shrink-0" />
+   307→   307→                  <div className="flex-1 min-w-0">
+   308→   308→                    <div className="flex items-center gap-2 mb-0.5">
+   309→   309→                      <h4 className="font-display font-semibold text-sm truncate">{prop.artisanName}</h4>
+   310→   310→                      {prop.artisanVerified && <ShieldCheck size={14} style={{ color: "var(--forest)", flexShrink: 0 }} />}
+   311→   311→                    </div>
+   312→   312→                    <div className="flex items-center gap-2 mb-2">
+   313→   313→                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "var(--amber-pale)", color: "var(--amber-dark)" }}>
+   314→   314→                        {prop.artisanLevel}
+   315→   315→                      </span>
+   316→   316→                      <span className="text-[11px] text-[var(--text-3)] font-numeric">{prop.deliveryTime}</span>
+   317→   317→                    </div>
+   318→   318→                  </div>
+   319→   319→                  <div className="text-right flex-shrink-0">
+   320→   320→                    <p className="font-numeric text-base font-bold" style={{ color: "var(--amber-dark)" }}>{formatFCFA(prop.price)}</p>
+   321→   321→                    <p className="text-[10px] text-[var(--text-3)]">TTC</p>
+   322→   322→                  </div>
+   323→   323→                </div>
+   324→   324→                <div className="mt-2 space-y-1.5">
+   325→   325→                  <p className="text-xs text-[var(--text-2)]">
+   326→   326→                    <span className="font-medium text-[var(--text-1)]">Matériaux :</span> {prop.materials}
+   327→   327→                  </p>
+   328→   328→                  <p className="text-xs text-[var(--text-2)]">
+   329→   329→                    <span className="font-medium text-[var(--text-1)]">Paiement :</span> {prop.paymentConditions}
+   330→   330→                  </p>
+   331→   331→                </div>
+   332→   332→                {prop.images.length > 0 && (
+   333→   333→                  <img src={prop.images[0]} alt="Exemple" className="w-full h-28 object-cover rounded-lg mt-2" />
+   334→   334→                )}
+   335→   335→                <button
+   336→   336→                  onClick={() => navigateTo({ page: "projet-paiement", proposalId: prop.id })}
+   337→   337→                  className="dedco-btn dedco-btn-primary dedco-btn-sm w-full mt-3 flex items-center justify-center gap-1.5"
+   338→   338→                >
+   339→   339→                  <CheckCircle2 size={14} />
+   340→   340→                  Choisir cette proposition
+   341→   341→                </button>
+   342→   342→              </div>
+   343→   343→            ))}
+   344→   344→          </div>
+   345→   345→        )}
+   346→   346→
+   347→   347→        {/* Footer */}
+   348→   348→        <div className="flex items-center justify-between mt-3 pt-3 border-t border-[var(--border)]">
+   349→   349→          <span className="text-[11px] text-[var(--text-3)]">
+   350→   350→            <Clock size={10} className="inline mr-1" style={{ verticalAlign: "middle" }} />
+   351→   351→            MAJ <span className="font-numeric">{brief.lastUpdate}</span>
+   352→   352→          </span>
+   353→   353→        </div>
+   354→   354→      </div>
+   355→   355→    </div>
+   356→   356→  );
+   357→   357→}
+   358→   358→
+   359→   359→// ============================================================
+   360→   360→// ONGLET "A CHOISIR" — Prestation designer
+   361→   361→// ============================================================
+   362→   362→
+   363→   363→function PrestationDesignerCard({ prestation }: { prestation: DesignerPrestation }) {
+   364→   364→  return (
+   365→   365→    <div className="dedco-card p-4 sm:p-5 hover:shadow-md transition-shadow">
+   366→   366→      <div className="flex gap-4">
+   367→   367→        <img src={prestation.designerAvatar} alt={prestation.designerName} className="w-14 h-14 rounded-full object-cover flex-shrink-0" />
+   368→   368→        <div className="flex-1 min-w-0">
+   369→   369→          <h3 className="font-display font-semibold text-sm truncate">{prestation.designerName}</h3>
+   370→   370→          <p className="text-xs text-[var(--text-2)] mt-0.5">{prestation.prestation}</p>
+   371→   371→        </div>
+   372→   372→        <div className="text-right flex-shrink-0">
+   373→   373→          <p className="font-numeric text-base font-bold" style={{ color: "var(--amber-dark)" }}>{formatFCFA(prestation.price)}</p>
+   374→   374→        </div>
+   375→   375→      </div>
+   376→   376→      <div className="mt-3 flex flex-wrap gap-1.5">
+   377→   377→        {prestation.livrables.map((l) => (
+   378→   378→          <span key={l} className="text-[10px] px-2 py-0.5 rounded-full border border-[var(--border)] text-[var(--text-2)]">{l}</span>
+   379→   379→        ))}
+   380→   380→      </div>
+   381→   381→      <div className="flex items-center gap-4 text-[11px] text-[var(--text-3)] mt-2">
+   382→   382→        <span className="font-numeric">
+   383→   383→          <FileText size={10} className="inline mr-1" style={{ verticalAlign: "middle" }} />
+   384→   384→          {prestation.revisions} révision{prestation.revisions > 1 ? "s" : ""} incluse{prestation.revisions > 1 ? "s" : ""}
+   385→   385→        </span>
+   386→   386→        <span className="font-numeric">
+   387→   387→          <Clock size={10} className="inline mr-1" style={{ verticalAlign: "middle" }} />
+   388→   388→          {prestation.deliveryTime}
+   389→   389→        </span>
+   390→   390→      </div>
+   391→   391→      <p className="text-[11px] text-[var(--text-3)] mt-1">Disponibilité : {prestation.availability}</p>
+   392→   392→      <button
+   393→   393→        onClick={() => navigateTo(prestation.nextActionRoute)}
+   394→   394→        className="dedco-btn dedco-btn-primary dedco-btn-sm w-full mt-4 flex items-center justify-center gap-1.5"
+   395→   395→      >
+   396→   396→        <CreditCard size={14} />
+   397→   397→        Réserver la prestation
+   398→   398→      </button>
+   399→   399→    </div>
+   400→   400→  );
+   401→   401→}
+   402→   402→
+   403→   403→// ============================================================
+   404→   404→// ONGLET "A CHOISIR" — Paiement en attente
+   405→   405→// ============================================================
+   406→   406→
+   407→   407→function PaiementEnAttenteCard({ paiement }: { paiement: PendingPayment }) {
+   408→   408→  return (
+   409→   409→    <div className="dedco-card overflow-hidden hover:shadow-md transition-shadow">
+   410→   410→      <div className="h-1 w-full bg-[var(--terracotta)]" />
+   411→   411→      <div className="p-4 sm:p-5">
+   412→   412→        <div className="flex gap-4">
+   413→   413→          <img src={paiement.projectImage} alt={paiement.projectTitle} className="w-16 h-16 rounded-lg object-cover flex-shrink-0" />
+   414→   414→          <div className="flex-1 min-w-0">
+   415→   415→            <h3 className="font-display font-semibold text-sm truncate">{paiement.projectTitle}</h3>
+   416→   416→            <p className="text-[11px] text-[var(--text-3)] mt-0.5 font-numeric">
+   417→   417→              <Timer size={10} className="inline mr-1" style={{ verticalAlign: "middle" }} />
+   418→   418→              Échéance : {paiement.dueDate}
+   419→   419→            </p>
+   420→   420→            <p className="text-[11px] text-[var(--text-3)] mt-0.5">{paiement.paymentMethod}</p>
+   421→   421→          </div>
+   422→   422→        </div>
+   423→   423→        <div className="flex items-center justify-between mt-4 pt-3 border-t border-[var(--border)]">
+   424→   424→          <p className="font-numeric text-lg font-bold" style={{ color: "var(--terracotta)" }}>{formatFCFA(paiement.amount)}</p>
+   425→   425→          <button
+   426→   426→            onClick={() => navigateTo(paiement.nextActionRoute)}
+   427→   427→            className="dedco-btn dedco-btn-terracotta dedco-btn-sm flex items-center gap-1.5"
+   428→   428→          >
+   429→   429→            <CreditCard size={14} />
+   430→   430→            Payer maintenant
+   431→   431→          </button>
+   432→   432→        </div>
+   433→   433→      </div>
+   434→   434→    </div>
+   435→   435→  );
+   436→   436→}
+   437→   437→
+   438→   438→// ============================================================
+   439→   439→// ONGLET "TERMINÉS" — carte projet
+   440→   440→// ============================================================
+   441→   441→
+   442→   442→function TermineCard({ item }: { item: MesProjetsItem }) {
+   443→   443→  return (
+   444→   444→    <div className="dedco-card overflow-hidden hover:shadow-md transition-shadow">
+   445→   445→      <div className="h-1 w-full" style={{ backgroundColor: item.isCancelled ? "var(--text-3)" : "var(--forest)" }} />
+   446→   446→      <div className="p-4 sm:p-5">
+   447→   447→        <div className="flex gap-4">
+   448→   448→          <img src={item.image} alt={item.title} className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg object-cover flex-shrink-0" />
+   449→   449→          <div className="flex-1 min-w-0">
+   450→   450→            <div className="flex items-center gap-2 mb-1">
+   451→   451→              <TypeBadge type={item.type} />
+   452→   452→              <span className="text-[10px] font-numeric text-[var(--text-3)]">{item.id}</span>
+   453→   453→            </div>
+   454→   454→            <h3 className="font-display font-semibold text-sm sm:text-base leading-tight truncate">{item.title}</h3>
+   455→   455→            {item.partnerName && (
+   456→   456→              <div className="flex items-center gap-2 mt-1.5">
+   457→   457→                {item.partnerAvatar && <img src={item.partnerAvatar} alt={item.partnerName} className="w-4 h-4 rounded-full object-cover" />}
+   458→   458→                <span className="text-xs text-[var(--text-2)]">{item.partnerName}</span>
+   459→   459→              </div>
+   460→   460→            )}
+   461→   461→          </div>
+   462→   462→        </div>
+   463→   463→        <div className="flex items-center gap-4 mt-3 pt-3 border-t border-[var(--border)]">
+   464→   464→          <div>
+   465→   465→            <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Montant</p>
+   466→   466→            <p className="font-numeric text-sm font-bold text-[var(--text-1)]">{formatFCFA(item.amount)}</p>
+   467→   467→          </div>
+   468→   468→          {item.estimatedDate && (
+   469→   469→            <div>
+   470→   470→              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Clôture</p>
+   471→   471→              <p className="font-numeric text-xs font-medium text-[var(--text-2)]">{item.estimatedDate}</p>
+   472→   472→            </div>
+   473→   473→          )}
+   474→   474→          <div className="flex-1" />
+   475→   475→          <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ color: item.statusColor, backgroundColor: item.statusBgColor }}>
+   476→   476→            {item.statusLabel}
+   477→   477→          </span>
+   478→   478→        </div>
+   479→   479→        <div className="flex gap-2 mt-4 pt-3 border-t border-[var(--border)]">
+   480→   480→          <button onClick={() => navigateTo(item.nextActionRoute)} className="dedco-btn dedco-btn-ghost dedco-btn-sm flex items-center gap-1.5">
+   481→   481→            <Eye size={14} />
+   482→   482→            {item.isCancelled ? "Dupliquer la commande" : "Voir le projet"}
+   483→   483→          </button>
+   484→   484→          {!item.isCancelled && (
+   485→   485→            <button onClick={() => navigateTo({ page: "brief" })} className="dedco-btn dedco-btn-secondary dedco-btn-sm flex items-center gap-1.5">
+   486→   486→              <ArrowRight size={14} />
+   487→   487→              Refaire une demande similaire
+   488→   488→            </button>
+   489→   489→          )}
+   490→   490→        </div>
+   491→   491→      </div>
+   492→   492→    </div>
+   493→   493→  );
+   494→   494→}
+   495→   495→
+   496→   496→// ============================================================
+   497→   497→// ONGLET "RÉCLAMATIONS" — carte réclamation
+   498→   498→// ============================================================
+   499→   499→
+   500→   500→function ReclamationCard({ rec }: { rec: Reclamation }) {
+   501→   501→  return (
+   502→   502→    <div className="dedco-card overflow-hidden hover:shadow-md transition-shadow">
+   503→   503→      <div className="h-1 w-full bg-[var(--terracotta)]" />
+   504→   504→      <div className="p-4 sm:p-5">
+   505→   505→        <div className="flex gap-4">
+   506→   506→          <img src={rec.projectImage} alt={rec.projectTitle} className="w-20 h-20 rounded-lg object-cover flex-shrink-0" />
+   507→   507→          <div className="flex-1 min-w-0">
+   508→   508→            <h3 className="font-display font-semibold text-sm leading-tight truncate">{rec.projectTitle}</h3>
+   509→   509→            <p className="text-xs text-[var(--text-2)] mt-1">{rec.partnerName}</p>
+   510→   510→            <p className="text-xs text-[var(--text-3)] mt-0.5 font-numeric">
+   511→   511→              <Gavel size={10} className="inline mr-1" style={{ verticalAlign: "middle" }} />
+   512→   512→              Ouvert le {rec.openedDate}
+   513→   513→            </p>
+   514→   514→          </div>
+   515→   515→        </div>
+   516→   516→        <div className="mt-3 p-3 rounded-lg" style={{ backgroundColor: "var(--bg-warm)" }}>
+   517→   517→          <p className="text-xs font-medium text-[var(--text-1)] mb-1">Motif</p>
+   518→   518→          <p className="text-sm text-[var(--text-2)]">{rec.motif}</p>
+   519→   519→        </div>
+   520→   520→        <div className="flex items-center gap-4 mt-3 pt-3 border-t border-[var(--border)]">
+   521→   521→          <div>
+   522→   522→            <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Montant</p>
+   523→   523→            <p className="font-numeric text-sm font-bold" style={{ color: "var(--terracotta)" }}>{formatFCFA(rec.amount)}</p>
+   524→   524→          </div>
+   525→   525→          <div className="flex items-center gap-1.5">
+   526→   526→            <Paperclip size={12} className="text-[var(--text-3)]" />
+   527→   527→            <span className="font-numeric text-xs text-[var(--text-3)]">{rec.attachments} pièce{rec.attachments > 1 ? "s" : ""}</span>
+   528→   528→          </div>
+   529→   529→          <div className="flex-1" />
+   530→   530→          <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ color: rec.statusColor, backgroundColor: rec.statusBgColor }}>
+   531→   531→            {rec.statusLabel}
+   532→   532→          </span>
+   533→   533→        </div>
+   534→   534→        {rec.lastAction && <p className="text-[11px] text-[var(--text-3)] mt-2 italic">Dernière action : {rec.lastAction}</p>}
+   535→   535→        {rec.dedcoDecision && (
+   536→   536→          <div className="mt-2 p-2 rounded-lg border" style={{ borderColor: "var(--forest)", backgroundColor: "var(--forest-pale)" }}>
+   537→   537→            <p className="text-xs font-medium" style={{ color: "var(--forest)" }}>Décision Dedco : {rec.dedcoDecision}</p>
+   538→   538→          </div>
+   539→   539→        )}
+   540→   540→        <div className="flex gap-2 mt-4 pt-3 border-t border-[var(--border)]">
+   541→   541→          <button onClick={() => navigateTo(rec.nextActionRoute)} className="dedco-btn dedco-btn-terracotta dedco-btn-sm flex items-center gap-1.5">
+   542→   542→            <Eye size={14} />
+   543→   543→            Voir le dossier
+   544→   544→          </button>
+   545→   545→        </div>
+   546→   546→      </div>
+   547→   547→    </div>
+   548→   548→  );
+   549→   549→}
+   550→   550→
+   551→   551→// ============================================================
+   552→   552→// SECTION HEADER
+   553→   553→// ============================================================
+   554→   554→
+   555→   555→function SectionHeader({ icon: Icon, title, count, description }: { icon: React.ElementType; title: string; count: number; description?: string }) {
+   556→   556→  return (
+   557→   557→    <div className="flex items-center gap-3 mb-4">
+   558→   558→      <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: "var(--amber-pale)" }}>
+   559→   559→        <Icon size={16} style={{ color: "var(--amber-dark)" }} />
+   560→   560→      </div>
+   561→   561→      <div className="min-w-0">
+   562→   562→        <div className="flex items-center gap-2">
+   563→   563→          <h2 className="font-display font-semibold text-base">{title}</h2>
+   564→   564→          <span className="font-numeric text-xs font-bold px-2 py-0.5 rounded-full" style={{ backgroundColor: "var(--bg-warm)", color: "var(--text-2)" }}>{count}</span>
+   565→   565→        </div>
+   566→   566→        {description && <p className="text-xs text-[var(--text-3)] mt-0.5">{description}</p>}
+   567→   567→      </div>
+   568→   568→    </div>
+   569→   569→  );
+   570→   570→}
+   571→   571→
+   572→   572→// ============================================================
+   573→   573→// EMPTY STATE
+   574→   574→// ============================================================
+   575→   575→
+   576→   576→function EmptyState({ title, description, actionLabel, onAction }: { title: string; description: string; actionLabel?: string; onAction?: () => void }) {
+   577→   577→  const navigate = useDedcoStore((s) => s.navigate);
+   578→   578→  return (
+   579→   579→    <div className="dedco-card p-10 sm:p-14 text-center">
+   580→   580→      <div className="w-14 h-14 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: "var(--bg-warm)" }}>
+   581→   581→        <LayoutGrid size={24} className="text-[var(--text-3)]" />
+   582→   582→      </div>
+   583→   583→      <p className="font-display font-semibold text-base mb-1">{title}</p>
+   584→   584→      <p className="text-sm text-[var(--text-2)] mb-5 max-w-sm mx-auto">{description}</p>
+   585→   585→      {actionLabel && (
+   586→   586→        <button onClick={onAction || (() => navigate({ page: "marketplace" }))} className="dedco-btn dedco-btn-primary dedco-btn-sm">
+   587→   587→          {actionLabel}
+   588→   588→        </button>
+   589→   589→      )}
+   590→   590→    </div>
+   591→   591→  );
+   592→   592→}
+   593→   593→
+   594→   594→// ============================================================
+   595→   595→// ONGLET : EN COURS
+   596→   596→// ============================================================
+   597→   597→
+   598→   598→function TabEnCours() {
+   599→   599→  const sorted = useMemo(
+   600→   600→    () => [...MOCK_EN_COURS].sort((a, b) => (ACTION_PRIORITY_ORDER[a.priority] ?? 8) - (ACTION_PRIORITY_ORDER[b.priority] ?? 8)),
+   601→   601→    [],
+   602→   602→  );
+   603→   603→  const urgentCount = sorted.filter((i) => ACTION_PRIORITY_ORDER[i.priority] <= 3).length;
+   604→   604→
+   605→   605→  return (
+   606→   606→    <div>
+   607→   607→      {urgentCount > 0 && (
+   608→   608→        <div className="mb-5 p-3 rounded-lg flex items-center gap-2" style={{ backgroundColor: "var(--terracotta-pale)" }}>
+   609→   609→          <AlertTriangle size={16} style={{ color: "var(--terracotta)" }} />
+   610→   610→          <p className="text-xs font-medium" style={{ color: "var(--terracotta)" }}>
+   611→   611→            <span className="font-numeric">{urgentCount}</span> action{urgentCount > 1 ? "s" : ""} urgente{urgentCount > 1 ? "s" : ""} en attente
+   612→   612→          </p>
+   613→   613→        </div>
+   614→   614→      )}
+   615→   615→      <div className="space-y-3">
+   616→   616→        {sorted.map((item) => <EnCoursCard key={item.id} item={item} />)}
+   617→   617→      </div>
+   618→   618→    </div>
+   619→   619→  );
+   620→   620→}
+   621→   621→
+   622→   622→// ============================================================
+   623→   623→// ONGLET : A CHOISIR
+   624→   624→// ============================================================
+   625→   625→
+   626→   626→function TabAChoisir() {
+   627→   627→  return (
+   628→   628→    <div className="space-y-6">
+   629→   629→      {/* Propositions artisan — regroupées sous 1 brief */}
+   630→   630→      <section>
+   631→   631→        <SectionHeader icon={Package} title="Briefs avec propositions" count={1} description="Comparez les propositions et choisissez un artisan" />
+   632→   632→        <BriefProposalsCard brief={MOCK_BRIEF_WITH_PROPOSALS} />
+   633→   633→      </section>
+   634→   634→
+   635→   635→      {/* Prestations designer */}
+   636→   636→      {MOCK_PRESTATIONS_DESIGNER.length > 0 && (
+   637→   637→        <section>
+   638→   638→          <SectionHeader icon={LayoutGrid} title="Prestations designer acceptées" count={MOCK_PRESTATIONS_DESIGNER.length} description="Un designer a accepté — réservez la prestation" />
+   639→   639→          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+   640→   640→            {MOCK_PRESTATIONS_DESIGNER.map((p) => <PrestationDesignerCard key={p.id} prestation={p} />)}
+   641→   641→          </div>
+   642→   642→        </section>
+   643→   643→      )}
+   644→   644→
+   645→   645→      {/* Paiements en attente */}
+   646→   646→      {MOCK_PAIEMENTS_EN_ATTENTE.length > 0 && (
+   647→   647→        <section>
+   648→   648→          <SectionHeader icon={CreditCard} title="Paiements en attente" count={MOCK_PAIEMENTS_EN_ATTENTE.length} description="Finalisez vos paiements pour démarrer" />
+   649→   649→          <div className="space-y-3 max-w-xl">
+   650→   650→            {MOCK_PAIEMENTS_EN_ATTENTE.map((p) => <PaiementEnAttenteCard key={p.id} paiement={p} />)}
+   651→   651→          </div>
+   652→   652→        </section>
+   653→   653→      )}
+   654→   654→    </div>
+   655→   655→  );
+   656→   656→}
+   657→   657→
+   658→   658→// ============================================================
+   659→   659→// ONGLET : TERMINÉS — avec sous-filtre
+   660→   660→// ============================================================
+   661→   661→
+   662→   662→type TermineFilter = "tous" | "termines" | "annules";
+   663→   663→
+   664→   664→function TabTermines() {
+   665→   665→  const [filter, setFilter] = useState<TermineFilter>("tous");
+   666→   666→
+   667→   667→  const filtered = useMemo(() => {
+   668→   668→    switch (filter) {
+   669→   669→      case "termines": return MOCK_TERMINES.filter((i) => !i.isCancelled);
+   670→   670→      case "annules": return MOCK_TERMINES.filter((i) => i.isCancelled);
+   671→   671→      default: return MOCK_TERMINES;
+   672→   672→    }
+   673→   673→  }, [filter]);
+   674→   674→
+   675→   675→  const FILTERS: { key: TermineFilter; label: string }[] = [
+   676→   676→    { key: "tous", label: `Tous (${MOCK_TERMINES.length})` },
+   677→   677→    { key: "termines", label: `Terminés (${MOCK_TERMINES.filter((i) => !i.isCancelled).length})` },
+   678→   678→    { key: "annules", label: `Annulés / expirés (${MOCK_TERMINES.filter((i) => i.isCancelled).length})` },
+   679→   679→  ];
+   680→   680→
+   681→   681→  return (
+   682→   682→    <div>
+   683→   683→      <div className="flex gap-2 mb-5 overflow-x-auto dedco-hide-scroll -mx-4 px-4 sm:mx-0 sm:px-0">
+   684→   684→        {FILTERS.map((f) => (
+   685→   685→          <button
+   686→   686→            key={f.key}
+   687→   687→            onClick={() => setFilter(f.key)}
+   688→   688→            className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all cursor-pointer ${
+   689→   689→              filter === f.key
+   690→   690→                ? "bg-[var(--amber)] text-white"
+   691→   691→                : "bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-2)] hover:bg-[var(--bg-warm)]"
+   692→   692→            }`}
+   693→   693→          >
+   694→   694→            {f.label}
+   695→   695→          </button>
+   696→   696→        ))}
+   697→   697→      </div>
+   698→   698→      {filtered.length === 0 ? (
+   699→   699→        <EmptyState title="Aucun élément" description="Aucun projet ne correspond à ce filtre." />
+   700→   700→      ) : (
+   701→   701→        <div className="space-y-3">
+   702→   702→          {filtered.map((item) => <TermineCard key={item.id} item={item} />)}
+   703→   703→        </div>
+   704→   704→      )}
+   705→   705→    </div>
+   706→   706→  );
+   707→   707→}
+   708→   708→
+   709→   709→// ============================================================
+   710→   710→// ONGLET : RÉCLAMATIONS
+   711→   711→// ============================================================
+   712→   712→
+   713→   713→function TabReclamations() {
+   714→   714→  return (
+   715→   715→    <div>
+   716→   716→      {MOCK_RECLAMATIONS.length === 0 ? (
+   717→   717→        <EmptyState title="Aucune réclamation ouverte" description="Aucun litige en cours. En cas de problème, ouvrez une réclamation depuis la page du projet concerné." />
+   718→   718→      ) : (
+   719→   719→        <div className="space-y-3">
+   720→   720→          {MOCK_RECLAMATIONS.map((rec) => <ReclamationCard key={rec.id} rec={rec} />)}
+   721→   721→        </div>
+   722→   722→      )}
+   723→   723→    </div>
+   724→   724→  );
+   725→   725→}
+   726→   726→
+   727→   727→// ============================================================
+   728→   728→// STATS HEADER
+   729→   729→// ============================================================
+   730→   730→
+   731→   731→function StatsHeader() {
+   732→   732→  const totalSuivi = MOCK_EN_COURS.length
+   733→   733→    + MOCK_BRIEF_WITH_PROPOSALS.proposals.length
+   734→   734→    + MOCK_PRESTATIONS_DESIGNER.length
+   735→   735→    + MOCK_PAIEMENTS_EN_ATTENTE.length
+   736→   736→    + MOCK_TERMINES.length
+   737→   737→    + MOCK_RECLAMATIONS.length;
+   738→   738→
+   739→   739→  const actionsEnCours = MOCK_EN_COURS.filter((i) => ACTION_PRIORITY_ORDER[i.priority] <= 3).length;
+   740→   740→  const decisionsAPrendre = MOCK_BRIEF_WITH_PROPOSALS.proposals.length
+   741→   741→    + MOCK_PRESTATIONS_DESIGNER.length
+   742→   742→    + MOCK_PAIEMENTS_EN_ATTENTE.length;
+   743→   743→  const reclamationsOuvertes = MOCK_RECLAMATIONS.length;
+   744→   744→
+   745→   745→  return (
+   746→   746→    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+   747→   747→      {[
+   748→   748→        { label: "Éléments suivis", value: totalSuivi, color: "var(--text-1)" },
+   749→   749→        { label: "Actions en cours", value: actionsEnCours, color: "var(--terracotta)" },
+   750→   750→        { label: "Décisions à prendre", value: decisionsAPrendre, color: "var(--amber-dark)" },
+   751→   751→        { label: "Réclamations ouvertes", value: reclamationsOuvertes, color: reclamationsOuvertes > 0 ? "var(--terracotta)" : "var(--forest)" },
+   752→   752→      ].map((s) => (
+   753→   753→        <div key={s.label} className="dedco-card p-3 sm:p-4 text-center">
+   754→   754→          <p className="font-numeric text-xl sm:text-2xl font-bold" style={{ color: s.color }}>{s.value}</p>
+   755→   755→          <p className="text-[11px] text-[var(--text-3)] mt-0.5">{s.label}</p>
+   756→   756→        </div>
+   757→   757→      ))}
+   758→   758→    </div>
+   759→   759→  );
+   760→   760→}
+   761→   761→
+   762→   762→// ============================================================
+   763→   763→// PAGE PRINCIPALE — MES PROJETS
+   764→   764→// ============================================================
+   765→   765→
+   766→   766→type TabKey = "en_cours" | "a_choisir" | "termines" | "reclamations";
+   767→   767→
+   768→   768→const TABS: { key: TabKey; label: string; icon: React.ElementType }[] = [
+   769→   769→  { key: "en_cours", label: "En cours", icon: Clock },
+   770→   770→  { key: "a_choisir", label: "À choisir", icon: GitCompareArrows },
+   771→   771→  { key: "termines", label: "Terminés", icon: CheckCircle2 },
+   772→   772→  { key: "reclamations", label: "Réclamations", icon: Gavel },
+   773→   773→];
+   774→   774→
+   775→   775→function getTabCount(key: TabKey): number {
+   776→   776→  switch (key) {
+   777→   777→    case "en_cours": return MOCK_EN_COURS.length;
+   778→   778→    case "a_choisir": return MOCK_BRIEF_WITH_PROPOSALS.proposals.length + MOCK_PRESTATIONS_DESIGNER.length + MOCK_PAIEMENTS_EN_ATTENTE.length;
+   779→   779→    case "termines": return MOCK_TERMINES.length;
+   780→   780→    case "reclamations": return MOCK_RECLAMATIONS.length;
+   781→   781→  }
+   782→   782→}
+   783→   783→
+   784→   784→export function MesProjetsPage() {
+   785→   785→  const [activeTab, setActiveTab] = useState<TabKey>("en_cours");
+   786→   786→  const navigate = useDedcoStore((s) => s.navigate);
+   787→   787→
+   788→   788→  return (
+   789→   789→    <div className="min-h-screen" style={{ backgroundColor: "var(--bg-cream)" }}>
+   790→   790→      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+   791→   791→        {/* Header */}
+   792→   792→        <header className="mb-6">
+   793→   793→          <div className="flex items-center gap-3 mb-1">
+   794→   794→            <button onClick={() => navigate({ page: "home" })} className="p-1.5 rounded-lg hover:bg-[var(--bg-warm)] transition-colors" aria-label="Retour">
+   795→   795→              <ChevronRight size={18} className="text-[var(--text-2)] rotate-180" />
+   796→   796→            </button>
+   797→   797→            <h1 className="display-lg">Mes projets</h1>
+   798→   798→          </div>
+   799→   799→          <p className="text-sm text-[var(--text-2)] ml-10">Suivez vos briefs, projets, commandes et réclamations en un seul endroit.</p>
+   800→   800→        </header>
+   801→   801→
+   802→   802→        {/* Stats */}
+   803→   803→        <StatsHeader />
+   804→   804→
+   805→   805→        {/* Tabs */}
+   806→   806→        <div className="mb-6 overflow-x-auto dedco-hide-scroll -mx-4 px-4 sm:mx-0 sm:px-0">
+   807→   807→          <div className="flex gap-1 p-1 rounded-xl bg-[var(--bg-card)] border border-[var(--border)] min-w-max">
+   808→   808→            {TABS.map((tab) => {
+   809→   809→              const Icon = tab.icon;
+   810→   810→              const isActive = activeTab === tab.key;
+   811→   811→              const count = getTabCount(tab.key);
+   812→   812→              const isReclamation = tab.key === "reclamations" && MOCK_RECLAMATIONS.length > 0;
+   813→   813→
+   814→   814→              return (
+   815→   815→                <button
+   816→   816→                  key={tab.key}
+   817→   817→                  onClick={() => setActiveTab(tab.key)}
+   818→   818→                  className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap cursor-pointer ${
+   819→   819→                    isActive
+   820→   820→                      ? "bg-[var(--amber)] text-white shadow-sm"
+   821→   821→                      : "text-[var(--text-2)] hover:bg-[var(--bg-warm)] hover:text-[var(--text-1)]"
+   822→   822→                  }`}
+   823→   823→                >
+   824→   824→                  <Icon size={16} />
+   825→   825→                  <span>{tab.label}</span>
+   826→   826→                  <span
+   827→   827→                    className={`font-numeric text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+   828→   828→                      isActive ? "bg-white/20 text-white" : "bg-[var(--bg-warm)] text-[var(--text-3)]"
+   829→   829→                    }`}
+   830→   830→                    style={!isActive && isReclamation ? { backgroundColor: "var(--terracotta)", color: "white" } : undefined}
+   831→   831→                  >
+   832→   832→                    {count}
+   833→   833→                  </span>
+   834→   834→                </button>
+   835→   835→              );
+   836→   836→            })}
+   837→   837→          </div>
+   838→   838→        </div>
+   839→   839→
+   840→   840→        {/* Content */}
+   841→   841→        {activeTab === "en_cours" && <TabEnCours />}
+   842→   842→        {activeTab === "a_choisir" && <TabAChoisir />}
+   843→   843→        {activeTab === "termines" && <TabTermines />}
+   844→   844→        {activeTab === "reclamations" && <TabReclamations />}
+   845→   845→      </div>
+   846→   846→    </div>
+   847→   847→  );
+   848→   848→}
