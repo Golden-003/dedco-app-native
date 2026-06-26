@@ -111,10 +111,10 @@ export function AdminProductsPage() {
               <span className="text-xs text-[var(--text-3)] font-numeric">
                 {selected.size} sélectionné{selected.size > 1 ? "s" : ""}
               </span>
-              <button className="dedco-btn dedco-btn-sm dedco-btn-forest gap-1">
+              <button onClick={() => showToast("Action effectuée.")} className="dedco-btn dedco-btn-sm dedco-btn-forest gap-1">
                 <Check size={14} /> Approuver
               </button>
-              <button className="dedco-btn dedco-btn-sm dedco-btn-terracotta gap-1">
+              <button onClick={() => showToast("Action effectuée.")} className="dedco-btn dedco-btn-sm dedco-btn-terracotta gap-1">
                 <X size={14} /> Rejeter
               </button>
             </div>
@@ -265,13 +265,13 @@ export function AdminProductsPage() {
                         <div className="flex items-center justify-end gap-1">
                           {product.status === "en_attente" && (
                             <>
-                              <button
+                              <button onClick={() => showToast("Approuver.")}
                                 title="Approuver"
                                 className="p-1.5 rounded-md hover:bg-[var(--forest-pale)] text-[var(--text-3)] hover:text-[var(--forest)] transition-colors cursor-pointer"
                               >
                                 <Check size={15} />
                               </button>
-                              <button
+                              <button onClick={() => showToast("Rejeter.")}
                                 title="Rejeter"
                                 className="p-1.5 rounded-md hover:bg-[var(--terracotta-pale)] text-[var(--text-3)] hover:text-[var(--terracotta)] transition-colors cursor-pointer"
                               >
@@ -279,7 +279,7 @@ export function AdminProductsPage() {
                               </button>
                             </>
                           )}
-                          <button
+                          <button onClick={() => showToast("Modifier.")}
                             title="Modifier"
                             className="p-1.5 rounded-md hover:bg-[var(--bg-warm)] text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors cursor-pointer"
                           >

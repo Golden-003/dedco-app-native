@@ -351,14 +351,14 @@ export function AdminUsersPage() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-end gap-1">
-                        <button
+                        <button onClick={() => navigate({ page: "client-projets" })}
                           title="Voir"
                           className="p-1.5 rounded-md hover:bg-[var(--bg-warm)] text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors cursor-pointer"
                         >
                           <Eye size={15} />
                         </button>
                         {!user.kycVerified && (
-                          <button
+                          <button onClick={() => showToast("Vérification KYC déclenchée.")}
                             title="Vérifier KYC"
                             className="p-1.5 rounded-md hover:bg-[var(--forest-pale)] text-[var(--text-3)] hover:text-[var(--forest)] transition-colors cursor-pointer"
                           >
@@ -366,7 +366,7 @@ export function AdminUsersPage() {
                           </button>
                         )}
                         {user.status === "actif" && (
-                          <button
+                          <button onClick={() => showToast("Suspendre.")}
                             title="Suspendre"
                             className="p-1.5 rounded-md hover:bg-[var(--terracotta-pale)] text-[var(--text-3)] hover:text-[var(--terracotta)] transition-colors cursor-pointer"
                           >

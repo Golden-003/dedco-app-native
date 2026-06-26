@@ -111,7 +111,7 @@ export function AdminContentPage() {
               transition={{ duration: 0.2 }}
             >
               <div className="flex justify-end mb-4">
-                <button className="dedco-btn dedco-btn-primary dedco-btn-sm gap-1.5">
+                <button onClick={() => showToast("Action effectuée.")} className="dedco-btn dedco-btn-primary dedco-btn-sm gap-1.5">
                   <Plus size={15} />
                   Créer un article
                 </button>
@@ -179,13 +179,13 @@ export function AdminContentPage() {
                             </td>
                             <td className="px-4 py-3">
                               <div className="flex items-center justify-end gap-1">
-                                <button
+                                <button onClick={() => navigate({ page: "client-projets" })}
                                   title="Voir"
                                   className="p-1.5 rounded-md hover:bg-[var(--bg-warm)] text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors cursor-pointer"
                                 >
                                   <Eye size={15} />
                                 </button>
-                                <button
+                                <button onClick={() => showToast("Modifier.")}
                                   title="Modifier"
                                   className="p-1.5 rounded-md hover:bg-[var(--bg-warm)] text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors cursor-pointer"
                                 >
@@ -213,7 +213,7 @@ export function AdminContentPage() {
               transition={{ duration: 0.2 }}
             >
               <div className="flex justify-end mb-4">
-                <button className="dedco-btn dedco-btn-primary dedco-btn-sm gap-1.5">
+                <button onClick={() => showToast("Action effectuée.")} className="dedco-btn dedco-btn-primary dedco-btn-sm gap-1.5">
                   <Plus size={15} />
                   Nouveau moodboard
                 </button>
@@ -279,13 +279,13 @@ export function AdminContentPage() {
                       <span className="font-numeric">{scene.saves} sauvegardes</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <button
+                      <button onClick={() => showToast("Modifier.")}
                         title="Modifier"
                         className="p-1.5 rounded-md hover:bg-[var(--bg-warm)] text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors cursor-pointer"
                       >
                         <Pencil size={15} />
                       </button>
-                      <button
+                      <button onClick={() => showToast("Supprimer.")}
                         title="Supprimer"
                         className="p-1.5 rounded-md hover:bg-[var(--terracotta-pale)] text-[var(--text-3)] hover:text-[var(--terracotta)] transition-colors cursor-pointer"
                       >
@@ -308,7 +308,7 @@ export function AdminContentPage() {
               transition={{ duration: 0.2 }}
             >
               <div className="flex justify-end mb-4">
-                <button className="dedco-btn dedco-btn-primary dedco-btn-sm gap-1.5">
+                <button onClick={() => showToast("Action effectuée.")} className="dedco-btn dedco-btn-primary dedco-btn-sm gap-1.5">
                   <Plus size={15} />
                   Ajouter une bannière
                 </button>
@@ -347,13 +347,13 @@ export function AdminContentPage() {
                           >
                             {banner.active ? "Active" : "Inactive"}
                           </span>
-                          <button
+                          <button onClick={() => showToast("Modifier.")}
                             title="Modifier"
                             className="p-1.5 rounded-md hover:bg-[var(--bg-warm)] text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors cursor-pointer"
                           >
                             <Pencil size={15} />
                           </button>
-                          <button
+                          <button onClick={() => showToast("Supprimer.")}
                             title="Supprimer"
                             className="p-1.5 rounded-md hover:bg-[var(--terracotta-pale)] text-[var(--text-3)] hover:text-[var(--terracotta)] transition-colors cursor-pointer"
                           >

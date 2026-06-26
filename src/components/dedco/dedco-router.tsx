@@ -29,6 +29,9 @@ import { KYCPage } from "@/components/dedco/pages/kyc-page";
 import { BriefListPage } from "@/components/dedco/pages/brief-list-page";
 import { BriefCreatePage } from "@/components/dedco/pages/brief-create-page";
 import { BriefPage } from "@/components/dedco/brief-page";
+import { ProjetArtisanDetailPage } from "@/components/dedco/pages/projet-artisan-detail";
+import { ProjetDesignerDetailPage } from "@/components/dedco/pages/projet-designer-detail";
+import { ProjetPaiementArtisanPage } from "@/components/dedco/pages/projet-paiement-artisan";
 import {
   OrderConfirmationPage,
   InvoicePage,
@@ -94,11 +97,11 @@ import {
   DesignerWalletPage,
   DesignerPortfolioPage,
   DesignerAbonnementPage,
-  ClientProjetsPage,
   BriefDesignerPage,
   AvisLivraisonPage,
   PlansTarifsPage,
 } from "@/components/dedco/pages/client-and-designer-pages";
+import { MesProjetsPage } from "@/components/dedco/pages/mes-projets-page";
 // Workflow designer (version simplifiée)
 import {
   DesignerProjetAttentePage,
@@ -460,7 +463,7 @@ export function DedcoRouter() {
 
       // BLOC 6 — Client pages
       case "client-projets":
-        return <ClientProjetsPage />;
+        return <MesProjetsPage />;
 
       case "brief-designer":
         return <BriefDesignerPage designerId={route.designerId} />;
@@ -489,8 +492,20 @@ export function DedcoRouter() {
       case "projet-paiement":
         return <ProjetPaiementPage proposalId={route.proposalId} />;
 
+      case "projet-paiement-artisan":
+        return <ProjetPaiementArtisanPage proposalId={route.proposalId} />;
+
       case "projet-detail":
-        return <ProjetDetailPage projectId={route.projectId} />;
+        // Routing intelligent : PD- → designer, PA- → artisan
+        return route.projectId.startsWith("PD-")
+          ? <ProjetDesignerDetailPage projectId={route.projectId} />
+          : <ProjetArtisanDetailPage projectId={route.projectId} />;
+
+      case "projet-artisan-detail":
+        return <ProjetArtisanDetailPage projectId={route.projectId} />;
+
+      case "projet-designer-detail":
+        return <ProjetDesignerDetailPage projectId={route.projectId} />;
 
       case "projet-livraison":
         return <ProjetLivraisonPage projectId={route.projectId} />;

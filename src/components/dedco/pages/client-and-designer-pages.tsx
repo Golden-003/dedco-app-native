@@ -78,7 +78,7 @@ export function DesignerWalletPage() {
             {showBalance ? <EyeOff size={16} /> : <Eye size={16} />}
           </button>
         </div>
-        <button className="dedco-btn dedco-btn-primary w-full sm:w-auto">
+        <button onClick={() => showToast("Redirection vers le retrait Mobile Money.")} className="dedco-btn dedco-btn-primary w-full sm:w-auto">
           <ArrowDownLeft size={16} /> Retirer mes fonds
         </button>
       </div>
@@ -336,7 +336,7 @@ export function DesignerPortfolioPage() {
                   ))}
                 </div>
               </div>
-              <button className="dedco-btn dedco-btn-primary w-full">Publier le projet</button>
+              <button onClick={() => navigate({ page: "home" })} className="dedco-btn dedco-btn-primary w-full">Publier le projet</button>
             </div>
           </div>
         </div>
@@ -399,7 +399,7 @@ export function DesignerAbonnementPage() {
                 </li>
               ))}
             </ul>
-            <button
+            <button onClick={() => navigate({ page: "home" })}
               className={`dedco-btn w-full ${plan.current ? "dedco-btn-ghost" : "dedco-btn-primary"}`}
               disabled={plan.current}
             >
@@ -444,6 +444,11 @@ const STATUS_LABELS: Record<ClientProject["status"], { label: string; color: str
 
 export function ClientProjetsPage() {
   const navigate = useDedcoStore((s) => s.navigate);
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  }
   const [tab, setTab] = useState<"en_cours" | "termines">("en_cours");
   const filtered = tab === "en_cours" ? MOCK_CLIENT_PROJECTS.filter((p) => p.status !== "livre") : MOCK_CLIENT_PROJECTS.filter((p) => p.status === "livre");
 
@@ -1086,6 +1091,14 @@ export function PlansTarifsPage() {
           Voir tous les artisans →
         </button>
       </div>
+
+      {/* Toast inline */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 dedco-card px-4 py-3 shadow-lg flex items-center gap-2" style={{ backgroundColor: "var(--forest-pale)", borderColor: "var(--forest)" }}>
+          <CheckCircle2 size={16} className="text-[var(--forest)] flex-shrink-0" />
+          <p className="text-sm text-[var(--text-1)]">{toast}</p>
+        </div>
+      )}
     </div>
   );
 }

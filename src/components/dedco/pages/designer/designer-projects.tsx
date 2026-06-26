@@ -78,6 +78,11 @@ function formatDate(dateStr: string) {
 
 export function DesignerProjectsPage() {
   const navigate = useDedcoStore((s) => s.navigate);
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  }
   const [activeTab, setActiveTab] = useState<TabKey>("en_cours");
 
   // All projects for designer 1 (Ndèye Sarr)
@@ -337,7 +342,7 @@ export function DesignerProjectsPage() {
                   </div>
 
                   {/* View project button */}
-                  <button className="dedco-btn dedco-btn-primary dedco-btn-sm mt-4 w-full justify-center">
+                  <button onClick={() => showToast("Action effectuée.")} className="dedco-btn dedco-btn-primary dedco-btn-sm mt-4 w-full justify-center">
                     <Eye size={14} />
                     Voir le projet
                     <ChevronRight size={14} />
@@ -348,6 +353,14 @@ export function DesignerProjectsPage() {
           </div>
         )}
       </motion.div>
+
+      {/* Toast inline */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 dedco-card px-4 py-3 shadow-lg flex items-center gap-2" style={{ backgroundColor: "var(--forest-pale)", borderColor: "var(--forest)" }}>
+          <CheckCircle2 size={16} className="text-[var(--forest)] flex-shrink-0" />
+          <p className="text-sm text-[var(--text-1)]">{toast}</p>
+        </div>
+      )}
     </div>
   );
 }

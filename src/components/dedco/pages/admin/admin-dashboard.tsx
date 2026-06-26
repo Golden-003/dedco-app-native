@@ -269,7 +269,7 @@ export function AdminDashboardPage() {
                     {item.detail}
                   </p>
                 </div>
-                <button className="shrink-0 text-[var(--text-3)] hover:text-[var(--amber)] transition-colors cursor-pointer">
+                <button onClick={() => navigate({ page: "admin-users" })} className="shrink-0 text-[var(--text-3)] hover:text-[var(--amber)] transition-colors cursor-pointer">
                   <ArrowUpRight size={16} />
                 </button>
               </div>

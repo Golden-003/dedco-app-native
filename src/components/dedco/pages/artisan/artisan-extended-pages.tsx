@@ -119,6 +119,11 @@ const TYPE_LABELS: Record<Brief["type"], string> = {
 export function ArtisanDemandesPage() {
   const [filter, setFilter] = useState<"nouveau" | "en_cours" | "expire" | "tous">("tous");
   const navigate = useDedcoStore((s) => s.navigate);
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  }
   const filtered = filter === "tous" ? MOCK_BRIEFS : MOCK_BRIEFS.filter((b) => b.status === filter);
 
   return (
@@ -372,7 +377,7 @@ export function ArtisanWalletPage() {
             {showBalance ? <EyeOff size={16} /> : <Eye size={16} />}
           </button>
         </div>
-        <button className="dedco-btn dedco-btn-primary w-full sm:w-auto">
+        <button onClick={() => showToast("Redirection vers le retrait Mobile Money.")} className="dedco-btn dedco-btn-primary w-full sm:w-auto">
           <ArrowDownLeft size={16} /> Retirer mes fonds
         </button>
       </div>
@@ -437,7 +442,7 @@ export function ArtisanWalletPage() {
           <span className="text-sm">Vous recevrez</span>
           <span className="font-numeric font-bold text-[var(--forest)]">{formatFCFA(withdrawAmount - fees)}</span>
         </div>
-        <button className="dedco-btn dedco-btn-primary w-full">Confirmer le retrait</button>
+        <button onClick={() => navigate({ page: "home" })} className="dedco-btn dedco-btn-primary w-full">Confirmer le retrait</button>
       </div>
 
       {/* Transactions history */}
@@ -607,7 +612,7 @@ export function ArtisanAvisPage() {
               </div>
             )}
             {!r.hasReply && (
-              <button className="text-xs text-[var(--amber)] font-semibold hover:underline mt-2 ml-12">
+              <button onClick={() => navigate({ page: "home" })} className="text-xs text-[var(--amber)] font-semibold hover:underline mt-2 ml-12">
                 Répondre
               </button>
             )}
@@ -724,7 +729,7 @@ export function ArtisanCertificationPage() {
           />
           <p className="text-xs text-[var(--text-3)] mt-1 text-right font-numeric">{processDesc.length}/450</p>
         </div>
-        <button className="dedco-btn dedco-btn-primary w-full">
+        <button onClick={() => showToast("Demande de passage au niveau N4 soumise. Réponse sous 5 jours ouvrés.")} className="dedco-btn dedco-btn-primary w-full">
           <Award size={16} /> Soumettre ma demande N4
         </button>
         <p className="text-xs text-[var(--text-3)] text-center">Délai de review : 7 jours</p>
@@ -805,7 +810,7 @@ export function ArtisanAbonnementPage() {
                 </li>
               ))}
             </ul>
-            <button
+            <button onClick={() => navigate({ page: "home" })}
               className={`dedco-btn w-full ${plan.current ? "dedco-btn-ghost" : plan.highlighted ? "dedco-btn-primary" : "dedco-btn-secondary"}`}
               disabled={plan.current}
             >
@@ -883,7 +888,7 @@ export function ArtisanParametresPage() {
         <h3 className="font-display font-bold mb-4">Profil atelier</h3>
         <div className="flex items-center gap-4 mb-4">
           <img src={ARTISANS[0].avatar} alt="Atelier" className="w-16 h-16 rounded-full object-cover" />
-          <button className="dedco-btn dedco-btn-ghost dedco-btn-sm">
+          <button onClick={() => showToast("Sélectionnez une nouvelle photo de profil.")} className="dedco-btn dedco-btn-ghost dedco-btn-sm">
             <Upload size={14} /> Changer
           </button>
         </div>
@@ -918,7 +923,7 @@ export function ArtisanParametresPage() {
       {/* Sécurité */}
       <div className="dedco-card p-5">
         <h3 className="font-display font-bold mb-4">Sécurité</h3>
-        <button className="dedco-btn dedco-btn-ghost w-full sm:w-auto">
+        <button onClick={() => showToast("Email de réinitialisation envoyé.")} className="dedco-btn dedco-btn-ghost w-full sm:w-auto">
           <Lock size={14} /> Changer mon mot de passe
         </button>
       </div>
@@ -966,7 +971,7 @@ export function ArtisanParametresPage() {
         </div>
       </div>
 
-      <button className="dedco-btn dedco-btn-primary w-full sticky bottom-4">
+      <button onClick={() => showToast("Modifications enregistrées.")} className="dedco-btn dedco-btn-primary w-full sticky bottom-4">
         <Save size={16} /> Enregistrer les modifications
       </button>
     </div>
@@ -985,6 +990,14 @@ function EmptyState({ icon, title, desc }: { icon: React.ReactNode; title: strin
       </div>
       <p className="font-display font-semibold text-lg mb-1">{title}</p>
       <p className="text-sm text-[var(--text-2)]">{desc}</p>
+
+      {/* Toast inline */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 dedco-card px-4 py-3 shadow-lg flex items-center gap-2" style={{ backgroundColor: "var(--forest-pale)", borderColor: "var(--forest)" }}>
+          <CheckCircle2 size={16} className="text-[var(--forest)] flex-shrink-0" />
+          <p className="text-sm text-[var(--text-1)]">{toast}</p>
+        </div>
+      )}
     </div>
   );
 }

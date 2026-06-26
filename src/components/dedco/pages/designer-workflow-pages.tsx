@@ -401,8 +401,8 @@ export function ClientPropositionRecuePage({ proposalId }: { proposalId: string 
       </div>
 
       <div className="flex gap-2">
-        <button className="dedco-btn dedco-btn-ghost">Demander une modification</button>
-        <button className="dedco-btn dedco-btn-ghost text-[var(--terracotta)]">Refuser</button>
+        <button onClick={() => navigate({ page: "messages", conversationId: `prop-${proposalId}` })} className="dedco-btn dedco-btn-ghost">Demander une modification</button>
+        <button onClick={() => navigate({ page: "client-projets" })} className="dedco-btn dedco-btn-ghost text-[var(--terracotta)]">Refuser</button>
         <button onClick={() => navigate({ page: "projet-paiement", proposalId })} className="dedco-btn dedco-btn-primary flex-1">Accepter et payer <ChevronRight size={16} /></button>
       </div>
     </div>
@@ -462,6 +462,11 @@ export function ProjetPaiementPage({ proposalId }: { proposalId: string }) {
 export function ProjetDetailPage({ projectId }: { projectId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
   const [tab, setTab] = useState<"progression" | "messages" | "achats">("progression");
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  }
 
   const stages = [
     { label: "Projet confirmé", done: true },
@@ -512,7 +517,7 @@ export function ProjetDetailPage({ projectId }: { projectId: string }) {
           </div>
           <div className="flex gap-2">
             <input placeholder="Votre message..." className="flex-1 px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
-            <button className="dedco-btn dedco-btn-primary dedco-btn-sm"><Send size={14} /></button>
+            <button onClick={() => showToast("Message envoyé.")} className="dedco-btn dedco-btn-primary dedco-btn-sm"><Send size={14} /></button>
           </div>
         </div>
       )}
@@ -533,7 +538,15 @@ export function ProjetDetailPage({ projectId }: { projectId: string }) {
         </div>
       )}
 
-      <button className="dedco-btn dedco-btn-ghost text-[var(--terracotta)] mt-4"><AlertTriangle size={14} /> Ouvrir un litige</button>
+      <button onClick={() => navigate({ page: "litige", id: `REC-${projectId}` })} className="dedco-btn dedco-btn-ghost text-[var(--terracotta)] mt-4"><AlertTriangle size={14} /> Ouvrir un litige</button>
+
+      {/* Toast inline */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 dedco-card px-4 py-3 shadow-lg flex items-center gap-2" style={{ backgroundColor: "var(--forest-pale)", borderColor: "var(--forest)" }}>
+          <CheckCircle2 size={16} className="text-[var(--forest)] flex-shrink-0" />
+          <p className="text-sm text-[var(--text-1)]">{toast}</p>
+        </div>
+      )}
     </div>
   );
 }
@@ -576,13 +589,13 @@ export function ProjetLivraisonPage({ projectId }: { projectId: string }) {
             <li key={l.id} className="flex items-center gap-3 p-3 bg-[var(--bg-warm)] rounded-md">
               <div className="w-10 h-10 rounded-md bg-white flex items-center justify-center text-[var(--amber)]"><FileText size={18} /></div>
               <div className="flex-1 min-w-0"><p className="text-sm font-medium truncate">{l.name}</p><p className="text-xs text-[var(--text-3)] font-numeric">{l.date}</p></div>
-              <button className="dedco-btn dedco-btn-ghost dedco-btn-sm"><Download size={14} /></button>
+              <button onClick={() => showToast("Téléchargement démarré.")} className="dedco-btn dedco-btn-ghost dedco-btn-sm"><Download size={14} /></button>
             </li>
           ))}
         </ul>
       </div>
       <div className="flex gap-2">
-        <button className="dedco-btn dedco-btn-ghost">Demander une révision</button>
+        <button onClick={() => navigate({ page: "messages", conversationId: `proj-${projectId}` })} className="dedco-btn dedco-btn-ghost">Demander une révision</button>
         <button onClick={() => setValidated(true)} className="dedco-btn dedco-btn-primary flex-1"><Check size={16} /> Valider la livraison</button>
       </div>
     </div>

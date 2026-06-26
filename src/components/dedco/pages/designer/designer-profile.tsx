@@ -46,6 +46,11 @@ const PORTFOLIO_IMAGES = [
 
 export function DesignerProfilePage() {
   const navigate = useDedcoStore((s) => s.navigate);
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  }
   const designer = getDesigner(1); // Ndèye Sarr
 
   const [name, setName] = useState(designer?.name ?? "Ndèye Sarr");
@@ -102,7 +107,7 @@ export function DesignerProfilePage() {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <button className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+              <button onClick={() => showToast("Sélectionnez une nouvelle photo de couverture.")} className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
                 <Camera size={20} className="text-white" />
               </button>
             </div>
@@ -228,7 +233,7 @@ export function DesignerProfilePage() {
             <h2 className="font-display text-lg font-semibold text-[var(--text-1)]">
               Portfolio
             </h2>
-            <button className="dedco-btn dedco-btn-secondary dedco-btn-sm">
+            <button onClick={() => showToast("Sélectionnez une image à ajouter à votre portfolio.")} className="dedco-btn dedco-btn-secondary dedco-btn-sm">
               <Upload size={14} />
               Ajouter
             </button>
@@ -246,14 +251,14 @@ export function DesignerProfilePage() {
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                  <button className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 bg-white/90 rounded-full">
+                  <button onClick={() => showToast("Image supprimée du portfolio.")} className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 bg-white/90 rounded-full">
                     <Trash2 size={14} className="text-[var(--terracotta)]" />
                   </button>
                 </div>
               </div>
             ))}
             {/* Add new placeholder */}
-            <button className="aspect-[4/3] rounded-lg border-2 border-dashed border-[var(--border)] flex flex-col items-center justify-center gap-2 text-[var(--text-3)] hover:border-[var(--amber)] hover:text-[var(--amber)] transition-colors cursor-pointer">
+            <button onClick={() => showToast("Sélectionnez une image à uploader.")} className="aspect-[4/3] rounded-lg border-2 border-dashed border-[var(--border)] flex flex-col items-center justify-center gap-2 text-[var(--text-3)] hover:border-[var(--amber)] hover:text-[var(--amber)] transition-colors cursor-pointer">
               <Upload size={20} />
               <span className="text-xs">Ajouter</span>
             </button>
@@ -284,6 +289,14 @@ export function DesignerProfilePage() {
           </button>
         </motion.div>
       </motion.div>
+
+      {/* Toast inline */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 dedco-card px-4 py-3 shadow-lg flex items-center gap-2" style={{ backgroundColor: "var(--forest-pale)", borderColor: "var(--forest)" }}>
+          <CheckCircle2 size={16} className="text-[var(--forest)] flex-shrink-0" />
+          <p className="text-sm text-[var(--text-1)]">{toast}</p>
+        </div>
+      )}
     </div>
   );
 }

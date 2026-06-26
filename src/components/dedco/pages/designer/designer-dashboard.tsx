@@ -118,7 +118,7 @@ export function DesignerDashboardPage() {
         <motion.div variants={fadeUp} className="mb-8">
           <p className="text-[var(--text-3)] text-sm mb-1">Tableau de bord</p>
           <h1 className="font-display text-2xl sm:text-3xl font-semibold text-[var(--text-1)]">
-            Bonjour Ndèye 👋
+            Bonjour Ndèye
           </h1>
           <p className="text-[var(--text-2)] text-sm mt-1">
             Voici un résumé de votre activité

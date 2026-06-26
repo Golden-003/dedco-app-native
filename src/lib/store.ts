@@ -52,6 +52,7 @@ export type AppRoute =
   | { page: 'search'; query?: string }
   | { page: 'onboarding'; step?: number }
   | { page: 'brief' }
+  | { page: 'brief-list' }
   | { page: 'brief-create' }
   | { page: 'brief-detail'; id: number }
   | { page: 'order-history' }
@@ -98,7 +99,12 @@ export type AppRoute =
   | { page: 'invoice'; orderId: string }
   // ── ARTISAN BRIEF WORKFLOW
   | { page: 'artisan-brief-recu'; briefId: string }
-  | { page: 'artisan-devis-create'; briefId: string };
+  | { page: 'artisan-devis-create'; briefId: string }
+  | { page: 'projet-artisan-detail'; projectId: string }
+  // ── PROJET DESIGNER DETAIL (séparé de l'artisan)
+  | { page: 'projet-designer-detail'; projectId: string }
+  // ── PAIEMENT ACOMpte ARTISAN (séparé du paiement designer)
+  | { page: 'projet-paiement-artisan'; proposalId: string };
 
 // ============================================================
 // ProjectScope — niveau de projet (pivot économique simplifié)

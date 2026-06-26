@@ -21,6 +21,7 @@ import {
   Upload,
   X,
   Plus,
+  Lock,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
 import { formatFCFA } from "@/lib/dedco-data-expanded";
@@ -759,8 +760,9 @@ export function BriefCreatePage() {
       </div>
 
       {/* Reassurance */}
-      <p className="text-xs text-[var(--text-3)] text-center mt-4">
-        🔒 Votre brief est visible uniquement par les designers vérifiés. Aucun
+      <p className="text-xs text-[var(--text-3)] text-center mt-4 flex items-center justify-center gap-1.5">
+        <Lock size={12} className="text-[var(--forest)]" />
+        Votre brief est visible uniquement par les designers vérifiés. Aucun
         engagement tant que vous n&apos;acceptez pas une proposition.
       </p>
     </div>

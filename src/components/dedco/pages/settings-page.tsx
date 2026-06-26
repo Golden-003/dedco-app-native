@@ -19,6 +19,11 @@ const SETTINGS = [
 
 export function SettingsPage() {
   const navigate = useDedcoStore((s) => s.navigate);
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  }
   const goBack = useDedcoStore((s) => s.goBack);
   const [notifs, setNotifs] = useState(true);
 
@@ -95,6 +100,7 @@ export function SettingsPage() {
           className="dedco-card p-5 sm:p-6 border-[var(--terracotta)]/20"
         >
           <button
+            onClick={() => showToast("Demande de suppression de compte envoyée. Notre équipe vous contactera sous 48 h.")}
             className="flex items-center gap-3 text-sm font-medium text-[var(--terracotta)] hover:underline cursor-pointer"
           >
             <LogOut size={18} />
@@ -102,6 +108,14 @@ export function SettingsPage() {
           </button>
         </motion.div>
       </div>
+
+      {/* Toast inline */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 dedco-card px-4 py-3 shadow-lg flex items-center gap-2" style={{ backgroundColor: "var(--forest-pale)", borderColor: "var(--forest)" }}>
+          <CheckCircle2 size={16} className="text-[var(--forest)] flex-shrink-0" />
+          <p className="text-sm text-[var(--text-1)]">{toast}</p>
+        </div>
+      )}
     </div>
   );
 }

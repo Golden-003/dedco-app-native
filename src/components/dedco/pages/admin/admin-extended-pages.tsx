@@ -149,10 +149,10 @@ export function AdminKYCPage() {
                     <p className="text-xs text-[var(--text-3)] font-numeric">{d.type} · {d.waitTime}</p>
                   </div>
                   <div className="flex gap-1">
-                    <button className="w-7 h-7 rounded-full bg-[var(--forest-pale)] text-[var(--forest)] flex items-center justify-center hover:bg-[var(--forest)] hover:text-white">
+                    <button onClick={() => showToast("Action effectuée.")} className="w-7 h-7 rounded-full bg-[var(--forest-pale)] text-[var(--forest)] flex items-center justify-center hover:bg-[var(--forest)] hover:text-white">
                       <Check size={14} />
                     </button>
-                    <button className="w-7 h-7 rounded-full bg-[var(--terracotta-pale)] text-[var(--terracotta)] flex items-center justify-center hover:bg-[var(--terracotta)] hover:text-white">
+                    <button onClick={() => showToast("Action effectuée.")} className="w-7 h-7 rounded-full bg-[var(--terracotta-pale)] text-[var(--terracotta)] flex items-center justify-center hover:bg-[var(--terracotta)] hover:text-white">
                       <X size={14} />
                     </button>
                   </div>
@@ -200,7 +200,7 @@ export function AdminKYCPage() {
               className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white mb-3 resize-none"
             />
           )}
-          <button className="dedco-btn dedco-btn-primary w-full">Valider la décision</button>
+          <button onClick={() => navigate({ page: "home" })} className="dedco-btn dedco-btn-primary w-full">Valider la décision</button>
           <p className="text-xs text-[var(--text-3)] text-center mt-2">Notification email + SMS envoyée automatiquement</p>
         </div>
       </div>
@@ -336,11 +336,11 @@ export function AdminMessagesPage() {
                   </ul>
                 </div>
                 <div className="flex gap-2 flex-wrap">
-                  <button className="dedco-btn dedco-btn-terracotta dedco-btn-sm">
+                  <button onClick={() => navigate({ page: "litige", id: "REC-default" })} className="dedco-btn dedco-btn-terracotta dedco-btn-sm">
                     <AlertTriangle size={14} /> Confirmer violation
                   </button>
-                  <button className="dedco-btn dedco-btn-ghost dedco-btn-sm">Faux positif</button>
-                  <button className="dedco-btn dedco-btn-terracotta dedco-btn-sm" style={{ background: "var(--ink)", borderColor: "var(--ink)" }}>
+                  <button onClick={() => navigate({ page: "home" })} className="dedco-btn dedco-btn-ghost dedco-btn-sm">Faux positif</button>
+                  <button onClick={() => showToast("Action effectuée.")} className="dedco-btn dedco-btn-terracotta dedco-btn-sm" style={{ background: "var(--ink)", borderColor: "var(--ink)" }}>
                     <X size={14} /> Bannir utilisateur
                   </button>
                 </div>
@@ -542,7 +542,7 @@ export function AdminLitigesPage() {
                   className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white resize-none focus:outline-none focus:border-[var(--amber)]"
                 />
               </div>
-              <button className="dedco-btn dedco-btn-primary w-full">Valider la décision</button>
+              <button onClick={() => navigate({ page: "home" })} className="dedco-btn dedco-btn-primary w-full">Valider la décision</button>
             </div>
           </div>
         </div>
@@ -658,18 +658,18 @@ export function AdminScenesPage() {
               <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1 block">Statut stock</label>
               <span className="dedco-badge dedco-badge-forest">En stock (5)</span>
             </div>
-            <button className="dedco-btn dedco-btn-primary w-full dedco-btn-sm">Sauvegarder hotspot</button>
+            <button onClick={() => navigate({ page: "home" })} className="dedco-btn dedco-btn-primary w-full dedco-btn-sm">Sauvegarder hotspot</button>
           </div>
         </div>
       </div>
 
       <div className="flex items-center justify-end gap-2 mt-5">
-        <button className="dedco-btn dedco-btn-ghost dedco-btn-sm">
+        <button onClick={() => showToast("Action effectuée.")} className="dedco-btn dedco-btn-ghost dedco-btn-sm">
           <Eye size={14} /> Aperçu
         </button>
-        <button className="dedco-btn dedco-btn-ghost dedco-btn-sm">Enregistrer brouillon</button>
-        <button className="dedco-btn dedco-btn-primary dedco-btn-sm">Publier la scène</button>
-        <button className="dedco-btn dedco-btn-terracotta dedco-btn-sm">
+        <button onClick={() => navigate({ page: "home" })} className="dedco-btn dedco-btn-ghost dedco-btn-sm">Enregistrer brouillon</button>
+        <button onClick={() => navigate({ page: "home" })} className="dedco-btn dedco-btn-primary dedco-btn-sm">Publier la scène</button>
+        <button onClick={() => showToast("Élément supprimé.")} className="dedco-btn dedco-btn-terracotta dedco-btn-sm">
           <Trash2 size={14} /> Supprimer
         </button>
       </div>
@@ -716,13 +716,13 @@ export function AdminCollectionsPage() {
                 {c.status}
               </span>
               <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                <button className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[var(--ink)] hover:bg-white">
+                <button onClick={() => showToast("Action effectuée.")} className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[var(--ink)] hover:bg-white">
                   <Edit size={14} />
                 </button>
-                <button className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[var(--ink)] hover:bg-white">
+                <button onClick={() => showToast("Action effectuée.")} className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[var(--ink)] hover:bg-white">
                   <Eye size={14} />
                 </button>
-                <button className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[var(--terracotta)] hover:bg-white">
+                <button onClick={() => showToast("Image supprimée.")} className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[var(--terracotta)] hover:bg-white">
                   <Trash2 size={14} />
                 </button>
               </div>
@@ -781,7 +781,7 @@ export function AdminCollectionsPage() {
                   <input className="w-full pl-7 pr-2 py-2 text-sm border border-[var(--border)] rounded-md bg-white" placeholder="Rechercher un produit..." />
                 </div>
               </div>
-              <button className="dedco-btn dedco-btn-primary w-full">Créer la collection</button>
+              <button onClick={() => navigate({ page: "home" })} className="dedco-btn dedco-btn-primary w-full">Créer la collection</button>
             </div>
           </div>
         </div>
@@ -858,7 +858,7 @@ export function AdminCertificationPage() {
                   <p className="text-[var(--text-3)]">complétion</p>
                 </div>
               </div>
-              <button className="dedco-btn dedco-btn-primary dedco-btn-sm">Examiner</button>
+              <button onClick={() => navigate({ page: "home" })} className="dedco-btn dedco-btn-primary dedco-btn-sm">Examiner</button>
             </div>
           </button>
         ))}
@@ -905,13 +905,13 @@ export function AdminCertificationPage() {
                 <textarea rows={3} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white resize-none" />
               </div>
               <div className="space-y-2">
-                <button className="dedco-btn dedco-btn-forest w-full">
+                <button onClick={() => showToast("Action effectuée.")} className="dedco-btn dedco-btn-forest w-full">
                   <Check size={16} /> Certifier N4
                 </button>
-                <button className="dedco-btn dedco-btn-terracotta w-full">
+                <button onClick={() => navigate({ page: "client-projets" })} className="dedco-btn dedco-btn-terracotta w-full">
                   <X size={16} /> Refuser + motif
                 </button>
-                <button className="dedco-btn dedco-btn-ghost w-full">Demander infos complémentaires</button>
+                <button onClick={() => navigate({ page: "home" })} className="dedco-btn dedco-btn-ghost w-full">Demander infos complémentaires</button>
               </div>
             </div>
           </div>
@@ -996,15 +996,23 @@ export function AdminParametresPage() {
       <div className="dedco-card p-5">
         <h3 className="font-display font-bold mb-3">Maintenance technique</h3>
         <div className="flex gap-2 flex-wrap">
-          <button className="dedco-btn dedco-btn-ghost dedco-btn-sm">Vider le cache</button>
-          <button className="dedco-btn dedco-btn-ghost dedco-btn-sm">Resync base</button>
-          <button className="dedco-btn dedco-btn-ghost dedco-btn-sm">Voir logs (1h)</button>
+          <button onClick={() => navigate({ page: "home" })} className="dedco-btn dedco-btn-ghost dedco-btn-sm">Vider le cache</button>
+          <button onClick={() => navigate({ page: "home" })} className="dedco-btn dedco-btn-ghost dedco-btn-sm">Resync base</button>
+          <button onClick={() => navigate({ page: "home" })} className="dedco-btn dedco-btn-ghost dedco-btn-sm">Voir logs (1h)</button>
         </div>
       </div>
 
-      <button className="dedco-btn dedco-btn-primary w-full sticky bottom-4">
+      <button onClick={() => showToast("Modifications enregistrées.")} className="dedco-btn dedco-btn-primary w-full sticky bottom-4">
         <Save size={16} /> Enregistrer les modifications
       </button>
+
+      {/* Toast inline */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 dedco-card px-4 py-3 shadow-lg flex items-center gap-2" style={{ backgroundColor: "var(--forest-pale)", borderColor: "var(--forest)" }}>
+          <CheckCircle2 size={16} className="text-[var(--forest)] flex-shrink-0" />
+          <p className="text-sm text-[var(--text-1)]">{toast}</p>
+        </div>
+      )}
     </div>
   );
 }

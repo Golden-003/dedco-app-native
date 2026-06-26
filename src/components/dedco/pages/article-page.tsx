@@ -52,6 +52,11 @@ const RELATED_ARTICLES = [
 
 export function ArticlePage() {
   const navigate = useDedcoStore((s) => s.navigate);
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  }
   const goBack = useDedcoStore((s) => s.goBack);
   const toggleFavorite = useDedcoStore((s) => s.toggleFavorite);
   const favorites = useDedcoStore((s) => s.favorites);
@@ -132,7 +137,7 @@ export function ArticlePage() {
             <Bookmark size={16} fill={saved ? "var(--amber)" : "none"} />
             <span className="hidden sm:inline">{saved ? "Sauvegardé" : "Sauvegarder"}</span>
           </button>
-          <button className="dedco-btn dedco-btn-ghost dedco-btn-sm">
+          <button onClick={() => showToast("Lien copié dans le presse-papier.")} className="dedco-btn dedco-btn-ghost dedco-btn-sm">
             <Share2 size={16} />
             <span className="hidden sm:inline">Partager</span>
           </button>
@@ -324,7 +329,7 @@ export function ArticlePage() {
               rows={3}
             />
             <div className="flex justify-end mt-2">
-              <button className="dedco-btn dedco-btn-primary dedco-btn-sm">
+              <button onClick={() => navigate({ page: "home" })} className="dedco-btn dedco-btn-primary dedco-btn-sm">
                 Publier
               </button>
             </div>
@@ -359,6 +364,14 @@ export function ArticlePage() {
           </div>
         </div>
       </motion.div>
+
+      {/* Toast inline */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 dedco-card px-4 py-3 shadow-lg flex items-center gap-2" style={{ backgroundColor: "var(--forest-pale)", borderColor: "var(--forest)" }}>
+          <CheckCircle2 size={16} className="text-[var(--forest)] flex-shrink-0" />
+          <p className="text-sm text-[var(--text-1)]">{toast}</p>
+        </div>
+      )}
     </div>
   );
 }
