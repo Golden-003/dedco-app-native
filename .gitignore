@@ -52,3 +52,37 @@ prompt
 server.log
 # Skills directory
 /skills/
+# ============================================================
+# DEDCO — Sécurité sandbox
+# ============================================================
+
+# Secrets et tokens (JAMAIS pousser)
+/upload/.pat
+upload/.pat
+**/.pat
+.env
+.env.local
+.env.*.local
+
+# Backups sandbox (trop lourds, pas utiles sur GitHub)
+/upload/
+/download/
+/tool-results/
+/src_backup_*/
+/public_backup_*/
+/.zscripts/
+/mini-services/
+/examples/
+
+# Logs et artefacts sandbox
+chat_content.json
+worklog.md
+*.log
+dev.log
+dev.out.log
+test
+prompt
+server.log
+
+# Skills directory
+/skills/
