@@ -144,33 +144,26 @@ function PriorityBanner({
 // ============================================================
 
 function EnCoursCard({ item }: { item: MesProjetsItem }) {
+  const [expanded, setExpanded] = useState(false);
   const isUrgent = item.priority === "PAYMENT_REQUIRED" || item.priority === "CHANGE_REQUEST_PENDING" || item.priority === "DELIVERY_CONFIRMATION_REQUIRED";
-
-  const actionIcon = (() => {
-    switch (item.priority) {
-      case "PAYMENT_REQUIRED": return <CreditCard size={14} />;
-      case "CHANGE_REQUEST_PENDING": return <GitCompareArrows size={14} />;
-      case "DELIVERY_CONFIRMATION_REQUIRED": return <CheckCircle2 size={14} />;
-      case "RESPONSE_REQUIRED": return <Eye size={14} />;
-      case "DESIGNER_MEETING_OR_DELIVERABLE": return <Eye size={14} />;
-      default: return <Eye size={14} />;
-    }
-  })();
 
   return (
     <div className="dedco-card overflow-hidden hover:shadow-md transition-shadow">
-      {/* Bande urgente */}
       {isUrgent && <div className="h-1 w-full" style={{ backgroundColor: "var(--terracotta)" }} />}
 
       <div className="p-4 sm:p-5">
-        <div className="flex gap-4">
-          <img src={item.image} alt={item.title} className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg object-cover flex-shrink-0" />
+        {/* Header cliquable → page détail */}
+        <button
+          onClick={() => navigateTo(item.nextActionRoute)}
+          className="w-full text-left flex gap-4 items-start hover:opacity-80 transition-opacity cursor-pointer"
+        >
+          <img src={item.image} alt={item.title} className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg object-cover flex-shrink-0" />
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex items-center gap-2 mb-1 flex-wrap">
               <TypeBadge type={item.type} />
               <span className="text-[10px] font-numeric text-[var(--text-3)]">{item.id}</span>
             </div>
-            <h3 className="font-display font-semibold text-sm sm:text-base leading-tight truncate">{item.title}</h3>
+            <h3 className="font-display font-semibold text-sm sm:text-base leading-tight truncate text-[var(--text-1)]">{item.title}</h3>
             {item.partnerName && (
               <div className="flex items-center gap-2 mt-1.5">
                 {item.partnerAvatar && <img src={item.partnerAvatar} alt={item.partnerName} className="w-5 h-5 rounded-full object-cover" />}
@@ -182,79 +175,71 @@ function EnCoursCard({ item }: { item: MesProjetsItem }) {
                 </span>
               </div>
             )}
+            <div className="flex items-center gap-3 mt-2 text-[11px]">
+              {item.amount > 0 && <span className="font-numeric font-semibold text-[var(--text-1)]">{formatFCFA(item.amount)}</span>}
+              {item.progress !== undefined && item.progress < 100 && <span className="font-numeric text-[var(--text-3)]">{item.progress}%</span>}
+              {item.estimatedDate && <span className="font-numeric text-[var(--text-3)]">→ {item.estimatedDate}</span>}
+            </div>
           </div>
-        </div>
+          <ChevronRight size={16} className="text-[var(--text-3)] flex-shrink-0 mt-1" />
+        </button>
 
-        {/* Ligne stats */}
-        <div className="flex items-center gap-4 mt-3 pt-3 border-t border-[var(--border)]">
-          {item.amount > 0 && (
-            <div>
-              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Montant</p>
-              <p className="font-numeric text-sm font-bold text-[var(--text-1)]">{formatFCFA(item.amount)}</p>
-            </div>
-          )}
-          {item.securedAmount !== undefined && item.securedAmount > 0 && (
-            <div>
-              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Sécurisé</p>
-              <p className="font-numeric text-sm font-semibold" style={{ color: "var(--forest)" }}>{formatFCFA(item.securedAmount)}</p>
-            </div>
-          )}
-          {item.estimatedDate && (
-            <div>
-              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Échéance</p>
-              <p className="font-numeric text-xs font-medium text-[var(--text-2)]">{item.estimatedDate}</p>
-            </div>
-          )}
-        </div>
-
-        {/* Progression + statut */}
-        {item.progress !== undefined && item.type !== "ARTISAN_BRIEF" && item.type !== "DESIGNER_BRIEF" && (
-          <div className="mt-3">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ color: item.statusColor, backgroundColor: item.statusBgColor }}>
-                {item.statusLabel}
-              </span>
-              {item.progress < 100 && <span className="text-[10px] font-numeric text-[var(--text-3)]">{item.progress} %</span>}
-            </div>
-            {item.progress < 100 && (
-              <div className="h-1.5 bg-[var(--bg-warm)] rounded-full overflow-hidden">
-                <div
-                  className="h-full rounded-full transition-all duration-500"
-                  style={{
-                    width: `${item.progress}%`,
-                    backgroundColor: isUrgent ? "var(--terracotta)" : item.progress >= 80 ? "var(--forest)" : "var(--amber)",
-                  }}
-                />
-              </div>
-            )}
-          </div>
-        )}
-
-        {(item.type === "ARTISAN_BRIEF" || item.type === "DESIGNER_BRIEF") && (
-          <div className="mt-3">
+        {/* Statut + bouton "Voir le projet" — TOUJOURS visible */}
+        <div className="flex items-center justify-between mt-3 pt-3 border-t border-[var(--border)] gap-3">
+          <div className="flex items-center gap-2 flex-wrap min-w-0">
             <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ color: item.statusColor, backgroundColor: item.statusBgColor }}>
               {item.statusLabel}
             </span>
+            <button
+              onClick={() => setExpanded(!expanded)}
+              className="text-[10px] font-semibold text-[var(--text-3)] hover:text-[var(--amber)] flex items-center gap-1"
+            >
+              {expanded ? "Moins" : "Plus de détails"}
+              <ChevronRight size={10} className={`transition-transform ${expanded ? "rotate-90" : ""}`} />
+            </button>
           </div>
-        )}
-
-        {/* Priorité urgente */}
-        <PriorityBanner priority={item.priority} deadline={item.priorityDeadline} consequence={item.priorityConsequence} />
-
-        {/* Footer : MAJ + bouton action */}
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-[var(--border)]">
-          <span className="text-[11px] text-[var(--text-3)]">
-            <Clock size={10} className="inline mr-1" style={{ verticalAlign: "middle" }} />
-            MAJ <span className="font-numeric">{item.lastUpdate}</span>
-          </span>
           <button
             onClick={() => navigateTo(item.nextActionRoute)}
-            className="dedco-btn dedco-btn-primary dedco-btn-sm flex items-center gap-1.5"
+            className="dedco-btn dedco-btn-primary dedco-btn-sm flex items-center gap-1.5 flex-shrink-0"
           >
-            {actionIcon}
-            {item.nextAction}
+            <Eye size={14} /> Voir le projet
           </button>
         </div>
+
+        {/* Détails dépliables */}
+        {expanded && (
+          <div className="mt-3 pt-3 border-t border-[var(--border)] space-y-3">
+            <div className="flex items-center gap-6">
+              {item.amount > 0 && (
+                <div>
+                  <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Montant</p>
+                  <p className="font-numeric text-sm font-bold text-[var(--text-1)]">{formatFCFA(item.amount)}</p>
+                </div>
+              )}
+              {item.securedAmount !== undefined && item.securedAmount > 0 && (
+                <div>
+                  <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Sécurisé</p>
+                  <p className="font-numeric text-sm font-semibold" style={{ color: "var(--forest)" }}>{formatFCFA(item.securedAmount)}</p>
+                </div>
+              )}
+              {item.estimatedDate && (
+                <div>
+                  <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Échéance</p>
+                  <p className="font-numeric text-xs font-medium text-[var(--text-2)]">{item.estimatedDate}</p>
+                </div>
+              )}
+            </div>
+            {item.progress !== undefined && item.type !== "ARTISAN_BRIEF" && item.type !== "DESIGNER_BRIEF" && item.progress < 100 && (
+              <div className="h-1.5 bg-[var(--bg-warm)] rounded-full overflow-hidden">
+                <div className="h-full rounded-full transition-all duration-500" style={{ width: `${item.progress}%`, backgroundColor: isUrgent ? "var(--terracotta)" : item.progress >= 80 ? "var(--forest)" : "var(--amber)" }} />
+              </div>
+            )}
+            <PriorityBanner priority={item.priority} deadline={item.priorityDeadline} consequence={item.priorityConsequence} />
+            <p className="text-[11px] text-[var(--text-3)]">
+              <Clock size={10} className="inline mr-1" style={{ verticalAlign: "middle" }} /> MAJ <span className="font-numeric">{item.lastUpdate}</span>
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
