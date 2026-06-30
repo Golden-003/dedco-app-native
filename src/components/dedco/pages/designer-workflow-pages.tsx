@@ -445,7 +445,7 @@ export function ProjetPaiementPage({ proposalId }: { proposalId: string }) {
       <div className="dedco-card p-5 mb-4">
         <div className="grid grid-cols-2 gap-2 mb-4">
           {[{ id: "mtn", label: "MTN MoMo", color: "#FFCC00", text: "#000" }, { id: "moov", label: "Moov Money", color: "#009BDB", text: "#fff" }].map((op) => (
-            <button key={op.id} onClick={() => setOperator(op.id as "mtn" | "moov")} className={`px-3 py-3 rounded-md text-sm font-semibold border-2 ${operator === op.id ? "border-[var(--text-1)]" : "border-[var(--border)]"}`} style={{ backgroundColor: op.color, color: op.text }}>{op.label}</button>
+            <button key={op.id} onClick={() => setOperator(op.id as "mtn" | "moov")} className={`px-3 py-3 rounded-md text-sm font-semibold border-2 ${operator === op.id ? "border-[var(--amber)]" : "border-[var(--border)]"}`} style={{ backgroundColor: op.color, color: op.text }}>{op.label}</button>
           ))}
         </div>
         <input defaultValue="+229 01 97 45 23 10" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white font-numeric" />
@@ -488,7 +488,7 @@ export function ProjetDetailPage({ projectId }: { projectId: string }) {
 
       <div className="flex gap-2 mb-4">
         {[{ id: "progression", label: "Progression" }, { id: "messages", label: "Messagerie" }, { id: "achats", label: "Achats recommandés" }].map((t) => (
-          <button key={t.id} onClick={() => setTab(t.id as typeof tab)} className={`px-4 py-2 rounded-full text-sm font-medium ${tab === t.id ? "bg-[var(--text-1)] text-white" : "bg-white border border-[var(--border)] text-[var(--text-2)]"}`}>{t.label}</button>
+          <button key={t.id} onClick={() => setTab(t.id as typeof tab)} className={`px-4 py-2 rounded-full text-sm font-medium ${tab === t.id ? "bg-[var(--amber)] text-white" : "bg-white border border-[var(--border)] text-[var(--text-2)]"}`}>{t.label}</button>
         ))}
       </div>
 

@@ -263,7 +263,7 @@ export function ArtisanProjetsPage() {
             key={c.id}
             onClick={() => setMobileCol(c.id)}
             className={`px-3 py-1.5 text-xs font-medium rounded-full whitespace-nowrap border transition-all ${
-              mobileCol === c.id ? "bg-[var(--text-1)] text-white border-[var(--text-1)]" : "bg-white border-[var(--border)]"
+              mobileCol === c.id ? "bg-[var(--amber)] text-white border-[var(--amber)]" : "bg-white border-[var(--border)]"
             }`}
           >
             {c.label}
@@ -428,7 +428,7 @@ export function ArtisanWalletPage() {
                   key={op.id}
                   onClick={() => setOperator(op.id)}
                   className={`px-3 py-2.5 rounded-md text-sm font-semibold border-2 transition-all ${
-                    operator === op.id ? "border-[var(--text-1)]" : "border-[var(--border)]"
+                    operator === op.id ? "border-[var(--amber)]" : "border-[var(--border)]"
                   }`}
                   style={{ backgroundColor: op.color, color: op.text }}
                 >
@@ -460,7 +460,7 @@ export function ArtisanWalletPage() {
                 key={t.id}
                 onClick={() => setTab(t.id as typeof tab)}
                 className={`px-2.5 py-1 text-xs rounded-md font-medium transition-all ${
-                  tab === t.id ? "bg-[var(--text-1)] text-white" : "bg-[var(--bg-warm)] text-[var(--text-2)]"
+                  tab === t.id ? "bg-[var(--amber)] text-white" : "bg-[var(--bg-warm)] text-[var(--text-2)]"
                 }`}
               >
                 {t.label}

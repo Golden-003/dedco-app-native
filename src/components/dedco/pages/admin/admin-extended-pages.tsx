@@ -292,7 +292,7 @@ export function AdminMessagesPage() {
             key={t.id}
             onClick={() => setFilter(t.id as typeof filter)}
             className={`px-3 py-1.5 text-xs font-medium rounded-full whitespace-nowrap border transition-all ${
-              filter === t.id ? "bg-[var(--text-1)] text-white border-[var(--text-1)]" : "bg-white border-[var(--border)]"
+              filter === t.id ? "bg-[var(--amber)] text-white border-[var(--amber)]" : "bg-white border-[var(--border)]"
             }`}
           >
             {t.label}

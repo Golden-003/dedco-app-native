@@ -108,7 +108,7 @@ export function DesignerWalletPage() {
                 key={t.id}
                 onClick={() => setTab(t.id as typeof tab)}
                 className={`px-2.5 py-1 text-xs rounded-md font-medium transition-all ${
-                  tab === t.id ? "bg-[var(--text-1)] text-white" : "bg-[var(--bg-warm)] text-[var(--text-2)]"
+                  tab === t.id ? "bg-[var(--amber)] text-white" : "bg-[var(--bg-warm)] text-[var(--text-2)]"
                 }`}
               >
                 {t.label}
@@ -992,13 +992,13 @@ export function PlansTarifsPage() {
       <div className="flex items-center justify-center gap-3 mb-8">
         <button
           onClick={() => setCycle("mensuel")}
-          className={`px-4 py-2 rounded-full text-sm font-medium ${cycle === "mensuel" ? "bg-[var(--text-1)] text-white" : "text-[var(--text-2)]"}`}
+          className={`px-4 py-2 rounded-full text-sm font-medium ${cycle === "mensuel" ? "bg-[var(--amber)] text-white" : "text-[var(--text-2)]"}`}
         >
           Mensuel
         </button>
         <button
           onClick={() => setCycle("annuel")}
-          className={`px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 ${cycle === "annuel" ? "bg-[var(--text-1)] text-white" : "text-[var(--text-2)]"}`}
+          className={`px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 ${cycle === "annuel" ? "bg-[var(--amber)] text-white" : "text-[var(--text-2)]"}`}
         >
           Annuel
           <span className="dedco-badge dedco-badge-forest">-20%</span>

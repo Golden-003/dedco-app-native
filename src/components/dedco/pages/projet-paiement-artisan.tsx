@@ -218,7 +218,7 @@ export function ProjetPaiementArtisanPage({ proposalId }: { proposalId: string }
             <button
               key={op.id}
               onClick={() => setOperator(op.id as "mtn" | "moov")}
-              className={`px-3 py-3 rounded-md text-sm font-semibold border-2 ${operator === op.id ? "border-[var(--text-1)]" : "border-[var(--border)]"}`}
+              className={`px-3 py-3 rounded-md text-sm font-semibold border-2 ${operator === op.id ? "border-[var(--amber)]" : "border-[var(--border)]"}`}
               style={{ backgroundColor: op.color, color: op.text }}
             >
               {op.label}
