@@ -341,7 +341,7 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
           { id: "revisions", label: `Révisions${project.revisions.length > 0 ? ` (${project.revisions.length})` : ""}` },
           { id: "messages", label: "Messagerie" },
         ].map((t) => (
-          <button key={t.id} onClick={() => setActiveTab(t.id as typeof activeTab)} className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${activeTab === t.id ? "bg-[var(--ink)] text-white" : "bg-white border border-[var(--border)] text-[var(--text-2)]"}`}>
+          <button key={t.id} onClick={() => setActiveTab(t.id as typeof activeTab)} className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${activeTab === t.id ? "bg-[var(--text-1)] text-white" : "bg-white border border-[var(--border)] text-[var(--text-2)]"}`}>
             {t.label}
           </button>
         ))}

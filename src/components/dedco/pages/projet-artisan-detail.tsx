@@ -356,7 +356,7 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
           { id: "modifications", label: `Modifications${project.modifications.filter(m => modStatuses[m.id] === "CHANGE_PENDING_CLIENT").length > 0 ? ` (${project.modifications.filter(m => modStatuses[m.id] === "CHANGE_PENDING_CLIENT").length})` : ""}` },
           { id: "messages", label: "Messagerie" },
         ].map((t) => (
-          <button key={t.id} onClick={() => setCurrentTab(t.id as typeof currentTab)} className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${currentTab === t.id ? "bg-[var(--ink)] text-white" : "bg-white border border-[var(--border)] text-[var(--text-2)]"}`}>
+          <button key={t.id} onClick={() => setCurrentTab(t.id as typeof currentTab)} className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${currentTab === t.id ? "bg-[var(--text-1)] text-white" : "bg-white border border-[var(--border)] text-[var(--text-2)]"}`}>
             {t.label}
           </button>
         ))}

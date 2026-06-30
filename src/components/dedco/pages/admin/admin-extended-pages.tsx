@@ -292,7 +292,7 @@ export function AdminMessagesPage() {
             key={t.id}
             onClick={() => setFilter(t.id as typeof filter)}
             className={`px-3 py-1.5 text-xs font-medium rounded-full whitespace-nowrap border transition-all ${
-              filter === t.id ? "bg-[var(--ink)] text-white border-[var(--ink)]" : "bg-white border-[var(--border)]"
+              filter === t.id ? "bg-[var(--text-1)] text-white border-[var(--text-1)]" : "bg-white border-[var(--border)]"
             }`}
           >
             {t.label}
@@ -340,7 +340,7 @@ export function AdminMessagesPage() {
                     <AlertTriangle size={14} /> Confirmer violation
                   </button>
                   <button onClick={() => navigate({ page: "home" })} className="dedco-btn dedco-btn-ghost dedco-btn-sm">Faux positif</button>
-                  <button onClick={() => showToast("Action effectuée.")} className="dedco-btn dedco-btn-terracotta dedco-btn-sm" style={{ background: "var(--ink)", borderColor: "var(--ink)" }}>
+                  <button onClick={() => showToast("Action effectuée.")} className="dedco-btn dedco-btn-terracotta dedco-btn-sm" style={{ background: "var(--text-1)", borderColor: "var(--text-1)" }}>
                     <X size={14} /> Bannir utilisateur
                   </button>
                 </div>
@@ -410,7 +410,7 @@ const LITIGE_TYPES: Record<Litige["type"], { label: string; color: string }> = {
   non_conforme: { label: "Non conforme", color: "var(--terracotta)" },
   defaut: { label: "Défaut qualité", color: "var(--amber)" },
   endommage: { label: "Endommagé livraison", color: "var(--terracotta)" },
-  non_livre: { label: "Non livré", color: "var(--ink)" },
+  non_livre: { label: "Non livré", color: "var(--text-1)" },
 };
 
 export function AdminLitigesPage() {
@@ -716,10 +716,10 @@ export function AdminCollectionsPage() {
                 {c.status}
               </span>
               <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                <button onClick={() => showToast("Action effectuée.")} className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[var(--ink)] hover:bg-white">
+                <button onClick={() => showToast("Action effectuée.")} className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[var(--text-1)] hover:bg-white">
                   <Edit size={14} />
                 </button>
-                <button onClick={() => showToast("Action effectuée.")} className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[var(--ink)] hover:bg-white">
+                <button onClick={() => showToast("Action effectuée.")} className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[var(--text-1)] hover:bg-white">
                   <Eye size={14} />
                 </button>
                 <button onClick={() => showToast("Image supprimée.")} className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[var(--terracotta)] hover:bg-white">
