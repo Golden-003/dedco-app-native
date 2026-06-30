@@ -40,7 +40,7 @@ export function BecomeArtisanPage() {
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 backdrop-blur text-xs font-semibold mb-5">
               <Wrench size={14} />
-              Artisans béninois
+              Artisans du pays
             </div>
             <h1 className="font-display text-3xl sm:text-4xl font-bold mb-4">
               Devenez artisan Dedco

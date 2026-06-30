@@ -720,7 +720,16 @@ export function Footer({
         </div>
 
         <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-          <p>© 2026 Dedco · Cotonou, Bénin · Tous droits réservés</p>
+          <div className="flex items-center gap-3">
+            <p>© 2026 Dedco · Tous droits réservés</p>
+            <span className="opacity-30">|</span>
+            <p className="flex items-center gap-1.5 opacity-70">
+              <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--amber)' }} />
+              <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--terracotta)' }} />
+              <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--forest)' }} />
+              Conçu à Cotonou
+            </p>
+          </div>
           <div className="flex gap-4">
             <button type="button" onClick={() => navigate({ page: "about" })} className="hover:text-amber transition-colors">
               Mentions légales

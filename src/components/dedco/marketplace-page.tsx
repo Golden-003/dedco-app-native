@@ -237,7 +237,7 @@ export function MarketplacePage({
             {filtered.length}
           </span>{" "}
           produit{filtered.length > 1 ? "s" : ""} · Fabrication artisanale
-          béninoise · Paiement sécurisé
+          · Paiement sécurisé
         </p>
       </div>
 

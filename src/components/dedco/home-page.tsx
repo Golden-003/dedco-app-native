@@ -80,9 +80,9 @@ export function HomePage({
               nos artisans
             </h1>
             <p className="text-base sm:text-lg opacity-90 leading-relaxed mb-8 max-w-lg">
-              Découvrez des créations uniques fabriquées à la main par les
-              meilleurs artisans béninois. Du wax au bois iroko, transformez
-              votre espace en œuvre d'art.
+              Découvrez des créations uniques façonnées à la main par les
+              meilleurs artisans du pays. Du wax au bois iroko, du bogolan
+              au rotin tressé, transformez votre espace en œuvre d'art.
             </p>
             <div className="flex flex-wrap gap-3">
               <button
