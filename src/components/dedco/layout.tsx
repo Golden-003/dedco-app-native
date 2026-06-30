@@ -255,7 +255,7 @@ function NotificationBell({ navigate }: { navigate: (route: AppRoute) => void })
       title="Notifications"
       className="relative w-10 h-10 rounded-full flex items-center justify-center text-ink-soft hover:bg-warm hover:text-ink transition-colors"
     >
-      <Bell size={20} />
+      <Bell size={20} className={unreadCount > 0 ? "dedco-pulse" : ""} />
       {unreadCount > 0 && (
         <span className="absolute top-0 right-0 min-w-[18px] h-[18px] px-1 rounded-full bg-terracotta text-white text-[10px] font-bold flex items-center justify-center">
           {unreadCount > 9 ? "9+" : unreadCount}

@@ -188,9 +188,9 @@ export function isDashboardPage(page: string): boolean {
 // ============================================================
 
 const pageVariants = {
-  initial: { opacity: 0, y: 8 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -8 },
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.25, ease: [0.4, 0, 0.2, 1] as const } },
+  exit: { opacity: 0, y: -8, transition: { duration: 0.15, ease: "easeIn" as const } },
 };
 
 export function DedcoRouter() {

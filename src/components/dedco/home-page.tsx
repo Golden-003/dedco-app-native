@@ -54,12 +54,12 @@ export function HomePage({
             alt=""
             aria-hidden
             className="w-full h-full object-cover"
+            style={{ animation: "dedco-fade-in 1s ease-out" }}
           />
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 dedco-animated-gradient"
             style={{
-              background:
-                "linear-gradient(135deg, rgba(30,24,19,0.85) 0%, rgba(30,24,19,0.55) 50%, rgba(30,24,19,0.3) 100%)",
+              background: "linear-gradient(135deg, rgba(30,24,19,0.88) 0%, rgba(30,24,19,0.6) 50%, rgba(191,121,59,0.2) 100%)",
             }}
           />
         </div>
