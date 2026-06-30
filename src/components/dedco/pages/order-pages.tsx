@@ -15,8 +15,8 @@ function formatDate(d: Date) {
 
 // ============================================================
 // 2 TYPES DE COMMANDES
-// - marketplace : produit en stock → expédition → livraison (pas de T1/T2/T3)
-// - custom : commande sur mesure via brief → fabrication → T1/T2/T3 photos
+// - marketplace : produit en stock → expédition → livraison (pas de livraison)
+// - custom : commande sur mesure via brief → fabrication → livraison photos
 // ============================================================
 
 const MOCK_MARKETPLACE_ORDER = {
@@ -34,7 +34,7 @@ const MOCK_MARKETPLACE_ORDER = {
   paymentMethod: "MTN Mobile Money",
   paymentRef: "FEDAPAY-TX-789456123",
   delivery: { ville: "Cotonou", quartier: "Akpakpa", adresse: "12 rue des Lagunes", phone: "+229 01 97 45 23 10", livreur: "Jean-Baptiste A.", livreurPhone: "+229 01 96 78 45 12" },
-  // Marketplace: simple shipping timeline (NO fabrication, NO T1/T2/T3)
+  // Marketplace: simple shipping timeline (NO fabrication, NO livraison)
   timeline: [
     { label: "Paiement confirmé", date: "23 juin 2026, 14:30", done: true, icon: ShieldCheck },
     { label: "Préparation de l'expédition", date: "24 juin 2026", done: true, icon: Package },
@@ -58,10 +58,10 @@ const MOCK_CUSTOM_ORDER = {
   paymentMethod: "Moov Money",
   paymentRef: "FEDAPAY-TX-789456789",
   delivery: { ville: "Cotonou", quartier: "Akpakpa", adresse: "12 rue des Lagunes", phone: "+229 01 97 45 23 10", livreur: "Jean-Baptiste A.", livreurPhone: "+229 01 96 78 45 12" },
-  // Custom: fabrication + 3 temps photos (T1 enlèvement, T2 transport, T3 remise)
+  // Custom: fabrication + confirmations (T1 enlèvement, T2 transport, T3 remise)
   fabrication: { status: "terminee", startDate: "21 juin", endDate: "10 juillet", progress: 100 },
   timeline: [
-    { label: "Paiement confirmé (séquestre)", date: "20 juin 2026, 16:00", done: true, icon: ShieldCheck },
+    { label: "Paiement confirmé (Mobile Money)", date: "20 juin 2026, 16:00", done: true, icon: ShieldCheck },
     { label: "Fabrication en atelier", date: "21 juin → 10 juillet", done: true, icon: Package },
     { label: "T1 — Produit prêt (photo enlèvement)", date: "10 juillet 2026", done: true, icon: CheckCircle2, photo: "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=400&q=80" },
     { label: "T2 — En transit (photo transport)", date: "12 juillet 2026", done: true, icon: Truck, photo: "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=400&q=80" },
@@ -86,7 +86,7 @@ export function OrderConfirmationPage({ orderId }: { orderId: string }) {
         </div>
         <h1 className="display-xl mb-2">Commande confirmée !</h1>
         <p className="text-sm text-[var(--text-2)]">
-          {isCustom ? "Votre paiement est séquestré. L'artisan démarre la fabrication." : "Votre paiement a été reçu. Préparation de l'expédition."}
+          {isCustom ? "Votre paiement est sécurisé. L'artisan démarre la fabrication." : "Votre paiement a été reçu. Préparation de l'expédition."}
         </p>
       </div>
 
@@ -141,7 +141,7 @@ export function OrderConfirmationPage({ orderId }: { orderId: string }) {
             <Package size={14} className="inline text-[var(--amber)]" />
             {" "}<strong>Commande sur mesure :</strong> L'artisan va fabriquer votre pièce.
             Vous recevrez des photos à chaque étape (T1 : produit prêt, T2 : en transit, T3 : remise).
-            Le paiement est séquestré jusqu'à validation de la livraison.
+            Le paiement est sécurisé jusqu'à validation de la livraison.
           </p>
         </div>
       ) : (
@@ -221,7 +221,7 @@ export function InvoicePage({ orderId }: { orderId: string }) {
               <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">Paiement</p>
               <p className="text-sm font-medium">{order.paymentMethod}</p>
               <p className="text-xs text-[var(--text-3)] font-numeric">Réf : {order.paymentRef}</p>
-              <p className="text-xs text-[var(--forest)] mt-1">{order.type === "custom" ? "Séquestré via Fedapay" : "Payé via Fedapay"}</p>
+              <p className="text-xs text-[var(--forest)] mt-1">{order.type === "custom" ? "Sécurisé via Mobile Money" : "Payé via Mobile Money"}</p>
             </div>
           </div>
 
@@ -269,8 +269,8 @@ export function InvoicePage({ orderId }: { orderId: string }) {
           <div className="pt-6 border-t border-[var(--border)] text-xs text-[var(--text-3)] space-y-1">
             {order.type === "custom" ? (
               <>
-                <p><strong>Commande sur mesure :</strong> Paiement séquestré. Artisan payé après validation T3.</p>
-                <p><strong>Livraison 3 temps :</strong> T1 (produit prêt), T2 (transit), T3 (remise client).</p>
+                <p><strong>Commande sur mesure :</strong> Paiement sécurisé. Artisan payé après validation T3.</p>
+                <p><strong>Livraison sécurisée :</strong> T1 (produit prêt), T2 (transit), T3 (remise client).</p>
               </>
             ) : (
               <>
@@ -323,7 +323,7 @@ export function OrderTrackingPage({ orderId }: { orderId: string }) {
       {/* Timeline — différente selon le type */}
       <div className="dedco-card p-5 mb-5">
         <h2 className="font-display font-bold mb-5">
-          {isCustom ? "Suivi fabrication & livraison — 3 temps photo" : "Suivi d'expédition"}
+          {isCustom ? "Suivi fabrication & livraison — confirmation" : "Suivi d'expédition"}
         </h2>
         <div className="space-y-4">
           {order.timeline.map((t, i) => {

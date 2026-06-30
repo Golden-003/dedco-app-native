@@ -9,13 +9,13 @@ const STEPS = [
   { num: "2", title: "Complétez votre profil", desc: "Ajoutez vos réalisations, certifications et description de savoir-faire." },
   { num: "3", title: "Vérification KYC", desc: "Soumettez vos documents d'identité. Notre équipe valide en 48-72h." },
   { num: "4", title: "Publiez vos produits", desc: "Créez vos fiches produits avec photos, prix et descriptions." },
-  { num: "5", title: "Recevez des commandes", desc: "Gérez vos commandes et livrez. Le paiement est sécurisé par séquestre." },
+  { num: "5", title: "Recevez des commandes", desc: "Gérez vos commandes et livrez. Le paiement est sécurisé par Mobile Money." },
   { num: "6", title: "Montez en niveau", desc: "N1 → N4 : plus de ventes, plus de visibilité, plus de confiance." },
 ];
 
 const BENEFITS = [
   { icon: <DollarSign size={20} />, title: "0% commission sur les 6 premiers mois", desc: "Lancez-vous sans frais. Nous investissons dans votre succès." },
-  { icon: <ShieldCheck size={20} />, title: "Paiement sécurisé par séquestre", desc: "Votre argent est protégé. Pas de risque d'impayé." },
+  { icon: <ShieldCheck size={20} />, title: "Paiement sécurisé par Mobile Money", desc: "Votre argent est protégé. Pas de risque d'impayé." },
   { icon: <Star size={20} />, title: "Système de niveaux N1-N4", desc: "Montez en grade et gagnez la confiance des clients." },
   { icon: <Package size={20} />, title: "Outils de gestion intégrés", desc: "Dashboard, statistiques, gestion de stock et commandes." },
 ];

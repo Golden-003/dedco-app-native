@@ -48,7 +48,7 @@ type DesignerProjectMock = {
   // Prestation
   prestationLabel: string;
   prix: number;
-  acompte: number; // 50% en général
+  montantPaye: number; // 100% payé au début
   solde: number;
   livrablesPromis: string[];
   revisionsIncluses: number;
@@ -82,7 +82,7 @@ const MOCK_PROJECTS: Record<string, DesignerProjectMock> = {
     designerCity: "Cotonou",
     prestationLabel: "Standard — Plan d'aménagement complet",
     prix: 350000,
-    acompte: 175000,
+    montantPaye: 175000,
     solde: 175000,
     livrablesPromis: ["Plan d'aménagement 2D/3D", "Palette couleurs", "Liste de sourcing", "Conseils d'installation"],
     revisionsIncluses: 2,
@@ -110,7 +110,7 @@ const MOCK_PROJECTS: Record<string, DesignerProjectMock> = {
     designerCity: "Porto-Novo",
     prestationLabel: "Standard — Plan d'aménagement complet",
     prix: 250000,
-    acompte: 125000,
+    montantPaye: 125000,
     solde: 125000,
     livrablesPromis: ["Plan 2D", "Palette", "Sourcing mobilier"],
     revisionsIncluses: 2,
@@ -144,7 +144,7 @@ const MOCK_PROJECTS: Record<string, DesignerProjectMock> = {
     designerCity: "Cotonou",
     prestationLabel: "Standard — Plan d'aménagement complet",
     prix: 250000,
-    acompte: 250000,
+    montantPaye: 250000,
     solde: 0,
     livrablesPromis: ["Plan 2D", "Palette", "Sourcing"],
     revisionsIncluses: 2,
@@ -418,8 +418,8 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
                 <dd className="font-numeric font-semibold text-[var(--amber)]">{formatFCFA(project.prix)}</dd>
               </div>
               <div>
-                <dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Acompte payé (50%)</dt>
-                <dd className="font-numeric text-[var(--forest)]">{formatFCFA(project.acompte)}</dd>
+                <dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Paiement sécurisé</dt>
+                <dd className="font-numeric text-[var(--forest)]">{formatFCFA(project.montantPaye)}</dd>
               </div>
               <div>
                 <dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Solde à la livraison</dt>

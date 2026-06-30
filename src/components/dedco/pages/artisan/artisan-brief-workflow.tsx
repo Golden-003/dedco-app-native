@@ -13,7 +13,7 @@ import { formatFCFA } from "@/lib/dedco-data";
 // WORKFLOW ARTISAN — Spécifique à la fabrication sur mesure
 // DIFFÉRENT du designer :
 // - Designer : brief → choix prestation → proposition de mission → paiement → exécution → livraison PDF
-// - Artisan : demande de fabrication → devis (prix+délai+matières) → négociation → paiement → fabrication → T1/T2/T3 → validation
+// - Artisan : demande de fabrication → devis (prix+délai+matières) → négociation → paiement → fabrication → livraison → validation
 // ============================================================
 
 const MOCK_BRIEF = {
@@ -213,8 +213,8 @@ export function ArtisanBriefRecuPage({ briefId }: { briefId: string }) {
       <div className="mt-4 p-3 bg-[var(--bg-warm)] rounded-md">
         <p className="text-xs text-[var(--text-3)] leading-relaxed">
           <ShieldCheck size={12} className="inline text-[var(--forest)]" />
-          {" "}Le client recevra votre devis. S'il accepte, le paiement est <strong>séquestré via Fedapay</strong>.
-          Vous fabriquez, puis livrez en <strong>3 temps photo</strong> (T1 : produit prêt, T2 : en transit, T3 : remise client).
+          {" "}Le client recevra votre devis. S'il accepte, le paiement est <strong>sécurisé via Mobile Money</strong>.
+          Vous fabriquez, puis livrez en <strong>confirmation</strong> (T1 : produit prêt, T2 : en transit, T3 : remise client).
           Négociation possible (max 2 allers-retours).
         </p>
       </div>
@@ -238,7 +238,7 @@ export function ArtisanDevisCreatePage({ briefId }: { briefId: string }) {
     delaiFabrication: "3 semaines",
     materiauxUtilises: "Bois iroko massif, tissu wax bleu Ankara, colle bois, vernis naturel",
     processus: "1. Sélection du bois (2j) 2. Découpe et assemblage (5j) 3. Insert wax (3j) 4. Tiroir et finition (4j)",
-    conditions: "Acompte 30% à la commande, solde à la livraison. Ajustement dimensions possible (±5cm). Garantie 6 mois sur la fabrication.",
+    conditions: "Paiement sécurisé Mobile Money. Ajustement dimensions possible (±5cm). Garantie 6 mois sur la fabrication.",
   });
 
   const total = form.prixUnitaire * form.quantite;
@@ -333,7 +333,7 @@ export function ArtisanDevisCreatePage({ briefId }: { briefId: string }) {
 
         {/* Conditions */}
         <div>
-          <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Conditions (acompte, garantie, ajustements)</label>
+          <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Conditions (garantie, ajustements)</label>
           <textarea
             value={form.conditions}
             onChange={(e) => setForm({ ...form, conditions: e.target.value })}
@@ -366,7 +366,7 @@ export function ArtisanDevisCreatePage({ briefId }: { briefId: string }) {
         <div className="p-3 bg-[var(--forest-pale)]/30 rounded-md">
           <p className="text-xs text-[var(--text-2)]">
             <strong>Après acceptation du client :</strong>
-            {" "}Paiement séquestre → Fabrication → T1 (photo produit prêt) → T2 (photo transit) → T3 (photo remise) → Validation → Paiement libéré
+            {" "}Paiement Mobile Money → Fabrication → T1 (photo produit prêt) → T2 (photo transit) → T3 (photo remise) → Validation → Paiement libéré
           </p>
         </div>
 

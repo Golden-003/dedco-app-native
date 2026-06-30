@@ -365,7 +365,7 @@ export type PendingPayment = {
   dueDate: string;
   paymentMethod: string;
   nextActionRoute: MesProjetsRoute;
-  /** Liaison métier — acompte artisan ou prestation designer */
+  /** Liaison métier — paiement artisan ou prestation designer */
   sourceType: ClientProjectType;
   sourceId: string;
   parentBriefId?: string;

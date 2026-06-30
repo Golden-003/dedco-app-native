@@ -52,10 +52,7 @@ type ArtisanProjectMock = {
   // Détails du devis
   prixInitial: number;
   prixFinal: number;
-  acomptePaye: number;
-  soldeAPayer: number;
-  acomptePercent: number;
-  soldePercent: number;
+  montantPaye: number;
   materiaux: string;
   dimensions: string;
   delaiInitial: string;
@@ -68,7 +65,7 @@ type ArtisanProjectMock = {
   jalons: JalonMock[];
   // Modifications
   modifications: ModificationMock[];
-  // Liaison proposition (pour le bouton "Payer l'acompte")
+  // Liaison proposition (pour le bouton "Payer maintenant")
   proposalId?: string;
 };
 
@@ -86,10 +83,7 @@ const MOCK_PROJECTS: Record<string, ArtisanProjectMock> = {
     artisanCity: "Porto-Novo",
     prixInitial: 245000,
     prixFinal: 260000,
-    acomptePaye: 122500,
-    soldeAPayer: 137500,
-    acomptePercent: 50,
-    soldePercent: 50,
+    montantPaye: 122500,
     materiaux: "Rotin naturel, tissu coton, structure bois",
     dimensions: "85 x 90 x 75 cm",
     delaiInitial: "3 semaines",
@@ -138,10 +132,7 @@ const MOCK_PROJECTS: Record<string, ArtisanProjectMock> = {
     artisanCity: "Ouidah",
     prixInitial: 68000,
     prixFinal: 68000,
-    acomptePaye: 34000,
-    soldeAPayer: 34000,
-    acomptePercent: 50,
-    soldePercent: 50,
+    montantPaye: 34000,
     materiaux: "Tissu bogolan, structure métal, douille porcelaine",
     dimensions: "Ø 35 x 45 cm",
     delaiInitial: "10 jours",
@@ -170,10 +161,7 @@ const MOCK_PROJECTS: Record<string, ArtisanProjectMock> = {
     artisanCity: "Cotonou",
     prixInitial: 95000,
     prixFinal: 95000,
-    acomptePaye: 47500,
-    soldeAPayer: 47500,
-    acomptePercent: 50,
-    soldePercent: 50,
+    montantPaye: 47500,
     materiaux: "Raffia tressé, miroir biseauté, contreplaqué",
     dimensions: "Ø 60 cm",
     delaiInitial: "12 jours",
@@ -202,10 +190,7 @@ const MOCK_PROJECTS: Record<string, ArtisanProjectMock> = {
     artisanCity: "Cotonou",
     prixInitial: 76000,
     prixFinal: 76000,
-    acomptePaye: 38000,
-    soldeAPayer: 38000,
-    acomptePercent: 50,
-    soldePercent: 50,
+    montantPaye: 38000,
     materiaux: "Bois iroko, tissu wax, mousse haute densité",
     dimensions: "Ø 40 x 45 cm (x2)",
     delaiInitial: "15 jours",
@@ -234,10 +219,7 @@ const MOCK_PROJECTS: Record<string, ArtisanProjectMock> = {
     artisanCity: "Cotonou",
     prixInitial: 420000,
     prixFinal: 420000,
-    acomptePaye: 420000,
-    soldeAPayer: 0,
-    acomptePercent: 50,
-    soldePercent: 50,
+    montantPaye: 420000,
     materiaux: "Bois massif iroko, tissu coton wax, mousse haute résilience",
     dimensions: "220 x 95 x 85 cm",
     delaiInitial: "4 semaines",
@@ -445,8 +427,8 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
             <div className="grid sm:grid-cols-2 gap-3">
               <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Prix initial</dt><dd className="font-numeric font-semibold">{formatFCFA(project.prixInitial)}</dd></div>
               <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Prix final</dt><dd className="font-numeric font-semibold text-[var(--amber)]">{formatFCFA(project.prixFinal)}</dd></div>
-              <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Acompte payé ({project.acomptePercent}%)</dt><dd className="font-numeric text-[var(--forest)]">{formatFCFA(project.acomptePaye)}</dd></div>
-              <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Solde à payer ({project.soldePercent}%)</dt><dd className="font-numeric text-[var(--terracotta)]">{formatFCFA(project.soldeAPayer)}</dd></div>
+              <div className="sm:col-span-2"><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Paiement sécurisé</dt><dd className="font-numeric text-[var(--forest)]">{formatFCFA(project.montantPaye)} — réglé via Mobile Money</dd></div>
+              
             </div>
             <div className="pt-3 border-t border-[var(--border)]">
               <dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Matériaux</dt><dd className="flex items-center gap-1"><Hammer size={12} className="text-[var(--amber)]" /> {project.materiaux}</dd>
@@ -607,7 +589,7 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
             onClick={() => navigate({ page: "projet-paiement-artisan", proposalId: project.proposalId! })}
             className="dedco-btn dedco-btn-primary"
           >
-            <CheckCircle2 size={16} /> Payer l'acompte
+            <CheckCircle2 size={16} /> Payer maintenant
           </button>
         )}
         <button

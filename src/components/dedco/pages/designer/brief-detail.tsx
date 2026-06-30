@@ -6,7 +6,7 @@ import { useDedcoStore } from "@/lib/store";
 // ============================================================
 // BriefDetailPage — REDIRECT
 // Les workflows ont été refondus :
-// - Artisan : Demande de fabrication → Devis → Négociation → Paiement → Fabrication → T1/T2/T3
+// - Artisan : Demande de fabrication → Devis → Négociation → Paiement → Fabrication → livraison
 // - Designer : Brief reçu → Choix prestation → Proposition mission → Paiement → Projet → Livraison
 // Cette ancienne page redirige vers le workflow artisan par défaut.
 // ============================================================

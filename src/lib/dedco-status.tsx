@@ -31,7 +31,7 @@ export const BRIEF_ARTISAN_STATUS: Record<BriefArtisanStatus, {
   PROPOSALS_RECEIVED: { label: "Propositions reçues", color: "#4A7A3C", bgColor: "#E8F1FA", button: "Comparer les propositions", nextStatus: "IN_DISCUSSION" },
   IN_DISCUSSION: { label: "En discussion", color: "#3B6EA5", bgColor: "#E8F1FA", button: "Ouvrir la conversation", nextStatus: "ARTISAN_SELECTED" },
   ARTISAN_SELECTED: { label: "Proposition sélectionnée", color: "#A6442E", bgColor: "#FAEAE6", button: "Voir le récapitulatif", nextStatus: "AWAITING_DEPOSIT" },
-  AWAITING_DEPOSIT: { label: "Acompte à payer", color: "#A6442E", bgColor: "#FAEAE6", button: "Payer l'acompte", nextStatus: "CONVERTED_TO_PROJECT" },
+  AWAITING_DEPOSIT: { label: "Paiement à effectuer", color: "#A6442E", bgColor: "#FAEAE6", button: "Payer maintenant", nextStatus: "CONVERTED_TO_PROJECT" },
   CONVERTED_TO_PROJECT: { label: "Projet créé", color: "#4A7A3C", bgColor: "#E6F2E3", button: "Suivre le projet" },
   EXPIRED: { label: "Brief expiré", color: "#7A6E65", bgColor: "#F2EDE4", button: "Relancer le brief" },
   CANCELLED: { label: "Brief annulé", color: "#7A6E65", bgColor: "#F2EDE4", button: "Dupliquer le brief" },
@@ -78,7 +78,7 @@ export const PROJET_ARTISAN_STATUS: Record<ProjetArtisanStatus, {
   button: string;
   isUrgent?: boolean;
 }> = {
-  AWAITING_DEPOSIT: { label: "Acompte à payer", color: "#A6442E", bgColor: "#FAEAE6", button: "Payer l'acompte", isUrgent: true },
+  AWAITING_DEPOSIT: { label: "Paiement à effectuer", color: "#A6442E", bgColor: "#FAEAE6", button: "Payer maintenant", isUrgent: true },
   CONFIRMED: { label: "Projet confirmé", color: "#4A7A3C", bgColor: "#E6F2E3", button: "Voir le projet" },
   PREPARATION: { label: "Préparation", color: "#B8702F", bgColor: "#FEF5E9", button: "Voir l'avancement" },
   IN_PRODUCTION: { label: "En fabrication", color: "#B8702F", bgColor: "#FEF5E9", button: "Voir l'avancement" },

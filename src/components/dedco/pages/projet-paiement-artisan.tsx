@@ -23,8 +23,6 @@ type ArtisanProposalMock = {
   artisanLevel: "N1" | "N2" | "N3" | "N4";
   // Détails devis
   price: number;
-  acomptePercent: number; // ex 50
-  soldePercent: number; // ex 50
   deliveryTime: string;
   materials: string;
   dimensions: string;
@@ -43,8 +41,6 @@ const MOCK_PROPOSALS: Record<string, ArtisanProposalMock> = {
     artisanCity: "Cotonou",
     artisanLevel: "N3",
     price: 185000,
-    acomptePercent: 50,
-    soldePercent: 50,
     deliveryTime: "18 jours",
     materials: "Bois massif iroko, vernis naturel",
     dimensions: "120 x 60 x 40 cm",
@@ -60,8 +56,6 @@ const MOCK_PROPOSALS: Record<string, ArtisanProposalMock> = {
     artisanCity: "Cotonou",
     artisanLevel: "N3",
     price: 220000,
-    acomptePercent: 50,
-    soldePercent: 50,
     deliveryTime: "18 jours",
     materials: "Bois massif iroko, vernis naturel",
     dimensions: "300 x 240 x 60 cm",
@@ -77,8 +71,6 @@ const MOCK_PROPOSALS: Record<string, ArtisanProposalMock> = {
     artisanCity: "Cotonou",
     artisanLevel: "N2",
     price: 195000,
-    acomptePercent: 40,
-    soldePercent: 60,
     deliveryTime: "21 jours",
     materials: "Contreplaqué bouleau, peinture éco-responsable",
     dimensions: "300 x 240 x 60 cm",
@@ -94,8 +86,6 @@ const MOCK_PROPOSALS: Record<string, ArtisanProposalMock> = {
     artisanCity: "Porto-Novo",
     artisanLevel: "N1",
     price: 165000,
-    acomptePercent: 30,
-    soldePercent: 70,
     deliveryTime: "25 jours",
     materials: "Médjin (bois local), finition cire d'abeille",
     dimensions: "300 x 240 x 60 cm",
@@ -105,7 +95,7 @@ const MOCK_PROPOSALS: Record<string, ArtisanProposalMock> = {
 };
 
 // ============================================================
-// PAGE: Projet Paiement Artisan (acompte)
+// PAGE: Projet Paiement Artisan (escrow — client paie 100% + garantie)
 // ============================================================
 
 export function ProjetPaiementArtisanPage({ proposalId }: { proposalId: string }) {
@@ -115,10 +105,8 @@ export function ProjetPaiementArtisanPage({ proposalId }: { proposalId: string }
   const [done, setDone] = useState(false);
 
   // Calculs financiers
-  const acompte = Math.round(proposal.price * proposal.acomptePercent / 100);
-  const solde = proposal.price - acompte;
-  const garantie = Math.round(acompte * proposal.garantiePercent / 100);
-  const total = acompte + garantie;
+  const garantie = Math.round(proposal.price * proposal.garantiePercent / 100);
+  const total = proposal.price + garantie;
   const newProjectId = `PA-${Math.floor(1000 + Math.random() * 9000)}`;
 
   if (done) {
@@ -151,8 +139,8 @@ export function ProjetPaiementArtisanPage({ proposalId }: { proposalId: string }
       </button>
 
       <header className="mb-6">
-        <span className="dedco-badge dedco-badge-terra mb-2">Acompte à payer</span>
-        <h1 className="display-lg mb-1">Paiement de l'acompte</h1>
+        <span className="dedco-badge dedco-badge-terra mb-2">Paiement à effectuer</span>
+        <h1 className="display-lg mb-1">Paiement de la commande</h1>
         <p className="text-sm text-[var(--text-2)]">{proposal.projectTitle}</p>
       </header>
 
@@ -192,8 +180,8 @@ export function ProjetPaiementArtisanPage({ proposalId }: { proposalId: string }
       <div className="dedco-card p-5 mb-4">
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
-            <span>Acompte ({proposal.acomptePercent}%)</span>
-            <span className="font-numeric font-semibold">{formatFCFA(acompte)}</span>
+            <span>Prix de la prestation</span>
+            <span className="font-numeric font-semibold">{formatFCFA(proposal.price)}</span>
           </div>
           <div className="flex justify-between text-[var(--text-2)]">
             <span className="flex items-center gap-1">
@@ -203,11 +191,10 @@ export function ProjetPaiementArtisanPage({ proposalId }: { proposalId: string }
             <span className="font-numeric">{formatFCFA(garantie)}</span>
           </div>
           <div className="flex justify-between text-[var(--text-3)] text-xs">
-            <span>Solde à la livraison ({proposal.soldePercent}%)</span>
-            <span className="font-numeric">{formatFCFA(solde)}</span>
+            
           </div>
           <div className="flex justify-between font-display font-bold pt-2 border-t border-[var(--border)]">
-            <span>Total à payer maintenant</span>
+            <span>Total à payer</span>
             <span className="font-numeric text-[var(--amber)] text-lg">{formatFCFA(total)}</span>
           </div>
         </div>
@@ -217,7 +204,7 @@ export function ProjetPaiementArtisanPage({ proposalId }: { proposalId: string }
       <div className="p-3 rounded-lg mb-4 flex items-start gap-2" style={{ backgroundColor: "var(--forest-pale)" }}>
         <Lock size={14} className="text-[var(--forest)] flex-shrink-0 mt-0.5" />
         <p className="text-xs text-[var(--forest)]">
-          Paiement sécurisé. L'acompte est conservé par Dedco et libéré à l'artisan au démarrage de la fabrication. Le solde n'est prélevé qu'à la livraison conforme.
+          Paiement sécurisé Mobile Money. Vous payez l'intégralité maintenant. L'artisan est payé après validation de votre livraison.
         </p>
       </div>
 

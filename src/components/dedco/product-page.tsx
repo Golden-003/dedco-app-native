@@ -300,8 +300,8 @@ export function ProductPage({
           {/* Trust badges */}
           <div className="grid grid-cols-3 gap-2 pt-4 border-t border-border">
             {[
-              { icon: ShieldCheck, label: "Paiement séquestré", sub: "Fedapay" },
-              { icon: Truck, label: "Livraison 3 temps", sub: "Tracée photo" },
+              { icon: ShieldCheck, label: "Paiement sécurisé", sub: "Mobile Money" },
+              { icon: Truck, label: "Livraison sécurisée", sub: "Tracée photo" },
               { icon: RotateCcw, label: "Litige 7 jours", sub: "Médiation" },
             ].map((item, i) => (
               <div key={i} className="text-center">

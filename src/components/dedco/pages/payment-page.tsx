@@ -65,7 +65,7 @@ export function PaymentPage() {
               transition={{ duration: 0.25 }}
             >
               <div className="dedco-card p-8 md:p-10">
-                {/* Fedapay Header */}
+                {/* Mobile Money Header */}
                 <div className="text-center mb-8">
                   <div
                     className="w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-4"
@@ -77,7 +77,7 @@ export function PaymentPage() {
                     Paiement sécurisé
                   </h2>
                   <p className="text-sm mt-1" style={{ color: "var(--text-3)" }}>
-                    Propulsé par Fedapay
+                    Propulsé par Mobile Money
                   </p>
                 </div>
 

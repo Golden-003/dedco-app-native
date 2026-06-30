@@ -19,7 +19,7 @@ import {
   Smartphone,
 } from "lucide-react";
 
-type PaymentMethod = "fedapay" | "mtn" | "moov";
+type PaymentMethod = "mobile_money" | "mtn" | "moov";
 
 const PAYMENT_METHODS: {
   id: PaymentMethod;
@@ -29,9 +29,9 @@ const PAYMENT_METHODS: {
   color: string;
 }[] = [
   {
-    id: "fedapay",
-    label: "Fedapay Mobile Money",
-    desc: "MTN & Moov via Fedapay",
+    id: "mobile_money",
+    label: "Mobile Money",
+    desc: "MTN & Moov via Mobile Money",
     icon: <Wallet size={24} />,
     color: "var(--amber)",
   },
@@ -71,7 +71,7 @@ export function CheckoutPage() {
   const [indication, setIndication] = useState("");
 
   // Payment
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("fedapay");
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("mobile_money");
 
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
   const shipping = cart.length > 0 ? 5000 : 0;
@@ -347,7 +347,7 @@ export function CheckoutPage() {
                       <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                       <path d="M7 11V7a5 5 0 0110 0v4" />
                     </svg>
-                    Vos paiements sont sécurisés et cryptés via Fedapay. Aucune information de carte n'est stockée.
+                    Vos paiements sont sécurisés et cryptés via Mobile Money. Aucune information de carte n'est stockée.
                   </div>
                 </div>
               )}

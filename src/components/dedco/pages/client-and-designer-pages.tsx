@@ -49,7 +49,7 @@ type Tx = { id: string; type: TxType; desc: string; amount: number; date: string
 const MOCK_TXS: Tx[] = [
   { id: "TX-D01", type: "credit", desc: "Honoraires — Projet salon Sophie K.", amount: 250000, date: "20 jan 2026", status: "completed" },
   { id: "TX-D02", type: "retrait", desc: "Retrait MTN Mobile Money", amount: -150000, date: "15 jan 2026", status: "completed" },
-  { id: "TX-D03", type: "credit", desc: "Acompte — Projet bureau Marc A.", amount: 45000, date: "10 jan 2026", status: "pending" },
+  { id: "TX-D03", type: "credit", desc: "Avance — Projet bureau Marc A.", amount: 45000, date: "10 jan 2026", status: "pending" },
   { id: "TX-D04", type: "debit", desc: "Abonnement Pro mensuel", amount: -25000, date: "1 jan 2026", status: "completed" },
 ];
 
@@ -976,7 +976,7 @@ export function PlansTarifsPage() {
 
   const faqs = [
     { q: "Puis-je changer de plan à tout moment ?", a: "Oui, vous pouvez upgrader ou downgrader votre plan à tout moment. Le prorata est calculé automatiquement." },
-    { q: "Comment fonctionne le paiement Mobile Money ?", a: "Le prélèvement auto se fait via Fedapay (MTN ou Moov) à la date anniversaire de votre abonnement." },
+    { q: "Comment fonctionne le paiement Mobile Money ?", a: "Le prélèvement auto se fait via Mobile Money (MTN ou Moov) à la date anniversaire de votre abonnement." },
     { q: "Y a-t-il un essai gratuit ?", a: "Oui, les 3 premiers mois sont gratuits pour tout nouvel inscrit. Sans engagement." },
     { q: "Qu'est-ce que la commission Dedco ?", a: "Pour les artisans, 10% sur chaque vente (incluse dans le prix affiché). Pour les designers, 0% de commission — seulement l'abonnement." },
   ];

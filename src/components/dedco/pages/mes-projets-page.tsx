@@ -371,16 +371,13 @@ function BriefProposalsCard({ brief }: { brief: ArtisanBriefWithProposals }) {
                     <th className="text-left px-3 py-2 font-semibold">Artisan</th>
                     <th className="text-right px-3 py-2 font-semibold">Prix</th>
                     <th className="text-right px-3 py-2 font-semibold">Délai</th>
-                    <th className="text-left px-3 py-2 font-semibold">Acompte</th>
+                    <th className="text-left px-3 py-2 font-semibold">Paiement</th>
                     <th className="text-left px-3 py-2 font-semibold">Vérifié</th>
                     <th className="text-right px-3 py-2 font-semibold">Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {brief.proposals.map((prop: ArtisanProposal) => {
-                    // Extraction % acompte depuis "50 % acompte..."
-                    const acompte = prop.paymentConditions.match(/(\d+)\s*%/);
-                    const acomptePct = acompte ? `${acompte[1]} %` : "—";
                     return (
                       <tr key={prop.id} className="border-t border-[var(--border)]">
                         <td className="px-3 py-2.5 font-medium text-[var(--text-1)]">
@@ -393,7 +390,7 @@ function BriefProposalsCard({ brief }: { brief: ArtisanBriefWithProposals }) {
                         </td>
                         <td className="px-3 py-2.5 text-right font-numeric font-bold" style={{ color: "var(--amber-dark)" }}>{formatFCFA(prop.price)}</td>
                         <td className="px-3 py-2.5 text-right font-numeric text-[var(--text-2)]">{prop.deliveryTime}</td>
-                        <td className="px-3 py-2.5 font-numeric text-[var(--text-2)]">{acomptePct}</td>
+                        <td className="px-3 py-2.5 text-[var(--text-2)] text-[11px]">{prop.paymentConditions}</td>
                         <td className="px-3 py-2.5">
                           {prop.artisanVerified
                             ? <ShieldCheck size={14} className="text-[var(--forest)]" />
@@ -742,10 +739,10 @@ function TabAChoisir() {
           <SectionHeader icon={Package} title="Briefs avec propositions" count={1} description="Comparez les propositions et choisissez un artisan" accentColor="var(--amber)" />
           <BriefProposalsCard brief={MOCK_BRIEF_WITH_PROPOSALS} />
 
-          {/* Paiements acompte artisan */}
+          {/* Paiements paiement artisan */}
           {MOCK_PAIEMENTS_EN_ATTENTE.filter(p => p.sourceType === "ARTISAN_BRIEF").length > 0 && (
             <div className="mt-6">
-              <SectionHeader icon={CreditCard} title="Acomptes artisan à régler" count={MOCK_PAIEMENTS_EN_ATTENTE.filter(p => p.sourceType === "ARTISAN_BRIEF").length} description="Proposition sélectionnée — payez l'acompte pour démarrer la fabrication" accentColor="var(--amber)" />
+              <SectionHeader icon={CreditCard} title="Paiements artisan à régler" count={MOCK_PAIEMENTS_EN_ATTENTE.filter(p => p.sourceType === "ARTISAN_BRIEF").length} description="Proposition sélectionnée — payez pour démarrer la fabrication" accentColor="var(--amber)" />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {MOCK_PAIEMENTS_EN_ATTENTE.filter(p => p.sourceType === "ARTISAN_BRIEF").map((p) => (
                   <PaiementEnAttenteCard key={p.id} paiement={p} />

@@ -432,7 +432,7 @@ export function MarketplacePage({
       <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-3">
         {[
           {
-            title: "Paiement séquestré",
+            title: "Paiement sécurisé",
             desc: "Votre argent est bloqué jusqu'à validation livraison",
           },
           {
@@ -440,7 +440,7 @@ export function MarketplacePage({
             desc: "KYC + niveaux N1-N4, 87 avis en moyenne",
           },
           {
-            title: "Livraison 3 temps",
+            title: "Livraison sécurisée",
             desc: "Photo à chaque étape, traçabilité totale",
           },
         ].map((item, i) => (

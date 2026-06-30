@@ -339,7 +339,7 @@ type Tx = { id: string; type: TxType; desc: string; amount: number; date: string
 const MOCK_TXS: Tx[] = [
   { id: "TX-001", type: "credit", desc: "Paiement reçu — Table basse Wax", amount: 185000, date: "18 jan 2026", status: "completed" },
   { id: "TX-002", type: "debit", desc: "Commission Dedco (10%)", amount: -18500, date: "18 jan 2026", status: "completed" },
-  { id: "TX-003", type: "credit", desc: "Acompte Brief #123 — Sophie K.", amount: 48500, date: "20 jan 2026", status: "pending" },
+  { id: "TX-003", type: "credit", desc: "Avance Brief #123 — Sophie K.", amount: 48500, date: "20 jan 2026", status: "pending" },
   { id: "TX-004", type: "retrait", desc: "Retrait MTN Mobile Money", amount: -50000, date: "10 jan 2026", status: "completed" },
   { id: "TX-005", type: "credit", desc: "Paiement reçu — Miroir Raffia", amount: 95000, date: "5 jan 2026", status: "completed" },
 ];

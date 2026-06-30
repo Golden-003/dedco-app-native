@@ -129,8 +129,8 @@ export function HomePage({
           {[
             {
               icon: <ShieldCheck size={22} className="text-forest" />,
-              title: "Paiement séquestré",
-              desc: "Sécurisé Fedapay",
+              title: "Paiement sécurisé",
+              desc: "Sécurisé Mobile Money",
             },
             {
               icon: <Users size={22} className="text-amber" />,
@@ -139,7 +139,7 @@ export function HomePage({
             },
             {
               icon: <Truck size={22} className="text-amber-dark" />,
-              title: "Livraison 3 temps",
+              title: "Livraison sécurisée",
               desc: "Tracée photo par photo",
             },
             {
@@ -364,7 +364,7 @@ export function HomePage({
               <ul className="space-y-1.5 mb-5 text-sm opacity-90">
                 <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> Mobilier, décoration, aménagement sur mesure</li>
                 <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> 5 à 15 artisans qualifiés notifiés (N2+, note ≥ 4.0)</li>
-                <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> Sélection, paiement séquestré, livraison 3 temps photo</li>
+                <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> Sélection, paiement sécurisé, livraison confirmation</li>
               </ul>
               <button
                 type="button"

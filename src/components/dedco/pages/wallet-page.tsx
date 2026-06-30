@@ -286,7 +286,7 @@ export function WalletPage() {
 }
 
 // ============================================================
-// Withdraw Modal (Fedapay Mobile Money)
+// Withdraw Modal (Mobile Money)
 // ============================================================
 
 function WithdrawModal({
@@ -330,7 +330,7 @@ function WithdrawModal({
           </div>
           <div>
             <h3 className="font-display font-bold text-lg">Retrait Mobile Money</h3>
-            <p className="text-xs text-ink-mute">Via Fedapay</p>
+            <p className="text-xs text-ink-mute">Via Mobile Money</p>
           </div>
         </div>
 
