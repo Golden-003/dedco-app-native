@@ -44,6 +44,11 @@ import {
   TYPE_LABELS,
   parseFrDate,
 } from "@/lib/mes-projets-data";
+import { useBriefArtisanStore } from "@/lib/artisan-brief-store";
+import { useBriefDesignerStore } from "@/lib/designer-brief-store";
+import { BRIEF_ARTISAN_STATUS, BRIEF_DESIGNER_STATUS } from "@/lib/dedco-status";
+import type { ArtisanBrief } from "@/lib/artisan-brief-types";
+import type { DesignerBrief } from "@/lib/designer-brief-types";
 
 // ============================================================
 // HELPERS
@@ -723,9 +728,154 @@ function TabEnCours() {
 // ONGLET : A CHOISIR
 // ============================================================
 
+
+// Carte dynamique pour brief artisan (lit le store Zustand)
+function DynamicBriefCard({ brief }: { brief: ArtisanBrief }) {
+  const navigate = useDedcoStore((s) => s.navigate);
+  const selectProposal = useBriefArtisanStore((s) => s.selectProposal);
+  const [toast, setToast] = useState<string | null>(null);
+  const statusConfig = BRIEF_ARTISAN_STATUS[brief.status];
+  const selectedProposal = brief.proposals.find(p => p.id === brief.selectedProposalId);
+
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
+  let actionLabel = "Voir le brief";
+  let actionIcon: React.ReactNode = <Eye size={14} />;
+  switch (brief.status) {
+    case 'PROPOSALS_RECEIVED': actionLabel = "Voir le détail"; break;
+    case 'AWAITING_DEPOSIT':
+      actionLabel = selectedProposal ? `Payer ${formatFCFA(Math.round(selectedProposal.price * 1.015))}` : "Payer";
+      actionIcon = <CreditCard size={14} />; break;
+    case 'ARTISAN_SELECTED': actionLabel = "Confirmer et payer"; actionIcon = <CheckCircle2 size={14} />; break;
+  }
+
+  const targetRoute = brief.status === 'AWAITING_DEPOSIT' && selectedProposal
+    ? { page: "projet-paiement-artisan" as const, proposalId: selectedProposal.id }
+    : { page: "brief-artisan-detail" as const, briefId: brief.id };
+
+  return (
+    <div className="dedco-card overflow-hidden hover:shadow-md transition-shadow">
+      <div className="p-4 sm:p-5">
+        <div className="flex items-start gap-3 mb-3">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+              <TypeBadge type="ARTISAN_BRIEF" />
+              <span className="text-[10px] font-numeric text-[var(--text-3)]">{brief.id}</span>
+              <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ color: statusConfig.color, backgroundColor: statusConfig.bgColor }}>{statusConfig.label}</span>
+            </div>
+            <h3 className="font-display font-semibold text-sm sm:text-base leading-tight mb-1 text-[var(--text-1)]">{brief.title}</h3>
+            <div className="flex items-center gap-2 text-[11px] text-[var(--text-3)] flex-wrap">
+              <span>{brief.category}</span><span className="text-[var(--border)]">·</span>
+              <span>{brief.zone}</span><span className="text-[var(--border)]">·</span>
+              <span className="font-numeric">{formatFCFA(brief.budgetMin)} – {formatFCFA(brief.budgetMax)}</span>
+            </div>
+          </div>
+        </div>
+        {selectedProposal && (brief.status === 'ARTISAN_SELECTED' || brief.status === 'AWAITING_DEPOSIT' || brief.status === 'IN_DISCUSSION') && (
+          <div className="flex items-center gap-3 p-3 rounded-md mb-3" style={{ backgroundColor: "var(--bg-warm)" }}>
+            <img src={selectedProposal.artisanAvatar} alt={selectedProposal.artisanName} className="w-10 h-10 rounded-full object-cover" />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium truncate">{selectedProposal.artisanName}</p>
+              <p className="text-[10px] text-[var(--text-3)] font-numeric">{selectedProposal.deliveryTime} · {formatFCFA(selectedProposal.price)}</p>
+            </div>
+          </div>
+        )}
+        {brief.status === 'PROPOSALS_RECEIVED' && brief.proposals.length > 0 && (
+          <div className="mb-3">
+            <div className="flex items-center gap-2 mb-2 p-2 rounded-md" style={{ backgroundColor: "var(--amber-pale)" }}>
+              <Package size={12} style={{ color: "var(--amber-dark)" }} />
+              <span className="text-xs font-semibold" style={{ color: "var(--amber-dark)" }}><span className="font-numeric">{brief.proposals.length}</span> proposition{brief.proposals.length > 1 ? "s" : ""}</span>
+            </div>
+            <div className="space-y-2">
+              {brief.proposals.map((prop) => (
+                <div key={prop.id} className="p-3 rounded-md border border-[var(--border)] bg-[var(--bg-card)]">
+                  <div className="flex items-center gap-2 mb-2">
+                    <img src={prop.artisanAvatar} alt={prop.artisanName} className="w-9 h-9 rounded-full object-cover" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-medium truncate">{prop.artisanName}</p>
+                      <span className="text-[9px] font-bold px-1 py-0.5 rounded-full" style={{ backgroundColor: "var(--amber-pale)", color: "var(--amber-dark)" }}>{prop.artisanLevel}</span>
+                    </div>
+                    <p className="font-numeric text-sm font-bold" style={{ color: "var(--amber-dark)" }}>{formatFCFA(prop.price)}</p>
+                  </div>
+                  <button onClick={() => { selectProposal(brief.id, prop.id); showToast(`Proposition sélectionnée.`); }} className="dedco-btn dedco-btn-primary dedco-btn-sm w-full">
+                    <CheckCircle2 size={12} /> Choisir
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        <button onClick={() => navigate(targetRoute)} className="dedco-btn dedco-btn-primary dedco-btn-sm w-full flex items-center justify-center gap-1.5">
+          {actionIcon}{actionLabel}
+        </button>
+      </div>
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 dedco-card px-4 py-3 shadow-lg flex items-center gap-2" style={{ backgroundColor: "var(--forest-pale)", borderColor: "var(--forest)" }}>
+          <CheckCircle2 size={16} className="text-[var(--forest)] flex-shrink-0" /><p className="text-sm text-[var(--text-1)]">{toast}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Carte dynamique pour brief designer (lit le store Zustand)
+function DynamicDesignerBriefCard({ brief }: { brief: DesignerBrief }) {
+  const navigate = useDedcoStore((s) => s.navigate);
+  const statusConfig = BRIEF_DESIGNER_STATUS[brief.status];
+  let actionLabel = "Voir la demande";
+  let actionIcon: React.ReactNode = <Eye size={14} />;
+  switch (brief.status) {
+    case 'AWAITING_PAYMENT':
+      actionLabel = brief.prestation ? `Payer ${formatFCFA(Math.round(brief.prestation.price * 1.015))}` : "Payer";
+      actionIcon = <CreditCard size={14} />; break;
+    case 'BOOKING_CONFIRMED': actionLabel = "Voir le rendez-vous"; actionIcon = <CheckCircle2 size={14} />; break;
+    case 'NEEDS_INFO': actionLabel = "Répondre au designer"; actionIcon = <MessageSquare size={14} />; break;
+  }
+  return (
+    <div className="dedco-card overflow-hidden hover:shadow-md transition-shadow">
+      <div className="p-4 sm:p-5">
+        <div className="flex items-start gap-3 mb-3">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+              <TypeBadge type="DESIGNER_BRIEF" />
+              <span className="text-[10px] font-numeric text-[var(--text-3)]">{brief.id}</span>
+              <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ color: statusConfig.color, backgroundColor: statusConfig.bgColor }}>{statusConfig.label}</span>
+            </div>
+            <h3 className="font-display font-semibold text-sm sm:text-base leading-tight mb-1 text-[var(--text-1)]">{brief.title}</h3>
+            <div className="flex items-center gap-2 text-[11px] text-[var(--text-3)] flex-wrap">
+              <span>{brief.piece}</span><span className="text-[var(--border)]">·</span>
+              <span>{brief.style}</span>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 p-3 rounded-md mb-3" style={{ backgroundColor: "var(--bg-warm)" }}>
+          <img src={brief.designerAvatar} alt={brief.designerName} className="w-10 h-10 rounded-full object-cover" />
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium truncate">{brief.designerName}</p>
+            <p className="text-[10px] text-[var(--text-3)]">{brief.designerCity}</p>
+          </div>
+          {brief.prestation && (
+            <div className="text-right">
+              <p className="font-numeric text-sm font-bold" style={{ color: "var(--forest)" }}>{formatFCFA(brief.prestation.price)}</p>
+              <p className="text-[10px] text-[var(--text-3)] font-numeric">{brief.prestation.deliveryTime}</p>
+            </div>
+          )}
+        </div>
+        <button onClick={() => navigate({ page: "brief-designer-detail" as const, briefId: brief.id })} className="dedco-btn dedco-btn-primary dedco-btn-sm w-full flex items-center justify-center gap-1.5">
+          {actionIcon}{actionLabel}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function TabAChoisir() {
-  const hasArtisan = true; // brief avec propositions
-  const hasDesigner = MOCK_PRESTATIONS_DESIGNER.length > 0 || MOCK_PAIEMENTS_EN_ATTENTE.some(p => p.parentBriefId?.startsWith("BD"));
+  const briefsFromStore = useBriefArtisanStore((s) => s.briefs);
+  const proposalsBriefs = briefsFromStore.filter(b => b.status === 'PROPOSALS_RECEIVED' || b.status === 'ARTISAN_SELECTED' || b.status === 'AWAITING_DEPOSIT' || b.status === 'IN_DISCUSSION');
+  const designerBriefsFromStore = useBriefDesignerStore((s) => s.briefs);
+  const designerBriefsToChoose = designerBriefsFromStore.filter(b => b.status === 'AWAITING_PAYMENT' || b.status === 'ACCEPTED' || b.status === 'PENDING_DESIGNER_RESPONSE' || b.status === 'NEEDS_INFO' || b.status === 'BOOKING_CONFIRMED');
+  const hasArtisan = proposalsBriefs.length > 0;
+  const hasDesigner = designerBriefsToChoose.length > 0 || MOCK_PRESTATIONS_DESIGNER.length > 0 || MOCK_PAIEMENTS_EN_ATTENTE.some(p => p.parentBriefId?.startsWith("BD"));
 
   return (
     <div className="space-y-8">
@@ -760,6 +910,15 @@ function TabAChoisir() {
             <Palette size={14} style={{ color: "var(--forest)" }} />
             <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: "var(--forest)" }}>Designer</span>
           </div>
+
+          {designerBriefsToChoose.length > 0 && (
+            <div className="mb-6">
+              <SectionHeader icon={Palette} title="Briefs designer à traiter" count={designerBriefsToChoose.length} description="Paiements à effectuer ou demandes en attente" accentColor="var(--forest)" />
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                {designerBriefsToChoose.map(brief => <DynamicDesignerBriefCard key={brief.id} brief={brief} />)}
+              </div>
+            </div>
+          )}
 
           {MOCK_PRESTATIONS_DESIGNER.length > 0 && (
             <div className="mb-6">
