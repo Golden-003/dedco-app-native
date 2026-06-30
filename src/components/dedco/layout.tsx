@@ -20,9 +20,11 @@ import {
   Shield,
   Home as HomeIcon,
   FolderKanban,
+  Bell,
 } from "lucide-react";
 import type { Route } from "@/lib/dedco-types";
 import { useDedcoStore, type AppRoute, type CurrentUser, type UserRole } from "@/lib/store";
+import { useNotificationStore } from "@/lib/notification-store";
 
 // ============================================================
 // Navbar (desktop) + mobile menu
@@ -238,6 +240,31 @@ function UserMenu({
   );
 }
 
+// ============================================================
+// NotificationBell — cloche avec badge non-lus
+// ============================================================
+
+function NotificationBell({ navigate }: { navigate: (route: AppRoute) => void }) {
+  const unreadCount = useNotificationStore((s) => s.unreadCount);
+
+  return (
+    <button
+      type="button"
+      onClick={() => navigate({ page: "notifications" })}
+      aria-label="Notifications"
+      title="Notifications"
+      className="relative w-10 h-10 rounded-full flex items-center justify-center text-ink-soft hover:bg-warm hover:text-ink transition-colors"
+    >
+      <Bell size={20} />
+      {unreadCount > 0 && (
+        <span className="absolute top-0 right-0 min-w-[18px] h-[18px] px-1 rounded-full bg-terracotta text-white text-[10px] font-bold flex items-center justify-center">
+          {unreadCount > 9 ? "9+" : unreadCount}
+        </span>
+      )}
+    </button>
+  );
+}
+
 export function Navbar({
   currentRoute,
   onNavigate,
@@ -351,6 +378,8 @@ export function Navbar({
                 </span>
               )}
             </button>
+            {/* ── Cloche notifications ── */}
+            <NotificationBell navigate={navigate} />
             {/* ── BLOC 8 — Distinction visiteur / connecté ── */}
             <UserMenu currentUser={currentUser} navigate={navigate} logout={logout} />
             <button
