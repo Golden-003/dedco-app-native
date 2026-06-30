@@ -349,7 +349,7 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 mb-4 overflow-x-auto">
+      <div className="flex gap-2 mb-4 overflow-x-auto dedco-hide-scroll -mx-4 px-4 sm:mx-0 sm:px-0">
         {[
           { id: "avancement", label: "Avancement" },
           { id: "details", label: "Détails" },

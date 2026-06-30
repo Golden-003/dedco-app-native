@@ -334,7 +334,7 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 mb-4 overflow-x-auto">
+      <div className="flex gap-2 mb-4 overflow-x-auto dedco-hide-scroll -mx-4 px-4 sm:mx-0 sm:px-0">
         {[
           { id: "livrables", label: `Livrables${project.livrables.length > 0 ? ` (${project.livrables.length})` : ""}` },
           { id: "details", label: "Détails" },
