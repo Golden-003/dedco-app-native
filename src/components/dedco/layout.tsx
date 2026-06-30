@@ -203,23 +203,24 @@ function UserMenu({
               </>
             )}
 
-            {/* Wallet commun */}
-            <button
-              type="button"
-              onClick={() => {
-                navigate({
-                  page:
-                    currentUser.role === "artisan" ? "artisan-wallet"
-                    : currentUser.role === "designer" ? "designer-wallet"
-                    : "wallet",
-                });
-                setOpen(false);
-              }}
-              className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-ink hover:bg-warm transition-colors"
-            >
-              <Wallet size={16} className="text-amber" />
-              Mon wallet
-            </button>
+            {/* Wallet — uniquement pour artisans et designers (pas les clients) */}
+            {(currentUser.role === "artisan" || currentUser.role === "designer") && (
+              <button
+                type="button"
+                onClick={() => {
+                  navigate({
+                    page:
+                      currentUser.role === "artisan" ? "artisan-wallet"
+                      : "designer-wallet",
+                  });
+                  setOpen(false);
+                }}
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-ink hover:bg-warm transition-colors"
+              >
+                <Wallet size={16} className="text-amber" />
+                Mon wallet
+              </button>
+            )}
 
             <div className="border-t border-border my-1" />
             <button

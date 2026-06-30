@@ -6,7 +6,6 @@ import {
   User,
   Package,
   Heart,
-  Wallet,
   Settings,
   MapPin,
   Phone,
@@ -50,14 +49,13 @@ const ADDRESSES = [
   },
 ];
 
-type ProfileTab = "profile" | "orders" | "favorites" | "wallet" | "settings" | "messages";
+type ProfileTab = "profile" | "orders" | "favorites" | "settings" | "messages";
 
 const TABS: { key: ProfileTab; label: string; icon: React.ReactNode }[] = [
   { key: "profile", label: "Profil", icon: <User size={18} /> },
   { key: "orders", label: "Commandes", icon: <Package size={18} /> },
   { key: "messages", label: "Messages", icon: <MessageSquare size={18} /> },
   { key: "favorites", label: "Favoris", icon: <Heart size={18} /> },
-  { key: "wallet", label: "Portefeuille", icon: <Wallet size={18} /> },
   { key: "settings", label: "Paramètres", icon: <Settings size={18} /> },
 ];
 
@@ -87,8 +85,6 @@ export function ProfilePage() {
       navigate({ page: "client-projets" });
     } else if (tab === "favorites") {
       navigate({ page: "favorites" });
-    } else if (tab === "wallet") {
-      navigate({ page: "wallet" });
     } else if (tab === "messages") {
       navigate({ page: "messages" });
     }
@@ -111,7 +107,7 @@ export function ProfilePage() {
         >
           {/* Mobile horizontal tabs */}
           <div className="lg:hidden flex gap-1.5 overflow-x-auto dedco-hide-scroll pb-1 mb-4">
-            {TABS.filter((t) => t.key !== "favorites" && t.key !== "wallet").map((tab) => (
+            {TABS.filter((t) => t.key !== "favorites").map((tab) => (
               <button
                 key={tab.key}
                 type="button"
@@ -144,7 +140,7 @@ export function ProfilePage() {
                   >
                     {tab.icon}
                     {tab.label}
-                    {(tab.key === "favorites" || tab.key === "wallet") && (
+                    {(tab.key === "favorites") && (
                       <ChevronRight size={14} className="ml-auto text-ink-mute" />
                     )}
                   </button>
@@ -288,7 +284,7 @@ function ProfileContent({
         {[
           { label: "Commandes", value: "12", icon: <Package size={16} /> },
           { label: "Favoris", value: "3", icon: <Heart size={16} /> },
-          { label: "Portefeuille", value: "45 000 F", icon: <Wallet size={16} /> },
+          { label: "Projets en cours", value: "5", icon: <Package size={16} /> },
           { label: "Avis donnés", value: "8", icon: <Shield size={16} /> },
         ].map((stat) => (
           <div key={stat.label} className="dedco-card p-4 text-center">
