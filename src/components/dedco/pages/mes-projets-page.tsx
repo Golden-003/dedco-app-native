@@ -202,7 +202,14 @@ function EnCoursCard({ item }: { item: MesProjetsItem }) {
             onClick={() => navigateTo(item.nextActionRoute)}
             className="dedco-btn dedco-btn-primary dedco-btn-sm flex items-center gap-1.5 flex-shrink-0"
           >
-            <Eye size={14} /> Voir le projet
+            {(() => {
+              switch (item.priority) {
+                case "PAYMENT_REQUIRED": return <><CreditCard size={14} /> {item.nextAction}</>;
+                case "CHANGE_REQUEST_PENDING": return <><GitCompareArrows size={14} /> {item.nextAction}</>;
+                case "DELIVERY_CONFIRMATION_REQUIRED": return <><CheckCircle2 size={14} /> {item.nextAction}</>;
+                default: return <><Eye size={14} /> {item.nextAction}</>;
+              }
+            })()}
           </button>
         </div>
 
