@@ -280,7 +280,7 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
   const displayedStatusConfig = PROJET_ARTISAN_STATUS[displayedStatus];
 
   return (
-    <div className="p-6 max-w-4xl mx-auto relative">
+    <div className="p-4 sm:p-6 max-w-4xl mx-auto relative">
       <button onClick={() => navigate({ page: "client-projets" })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
         <ChevronRight size={16} className="rotate-180" /> Mes projets
       </button>

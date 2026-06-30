@@ -188,7 +188,7 @@ export function AdminOrdersPage() {
 
         {/* Orders Table */}
         <motion.div variants={fadeUp} className="dedco-card overflow-hidden">
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto dedco-hide-scroll">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-[var(--border)] bg-[var(--bg-cream)]">

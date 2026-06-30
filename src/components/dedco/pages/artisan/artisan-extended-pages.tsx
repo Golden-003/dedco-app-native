@@ -138,7 +138,7 @@ export function ArtisanDemandesPage() {
         </div>
       </header>
 
-      <div className="flex gap-2 mb-5 overflow-x-auto">
+      <div className="flex gap-2 mb-5 overflow-x-auto dedco-hide-scroll -mx-4 px-4 sm:mx-0 sm:px-0">
         {[
           { id: "tous", label: "Tous" },
           { id: "nouveau", label: "Nouveau" },
@@ -257,7 +257,7 @@ export function ArtisanProjetsPage() {
       </header>
 
       {/* Mobile: tabs */}
-      <div className="lg:hidden flex gap-2 mb-4 overflow-x-auto">
+      <div className="lg:hidden flex gap-2 mb-4 overflow-x-auto dedco-hide-scroll">
         {COLUMNS.map((c) => (
           <button
             key={c.id}
@@ -822,7 +822,7 @@ export function ArtisanAbonnementPage() {
 
       <div className="dedco-card p-5">
         <h3 className="font-display font-bold mb-3">Comparatif détaillé</h3>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto dedco-hide-scroll">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[var(--border)]">
@@ -877,7 +877,7 @@ export function ArtisanParametresPage() {
   });
 
   return (
-    <div className="p-6 max-w-3xl mx-auto space-y-5">
+    <div className="p-4 sm:p-6 max-w-3xl mx-auto space-y-5">
       <header>
         <h1 className="display-lg mb-1">Paramètres</h1>
         <p className="text-sm text-[var(--text-2)]">Gérez votre profil et préférences</p>

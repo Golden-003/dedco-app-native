@@ -281,7 +281,7 @@ export function AdminMessagesPage() {
         </div>
       </header>
 
-      <div className="flex gap-2 mb-4 overflow-x-auto">
+      <div className="flex gap-2 mb-4 overflow-x-auto dedco-hide-scroll -mx-4 px-4 sm:mx-0 sm:px-0">
         {[
           { id: "tous", label: "Tous" },
           { id: "phone", label: "Coordonnées" },
@@ -931,7 +931,7 @@ export function AdminParametresPage() {
   const [maintenance, setMaintenance] = useState(false);
 
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-5">
+    <div className="p-4 sm:p-6 max-w-4xl mx-auto space-y-5">
       <header>
         <h1 className="display-lg mb-1">Paramètres plateforme</h1>
         <p className="text-sm text-[var(--text-2)]">Configuration globale de Dedco</p>
