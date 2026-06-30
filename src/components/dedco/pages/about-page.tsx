@@ -7,8 +7,8 @@ import { useDedcoStore } from "@/lib/store";
 const VALUES = [
   { icon: <ShieldCheck size={24} />, title: "Confiance & Sécurité", desc: "Paiement sécurisé via Mobile Money. Votre argent est protégé jusqu'à satisfaction." },
   { icon: <Users size={24} />, title: "Artisans Vérifiés", desc: "Chaque artisan passe par un processus KYC rigoureux. Niveaux N1 à N4." },
-  { icon: <Heart size={24} />, title: "Fait main, ici", desc: "Chaque produit est façonné à la main par des artisans du pays." },
-  { icon: <Globe size={24} />, title: "Rayonnement africain", desc: "Porter l'artisanat local et l'afro-design au-delà des frontières." },
+  { icon: <Heart size={24} />, title: "Fait main au Bénin", desc: "Chaque pièce est façonnée à la main par des artisans de Cotonou, Porto-Novo, Ouidah et Parakou." },
+  { icon: <Globe size={24} />, title: "Rayonnement africain", desc: "Du wax au bogolan, l'artisanat béninois porté au-delà des frontières." },
 ];
 
 const TEAM = [
@@ -39,7 +39,7 @@ export function AboutPage() {
               À propos de <span className="text-[var(--amber)]">Dedco</span>
             </h1>
             <p className="text-base sm:text-lg opacity-90 max-w-2xl mx-auto leading-relaxed">
-              La marketplace qui connecte artisans talentueux, designers d&apos;espace
+              La marketplace béninoise qui connecte artisans talentueux, designers d&apos;espace
               et passionnés de décoration d&apos;intérieur. Chaque pièce raconte une histoire.
             </p>
           </motion.div>

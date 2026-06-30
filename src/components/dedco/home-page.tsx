@@ -67,7 +67,7 @@ export function HomePage({
           <div className="max-w-xl text-white">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 backdrop-blur text-xs font-semibold mb-5">
               <Sparkles size={14} className="text-amber-light" />
-              <span>Artisans béninois vérifiés · Paiement sécurisé</span>
+              <span>La marketplace de l'artisanat béninois · Paiement sécurisé</span>
             </div>
             <h1 className="font-display font-bold leading-[1.05] tracking-tight mb-5"
                 style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)" }}>
@@ -80,9 +80,9 @@ export function HomePage({
               nos artisans
             </h1>
             <p className="text-base sm:text-lg opacity-90 leading-relaxed mb-8 max-w-lg">
-              Découvrez des créations uniques façonnées à la main par les
-              meilleurs artisans du pays. Du wax au bois iroko, du bogolan
-              au rotin tressé, transformez votre espace en œuvre d'art.
+              Du wax au bois iroko, du bogolan au rotin tressé —
+              des pièces uniques façonnées à la main par les artisans
+              de Cotonou, Porto-Novo et Parakou.
             </p>
             <div className="flex flex-wrap gap-3">
               <button
@@ -130,17 +130,17 @@ export function HomePage({
             {
               icon: <ShieldCheck size={22} className="text-forest" />,
               title: "Paiement sécurisé",
-              desc: "Sécurisé Mobile Money",
+              desc: "MTN MoMo · Moov Money",
             },
             {
               icon: <Users size={22} className="text-amber" />,
               title: "Artisans vérifiés",
-              desc: "KYC + niveaux N1-N4",
+              desc: "De Cotonou à Parakou",
             },
             {
               icon: <Truck size={22} className="text-amber-dark" />,
-              title: "Livraison sécurisée",
-              desc: "Tracée photo par photo",
+              title: "Livraison suivie",
+              desc: "Partout au Bénin",
             },
             {
               icon: <Sparkles size={22} className="text-amber" />,

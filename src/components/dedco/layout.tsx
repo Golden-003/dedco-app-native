@@ -724,10 +724,11 @@ export function Footer({
             <p>© 2026 Dedco · Tous droits réservés</p>
             <span className="opacity-30">|</span>
             <p className="flex items-center gap-1.5 opacity-70">
-              <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--amber)' }} />
-              <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--terracotta)' }} />
-              <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--forest)' }} />
-              Conçu à Cotonou
+              {/* Couleurs du drapeau béninois : vert, jaune, rouge */}
+              <span className="inline-block w-2 h-2 rounded-sm" style={{ backgroundColor: '#008751' }} />
+              <span className="inline-block w-2 h-2 rounded-sm" style={{ backgroundColor: '#FCD116' }} />
+              <span className="inline-block w-2 h-2 rounded-sm" style={{ backgroundColor: '#E8112D' }} />
+              Cotonou, Bénin 🇧🇯
             </p>
           </div>
           <div className="flex gap-4">
