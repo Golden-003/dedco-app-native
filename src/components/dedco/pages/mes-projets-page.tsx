@@ -43,7 +43,7 @@ import {
   PRIORITY_CONFIG,
   TYPE_LABELS,
   parseFrDate,
-} from "@/lib/mes-projets-data";
+} from "@/lib/mock/mes-projets-data";
 import { useBriefArtisanStore } from "@/lib/artisan-brief-store";
 import { useBriefDesignerStore } from "@/lib/designer-brief-store";
 import { BRIEF_ARTISAN_STATUS, BRIEF_DESIGNER_STATUS } from "@/lib/dedco-status";
@@ -54,33 +54,35 @@ import type { DesignerBrief } from "@/lib/designer-brief-types";
 // HELPERS
 // ============================================================
 
+// Table de correspondance pour la navigation Mes Projets
+// Remplace la longue chaîne de if/else
+const ROUTE_MAP: Record<string, (route: MesProjetsRoute, store: ReturnType<typeof useDedcoStore.getState>) => void> = {
+  "brief-detail": (r, store) => r.id && store.navigate({ page: "artisan-brief-recu", briefId: r.id }),
+  "projet-detail": (r, store) => {
+    if (r.projectId) {
+      if (r.projectId.startsWith("PD-")) {
+        store.navigate({ page: "projet-designer-detail", projectId: r.projectId });
+      } else {
+        store.navigate({ page: "projet-artisan-detail", projectId: r.projectId });
+      }
+    }
+  },
+  "projet-paiement-artisan": (r, store) => r.proposalId && store.navigate({ page: "projet-paiement-artisan", proposalId: r.proposalId }),
+  "projet-paiement": (r, store) => r.proposalId && store.navigate({ page: "projet-paiement", proposalId: r.proposalId }),
+  "payment": (r, store) => r.orderId && store.navigate({ page: "payment", orderId: r.orderId }),
+  "litige": (r, store) => r.id && store.navigate({ page: "litige", id: r.id }),
+  "order-tracking": (r, store) => r.id && store.navigate({ page: "order-tracking", id: r.id }),
+  "marketplace": (_, store) => store.navigate({ page: "marketplace" }),
+  "brief": (_, store) => store.navigate({ page: "brief" }),
+  "brief-designer": (r, store) => r.designerId && store.navigate({ page: "brief-designer", designerId: r.designerId }),
+  "home": (_, store) => store.navigate({ page: "home" }),
+};
+
 function navigateTo(route: MesProjetsRoute) {
   const store = useDedcoStore.getState();
-  if (route.page === "brief-detail" && route.id) {
-    store.navigate({ page: "artisan-brief-recu", briefId: route.id });
-  } else if (route.page === "projet-detail" && route.projectId) {
-    // Routing intelligent : PD- → designer, PA- → artisan
-    if (route.projectId.startsWith("PD-")) {
-      store.navigate({ page: "projet-designer-detail", projectId: route.projectId });
-    } else {
-      store.navigate({ page: "projet-artisan-detail", projectId: route.projectId });
-    }
-  } else if (route.page === "projet-paiement-artisan" && route.proposalId) {
-    store.navigate({ page: "projet-paiement-artisan", proposalId: route.proposalId });
-  } else if (route.page === "projet-paiement" && route.proposalId) {
-    store.navigate({ page: "projet-paiement", proposalId: route.proposalId });
-  } else if (route.page === "payment" && route.orderId) {
-    store.navigate({ page: "payment", orderId: route.orderId });
-  } else if (route.page === "litige" && route.id) {
-    store.navigate({ page: "litige", id: route.id });
-  } else if (route.page === "order-tracking" && route.id) {
-    store.navigate({ page: "order-tracking", id: route.id });
-  } else if (route.page === "marketplace") {
-    store.navigate({ page: "marketplace" });
-  } else if (route.page === "brief") {
-    store.navigate({ page: "brief" });
-  } else if (route.page === "brief-designer" && route.designerId) {
-    store.navigate({ page: "brief-designer", designerId: route.designerId });
+  const handler = ROUTE_MAP[route.page];
+  if (handler) {
+    handler(route, store);
   } else {
     store.navigate({ page: "home" });
   }
