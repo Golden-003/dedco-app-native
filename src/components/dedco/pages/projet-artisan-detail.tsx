@@ -333,6 +333,39 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
         </button>
       </div>
 
+      {/* Bandeau récapitulatif — visible dans TOUS les onglets */}
+      <div className="dedco-card p-4 mb-4">
+        <div className="flex items-center gap-4 flex-wrap">
+          {/* Image + titre */}
+          <img src={project.image} alt={project.title} className="w-14 h-14 rounded-lg object-cover flex-shrink-0" />
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1 flex-wrap">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-full" style={{ color: displayedStatusConfig.color, backgroundColor: displayedStatusConfig.bgColor }}>
+                {displayedStatusConfig.label}
+              </span>
+              {displayedStatusConfig.isUrgent && <span className="dedco-badge dedco-badge-terra">Urgent</span>}
+            </div>
+            <h3 className="font-display font-semibold text-sm truncate text-[var(--text-1)]">{project.title}</h3>
+            <p className="text-xs text-[var(--text-3)] font-numeric">{project.id} · {project.artisanName}</p>
+          </div>
+          {/* Stats clés */}
+          <div className="flex items-center gap-4 text-xs">
+            <div>
+              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)]">Montant</p>
+              <p className="font-numeric font-bold text-[var(--text-1)]">{formatFCFA(project.prixFinal)}</p>
+            </div>
+            <div>
+              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)]">Payé</p>
+              <p className="font-numeric font-semibold text-[var(--forest)]">{formatFCFA(project.montantPaye)}</p>
+            </div>
+            <div>
+              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)]">Échéance</p>
+              <p className="font-numeric text-[var(--text-2)]">{project.delaiFinal}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Tabs */}
       <div className="flex gap-2 mb-4 overflow-x-auto">
         {[
