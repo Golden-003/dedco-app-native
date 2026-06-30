@@ -103,7 +103,7 @@ export function NotificationsPage() {
         )}
       </div>
 
-      {/* Filtre — minimal, pas de gros boutons */
+      {/* Filtre — minimal, pas de gros boutons */}
       <div className="flex gap-1 mb-6">
         {[
           { key: "all" as const, label: "Tout" },
@@ -169,7 +169,7 @@ export function NotificationsPage() {
                         onClick={() => handleClick(notif.id, notif.route)}
                       >
                         <div className="flex items-start gap-3">
-                          {/* Accent coloré — pas un cercle générique */
+                          {/* Accent coloré — pas un cercle générique */}
                           <div
                             className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"
                             style={{
@@ -184,7 +184,7 @@ export function NotificationsPage() {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-2">
                               <div className="flex items-center gap-1.5 min-w-0">
-                                {/* Point non-lu — petit, discret */
+                                {/* Point non-lu — petit, discret */}
                                 {isUnread && (
                                   <span
                                     className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1.5"
@@ -204,7 +204,7 @@ export function NotificationsPage() {
                             </p>
                           </div>
 
-                          {/* Actions — apparaissent au hover */
+                          {/* Actions — apparaissent au hover */}
                           <div className="flex items-center gap-0.5 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
                             {isUnread && (
                               <button
@@ -224,7 +224,7 @@ export function NotificationsPage() {
                             </button>
                           </div>
 
-                          {/* Chevron pour les notifications cliquables */
+                          {/* Chevron pour les notifications cliquables */}
                           {notif.route && (
                             <ChevronRight
                               size={14}
