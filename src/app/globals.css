@@ -185,6 +185,14 @@ h1, h2, h3, h4, h5, h6,
   letter-spacing: -0.01em;
 }
 
+/* Eyebrow opt-out — les eyebrows doivent rester en Jakarta (pas Quache)
+   malgré la règle !important ci-dessus */
+h1.eyebrow, h2.eyebrow, h3.eyebrow, h4.eyebrow, h5.eyebrow, h6.eyebrow,
+.eyebrow, .font-sans {
+  font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif !important;
+  letter-spacing: 0.16em;
+}
+
 /* Numeric utility — uses Plus Jakarta Sans for clean digit rendering.
    Editorial pattern: serif for words, sans-serif for numbers.
    Applied to prices, ratings, stats, amounts. */
@@ -268,6 +276,32 @@ h1, h2, h3, h4, h5, h6,
   .dedco-btn-forest:hover { box-shadow: 0 4px 12px rgba(84, 140, 69, 0.3); }
   .dedco-btn-lg { padding: 14px 24px; font-size: 1rem; }
   .dedco-btn-xl { padding: 16px 28px; font-size: 1.0625rem; }
+
+  /* Icon buttons — boutons carrés pour icônes seules (favorite, close, etc.) */
+  .dedco-btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 150ms ease;
+    flex-shrink: 0;
+  }
+  .dedco-btn-icon:active { transform: scale(0.95); }
+  .dedco-btn-icon:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+  .dedco-btn-icon-sm { width: 28px; height: 28px; border-radius: 4px; }
+  .dedco-btn-icon-lg { width: 44px; height: 44px; border-radius: 8px; }
+  .dedco-btn-icon-ghost { background: transparent; color: var(--text-2); }
+  .dedco-btn-icon-ghost:hover { background: var(--bg-warm); color: var(--text-1); }
+  .dedco-btn-icon-solid { background: var(--text-1); color: white; }
+  .dedco-btn-icon-solid:hover { background: var(--amber); }
+  .dedco-btn-icon-amber { background: var(--amber); color: white; }
+  .dedco-btn-icon-amber:hover { background: var(--amber-dark); }
+  .dedco-btn-icon-terra { background: var(--terracotta); color: white; }
+  .dedco-btn-icon-terra:hover { background: #8a3828; }
 
   /* Badges */
   .dedco-badge {
@@ -522,4 +556,87 @@ html { scroll-behavior: smooth; }
   outline: 2px solid var(--amber);
   outline-offset: 2px;
   border-radius: 4px;
+}
+
+/* ============================================================
+   DARK MODE — palette complète pour .dark class
+   ============================================================ */
+
+.dark {
+  color-scheme: dark;
+
+  /* Backgrounds */
+  --bg-cream: #14121a;
+  --bg-warm: #1c1a22;
+  --bg-card: #1e1c24;
+
+  /* Text */
+  --text-1: #f5f2ed;
+  --text-2: #a89e95;
+  --text-3: #6b6258;
+
+  /* Borders */
+  --border: #2a2730;
+  --border-dark: #3a3740;
+
+  /* Brand colors (légèrement ajustés pour dark) */
+  --amber: #d4954a;
+  --amber-dark: #bf793b;
+  --amber-light: #e0a85d;
+  --amber-pale: #2a2018;
+
+  --terracotta: #c4614a;
+  --terracotta-lt: #d4758a;
+  --terracotta-pale: #2a1815;
+
+  --forest: #6ba35a;
+  --forest-lt: #7eb86d;
+  --forest-pale: #1a2818;
+
+  /* Status colors (légèrement plus vifs en dark) */
+  --status-draft: #8a7e75;
+  --status-draft-bg: #2a2520;
+  --status-submitted: #d4954a;
+  --status-submitted-bg: #2a2018;
+  --status-published: #d4954a;
+  --status-published-bg: #2a2018;
+  --status-proposals: #6ba35a;
+  --status-proposals-bg: #1a2818;
+  --status-discussion: #5a8ec5;
+  --status-discussion-bg: #1a2530;
+  --status-selected: #c4614a;
+  --status-selected-bg: #2a1815;
+  --status-deposit: #c4614a;
+  --status-deposit-bg: #2a1815;
+  --status-converted: #6ba35a;
+  --status-converted-bg: #1a2818;
+  --status-expired: #8a7e75;
+  --status-expired-bg: #2a2520;
+  --status-cancelled: #8a7e75;
+  --status-cancelled-bg: #2a2520;
+  --status-closed: #8a7e75;
+  --status-closed-bg: #2a2520;
+}
+
+.dark body {
+  background-color: var(--bg-cream);
+  color: var(--text-1);
+}
+
+/* Z-index scale (tokens centralisés) */
+:root {
+  --z-base: 1;
+  --z-sticky: 40;
+  --z-drawer: 45;
+  --z-modal: 50;
+  --z-toast: 60;
+  --z-tooltip: 70;
+}
+
+/* Motion tokens (durées et easing centralisés) */
+:root {
+  --ease-dedco: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
 }
