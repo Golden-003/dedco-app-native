@@ -2,7 +2,10 @@
 
 import { useDedcoStore, type AppRoute, type UserRole } from "@/lib/store";
 import { AnimatePresence, motion } from "framer-motion";
+import dynamic from "next/dynamic";
 import type { Route } from "@/lib/dedco-types";
+
+// Pages critiques — eager load (LCP)
 import { HomePage } from "@/components/dedco/home-page";
 import { MarketplacePage } from "@/components/dedco/marketplace-page";
 import { ProductPage } from "@/components/dedco/product-page";
@@ -15,107 +18,96 @@ import {
   MagazinePage,
 } from "@/components/dedco/other-pages";
 
-import { LoginPage } from "@/components/dedco/pages/login-page";
-import { RegisterPage } from "@/components/dedco/pages/register-page";
-import { ForgotPasswordPage } from "@/components/dedco/pages/forgot-password-page";
-import { CartPage } from "@/components/dedco/pages/cart-page";
-import { CheckoutPage } from "@/components/dedco/pages/checkout-page";
-import { PaymentPage } from "@/components/dedco/pages/payment-page";
-import { ProfilePage } from "@/components/dedco/pages/profile-page";
-import { OrderTrackingPage } from "@/components/dedco/pages/order-tracking-page";
-import { FavoritesPage } from "@/components/dedco/pages/favorites-page";
-import { WalletPage } from "@/components/dedco/pages/wallet-page";
-import { KYCPage } from "@/components/dedco/pages/kyc-page";
-import { BriefListPage } from "@/components/dedco/pages/brief-list-page";
-import { BriefCreatePage } from "@/components/dedco/pages/brief-create-page";
-import { BriefPage } from "@/components/dedco/brief-page";
-import { ProjetArtisanDetailPage } from "@/components/dedco/pages/projet-artisan-detail";
-import { ProjetDesignerDetailPage } from "@/components/dedco/pages/projet-designer-detail";
-import { ProjetPaiementArtisanPage } from "@/components/dedco/pages/projet-paiement-artisan";
-import { BriefArtisanDetailPage } from "@/components/dedco/pages/brief-artisan-detail";
-import { BriefDesignerDetailPage } from "@/components/dedco/pages/brief-designer-detail";
-import {
-  OrderConfirmationPage,
-  InvoicePage,
-  OrderTrackingPage as NewOrderTrackingPage,
-} from "@/components/dedco/pages/order-pages";
-import { DesignerDashboardPage } from "@/components/dedco/pages/designer/designer-dashboard";
-import { DesignerProjectsPage } from "@/components/dedco/pages/designer/designer-projects";
-import { DesignerBriefsPage } from "@/components/dedco/pages/designer/designer-briefs";
-import { BriefDetailPage } from "@/components/dedco/pages/designer/brief-detail";
-import { DesignerProfilePage } from "@/components/dedco/pages/designer/designer-profile";
-import { DesignerSettingsPage } from "@/components/dedco/pages/designer/designer-settings";
-import { ArtisanDashboardPage } from "@/components/dedco/pages/artisan/artisan-dashboard";
-import { ArtisanProductsPage } from "@/components/dedco/pages/artisan/artisan-products";
-import { ArtisanOrdersPage } from "@/components/dedco/pages/artisan/artisan-orders";
-import { ArtisanProfilePage } from "@/components/dedco/pages/artisan/artisan-profile";
-import { ArtisanStatsPage } from "@/components/dedco/pages/artisan/artisan-stats";
-import { AdminDashboardPage } from "@/components/dedco/pages/admin/admin-dashboard";
-import { AdminUsersPage } from "@/components/dedco/pages/admin/admin-users";
-import { AdminProductsPage } from "@/components/dedco/pages/admin/admin-products";
-import { AdminOrdersPage } from "@/components/dedco/pages/admin/admin-orders";
-import { AdminAnalyticsPage } from "@/components/dedco/pages/admin/admin-analytics";
-import { AdminContentPage } from "@/components/dedco/pages/admin/admin-content";
-import { MessagesPage } from "@/components/dedco/pages/messages-page";
-import { LitigePage } from "@/components/dedco/pages/litige-page";
-import { MoodboardPage } from "@/components/dedco/pages/moodboard-page";
-import { SearchResultsPage } from "@/components/dedco/pages/search-page";
-import { OnboardingPage } from "@/components/dedco/pages/onboarding-page";
-import { MaisonDashboardPage } from "@/components/dedco/pages/maison-dashboard";
-import { ArticlePage } from "@/components/dedco/pages/article-page";
-import { ArtisansListingPage } from "@/components/dedco/pages/artisans-page";
-import { MarketplaceCategoryPage } from "@/components/dedco/pages/marketplace-category-page";
-import { OrderHistoryPage } from "@/components/dedco/pages/order-history-page";
-import { SettingsPage } from "@/components/dedco/pages/settings-page";
-import { NotificationsPage } from "@/components/dedco/pages/notifications-page";
-import { HelpCenterPage } from "@/components/dedco/pages/help-center-page";
-import { AboutPage } from "@/components/dedco/pages/about-page";
-import { BecomeArtisanPage } from "@/components/dedco/pages/become-artisan-page";
+// Pages secondaires — lazy load (code splitting)
+const LoginPage = dynamic(() => import("@/components/dedco/pages/login-page").then(m => ({ default: m.LoginPage })));
+const RegisterPage = dynamic(() => import("@/components/dedco/pages/register-page").then(m => ({ default: m.RegisterPage })));
+const ForgotPasswordPage = dynamic(() => import("@/components/dedco/pages/forgot-password-page").then(m => ({ default: m.ForgotPasswordPage })));
+const CartPage = dynamic(() => import("@/components/dedco/pages/cart-page").then(m => ({ default: m.CartPage })));
+const CheckoutPage = dynamic(() => import("@/components/dedco/pages/checkout-page").then(m => ({ default: m.CheckoutPage })));
+const PaymentPage = dynamic(() => import("@/components/dedco/pages/payment-page").then(m => ({ default: m.PaymentPage })));
+const ProfilePage = dynamic(() => import("@/components/dedco/pages/profile-page").then(m => ({ default: m.ProfilePage })));
+const OrderTrackingPage = dynamic(() => import("@/components/dedco/pages/order-tracking-page").then(m => ({ default: m.OrderTrackingPage })));
+const FavoritesPage = dynamic(() => import("@/components/dedco/pages/favorites-page").then(m => ({ default: m.FavoritesPage })));
+const WalletPage = dynamic(() => import("@/components/dedco/pages/wallet-page").then(m => ({ default: m.WalletPage })));
+const KYCPage = dynamic(() => import("@/components/dedco/pages/kyc-page").then(m => ({ default: m.KYCPage })));
+const BriefListPage = dynamic(() => import("@/components/dedco/pages/brief-list-page").then(m => ({ default: m.BriefListPage })));
+const BriefCreatePage = dynamic(() => import("@/components/dedco/pages/brief-create-page").then(m => ({ default: m.BriefCreatePage })));
+const BriefPage = dynamic(() => import("@/components/dedco/brief-page").then(m => ({ default: m.BriefPage })));
+const ProjetArtisanDetailPage = dynamic(() => import("@/components/dedco/pages/projet-artisan-detail").then(m => ({ default: m.ProjetArtisanDetailPage })));
+const ProjetDesignerDetailPage = dynamic(() => import("@/components/dedco/pages/projet-designer-detail").then(m => ({ default: m.ProjetDesignerDetailPage })));
+const ProjetPaiementArtisanPage = dynamic(() => import("@/components/dedco/pages/projet-paiement-artisan").then(m => ({ default: m.ProjetPaiementArtisanPage })));
+const BriefArtisanDetailPage = dynamic(() => import("@/components/dedco/pages/brief-artisan-detail").then(m => ({ default: m.BriefArtisanDetailPage })));
+const BriefDesignerDetailPage = dynamic(() => import("@/components/dedco/pages/brief-designer-detail").then(m => ({ default: m.BriefDesignerDetailPage })));
+const OrderConfirmationPage = dynamic(() => import("@/components/dedco/pages/order-pages").then(m => ({ default: m.OrderConfirmationPage })));
+const InvoicePage = dynamic(() => import("@/components/dedco/pages/order-pages").then(m => ({ default: m.InvoicePage })));
+const NewOrderTrackingPage = dynamic(() => import("@/components/dedco/pages/order-pages").then(m => ({ default: m.OrderTrackingPage })));
+const DesignerDashboardPage = dynamic(() => import("@/components/dedco/pages/designer/designer-dashboard").then(m => ({ default: m.DesignerDashboardPage })));
+const DesignerProjectsPage = dynamic(() => import("@/components/dedco/pages/designer/designer-projects").then(m => ({ default: m.DesignerProjectsPage })));
+const DesignerBriefsPage = dynamic(() => import("@/components/dedco/pages/designer/designer-briefs").then(m => ({ default: m.DesignerBriefsPage })));
+const BriefDetailPage = dynamic(() => import("@/components/dedco/pages/designer/brief-detail").then(m => ({ default: m.BriefDetailPage })));
+const DesignerProfilePage = dynamic(() => import("@/components/dedco/pages/designer/designer-profile").then(m => ({ default: m.DesignerProfilePage })));
+const DesignerSettingsPage = dynamic(() => import("@/components/dedco/pages/designer/designer-settings").then(m => ({ default: m.DesignerSettingsPage })));
+const ArtisanDashboardPage = dynamic(() => import("@/components/dedco/pages/artisan/artisan-dashboard").then(m => ({ default: m.ArtisanDashboardPage })));
+const ArtisanProductsPage = dynamic(() => import("@/components/dedco/pages/artisan/artisan-products").then(m => ({ default: m.ArtisanProductsPage })));
+const ArtisanOrdersPage = dynamic(() => import("@/components/dedco/pages/artisan/artisan-orders").then(m => ({ default: m.ArtisanOrdersPage })));
+const ArtisanProfilePage = dynamic(() => import("@/components/dedco/pages/artisan/artisan-profile").then(m => ({ default: m.ArtisanProfilePage })));
+const ArtisanStatsPage = dynamic(() => import("@/components/dedco/pages/artisan/artisan-stats").then(m => ({ default: m.ArtisanStatsPage })));
+const AdminDashboardPage = dynamic(() => import("@/components/dedco/pages/admin/admin-dashboard").then(m => ({ default: m.AdminDashboardPage })));
+const AdminUsersPage = dynamic(() => import("@/components/dedco/pages/admin/admin-users").then(m => ({ default: m.AdminUsersPage })));
+const AdminProductsPage = dynamic(() => import("@/components/dedco/pages/admin/admin-products").then(m => ({ default: m.AdminProductsPage })));
+const AdminOrdersPage = dynamic(() => import("@/components/dedco/pages/admin/admin-orders").then(m => ({ default: m.AdminOrdersPage })));
+const AdminAnalyticsPage = dynamic(() => import("@/components/dedco/pages/admin/admin-analytics").then(m => ({ default: m.AdminAnalyticsPage })));
+const AdminContentPage = dynamic(() => import("@/components/dedco/pages/admin/admin-content").then(m => ({ default: m.AdminContentPage })));
+const MessagesPage = dynamic(() => import("@/components/dedco/pages/messages-page").then(m => ({ default: m.MessagesPage })));
+const LitigePage = dynamic(() => import("@/components/dedco/pages/litige-page").then(m => ({ default: m.LitigePage })));
+const MoodboardPage = dynamic(() => import("@/components/dedco/pages/moodboard-page").then(m => ({ default: m.MoodboardPage })));
+const SearchResultsPage = dynamic(() => import("@/components/dedco/pages/search-page").then(m => ({ default: m.SearchResultsPage })));
+const OnboardingPage = dynamic(() => import("@/components/dedco/pages/onboarding-page").then(m => ({ default: m.OnboardingPage })));
+const MaisonDashboardPage = dynamic(() => import("@/components/dedco/pages/maison-dashboard").then(m => ({ default: m.MaisonDashboardPage })));
+const ArticlePage = dynamic(() => import("@/components/dedco/pages/article-page").then(m => ({ default: m.ArticlePage })));
+const ArtisansListingPage = dynamic(() => import("@/components/dedco/pages/artisans-page").then(m => ({ default: m.ArtisansListingPage })));
+const MarketplaceCategoryPage = dynamic(() => import("@/components/dedco/pages/marketplace-category-page").then(m => ({ default: m.MarketplaceCategoryPage })));
+const OrderHistoryPage = dynamic(() => import("@/components/dedco/pages/order-history-page").then(m => ({ default: m.OrderHistoryPage })));
+const SettingsPage = dynamic(() => import("@/components/dedco/pages/settings-page").then(m => ({ default: m.SettingsPage })));
+const NotificationsPage = dynamic(() => import("@/components/dedco/pages/notifications-page").then(m => ({ default: m.NotificationsPage })));
+const HelpCenterPage = dynamic(() => import("@/components/dedco/pages/help-center-page").then(m => ({ default: m.HelpCenterPage })));
+const AboutPage = dynamic(() => import("@/components/dedco/pages/about-page").then(m => ({ default: m.AboutPage })));
+const BecomeArtisanPage = dynamic(() => import("@/components/dedco/pages/become-artisan-page").then(m => ({ default: m.BecomeArtisanPage })));
 
-// BLOC 6 — New pages (audit)
-import {
-  ArtisanDemandesPage,
-  ArtisanProjetsPage,
-  ArtisanWalletPage,
-  ArtisanAvisPage,
-  ArtisanCertificationPage,
-  ArtisanAbonnementPage,
-  ArtisanParametresPage,
-} from "@/components/dedco/pages/artisan/artisan-extended-pages";
-import {
-  ArtisanBriefRecuPage,
-  ArtisanDevisCreatePage,
-} from "@/components/dedco/pages/artisan/artisan-brief-workflow";
-import {
-  AdminKYCPage,
-  AdminMessagesPage,
-  AdminLitigesPage,
-  AdminScenesPage,
-  AdminCollectionsPage,
-  AdminCertificationPage,
-  AdminParametresPage,
-} from "@/components/dedco/pages/admin/admin-extended-pages";
-import {
-  DesignerWalletPage,
-  DesignerPortfolioPage,
-  DesignerAbonnementPage,
-  BriefDesignerPage,
-  AvisLivraisonPage,
-  PlansTarifsPage,
-} from "@/components/dedco/pages/client-and-designer-pages";
-import { MesProjetsPage } from "@/components/dedco/pages/mes-projets-page";
-// Workflow designer (version simplifiée)
-import {
-  DesignerProjetAttentePage,
-  DesignerBriefRecuPage,
-  DesignerPropositionMissionPage,
-  ClientPropositionRecuePage,
-  ProjetPaiementPage,
-  ProjetDetailPage,
-  ProjetLivraisonPage,
-} from "@/components/dedco/pages/designer-workflow-pages";
+// BLOC 6 — New pages (lazy)
+const ArtisanDemandesPage = dynamic(() => import("@/components/dedco/pages/artisan/artisan-extended-pages").then(m => ({ default: m.ArtisanDemandesPage })));
+const ArtisanProjetsPage = dynamic(() => import("@/components/dedco/pages/artisan/artisan-extended-pages").then(m => ({ default: m.ArtisanProjetsPage })));
+const ArtisanWalletPage = dynamic(() => import("@/components/dedco/pages/artisan/artisan-extended-pages").then(m => ({ default: m.ArtisanWalletPage })));
+const ArtisanAvisPage = dynamic(() => import("@/components/dedco/pages/artisan/artisan-extended-pages").then(m => ({ default: m.ArtisanAvisPage })));
+const ArtisanCertificationPage = dynamic(() => import("@/components/dedco/pages/artisan/artisan-extended-pages").then(m => ({ default: m.ArtisanCertificationPage })));
+const ArtisanAbonnementPage = dynamic(() => import("@/components/dedco/pages/artisan/artisan-extended-pages").then(m => ({ default: m.ArtisanAbonnementPage })));
+const ArtisanParametresPage = dynamic(() => import("@/components/dedco/pages/artisan/artisan-extended-pages").then(m => ({ default: m.ArtisanParametresPage })));
+const ArtisanBriefRecuPage = dynamic(() => import("@/components/dedco/pages/artisan/artisan-brief-workflow").then(m => ({ default: m.ArtisanBriefRecuPage })));
+const ArtisanDevisCreatePage = dynamic(() => import("@/components/dedco/pages/artisan/artisan-brief-workflow").then(m => ({ default: m.ArtisanDevisCreatePage })));
+const AdminKYCPage = dynamic(() => import("@/components/dedco/pages/admin/admin-extended-pages").then(m => ({ default: m.AdminKYCPage })));
+const AdminMessagesPage = dynamic(() => import("@/components/dedco/pages/admin/admin-extended-pages").then(m => ({ default: m.AdminMessagesPage })));
+const AdminLitigesPage = dynamic(() => import("@/components/dedco/pages/admin/admin-extended-pages").then(m => ({ default: m.AdminLitigesPage })));
+const AdminScenesPage = dynamic(() => import("@/components/dedco/pages/admin/admin-extended-pages").then(m => ({ default: m.AdminScenesPage })));
+const AdminCollectionsPage = dynamic(() => import("@/components/dedco/pages/admin/admin-extended-pages").then(m => ({ default: m.AdminCollectionsPage })));
+const AdminCertificationPage = dynamic(() => import("@/components/dedco/pages/admin/admin-extended-pages").then(m => ({ default: m.AdminCertificationPage })));
+const AdminParametresPage = dynamic(() => import("@/components/dedco/pages/admin/admin-extended-pages").then(m => ({ default: m.AdminParametresPage })));
+const DesignerWalletPage = dynamic(() => import("@/components/dedco/pages/client-and-designer-pages").then(m => ({ default: m.DesignerWalletPage })));
+const DesignerPortfolioPage = dynamic(() => import("@/components/dedco/pages/client-and-designer-pages").then(m => ({ default: m.DesignerPortfolioPage })));
+const DesignerAbonnementPage = dynamic(() => import("@/components/dedco/pages/client-and-designer-pages").then(m => ({ default: m.DesignerAbonnementPage })));
+const BriefDesignerPage = dynamic(() => import("@/components/dedco/pages/client-and-designer-pages").then(m => ({ default: m.BriefDesignerPage })));
+const AvisLivraisonPage = dynamic(() => import("@/components/dedco/pages/client-and-designer-pages").then(m => ({ default: m.AvisLivraisonPage })));
+const PlansTarifsPage = dynamic(() => import("@/components/dedco/pages/client-and-designer-pages").then(m => ({ default: m.PlansTarifsPage })));
+const MesProjetsPage = dynamic(() => import("@/components/dedco/pages/mes-projets-page").then(m => ({ default: m.MesProjetsPage })));
+// Workflow designer (lazy)
+const DesignerProjetAttentePage = dynamic(() => import("@/components/dedco/pages/designer-workflow-pages").then(m => ({ default: m.DesignerProjetAttentePage })));
+const DesignerBriefRecuPage = dynamic(() => import("@/components/dedco/pages/designer-workflow-pages").then(m => ({ default: m.DesignerBriefRecuPage })));
+const DesignerPropositionMissionPage = dynamic(() => import("@/components/dedco/pages/designer-workflow-pages").then(m => ({ default: m.DesignerPropositionMissionPage })));
+const ClientPropositionRecuePage = dynamic(() => import("@/components/dedco/pages/designer-workflow-pages").then(m => ({ default: m.ClientPropositionRecuePage })));
+const ProjetPaiementPage = dynamic(() => import("@/components/dedco/pages/designer-workflow-pages").then(m => ({ default: m.ProjetPaiementPage })));
+const ProjetDetailPage = dynamic(() => import("@/components/dedco/pages/designer-workflow-pages").then(m => ({ default: m.ProjetDetailPage })));
+const ProjetLivraisonPage = dynamic(() => import("@/components/dedco/pages/designer-workflow-pages").then(m => ({ default: m.ProjetLivraisonPage })));
 
-// Layouts
+// Layouts (eager — utilisés partout)
 import { ArtisanLayout } from "@/components/dedco/pages/artisan/artisan-layout";
 import { DesignerLayout } from "@/components/dedco/pages/designer/designer-layout";
 import { AdminLayout } from "@/components/dedco/pages/admin/admin-layout";
