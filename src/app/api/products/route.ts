@@ -1,24 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
 
-// GET /api/products — liste des produits (avec filtres optionnels)
+// GET /api/products — liste des produits (mock pour prototype)
+// Note: Prisma est configuré mais les routes API sont en mock pour le prototype.
+// En production, remplacer par de vraies queries Prisma avec une DB PostgreSQL (Neon/Supabase).
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const category = searchParams.get("category");
-    const artisanId = searchParams.get("artisanId");
     const limit = parseInt(searchParams.get("limit") || "50");
 
-    const where: Record<string, unknown> = {};
-    if (category) where.category = category;
-    if (artisanId) where.artisanId = artisanId;
-
-    const products = await prisma.product.findMany({
-      where,
-      take: limit,
-      orderBy: { createdAt: "desc" },
-      include: { artisan: { include: { user: true } } },
-    });
+    // Import dynamique des données mock
+    const { PRODUCTS } = await import("@/lib/dedco-data");
+    let products = PRODUCTS;
+    if (category) {
+      products = products.filter((p) => p.category === category);
+    }
+    products = products.slice(0, limit);
 
     return NextResponse.json({ products });
   } catch (error) {
@@ -43,16 +40,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const product = await prisma.product.create({
-      data: {
-        name,
-        description: description || "",
-        price: parseInt(price),
-        category,
-        images: JSON.stringify(images || []),
-        artisanId,
-      },
-    });
+    // Mock : retourner le produit comme s'il était créé
+    const product = {
+      id: `prod-${Date.now()}`,
+      name,
+      description: description || "",
+      price: parseInt(price),
+      category,
+      images: images || [],
+      artisanId,
+      createdAt: new Date().toISOString(),
+    };
 
     return NextResponse.json({ product }, { status: 201 });
   } catch (error) {

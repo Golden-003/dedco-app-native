@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
 
-// GET /api/orders — liste des commandes d'un client
+// GET /api/orders — liste des commandes d'un client (mock pour prototype)
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -14,15 +13,8 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const orders = await prisma.order.findMany({
-      where: { customerId },
-      orderBy: { createdAt: "desc" },
-      include: {
-        items: { include: { product: true } },
-      },
-    });
-
-    return NextResponse.json({ orders });
+    // Mock : retourner un tableau vide (le prototype utilise le store Zustand côté client)
+    return NextResponse.json({ orders: [] });
   } catch (error) {
     console.error("[API /orders] GET error:", error);
     return NextResponse.json(
@@ -55,23 +47,17 @@ export async function POST(req: NextRequest) {
     // Générer un numéro de commande
     const orderNumber = `CMD-2026-${String(Math.floor(1000 + Math.random() * 9000))}`;
 
-    const order = await prisma.order.create({
-      data: {
-        orderNumber,
-        customerId,
-        status: "pending",
-        totalAmount,
-        shippingFee: shippingFee || 0,
-        items: {
-          create: items.map((item: { productId: string; quantity: number; price: number }) => ({
-            productId: item.productId,
-            quantity: item.quantity,
-            price: item.price,
-          })),
-        },
-      },
-      include: { items: true },
-    });
+    // Mock : retourner la commande comme si elle était créée
+    const order = {
+      id: `order-${Date.now()}`,
+      orderNumber,
+      customerId,
+      status: "pending",
+      totalAmount,
+      shippingFee: shippingFee || 0,
+      items,
+      createdAt: new Date().toISOString(),
+    };
 
     return NextResponse.json({ order }, { status: 201 });
   } catch (error) {
