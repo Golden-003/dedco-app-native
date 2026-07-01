@@ -376,7 +376,7 @@ export function ArtisanWalletPage() {
           </h2>
           <button
             onClick={() => setShowBalance(!showBalance)}
-            className="p-2 rounded-full bg-card/10 hover:bg-card/20"
+            className="p-2 rounded-full bg-white/10 hover:bg-white/20"
             aria-label="Masquer/Afficher le solde"
           >
             {showBalance ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -670,7 +670,7 @@ export function ArtisanCertificationPage() {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
             {benefits.map((b) => (
-              <div key={b} className="text-center bg-card/10 rounded-lg p-2">
+              <div key={b} className="text-center bg-white/10 rounded-lg p-2">
                 <p className="text-xs font-semibold">{b}</p>
               </div>
             ))}

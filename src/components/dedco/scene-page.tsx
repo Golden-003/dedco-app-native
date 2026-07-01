@@ -103,7 +103,7 @@ export function ScenePage({
                 className={`w-10 h-10 rounded-full flex items-center justify-center backdrop-blur transition-all ${
                   isSaved
                     ? "bg-card text-terracotta"
-                    : "bg-card/60 text-ink hover:bg-card"
+                    : "bg-white/60 text-ink hover:bg-card"
                 }`}
                 aria-label={isSaved ? "Retirer des favoris" : "Sauvegarder"}
               >
@@ -111,7 +111,7 @@ export function ScenePage({
               </button>
               <button
                 type="button"
-                className="w-10 h-10 rounded-full flex items-center justify-center bg-card/60 text-ink hover:bg-card backdrop-blur"
+                className="w-10 h-10 rounded-full flex items-center justify-center bg-white/60 text-ink hover:bg-card backdrop-blur"
                 aria-label="Partager"
               >
                 <Share2 size={18} />

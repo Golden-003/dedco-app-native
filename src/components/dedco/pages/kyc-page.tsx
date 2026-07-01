@@ -375,7 +375,7 @@ function UploadArea({
           <button
             type="button"
             onClick={onReset}
-            className="absolute top-2 right-2 w-7 h-7 rounded-full bg-card/90 flex items-center justify-center hover:bg-card transition-colors text-ink-mute"
+            className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 flex items-center justify-center hover:bg-card transition-colors text-ink-mute"
             title="Remplacer le fichier"
           >
             <RefreshCw size={14} />

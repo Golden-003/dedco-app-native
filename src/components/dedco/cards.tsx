@@ -97,7 +97,7 @@ export const ProductCard = memo(function ProductCard({
           type="button"
           aria-label={isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
           className={`absolute top-2.5 right-2.5 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all ${
-            isFav ? "bg-card text-terracotta" : "bg-card/60 text-ink-soft"
+            isFav ? "bg-card text-terracotta" : "bg-white/60 text-ink-soft"
           } hover:bg-card hover:scale-110`}
           onClick={(e) => {
             e.stopPropagation();
@@ -236,7 +236,7 @@ export const SceneCard = memo(function SceneCard({
             className={`absolute top-2.5 right-2.5 w-8 h-8 rounded-full flex items-center justify-center transition-all ${
               isSaved
                 ? "bg-card text-terracotta"
-                : "bg-card/60 text-ink-soft"
+                : "bg-white/60 text-ink-soft"
             } hover:bg-card`}
             onClick={(e) => {
               e.stopPropagation();

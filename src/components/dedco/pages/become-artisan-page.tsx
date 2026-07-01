@@ -38,7 +38,7 @@ export function BecomeArtisanPage() {
         <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, var(--amber) 0%, var(--terracotta) 100%)" }} />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 text-center text-white">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-card/15 backdrop-blur text-xs font-semibold mb-5">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 backdrop-blur text-xs font-semibold mb-5">
               <Hammer size={14} />
               Artisans du Bénin
             </div>

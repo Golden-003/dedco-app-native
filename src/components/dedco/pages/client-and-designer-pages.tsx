@@ -76,7 +76,7 @@ export function DesignerWalletPage() {
           <h2 className="font-display text-4xl font-numeric font-bold">
             {showBalance ? formatFCFA(solde) : "•••••• FCFA"}
           </h2>
-          <button onClick={() => setShowBalance(!showBalance)} className="p-2 rounded-full bg-card/10 hover:bg-card/20">
+          <button onClick={() => setShowBalance(!showBalance)} className="p-2 rounded-full bg-white/10 hover:bg-white/20">
             {showBalance ? <EyeOff size={16} /> : <Eye size={16} />}
           </button>
         </div>

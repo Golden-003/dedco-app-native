@@ -601,7 +601,7 @@ export function Footer({
                 <button
                   key={s}
                   type="button"
-                  className="w-9 h-9 rounded-full bg-card/10 hover:bg-amber hover:text-white transition-colors flex items-center justify-center text-[10px] font-semibold"
+                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-amber hover:text-white transition-colors flex items-center justify-center text-[10px] font-semibold"
                   aria-label={s}
                 >
                   {s[0]}
@@ -714,7 +714,7 @@ export function Footer({
                 type="email"
                 placeholder="Votre email"
                 aria-label="Votre adresse email"
-                className="flex-1 min-w-0 px-3 py-2 rounded-md bg-card/10 text-white text-sm placeholder-white/50 border border-white/20 focus:outline-none focus:border-terracotta"
+                className="flex-1 min-w-0 px-3 py-2 rounded-md bg-white/10 text-white text-sm placeholder-white/50 border border-white/30 focus:outline-none focus:border-terracotta"
               />
               <button
                 type="submit"

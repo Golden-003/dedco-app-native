@@ -398,7 +398,7 @@ function StepDescription({
               <button
                 type="button"
                 onClick={() => removePhoto(i)}
-                className="absolute top-1 right-1 w-5 h-5 rounded-full bg-card/90 flex items-center justify-center text-[var(--text-1)] hover:text-[var(--terracotta)]"
+                className="absolute top-1 right-1 w-5 h-5 rounded-full bg-white/90 flex items-center justify-center text-[var(--text-1)] hover:text-[var(--terracotta)]"
                 aria-label={`Supprimer photo ${i + 1}`}
               >
                 <X size={10} />

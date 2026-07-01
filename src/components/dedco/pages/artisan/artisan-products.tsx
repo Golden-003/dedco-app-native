@@ -203,7 +203,7 @@ export function ArtisanProductsPage() {
               <span
                 className={`text-xs px-1.5 py-0.5 rounded-full ${
                   filter === tab.key
-                    ? "bg-card/20 text-white"
+                    ? "bg-white/20 text-white"
                     : "bg-[var(--bg-cream)] text-[var(--text-3)]"
                 }`}
               >

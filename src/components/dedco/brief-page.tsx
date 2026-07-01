@@ -441,7 +441,7 @@ export function BriefPage({
                     <button
                       type="button"
                       onClick={() => update("references", data.references.filter((_, idx) => idx !== i))}
-                      className="absolute top-1 right-1 w-6 h-6 rounded-full bg-card/90 flex items-center justify-center text-ink hover:text-terracotta"
+                      className="absolute top-1 right-1 w-6 h-6 rounded-full bg-white/90 flex items-center justify-center text-ink hover:text-terracotta"
                       aria-label={`Supprimer la référence ${i + 1}`}
                     >
                       <X size={12} />

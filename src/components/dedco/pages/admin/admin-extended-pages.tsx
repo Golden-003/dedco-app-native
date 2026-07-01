@@ -736,13 +736,13 @@ export function AdminCollectionsPage() {
                 {c.status}
               </span>
               <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                <button onClick={() => showToast("Action effectuée.")} className="w-8 h-8 rounded-full bg-card/90 flex items-center justify-center text-[var(--text-1)] hover:bg-card">
+                <button onClick={() => showToast("Action effectuée.")} className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[var(--text-1)] hover:bg-card">
                   <Edit size={14} />
                 </button>
-                <button onClick={() => showToast("Action effectuée.")} className="w-8 h-8 rounded-full bg-card/90 flex items-center justify-center text-[var(--text-1)] hover:bg-card">
+                <button onClick={() => showToast("Action effectuée.")} className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[var(--text-1)] hover:bg-card">
                   <Eye size={14} />
                 </button>
-                <button onClick={() => showToast("Image supprimée.")} className="w-8 h-8 rounded-full bg-card/90 flex items-center justify-center text-[var(--terracotta)] hover:bg-card">
+                <button onClick={() => showToast("Image supprimée.")} className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[var(--terracotta)] hover:bg-card">
                   <Trash2 size={14} />
                 </button>
               </div>
