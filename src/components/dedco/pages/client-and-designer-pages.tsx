@@ -572,7 +572,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
     needsEspace: boolean; needsMultiples: boolean; needsContraintes: boolean; inspirationsOptional: boolean;
   }> = {
     prototype: {
-      label: "Prototype", icon: Sofa,
+      label: "Prototype", icon: Lightbulb,
       desc: "Petit besoin simple. Ajustement ponctuel ou conseil rapide.",
       needsEspace: false, needsMultiples: false, needsContraintes: false, inspirationsOptional: true,
     },
