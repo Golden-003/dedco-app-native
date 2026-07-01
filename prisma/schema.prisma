@@ -1,8 +1,7 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// ============================================================
+// DEDCO — Prisma Schema
+// Modèles métier : User (multi-rôle), Artisan, Product, Order, Brief, Notification
+// ============================================================
 
 generator client {
   provider = "prisma-client-js"
@@ -13,20 +12,159 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ── User — multi-rôle (client, artisan, designer, admin, maison) ──
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
-  name      String?
+  name      String
+  password  String   // hashé en production
+  role      String   @default("client") // client | artisan | designer | admin | maison
+  avatar    String?
+  phone     String?
+  verified  Boolean  @default(false)
+  kycStatus String?  // null | pending | validated | rejected
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Relations
+  products      Product[]      @relation("ArtisanProducts")
+  orders        Order[]        @relation("CustomerOrders")
+  briefs        Brief[]        @relation("ClientBriefs")
+  notifications Notification[]
+  proposals     Proposal[]
+
+  @@map("users")
 }
 
-model Post {
+// ── Artisan — profil public étendu (lié à un User) ──
+
+model Artisan {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  level       String   @default("N1") // N1 | N2 | N3 | N4
+  bio         String?
+  zone        String?  // ex: "Cotonou", "Porto-Novo"
+  rating      Float    @default(0)
+  reviewCount Int      @default(0)
+  verified    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user    User     @relation(fields: [userId], references: [id])
+  products Product[]
+
+  @@map("artisans")
+}
+
+// ── Product — pièce artisanale ──
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  price       Int      // en FCFA
+  category    String   // Mobilier | Sièges | Tables | Luminaires | etc.
+  images      String   // JSON array of URLs
+  badge       String?  // "Nouveau" | "Best-seller" | null
+  stock       Int      @default(1)
+  artisanId   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  artisan     Artisan  @relation(fields: [artisanId], references: [id])
+  orderItems  OrderItem[]
+
+  @@map("products")
+}
+
+// ── Order — commande client ──
+
+model Order {
+  id          String   @id @default(cuid())
+  orderNumber String   @unique // CMD-2026-XXXX
+  customerId  String
+  status      String   @default("pending") // pending | paid | shipped | delivered | cancelled
+  totalAmount Int      // en FCFA
+  shippingFee Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  customer    User       @relation(fields: [customerId], references: [id])
+  items       OrderItem[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String @id @default(cuid())
+  orderId   String
+  productId String
+  quantity  Int    @default(1)
+  price     Int    // prix unitaire au moment de la commande
+
+  order      Order   @relation(fields: [orderId], references: [id])
+  product    Product @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
+// ── Brief — brief artisan (workflow machine d'états) ──
+
+model Brief {
+  id          String   @id @default(cuid())
+  briefNumber String   @unique // BRA-000001
+  title       String
+  description String
+  category    String
+  zone        String
+  piece       String   // ex: "Chambre"
+  style       String   // ex: "Moderne épuré"
+  budgetMin   Int
+  budgetMax   Int
+  status      String   @default("DRAFT") // voir brief-artisan/statuses.ts
+  clientId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  expiresAt   DateTime?
+
+  client      User       @relation(fields: [clientId], references: [id])
+  proposals   Proposal[]
+
+  @@map("briefs")
+}
+
+model Proposal {
+  id            String   @id @default(cuid())
+  proposalNumber String  @unique // BAP-000001
+  briefId       String
+  artisanId     String
+  price         Int
+  deliveryTime  String   // ex: "18 jours"
+  materials     String
+  message       String?
+  status        String   @default("pending") // pending | accepted | rejected
+  createdAt     DateTime @default(now())
+
+  brief         Brief @relation(fields: [briefId], references: [id])
+  artisan       User  @relation(fields: [artisanId], references: [id])
+
+  @@map("proposals")
+}
+
+// ── Notification — centre de notifications ──
+
+model Notification {
   id        String   @id @default(cuid())
+  userId    String
+  type      String   // brief_artisan | brief_designer | order | payment | delivery | review | system | litige
   title     String
-  content   String?
-  published Boolean  @default(false)
-  authorId  String
+  desc      String
+  read      Boolean  @default(false)
+  linkedId  String?  // ID du brief/projet/order lié
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  user      User @relation(fields: [userId], references: [id])
+
+  @@map("notifications")
 }

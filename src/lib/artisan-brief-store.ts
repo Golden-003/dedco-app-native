@@ -4,6 +4,7 @@
 // ============================================================
 
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { BriefArtisanStatus } from './dedco-status';
 import type { ArtisanBrief, ArtisanBriefProposal } from './artisan-brief-types';
 import { applyTransition } from './brief-artisan/engine';
@@ -64,10 +65,41 @@ function executeTransition(
   // Mettre à jour le brief dans la liste
   const newBriefs = briefs.map(b => b.id === briefId ? updatedBrief as ArtisanBrief : b);
 
-  // Logger les notifications déclenchées
+  // Logger les notifications déclenchées ET les dispatcher au notification-store
   if (result.notifications && result.notifications.length > 0) {
     console.log(`[BriefArtisan] Notifications déclenchées pour ${briefId}:`, result.notifications);
-    // TODO: connecter au notification-store quand les types seront alignés
+    // Dispatcher les notifications au store global
+    try {
+      // Import dynamique pour éviter la dépendance circulaire
+      const { useNotificationStore } = require('./notification-store');
+      const addNotification = useNotificationStore.getState().addNotification;
+      const NOTIF_LABELS: Record<string, { type: any; title: string; desc: string }> = {
+        brief_submitted: { type: 'brief_artisan', title: 'Brief prêt à publier', desc: 'Votre brief est complet. Publiez-le pour recevoir des propositions.' },
+        brief_published: { type: 'brief_artisan', title: 'Brief publié', desc: 'Votre brief est maintenant visible par les artisans vérifiés.' },
+        proposal_received: { type: 'brief_artisan', title: 'Nouvelle proposition reçue', desc: 'Un artisan a répondu à votre brief.' },
+        discussion_started: { type: 'brief_artisan', title: 'Discussion démarrée', desc: 'Une discussion est ouverte avec un artisan.' },
+        artisan_selected: { type: 'brief_artisan', title: 'Artisan sélectionné', desc: 'Vous avez été sélectionné pour un brief.' },
+        payment_requested: { type: 'brief_artisan', title: 'Paiement requis', desc: 'Veuillez payer l\'acompte pour démarrer la fabrication.' },
+        payment_confirmed: { type: 'brief_artisan', title: 'Paiement confirmé', desc: 'Le paiement a été reçu, la fabrication démarre.' },
+        project_created: { type: 'brief_artisan', title: 'Projet créé', desc: 'Votre brief a été converti en projet de fabrication.' },
+        brief_expired: { type: 'brief_artisan', title: 'Brief expiré', desc: 'Aucune proposition reçue dans les 14 jours.' },
+        brief_cancelled: { type: 'brief_artisan', title: 'Brief annulé', desc: 'Le brief a été annulé.' },
+      };
+      for (const trigger of result.notifications) {
+        const label = NOTIF_LABELS[trigger];
+        if (label) {
+          addNotification({
+            type: label.type,
+            title: label.title,
+            desc: label.desc,
+            linkedId: briefId,
+            route: { page: 'brief-artisan-detail', briefId },
+          });
+        }
+      }
+    } catch (e) {
+      console.warn('[BriefArtisan] Impossible de dispatcher les notifications:', e);
+    }
   }
 
   return { briefs: newBriefs, success: true };
@@ -92,7 +124,9 @@ const CLIENT_USER = { id: 'CL-001', role: 'client' as UserRole };
 const ARTISAN_USER = { id: 'ART-001', role: 'artisan' as UserRole };
 const SYSTEM_USER = { id: 'system', role: 'system' as UserRole };
 
-export const useBriefArtisanStore = create<BriefArtisanState>((set, get) => ({
+export const useBriefArtisanStore = create<BriefArtisanState>()(
+  persist(
+    (set, get) => ({
   briefs: _MOCK,
 
   // ── Lecture ──
@@ -267,4 +301,9 @@ export const useBriefArtisanStore = create<BriefArtisanState>((set, get) => ({
       return { briefs: result.briefs };
     });
   },
-}));
+    }),
+    {
+      name: 'dedco-briefs-artisan',
+    }
+  )
+);

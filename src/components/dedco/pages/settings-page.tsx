@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { User, Globe, Shield, Bell, Moon, LogOut, ChevronRight,
-  CheckCircle2,
+  CheckCircle2, Trash2,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
 import { useState } from "react";
@@ -21,6 +21,7 @@ const SETTINGS = [
 
 export function SettingsPage() {
   const navigate = useDedcoStore((s) => s.navigate);
+  const logout = useDedcoStore((s) => s.logout);
   const [toast, setToast] = useState<string | null>(null);
   function showToast(msg: string) {
     setToast(msg);
@@ -102,7 +103,10 @@ export function SettingsPage() {
           className="dedco-card p-5 sm:p-6 border-[var(--terracotta)]/20"
         >
           <button
-            onClick={() => showToast("Demande de suppression de compte envoyée. Notre équipe vous contactera sous 48 h.")}
+            onClick={() => {
+              logout();
+              showToast("Vous êtes déconnecté. À bientôt sur Dedco !");
+            }}
             className="flex items-center gap-3 text-sm font-medium text-[var(--terracotta)] hover:underline cursor-pointer"
           >
             <LogOut size={18} />
@@ -110,6 +114,28 @@ export function SettingsPage() {
           </button>
         </motion.div>
       </div>
+
+      {/* Section suppression de compte (séparée) */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.35 }}
+        className="dedco-card p-5 sm:p-6 border-[var(--terracotta)]/20"
+      >
+        <h3 className="font-display font-semibold text-base mb-1 text-[var(--terracotta)]">
+          Supprimer mon compte
+        </h3>
+        <p className="text-xs text-[var(--text-2)] mb-3">
+          Cette action est irréversible. Notre équipe vous contactera sous 48 h pour confirmer.
+        </p>
+        <button
+          onClick={() => showToast("Demande de suppression de compte envoyée. Notre équipe vous contactera sous 48 h.")}
+          className="flex items-center gap-3 text-sm font-medium text-[var(--terracotta)] hover:underline cursor-pointer"
+        >
+          <Trash2 size={18} />
+          Demander la suppression
+        </button>
+      </motion.div>
 
       {/* Toast inline */}
       {toast && (

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import * as Dialog from "@radix-ui/react-dialog";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ArrowRight } from "lucide-react";
 
@@ -39,77 +40,70 @@ export function WelcomePopup({ onNavigate }: { onNavigate: (page: string) => voi
 
   return (
     <>
-      {/* ── WELCOME MODAL ── */}
-      <AnimatePresence>
-        {showWelcome && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] flex items-center justify-center p-4"
-            style={{ backgroundColor: "rgba(30, 24, 19, 0.75)" }}
-            onClick={closeWelcome}
-          >
-            <motion.div
-              initial={{ scale: 0.92, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.92, opacity: 0 }}
-              transition={{ type: "spring", damping: 24, stiffness: 300 }}
-              className="relative bg-card rounded-2xl overflow-hidden shadow-2xl max-w-md w-full"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Image plein cadre avec overlay */}
-              <div className="relative h-56 overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80"
-                  alt="Intérieur contemporain"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 30%, rgba(30,24,19,0.85) 100%)" }} />
+      {/* ── WELCOME MODAL ── (Radix Dialog pour a11y : focus trap, Échap, aria-modal) */}
+      <Dialog.Root open={showWelcome} onOpenChange={(o) => !o && closeWelcome()}>
+        <Dialog.Portal>
+          <Dialog.Overlay className="fixed inset-0 z-[200] bg-black/75 dedco-fade-in" />
+          <Dialog.Content className="fixed left-1/2 top-1/2 z-[200] -translate-x-1/2 -translate-y-1/2 max-w-md w-[calc(100%-32px)] bg-card rounded-2xl overflow-hidden shadow-2xl dedco-scale-in">
+            <Dialog.Title className="sr-only">Bienvenue sur Dedco</Dialog.Title>
+            <Dialog.Description className="sr-only">
+              Découvrez l'artisanat béninois — bois iroko, rotin tressé, bogolan, wax.
+            </Dialog.Description>
 
-                {/* Logo en bas de l'image */}
-                <div className="absolute bottom-4 left-6 text-white">
-                  <p className="font-display font-black text-3xl leading-none" style={{ fontFamily: "Quache, Georgia, serif" }}>
-                    Dedco<span style={{ color: "#BF793B" }}>.</span>
-                  </p>
-                </div>
+            {/* Image plein cadre avec overlay */}
+            <div className="relative h-56 overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80"
+                alt="Intérieur contemporain"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 30%, rgba(30,24,19,0.85) 100%)" }} />
 
-                {/* Bouton fermer */}
+              {/* Logo en bas de l'image */}
+              <div className="absolute bottom-4 left-6 text-white">
+                <p className="font-display font-black text-3xl leading-none" style={{ fontFamily: "Quache, Georgia, serif" }}>
+                  Dedco<span style={{ color: "#BF793B" }}>.</span>
+                </p>
+              </div>
+
+              {/* Bouton fermer */}
+              <Dialog.Close asChild>
                 <button
-                  onClick={closeWelcome}
                   className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/30 backdrop-blur flex items-center justify-center text-white hover:bg-black/50 transition-colors"
+                  aria-label="Fermer"
                 >
                   <X size={16} />
                 </button>
-              </div>
+              </Dialog.Close>
+            </div>
 
-              {/* Contenu */}
-              <div className="p-6">
-                <h2 className="font-display font-bold text-lg mb-2 text-[var(--text-1)]" style={{ fontFamily: "Quache, Georgia, serif" }}>
-                  L'art de vivre chez soi.
-                </h2>
-                <p className="text-sm text-[var(--text-2)] leading-relaxed mb-5">
-                  Bois iroko, rotin tressé, bogolan, wax — des pièces façonnées à la main par les artisans de Cotonou, Porto-Novo et Parakou.
-                </p>
+            {/* Contenu */}
+            <div className="p-6">
+              <h2 className="font-display font-bold text-lg mb-2 text-[var(--text-1)]" style={{ fontFamily: "Quache, Georgia, serif" }}>
+                L'art de vivre chez soi.
+              </h2>
+              <p className="text-sm text-[var(--text-2)] leading-relaxed mb-5">
+                Bois iroko, rotin tressé, bogolan, wax — des pièces façonnées à la main par les artisans de Cotonou, Porto-Novo et Parakou.
+              </p>
 
+              <button
+                onClick={() => { closeWelcome(); onNavigate("marketplace"); }}
+                className="w-full bg-[var(--text-1)] text-white rounded-xl py-3 text-sm font-semibold flex items-center justify-center gap-2 hover:bg-[var(--amber)] transition-colors"
+              >
+                Voir les créations
+                <ArrowRight size={16} />
+              </button>
+              <Dialog.Close asChild>
                 <button
-                  onClick={() => { closeWelcome(); onNavigate("marketplace"); }}
-                  className="w-full bg-[var(--text-1)] text-white rounded-xl py-3 text-sm font-semibold flex items-center justify-center gap-2 hover:bg-[var(--amber)] transition-colors"
-                >
-                  Voir les créations
-                  <ArrowRight size={16} />
-                </button>
-                <button
-                  onClick={closeWelcome}
                   className="w-full text-xs text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors mt-3"
                 >
                   Plus tard
                 </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              </Dialog.Close>
+            </div>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
 
       {/* ── COOKIE BANNER ── Style subtil — petit widget en bas à droite */}
       <AnimatePresence>

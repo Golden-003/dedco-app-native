@@ -169,15 +169,38 @@ function routeToAppRoute(r: Route): AppRoute {
 const ARTISAN_PAGES = new Set([
   "artisan-dashboard","artisan-products","artisan-orders","artisan-profile","artisan-stats",
   "artisan-demandes","artisan-projets","artisan-wallet","artisan-avis","artisan-certification","artisan-abonnement","artisan-parametres",
-  "artisan-brief-recu","artisan-devis-create",
+  "artisan-brief-recu","artisan-devis-create","projet-artisan-detail",
 ]);
 const DESIGNER_PAGES = new Set([
-  "designer-dashboard","designer-projects","designer-briefs","designer-profile","designer-settings","brief-detail",
+  "designer-dashboard","designer-projects","designer-briefs","designer-profile","designer-settings",
   "designer-wallet","designer-portfolio","designer-abonnement",
+  "designer-brief-recu","designer-proposition-mission","projet-designer-detail","brief-designer-detail",
 ]);
 const ADMIN_PAGES = new Set([
   "admin-dashboard","admin-users","admin-products","admin-orders","admin-analytics","admin-content",
   "admin-kyc","admin-messages","admin-litiges","admin-scenes","admin-collections","admin-certification","admin-parametres",
+]);
+
+// Routes workflow accessibles à tout utilisateur authentifié (client, artisan, designer)
+const AUTH_REQUIRED_PAGES = new Set([
+  "brief-detail",          // client voit son brief, designer voit un brief reçu
+  "brief-artisan-detail",  // détail brief artisan
+  "client-proposition-recue", // client voit proposition reçue
+  "projet-paiement",       // paiement projet designer
+  "projet-paiement-artisan", // paiement projet artisan
+  "projet-detail",         // suivi projet
+  "projet-livraison",      // livraison projet
+  "client-projets",        // liste projets client
+  "mes-projets",           // page mes projets
+  "order-history",         // historique commandes
+  "profile",               // profil utilisateur
+  "wallet",                // portefeuille
+  "settings",              // paramètres
+  "notifications",         // notifications
+  "messages",              // messagerie
+  "kyc",                   // KYC artisan
+  "moodboard",             // moodboard (sauvegardes)
+  "onboarding",            // onboarding post-inscription
 ]);
 
 export function isDashboardPage(page: string): boolean {
@@ -193,7 +216,12 @@ function getRequiredRole(page: string): UserRole | null {
   if (DESIGNER_PAGES.has(page)) return "designer";
   if (ADMIN_PAGES.has(page)) return "admin";
   if (page === "maison-dashboard") return "maison";
-  return null; // page publique
+  return null; // page publique ou auth-required
+}
+
+// Routes qui nécessitent juste une authentification (peu importe le rôle)
+function isAuthRequired(page: string): boolean {
+  return AUTH_REQUIRED_PAGES.has(page);
 }
 
 function GuardBlocked({ requiredRole }: { requiredRole: UserRole }) {
@@ -269,6 +297,10 @@ export function DedcoRouter() {
   const requiredRole = getRequiredRole(route.page);
   if (requiredRole && (!currentUser || currentUser.role !== requiredRole)) {
     return <GuardBlocked requiredRole={requiredRole} />;
+  }
+  // Routes auth-required (peu importe le rôle)
+  if (!requiredRole && isAuthRequired(route.page) && !currentUser) {
+    return <GuardBlocked requiredRole={"client"} />; // affiche écran login générique
   }
 
   const legacyRoute = appRouteToRoute(route);

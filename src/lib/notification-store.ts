@@ -4,6 +4,7 @@
 // ============================================================
 
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 export type NotificationType =
   | 'brief_artisan'      // Proposition reçue, brief publié, etc.
@@ -154,7 +155,9 @@ function timeAgo(): string {
   return "À l'instant";
 }
 
-export const useNotificationStore = create<NotificationState>((set, get) => ({
+export const useNotificationStore = create<NotificationState>()(
+  persist(
+    (set, get) => ({
   notifications: MOCK_NOTIFICATIONS,
   unreadCount: MOCK_NOTIFICATIONS.filter(n => !n.read).length,
 
@@ -206,4 +209,9 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
   clearAll: () => {
     set({ notifications: [], unreadCount: 0 });
   },
-}));
+    }),
+    {
+      name: 'dedco-notifications',
+    }
+  )
+);

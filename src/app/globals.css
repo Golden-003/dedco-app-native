@@ -135,6 +135,30 @@
   --border-dark: #e0ddd8;
 
   --radius: 0.625rem;
+
+  /* Status colors (brief-artisan workflow) — spec §14 */
+  --status-draft: #7A6E65;
+  --status-draft-bg: #F2EDE4;
+  --status-submitted: #B8702F;
+  --status-submitted-bg: #FEF5E9;
+  --status-published: #B8702F;
+  --status-published-bg: #FEF5E9;
+  --status-proposals: #4A7A3C;
+  --status-proposals-bg: #E8F1FA;
+  --status-discussion: #3B6EA5;
+  --status-discussion-bg: #E8F1FA;
+  --status-selected: #A6442E;
+  --status-selected-bg: #FAEAE6;
+  --status-deposit: #A6442E;
+  --status-deposit-bg: #FAEAE6;
+  --status-converted: #4A7A3C;
+  --status-converted-bg: #E6F2E3;
+  --status-expired: #7A6E65;
+  --status-expired-bg: #F2EDE4;
+  --status-cancelled: #7A6E65;
+  --status-cancelled-bg: #F2EDE4;
+  --status-closed: #7A6E65;
+  --status-closed-bg: #F2EDE4;
 }
 
 @layer base {
@@ -281,7 +305,7 @@ h1, h2, h3, h4, h5, h6,
   .section-eyebrow {
     font-size: 0.75rem;
     font-weight: 600;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--amber);
     margin-bottom: 8px;
@@ -291,22 +315,14 @@ h1, h2, h3, h4, h5, h6,
   .star { color: var(--amber); }
   .star.empty { color: var(--border-dark); }
 
-  /* Hotspot pulse */
-  @keyframes dedco-pulse {
-    0%, 100% { opacity: 0.85; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.15); }
-  }
+  /* Hotspot pulse — utilise la keyframe dedco-pulse unifiée (voir plus bas) */
   .hotspot-dot {
     animation: dedco-pulse 2s ease-in-out infinite;
   }
 
-  /* Fade in */
-  @keyframes dedco-fade-in {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  /* Fade in — utilise la keyframe dedco-fade-in unifiée (voir plus bas) */
   .dedco-fade-in {
-    animation: dedco-fade-in 0.35s ease-out;
+    animation: dedco-fade-in 0.5s ease-out forwards;
   }
 
   /* Slide in (sheets) */
@@ -402,7 +418,6 @@ h1, h2, h3, h4, h5, h6,
 }
 
 /* Classes utilitaires d'animation */
-.dedco-fade-in { animation: dedco-fade-in 0.5s ease-out forwards; }
 .dedco-fade-up { animation: dedco-fade-up 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 .dedco-scale-in { animation: dedco-scale-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 
