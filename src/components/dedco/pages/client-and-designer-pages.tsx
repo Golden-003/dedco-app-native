@@ -26,10 +26,9 @@ import {
   Video,
   MapPin,
   AlertTriangle,
-  Zap,
+  Lightbulb,
   Sofa,
   Home,
-  Lightbulb,
   Palette,
   Ruler,
   ShoppingCart,
@@ -54,6 +53,9 @@ const MOCK_TXS: Tx[] = [
 ];
 
 export function DesignerWalletPage() {
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
   const [showBalance, setShowBalance] = useState(true);
   const [tab, setTab] = useState<"tout" | "credits" | "debits" | "retraits">("tout");
   const solde = 89000;
@@ -199,6 +201,8 @@ const MOCK_PROJECTS: PortfolioProject[] = [
 ];
 
 export function DesignerPortfolioPage() {
+  const navigate = useDedcoStore((s) => s.navigate);
+
   const [selectedIdx, setSelectedIdx] = useState(0);
   const [showAdd, setShowAdd] = useState(false);
   const [sliderPos, setSliderPos] = useState(50);
@@ -350,6 +354,8 @@ export function DesignerPortfolioPage() {
 // ============================================================
 
 export function DesignerAbonnementPage() {
+  const navigate = useDedcoStore((s) => s.navigate);
+
   const plans = [
     {
       id: "essentiel", name: "Essentiel", price: 10000,
@@ -554,7 +560,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
     { id: "3d", label: "Rendu 3D", icon: Monitor },
     { id: "suivi", label: "Visite de suivi", icon: MapPin },
     { id: "coordination", label: "Coordination chantier", icon: HardHat },
-    { id: "conseil", label: "Conseil déco", icon: Lightbulb },
+    { id: "conseil", label: "Conseil déco", icon: Sofa },
   ];
 
   const toggleObjectif = (id: string) => {
@@ -562,11 +568,11 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
   };
 
   const SCOPE_CONFIG: Record<ProjectScope, {
-    label: string; icon: typeof Zap; desc: string;
+    label: string; icon: typeof Lightbulb; desc: string;
     needsEspace: boolean; needsMultiples: boolean; needsContraintes: boolean; inspirationsOptional: boolean;
   }> = {
     prototype: {
-      label: "Prototype", icon: Zap,
+      label: "Prototype", icon: Sofa,
       desc: "Petit besoin simple. Ajustement ponctuel ou conseil rapide.",
       needsEspace: false, needsMultiples: false, needsContraintes: false, inspirationsOptional: true,
     },
@@ -583,7 +589,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
   };
 
   const scopeConfig = scope ? SCOPE_CONFIG[scope] : null;
-  const ScopeIcon = scopeConfig?.icon;
+  const Lightbulb = scopeConfig?.icon;
   const TOTAL_STEPS = 2; // 0=niveau, 1=brief, 2=récap
 
   const canNext = () => {
@@ -655,7 +661,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
             <div className="space-y-3">
               {(Object.keys(SCOPE_CONFIG) as ProjectScope[]).map((key) => {
                 const cfg = SCOPE_CONFIG[key];
-                const ScopeIcon = cfg.icon;
+                const Lightbulb = cfg.icon;
                 const active = scope === key;
                 return (
                   <button
@@ -666,7 +672,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
                     }`}
                   >
                     <div className="flex items-start gap-3">
-                      <ScopeIcon size={24} className="text-[var(--amber)]" />
+                      <Sofa size={24} className="text-[var(--amber)]" />
                       <div className="flex-1">
                         <p className="font-display font-semibold text-base">{cfg.label}</p>
                         <p className="text-xs text-[var(--text-3)] mt-0.5">{cfg.desc}</p>
@@ -685,7 +691,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
           <div>
             <h2 className="display-sm mb-1">Décrivez votre besoin</h2>
             <p className="text-xs text-[var(--text-3)] mb-4">
-              <span className="dedco-badge dedco-badge-amber"><ScopeIcon size={12} /> {scopeConfig.label}</span>
+              <span className="dedco-badge dedco-badge-amber"><Sofa size={12} /> {scopeConfig.label}</span>
             </p>
             <div className="space-y-4">
               <div>
@@ -780,7 +786,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
           <div>
             <h2 className="display-sm mb-2">Récapitulatif</h2>
             <p className="text-xs text-[var(--text-3)] mb-4">
-              <span className="dedco-badge dedco-badge-amber"><ScopeIcon size={12} /> {scopeConfig.label}</span>
+              <span className="dedco-badge dedco-badge-amber"><Sofa size={12} /> {scopeConfig.label}</span>
             </p>
             <dl className="space-y-2 text-sm">
               <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Niveau</dt><dd className="text-right font-semibold">{scopeConfig.label}</dd></div>
@@ -957,6 +963,9 @@ export function AvisLivraisonPage({ orderId }: { orderId: string }) {
 // ============================================================
 
 export function PlansTarifsPage() {
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
   const navigate = useDedcoStore((s) => s.navigate);
   const [cycle, setCycle] = useState<"mensuel" | "annuel">("mensuel");
   const [openFaq, setOpenFaq] = useState<number | null>(null);

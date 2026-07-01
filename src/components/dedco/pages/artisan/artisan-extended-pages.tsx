@@ -31,6 +31,7 @@ import {
   Upload,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
+import { PhoneInput } from "@/components/dedco/phone-input";
 import { formatFCFA, ARTISANS } from "@/lib/dedco-data";
 
 // ============================================================
@@ -345,6 +346,10 @@ const MOCK_TXS: Tx[] = [
 ];
 
 export function ArtisanWalletPage() {
+  const navigate = useDedcoStore((s) => s.navigate);
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
   const [showBalance, setShowBalance] = useState(true);
   const [tab, setTab] = useState<"tout" | "credits" | "debits" | "retraits">("tout");
   const [withdrawAmount, setWithdrawAmount] = useState(50000);
@@ -532,6 +537,8 @@ const MOCK_REVIEWS: Review[] = [
 ];
 
 export function ArtisanAvisPage() {
+  const navigate = useDedcoStore((s) => s.navigate);
+
   const avgRating = 4.7;
   const totalReviews = 87;
   const histogram = [
@@ -628,6 +635,9 @@ export function ArtisanAvisPage() {
 // ============================================================
 
 export function ArtisanCertificationPage() {
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
   const criteria = [
     { label: "50+ commandes livrées", value: 87, target: 50, ok: true },
     { label: "Note ≥ 4.5/5", value: 4.7, target: 4.5, ok: true },
@@ -743,6 +753,8 @@ export function ArtisanCertificationPage() {
 // ============================================================
 
 export function ArtisanAbonnementPage() {
+  const navigate = useDedcoStore((s) => s.navigate);
+
   const plans = [
     {
       id: "gratuit",
@@ -861,6 +873,9 @@ export function ArtisanAbonnementPage() {
 // ============================================================
 
 export function ArtisanParametresPage() {
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
   const [notifEmail, setNotifEmail] = useState({
     brief: true,
     commande: true,
@@ -903,7 +918,7 @@ export function ArtisanParametresPage() {
           </div>
           <div>
             <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Téléphone</label>
-            <input defaultValue="+229 01 97 45 23 10" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white font-numeric focus:outline-none focus:border-[var(--amber)]" />
+            <PhoneInput value="+229 01 97 45 23 10" onChange={() => {}} className="w-full" />
           </div>
           <div>
             <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Spécialités (max 3)</label>
@@ -990,14 +1005,6 @@ function EmptyState({ icon, title, desc }: { icon: React.ReactNode; title: strin
       </div>
       <p className="font-display font-semibold text-lg mb-1">{title}</p>
       <p className="text-sm text-[var(--text-2)]">{desc}</p>
-
-      {/* Toast inline */}
-      {toast && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 dedco-card px-4 py-3 shadow-lg flex items-center gap-2" style={{ backgroundColor: "var(--forest-pale)", borderColor: "var(--forest)" }}>
-          <CheckCircle2 size={16} className="text-[var(--forest)] flex-shrink-0" />
-          <p className="text-sm text-[var(--text-1)]">{toast}</p>
-        </div>
-      )}
     </div>
   );
 }

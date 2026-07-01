@@ -18,6 +18,7 @@ import {
   Wallet,
   Smartphone,
 } from "lucide-react";
+import { PhoneInput } from "@/components/dedco/phone-input";
 
 type PaymentMethod = "mobile_money" | "mtn" | "moov";
 
@@ -219,17 +220,11 @@ export function CheckoutPage() {
                       <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
                         Téléphone
                       </label>
-                      <div className="relative">
-                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2" size={16} style={{ color: "var(--text-3)" }} />
-                        <input
-                          type="tel"
-                          value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
-                          placeholder="+229 90 00 00 00"
-                          className="w-full pl-9 pr-4 py-3 text-sm rounded-md border focus:outline-none focus:ring-2 transition-all"
-                          style={{ background: "var(--bg-cream)", borderColor: "var(--border)", color: "var(--text-1)" }}
-                        />
-                      </div>
+                      <PhoneInput
+                        value={phone}
+                        onChange={setPhone}
+                        className="w-full"
+                      />
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>

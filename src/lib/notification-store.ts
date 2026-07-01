@@ -24,7 +24,7 @@ export interface DedcoNotification {
   time: string;          // ex: "Il y a 2h", "Hier", "Il y a 3j"
   read: boolean;
   // Route de navigation au clic (optionnel)
-  route?: { page: string; id?: string; briefId?: string; projectId?: string };
+  route?: { page: string; id?: string; briefId?: string; projectId?: string; orderId?: string; designerId?: number };
   // ID du projet/brief lié (pour le linking)
   linkedId?: string;
 }

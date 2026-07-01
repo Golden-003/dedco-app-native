@@ -1,6 +1,6 @@
 "use client";
 
-import { Star, BadgeCheck, MapPin, Table2, Armchair, Lightbulb, Shirt, Flower2, BookOpen, Sofa, BedDouble } from "lucide-react";
+import { Star, BadgeCheck, MapPin, Table2, Armchair, Lightbulb, Shirt, Flower2, BookOpen, Sofa, BedDouble, Archive, Lamp, Frame } from "lucide-react";
 import { formatFCFA, getArtisan } from "@/lib/dedco-data";
 import type { Product } from "@/lib/dedco-types";
 
@@ -484,6 +484,7 @@ export function CategoryCard({
 }) {
   const ICON_MAP: Record<string, typeof Table2> = {
     Table2, Armchair, Lightbulb, Shirt, Flower2, BookOpen, Sofa, BedDouble,
+    Archive, Lamp, Frame, Vase: Flower2,
   };
   const CatIcon = ICON_MAP[category.icon] || Table2;
 

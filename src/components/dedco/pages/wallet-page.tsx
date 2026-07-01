@@ -18,6 +18,7 @@ import {
 import { useDedcoStore } from "@/lib/store";
 import { formatFCFA } from "@/lib/dedco-data";
 import { BackButton } from "../layout";
+import { PhoneInput } from "@/components/dedco/phone-input";
 
 // ============================================================
 // Mock transactions
@@ -338,11 +339,7 @@ function WithdrawModal({
           <p className="text-xs text-ink-mute uppercase tracking-wide mb-1.5">
             Numéro Mobile Money
           </p>
-          <input
-            type="tel"
-            placeholder="+229 9X XX XX XX"
-            className="w-full px-3.5 py-2.5 rounded-md border border-border bg-white text-sm focus:outline-none focus:border-amber"
-          />
+          <PhoneInput value="" onChange={() => {}} className="w-full" />
         </div>
 
         <div className="mb-4">

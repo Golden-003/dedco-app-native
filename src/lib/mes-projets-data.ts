@@ -20,7 +20,7 @@ import type {
   DesignerPrestation,
   PendingPayment,
   Reclamation,
-} from "../dedco-types";
+} from "./dedco-types";
 
 // ────────────────────────────────────────────────────────────
 // ONGLET "EN COURS" — projets actifs (pas d'engagement à confirmer)
@@ -271,7 +271,7 @@ export const MOCK_PRESTATIONS_DESIGNER: DesignerPrestation[] = [
   },
 ];
 
-/** Paiements en attente — inclut l'paiement artisan (BA-003 sélectionné, paiement à effectuer) */
+/** Paiements Paiement en attente — inclut l'paiement artisan (BA-003 sélectionné, paiement à effectuer) */
 export const MOCK_PAIEMENTS_EN_ATTENTE: PendingPayment[] = [
   // Paiement artisan — Proposition PROP-K1 sélectionnée pour BA-003
   {

@@ -1,7 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { User, Globe, Shield, Bell, Moon, LogOut, ChevronRight } from "lucide-react";
+import { User, Globe, Shield, Bell, Moon, LogOut, ChevronRight,
+  CheckCircle2,
+} from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
 import { useState } from "react";
 

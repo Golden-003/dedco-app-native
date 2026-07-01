@@ -19,6 +19,7 @@ import {
   Save,
   Search,
   Plus,
+  CheckCircle2,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
 import { ARTISANS, formatFCFA } from "@/lib/dedco-data";
@@ -80,6 +81,11 @@ const MOCK_KYC: KYCDossier[] = [
 ];
 
 export function AdminKYCPage() {
+  const navigate = useDedcoStore((s) => s.navigate);
+
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
   const [selectedIdx, setSelectedIdx] = useState(0);
   const [decision, setDecision] = useState<"approve" | "reject" | "corrections">("approve");
   const selected = MOCK_KYC[selectedIdx];
@@ -268,6 +274,10 @@ const REASON_LABELS: Record<FlaggedMsg["reason"], { label: string; color: string
 };
 
 export function AdminMessagesPage() {
+  const navigate = useDedcoStore((s) => s.navigate);
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
   const [filter, setFilter] = useState<"tous" | "phone" | "url" | "resolved">("tous");
   const [expanded, setExpanded] = useState<string | null>(null);
   const filtered = filter === "tous" ? MOCK_MSGS.filter((m) => m.status === "pending") : filter === "resolved" ? MOCK_MSGS.filter((m) => m.status === "resolved") : MOCK_MSGS.filter((m) => m.reason === filter && m.status === "pending");
@@ -414,6 +424,8 @@ const LITIGE_TYPES: Record<Litige["type"], { label: string; color: string }> = {
 };
 
 export function AdminLitigesPage() {
+  const navigate = useDedcoStore((s) => s.navigate);
+
   const [selected, setSelected] = useState<Litige | null>(null);
   const [decision, setDecision] = useState<"client_total" | "client_partiel" | "artisan" | "partage">("client_total");
   const [comment, setComment] = useState("");
@@ -556,6 +568,10 @@ export function AdminLitigesPage() {
 // ============================================================
 
 export function AdminScenesPage() {
+  const navigate = useDedcoStore((s) => s.navigate);
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
   const [selectedScene, setSelectedScene] = useState(0);
   const [hotspots, setHotspots] = useState([
     { x: 30, y: 55, productId: 2, label: "Fauteuil Sahel", price: 245000 },
@@ -682,6 +698,10 @@ export function AdminScenesPage() {
 // ============================================================
 
 export function AdminCollectionsPage() {
+  const navigate = useDedcoStore((s) => s.navigate);
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
   const [showCreate, setShowCreate] = useState(false);
   const collections = [
     { id: 1, title: "Ambiances naturelles", count: 12, status: "Publiée", img: "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=600&q=80" },
@@ -795,6 +815,10 @@ export function AdminCollectionsPage() {
 // ============================================================
 
 export function AdminCertificationPage() {
+  const navigate = useDedcoStore((s) => s.navigate);
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
   const candidates = [
     {
       id: "CAND-001", name: "Romuald Azonsi", city: "Cotonou", avatar: "https://images.unsplash.com/photo-1533108344127-a586d2b02479?auto=format&fit=crop&w=120&q=80",
@@ -926,6 +950,10 @@ export function AdminCertificationPage() {
 // ============================================================
 
 export function AdminParametresPage() {
+  const navigate = useDedcoStore((s) => s.navigate);
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
   const [commission, setCommission] = useState(10);
   const [fondsGarantie, setFondsGarantie] = useState(1.5);
   const [maintenance, setMaintenance] = useState(false);

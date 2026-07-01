@@ -3,7 +3,7 @@
 // ============================================================
 
 export * from './catalog';
-export * from './navigation';
+export type { Route } from './navigation';
 export * from './brief-artisan';
 export * from './brief-designer';
 export * from './project-artisan';

@@ -15,6 +15,7 @@ import {
   Clock,
 } from "lucide-react";
 import { formatFCFA } from "@/lib/dedco-data";
+import { useDedcoStore } from "@/lib/store";
 
 // ── KPI data ──
 const KPIS = [
@@ -140,6 +141,8 @@ const fadeUp = {
 };
 
 export function AdminDashboardPage() {
+  const navigate = useDedcoStore((s) => s.navigate);
+
   return (
           <motion.div variants={stagger} initial="initial" animate="animate">
         <motion.div variants={fadeUp} className="mb-6">

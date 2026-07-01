@@ -126,13 +126,13 @@
   --forest-lt: #6ba35a;
   --forest-pale: #e6f2e3;
   --bg-cream: #ffffff;
-  --bg-warm: #ede8e1;
+  --bg-warm: #faf8f5;
   --bg-card: #ffffff;
   --text-1: #1e1813;
   --text-2: #5b5048;
   --text-3: #a89e95;
-  --border: #eae3d9;
-  --border-dark: #d6cdc1;
+  --border: #f0eeec;
+  --border-dark: #e0ddd8;
 
   --radius: 0.625rem;
 }

@@ -20,6 +20,7 @@ import {
   Timer,
   Hammer,
   Palette,
+  MessageSquare,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
 import { formatFCFA } from "@/lib/dedco-data";

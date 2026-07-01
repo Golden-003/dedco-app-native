@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Wrench, ShieldCheck, DollarSign, Star, Package, CheckCircle2, ArrowRight } from "lucide-react";
+import { Hammer, ShieldCheck, DollarSign, Star, Package, CheckCircle2, ArrowRight } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
 
 const STEPS = [
@@ -39,7 +39,7 @@ export function BecomeArtisanPage() {
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 text-center text-white">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 backdrop-blur text-xs font-semibold mb-5">
-              <Wrench size={14} />
+              <Hammer size={14} />
               Artisans du Bénin
             </div>
             <h1 className="font-display text-3xl sm:text-4xl font-bold mb-4">

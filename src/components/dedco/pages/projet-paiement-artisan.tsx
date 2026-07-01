@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
 import { formatFCFA } from "@/lib/dedco-data";
+import { PhoneInput } from "@/components/dedco/phone-input";
 
 // ============================================================
 // MOCK — Propositions artisan par ID
@@ -225,9 +226,10 @@ export function ProjetPaiementArtisanPage({ proposalId }: { proposalId: string }
             </button>
           ))}
         </div>
-        <input
-          defaultValue="+229 01 97 45 23 10"
-          className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white font-numeric"
+        <PhoneInput
+          value="+229 01 97 45 23 10"
+          onChange={() => {}}
+          className="w-full"
         />
       </div>
 

@@ -65,10 +65,6 @@ export function HomePage({
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-36">
           <div className="max-w-xl text-white">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 backdrop-blur text-xs font-semibold mb-5">
-              <Sparkles size={14} className="text-amber-light" />
-              <span>La marketplace de l'artisanat béninois · Paiement sécurisé</span>
-            </div>
             <h1 className="font-display font-bold leading-[1.05] tracking-tight mb-5"
                 style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)" }}>
               Votre intérieur,
@@ -102,7 +98,7 @@ export function HomePage({
                 Voir les inspirations
               </button>
             </div>
-            <div className="flex items-center gap-4 mt-10 flex-wrap">
+            <div className="flex items-center gap-3 mt-10 flex-wrap">
               <div className="flex">
                 {heroAvatars.map((src, i) => (
                   <img
@@ -114,17 +110,23 @@ export function HomePage({
                   />
                 ))}
               </div>
-              <p className="text-sm opacity-90">
-                <strong className="font-numeric">2 400+ clients</strong> satisfaits ·{" "}
-                <strong className="font-numeric">180+ artisans</strong> vérifiés
-              </p>
+              <div className="flex items-center gap-3">
+                <span className="font-numeric text-xl font-bold text-white">2 400+</span>
+                <span className="text-xs text-white/70">clients</span>
+                <span className="text-white/30 text-xs">·</span>
+                <span className="font-numeric text-xl font-bold text-white">180+</span>
+                <span className="text-xs text-white/70">artisans</span>
+                <span className="text-white/30 text-xs">·</span>
+                <span className="font-numeric text-xl font-bold text-white">4.8</span>
+                <span className="text-xs text-white/70">/ 5</span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* TRUST BAR */}
-      <section className="bg-white border-b border-border">
+      <section style={{ background: "var(--bg-warm)" }} className="border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
             {
@@ -164,7 +166,7 @@ export function HomePage({
       </section>
 
       {/* SCENES SECTION */}
-      <section className="py-12 lg:py-16">
+      <section className="py-12 lg:py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-8 gap-4">
             <div>
@@ -208,7 +210,7 @@ export function HomePage({
       </section>
 
       {/* ARTISANS SECTION */}
-      <section className="py-12 lg:py-16" style={{ background: "var(--bg-warm)" }}>
+      <section className="py-12 lg:py-16" style={{ background: "#fdf9f3" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-8 gap-4">
             <div>
@@ -413,7 +415,7 @@ export function HomePage({
       </section>
 
       {/* MAGAZINE */}
-      <section className="py-12 lg:py-16">
+      <section className="py-12 lg:py-16" style={{ background: "var(--bg-warm)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-8 gap-4">
             <div>

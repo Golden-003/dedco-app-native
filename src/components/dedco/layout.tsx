@@ -25,6 +25,7 @@ import {
 import type { Route } from "@/lib/dedco-types";
 import { useDedcoStore, type AppRoute, type CurrentUser, type UserRole } from "@/lib/store";
 import { useNotificationStore } from "@/lib/notification-store";
+import { WelcomePopup } from "@/components/dedco/welcome-popup";
 
 // ============================================================
 // Navbar (desktop) + mobile menu
@@ -352,18 +353,21 @@ export function Navbar({
             >
               <Search size={20} />
             </button>
-            <button
-              type="button"
-              onClick={onOpenFavorites}
-              aria-label="Mes favoris"
-              title="Mes favoris"
-              className="relative w-10 h-10 rounded-full flex items-center justify-center text-ink-soft hover:bg-warm hover:text-ink transition-colors"
-            >
-              <Heart size={20} />
-              {favCount > 0 && (
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-terracotta" />
-              )}
-            </button>
+            {/* Favoris — seulement si connecté */}
+            {currentUser && (
+              <button
+                type="button"
+                onClick={onOpenFavorites}
+                aria-label="Mes favoris"
+                title="Mes favoris"
+                className="relative w-10 h-10 rounded-full flex items-center justify-center text-ink-soft hover:bg-warm hover:text-ink transition-colors"
+              >
+                <Heart size={20} />
+                {favCount > 0 && (
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-terracotta" />
+                )}
+              </button>
+            )}
             <button
               type="button"
               onClick={onOpenCart}
@@ -378,8 +382,8 @@ export function Navbar({
                 </span>
               )}
             </button>
-            {/* ── Cloche notifications ── */}
-            <NotificationBell navigate={navigate} />
+            {/* ── Cloche notifications — seulement si connecté ── */}
+            {currentUser && <NotificationBell navigate={navigate} />}
             {/* ── BLOC 8 — Distinction visiteur / connecté ── */}
             <UserMenu currentUser={currentUser} navigate={navigate} logout={logout} />
             <button

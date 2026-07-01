@@ -17,6 +17,7 @@ import {
   Globe,
   MessageSquare,
 } from "lucide-react";
+import { PhoneInput } from "@/components/dedco/phone-input";
 import { useDedcoStore } from "@/lib/store";
 import { BackButton } from "../layout";
 
@@ -329,10 +330,10 @@ function EditProfileForm() {
         <label className="text-xs text-ink-mute uppercase tracking-wide mb-1 block">
           Téléphone
         </label>
-        <input
-          type="tel"
-          defaultValue={PROFILE.phone}
-          className="w-full px-3 py-2 rounded-md border border-border bg-white text-sm focus:outline-none focus:border-amber"
+        <PhoneInput
+          value={PROFILE.phone}
+          onChange={() => {}}
+          className="w-full"
         />
       </div>
       <button type="button" className="dedco-btn dedco-btn-primary dedco-btn-sm">

@@ -5,7 +5,7 @@
 // ============================================================
 
 export * from './types/catalog';
-export * from './types/navigation';
+export type { Route } from './types/navigation';
 export * from './types/brief-artisan';
 export * from './types/brief-designer';
 export * from './types/project-artisan';

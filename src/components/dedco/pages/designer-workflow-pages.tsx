@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { useDedcoStore, type ProjectScope } from "@/lib/store";
 import { formatFCFA, PRODUCTS } from "@/lib/dedco-data";
+import { PhoneInput } from "@/components/dedco/phone-input";
 
 // ============================================================
 // MOCK DATA
@@ -448,7 +449,7 @@ export function ProjetPaiementPage({ proposalId }: { proposalId: string }) {
             <button key={op.id} onClick={() => setOperator(op.id as "mtn" | "moov")} className={`px-3 py-3 rounded-md text-sm font-semibold border-2 ${operator === op.id ? "border-[var(--amber)]" : "border-[var(--border)]"}`} style={{ backgroundColor: op.color, color: op.text }}>{op.label}</button>
           ))}
         </div>
-        <input defaultValue="+229 01 97 45 23 10" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white font-numeric" />
+        <PhoneInput value="+229 01 97 45 23 10" onChange={() => {}} className="w-full" />
       </div>
       <button onClick={() => setDone(true)} className="dedco-btn dedco-btn-primary w-full dedco-btn-lg">Payer {formatFCFA(total)}</button>
     </div>
@@ -556,6 +557,9 @@ export function ProjetDetailPage({ projectId }: { projectId: string }) {
 // ============================================================
 
 export function ProjetLivraisonPage({ projectId }: { projectId: string }) {
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
   const navigate = useDedcoStore((s) => s.navigate);
   const [validated, setValidated] = useState(false);
   const livrables = [

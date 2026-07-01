@@ -13,6 +13,7 @@ import {
   Star,
   Trash2,
   Upload,
+  CheckCircle2,
 } from "lucide-react";
 
 // ============================================================
