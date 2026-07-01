@@ -107,7 +107,7 @@ export function ProductPage({
               src={product.images[selectedImageIdx]}
               alt={`${product.name} — vue ${selectedImageIdx + 1}`}
               className="w-full h-full object-cover"
-            />
+            loading="lazy" />
           </div>
           {product.images.length > 1 && (
             <div className="flex gap-2 overflow-x-auto dedco-hide-scroll">
@@ -128,7 +128,7 @@ export function ProductPage({
                     src={img}
                     alt=""
                     className="w-full h-full object-cover"
-                  />
+                  loading="lazy" />
                 </button>
               ))}
             </div>
@@ -329,7 +329,7 @@ export function ProductPage({
               src={artisan.avatar}
               alt={artisan.name}
               className="w-20 h-20 rounded-full object-cover flex-shrink-0"
-            />
+            loading="lazy" />
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1 flex-wrap">
                 <h3 className="font-display font-bold text-lg">

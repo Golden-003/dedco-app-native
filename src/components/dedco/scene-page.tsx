@@ -58,7 +58,7 @@ export function ScenePage({
               src={scene.image}
               alt={scene.title}
               className="w-full h-full object-cover"
-            />
+            loading="lazy" />
             {/* Hotspots */}
             {scene.hotspots.map((h, idx) => {
               const product = getProduct(h.productId);
@@ -175,7 +175,7 @@ export function ScenePage({
                     src={designer.avatar}
                     alt={designer.name}
                     className="w-10 h-10 rounded-full object-cover"
-                  />
+                  loading="lazy" />
                   <div className="flex-1">
                     <p className="font-semibold text-sm">{designer.name}</p>
                     <p className="text-xs text-ink-mute">{designer.style}</p>
@@ -236,7 +236,7 @@ export function ScenePage({
                   src={s.image}
                   alt={s.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
+                loading="lazy" />
                 <div
                   className="absolute inset-0"
                   style={{
@@ -285,7 +285,7 @@ export function ScenePage({
                     src={product.images[0]}
                     alt={product.name}
                     className="w-full h-full object-cover"
-                  />
+                  loading="lazy" />
                 </div>
                 <div className="p-5">
                   {product.badge && (

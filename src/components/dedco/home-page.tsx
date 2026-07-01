@@ -107,7 +107,7 @@ export function HomePage({
                     alt=""
                     aria-hidden
                     className="w-9 h-9 rounded-full border-2 border-white/80 object-cover -ml-2.5 first:ml-0"
-                  />
+                  loading="lazy" />
                 ))}
               </div>
               <div className="flex items-center gap-3">
@@ -434,7 +434,7 @@ export function HomePage({
             {MAGAZINE.slice(0, 4).map((article) => (
               <button key={article.id} type="button" onClick={() => navigateStore({ page: "article", id: article.id })} className="dedco-card overflow-hidden text-left cursor-pointer hover:shadow-md transition-shadow">
                 <div className="aspect-[4/3] overflow-hidden bg-warm">
-                  <img src={article.image} alt={article.title} className="w-full h-full object-cover" />
+                  <img src={article.image} alt={article.title} className="w-full h-full object-cover" loading="lazy" />
                 </div>
                 <div className="p-4">
                   <div className="flex items-center gap-2 text-xs text-ink-mute mb-2">

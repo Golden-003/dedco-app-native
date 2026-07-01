@@ -189,7 +189,7 @@ export function DesignerDetailPage({
             src={designer.cover}
             alt=""
             className="w-full h-full object-cover"
-          />
+          loading="lazy" />
           <div
             className="absolute inset-0"
             style={{
@@ -206,7 +206,7 @@ export function DesignerDetailPage({
                 src={designer.avatar}
                 alt={designer.name}
                 className="w-20 h-20 lg:w-24 lg:h-24 rounded-full object-cover border-4 border-cream"
-              />
+              loading="lazy" />
               <div>
                 <h1 className="display-lg text-white drop-shadow-lg">
                   {designer.name}
@@ -353,7 +353,7 @@ export function ArtisanDetailPage({
             src={artisan.avatar}
             alt={artisan.name}
             className="w-24 h-24 rounded-full object-cover"
-          />
+          loading="lazy" />
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1 flex-wrap">
               <h1 className="display-lg">{artisan.name}</h1>
@@ -401,7 +401,7 @@ export function ArtisanDetailPage({
                 src={img}
                 alt={`Réalisation ${i + 1} de ${artisan.name}`}
                 className="w-full h-full object-cover"
-              />
+              loading="lazy" />
             </div>
           ))}
         </div>
@@ -456,7 +456,7 @@ export function MagazinePage() {
               src={featured.image}
               alt={featured.title}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
+            loading="lazy" />
           </div>
           <div className="p-6 sm:p-8 flex flex-col justify-center">
             <div className="flex items-center gap-2 text-xs text-ink-mute mb-3">
@@ -487,7 +487,7 @@ export function MagazinePage() {
         {others.map((article) => (
           <button key={article.id} type="button" onClick={() => navigate({ page: "article", id: article.id })} className="dedco-card overflow-hidden text-left cursor-pointer hover:shadow-md transition-shadow">
             <div className="aspect-[4/3] overflow-hidden bg-warm">
-              <img src={article.image} alt={article.title} className="w-full h-full object-cover" />
+              <img src={article.image} alt={article.title} className="w-full h-full object-cover" loading="lazy" />
             </div>
             <div className="p-4">
               <div className="flex items-center gap-2 text-xs text-ink-mute mb-2">
