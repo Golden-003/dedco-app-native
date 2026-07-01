@@ -154,7 +154,7 @@ export function ArtisanStatsPage() {
                 >
                   {/* Tooltip */}
                   {d.value > 0 && (
-                    <div className="absolute -top-7 left-1/2 -translate-x-1/2 px-2 py-1 rounded bg-[var(--amber)] text-white text-[10px] font-numeric whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                    <div className="absolute -top-7 left-1/2 -translate-x-1/2 px-2 py-1 rounded bg-[var(--text-1)] text-white text-[10px] font-numeric whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
                       {formatFCFA(d.value)}
                     </div>
                   )}

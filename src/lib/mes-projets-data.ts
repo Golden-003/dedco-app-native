@@ -3,7 +3,7 @@
 //
 // RÈGLES DE FRONTIÈRE :
 //   "En cours"  → briefs publiés sans proposition, projets en fabrication, RDV planifiés, livraison à confirmer
-//   "À choisir" → propositions reçues, artisan sélectionné + paiement à effectuer, prestation designer à réserver
+//   "À choisir" → propositions reçues, artisan sélectionné + acompte à payer, prestation designer à réserver
 //   "Terminés"  → projets livrés, prestations réussies, commandes reçues (+ filtre annulés/expirés)
 //   "Réclamations" → dossiers ouverts
 //
@@ -219,7 +219,7 @@ export const MOCK_BRIEF_WITH_PROPOSALS: ArtisanBriefWithProposals = {
       deliveryTime: "18 jours",
       materials: "Bois massif iroko, vernis naturel",
       images: ["https://images.unsplash.com/photo-1558997519-83ea9252edf8?auto=format&fit=crop&w=200&q=80"],
-      paymentConditions: "Paiement sécurisé Mobile Money",
+      paymentConditions: "50 % acompte, 50 % à la livraison",
     },
     {
       id: "PROP-A2",
@@ -232,7 +232,7 @@ export const MOCK_BRIEF_WITH_PROPOSALS: ArtisanBriefWithProposals = {
       deliveryTime: "21 jours",
       materials: "Contreplaqué bouleau, peinture éco-responsable",
       images: ["https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=200&q=80"],
-      paymentConditions: "Paiement sécurisé Mobile Money",
+      paymentConditions: "40 % acompte, 60 % à la livraison",
     },
     {
       id: "PROP-A3",
@@ -245,7 +245,7 @@ export const MOCK_BRIEF_WITH_PROPOSALS: ArtisanBriefWithProposals = {
       deliveryTime: "25 jours",
       materials: "Médjin (bois local), finition cire d'abeille",
       images: ["https://images.unsplash.com/photo-1558997519-83ea9252edf8?auto=format&fit=crop&w=200&q=80"],
-      paymentConditions: "Paiement sécurisé Mobile Money",
+      paymentConditions: "30 % acompte, 70 % à la livraison",
     },
   ],
   sourceType: "ARTISAN_BRIEF",
@@ -271,14 +271,14 @@ export const MOCK_PRESTATIONS_DESIGNER: DesignerPrestation[] = [
   },
 ];
 
-/** Paiements Paiement en attente — inclut l'paiement artisan (BA-003 sélectionné, paiement à effectuer) */
+/** Paiements acompte en attente — inclut l'acompte artisan (BA-003 sélectionné, acompte à payer) */
 export const MOCK_PAIEMENTS_EN_ATTENTE: PendingPayment[] = [
-  // Paiement artisan — Proposition PROP-K1 sélectionnée pour BA-003
+  // Acompte artisan — Proposition PROP-K1 sélectionnée pour BA-003
   {
     id: "PAY-A-003",
     projectTitle: "Table basse sur mesure",
     projectImage: "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=200&q=80",
-    amount: 92500, // 100% payé
+    amount: 92500, // 50% acompte
     dueDate: "28 juin 2026",
     paymentMethod: "MTN MoMo / Moov Money / Carte",
     nextActionRoute: { page: "projet-paiement-artisan", proposalId: "PROP-K1" },

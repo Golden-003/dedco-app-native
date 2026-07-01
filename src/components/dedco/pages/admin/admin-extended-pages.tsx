@@ -19,7 +19,6 @@ import {
   Save,
   Search,
   Plus,
-  CheckCircle2,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
 import { ARTISANS, formatFCFA } from "@/lib/dedco-data";
@@ -81,11 +80,6 @@ const MOCK_KYC: KYCDossier[] = [
 ];
 
 export function AdminKYCPage() {
-  const navigate = useDedcoStore((s) => s.navigate);
-
-  const [toast, setToast] = useState<string | null>(null);
-  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
-
   const [selectedIdx, setSelectedIdx] = useState(0);
   const [decision, setDecision] = useState<"approve" | "reject" | "corrections">("approve");
   const selected = MOCK_KYC[selectedIdx];
@@ -274,10 +268,6 @@ const REASON_LABELS: Record<FlaggedMsg["reason"], { label: string; color: string
 };
 
 export function AdminMessagesPage() {
-  const navigate = useDedcoStore((s) => s.navigate);
-  const [toast, setToast] = useState<string | null>(null);
-  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
-
   const [filter, setFilter] = useState<"tous" | "phone" | "url" | "resolved">("tous");
   const [expanded, setExpanded] = useState<string | null>(null);
   const filtered = filter === "tous" ? MOCK_MSGS.filter((m) => m.status === "pending") : filter === "resolved" ? MOCK_MSGS.filter((m) => m.status === "resolved") : MOCK_MSGS.filter((m) => m.reason === filter && m.status === "pending");
@@ -291,7 +281,7 @@ export function AdminMessagesPage() {
         </div>
       </header>
 
-      <div className="flex gap-2 mb-4 overflow-x-auto dedco-hide-scroll -mx-4 px-4 sm:mx-0 sm:px-0">
+      <div className="flex gap-2 mb-4 overflow-x-auto">
         {[
           { id: "tous", label: "Tous" },
           { id: "phone", label: "Coordonnées" },
@@ -302,7 +292,7 @@ export function AdminMessagesPage() {
             key={t.id}
             onClick={() => setFilter(t.id as typeof filter)}
             className={`px-3 py-1.5 text-xs font-medium rounded-full whitespace-nowrap border transition-all ${
-              filter === t.id ? "bg-[var(--amber)] text-white border-[var(--amber)]" : "bg-white border-[var(--border)]"
+              filter === t.id ? "bg-[var(--ink)] text-white border-[var(--ink)]" : "bg-white border-[var(--border)]"
             }`}
           >
             {t.label}
@@ -350,7 +340,7 @@ export function AdminMessagesPage() {
                     <AlertTriangle size={14} /> Confirmer violation
                   </button>
                   <button onClick={() => navigate({ page: "home" })} className="dedco-btn dedco-btn-ghost dedco-btn-sm">Faux positif</button>
-                  <button onClick={() => showToast("Action effectuée.")} className="dedco-btn dedco-btn-terracotta dedco-btn-sm" style={{ background: "var(--text-1)", borderColor: "var(--text-1)" }}>
+                  <button onClick={() => showToast("Action effectuée.")} className="dedco-btn dedco-btn-terracotta dedco-btn-sm" style={{ background: "var(--ink)", borderColor: "var(--ink)" }}>
                     <X size={14} /> Bannir utilisateur
                   </button>
                 </div>
@@ -420,12 +410,10 @@ const LITIGE_TYPES: Record<Litige["type"], { label: string; color: string }> = {
   non_conforme: { label: "Non conforme", color: "var(--terracotta)" },
   defaut: { label: "Défaut qualité", color: "var(--amber)" },
   endommage: { label: "Endommagé livraison", color: "var(--terracotta)" },
-  non_livre: { label: "Non livré", color: "var(--text-1)" },
+  non_livre: { label: "Non livré", color: "var(--ink)" },
 };
 
 export function AdminLitigesPage() {
-  const navigate = useDedcoStore((s) => s.navigate);
-
   const [selected, setSelected] = useState<Litige | null>(null);
   const [decision, setDecision] = useState<"client_total" | "client_partiel" | "artisan" | "partage">("client_total");
   const [comment, setComment] = useState("");
@@ -568,10 +556,6 @@ export function AdminLitigesPage() {
 // ============================================================
 
 export function AdminScenesPage() {
-  const navigate = useDedcoStore((s) => s.navigate);
-  const [toast, setToast] = useState<string | null>(null);
-  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
-
   const [selectedScene, setSelectedScene] = useState(0);
   const [hotspots, setHotspots] = useState([
     { x: 30, y: 55, productId: 2, label: "Fauteuil Sahel", price: 245000 },
@@ -698,10 +682,6 @@ export function AdminScenesPage() {
 // ============================================================
 
 export function AdminCollectionsPage() {
-  const navigate = useDedcoStore((s) => s.navigate);
-  const [toast, setToast] = useState<string | null>(null);
-  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
-
   const [showCreate, setShowCreate] = useState(false);
   const collections = [
     { id: 1, title: "Ambiances naturelles", count: 12, status: "Publiée", img: "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=600&q=80" },
@@ -736,10 +716,10 @@ export function AdminCollectionsPage() {
                 {c.status}
               </span>
               <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                <button onClick={() => showToast("Action effectuée.")} className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[var(--text-1)] hover:bg-white">
+                <button onClick={() => showToast("Action effectuée.")} className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[var(--ink)] hover:bg-white">
                   <Edit size={14} />
                 </button>
-                <button onClick={() => showToast("Action effectuée.")} className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[var(--text-1)] hover:bg-white">
+                <button onClick={() => showToast("Action effectuée.")} className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[var(--ink)] hover:bg-white">
                   <Eye size={14} />
                 </button>
                 <button onClick={() => showToast("Image supprimée.")} className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[var(--terracotta)] hover:bg-white">
@@ -815,10 +795,6 @@ export function AdminCollectionsPage() {
 // ============================================================
 
 export function AdminCertificationPage() {
-  const navigate = useDedcoStore((s) => s.navigate);
-  const [toast, setToast] = useState<string | null>(null);
-  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
-
   const candidates = [
     {
       id: "CAND-001", name: "Romuald Azonsi", city: "Cotonou", avatar: "https://images.unsplash.com/photo-1533108344127-a586d2b02479?auto=format&fit=crop&w=120&q=80",
@@ -950,16 +926,12 @@ export function AdminCertificationPage() {
 // ============================================================
 
 export function AdminParametresPage() {
-  const navigate = useDedcoStore((s) => s.navigate);
-  const [toast, setToast] = useState<string | null>(null);
-  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
-
   const [commission, setCommission] = useState(10);
   const [fondsGarantie, setFondsGarantie] = useState(1.5);
   const [maintenance, setMaintenance] = useState(false);
 
   return (
-    <div className="p-4 sm:p-6 max-w-4xl mx-auto space-y-5">
+    <div className="p-6 max-w-4xl mx-auto space-y-5">
       <header>
         <h1 className="display-lg mb-1">Paramètres plateforme</h1>
         <p className="text-sm text-[var(--text-2)]">Configuration globale de Dedco</p>

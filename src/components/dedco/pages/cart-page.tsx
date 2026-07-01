@@ -237,7 +237,7 @@ export function CartPage() {
               </button>
 
               <p className="text-center text-xs mt-3" style={{ color: "var(--text-3)" }}>
-                Paiement sécurisé via Mobile Money
+                Paiement sécurisé via Fedapay
               </p>
             </div>
           </div>

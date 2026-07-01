@@ -765,10 +765,10 @@ export const SCENES: Scene[] = [
 export const CATEGORIES: Category[] = [
   { slug: "tables", name: "Tables", count: 4, icon: "Table2" },
   { slug: "fauteuils", name: "Fauteuils & Chaises", count: 3, icon: "Armchair" },
-  { slug: "luminaires", name: "Luminaires", count: 4, icon: "Lamp" },
+  { slug: "luminaires", name: "Luminaires", count: 4, icon: "Lightbulb" },
   { slug: "textiles", name: "Textiles", count: 4, icon: "Shirt" },
-  { slug: "decoration", name: "Décoration", count: 6, icon: "Frame" },
-  { slug: "rangements", name: "Rangements", count: 3, icon: "Archive" },
+  { slug: "decoration", name: "Décoration", count: 6, icon: "Vase" },
+  { slug: "rangements", name: "Rangements", count: 3, icon: "BookOpen" },
   { slug: "canapes", name: "Canapés", count: 1, icon: "Sofa" },
   { slug: "lits", name: "Lits", count: 1, icon: "BedDouble" },
 ];

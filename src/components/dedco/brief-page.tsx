@@ -588,7 +588,7 @@ export function BriefPage({
       </div>
 
       <p className="text-xs text-ink-mute text-center mt-4">
-        Votre brief est transmis aux artisans qualifiés (N2+, note ≥ 4.0). Aucun engagement tant que vous n'avez pas accepté un devis. Paiement sécurisé, livraison sécurisée.
+        Votre brief est transmis aux artisans qualifiés (N2+, note ≥ 4.0). Aucun engagement tant que vous n'avez pas accepté un devis. Paiement séquestré, livraison 3 temps.
       </p>
     </div>
   );

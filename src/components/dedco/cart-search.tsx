@@ -180,7 +180,7 @@ export function CartSidebar({
               Passer commande
             </button>
             <p className="text-xs text-ink-mute text-center mt-2">
-              Paiement sécurisé · Mobile Money · Mobile Money
+              Paiement sécurisé · Fedapay Mobile Money · Séquestre
             </p>
           </div>
         )}

@@ -384,7 +384,7 @@ function StepDescription({
         </label>
       )}
       {photos.length > 0 && (
-        <div className="flex gap-2 mb-5 overflow-x-auto dedco-hide-scroll -mx-4 px-4 sm:mx-0 sm:px-0">
+        <div className="flex gap-2 mb-5 overflow-x-auto">
           {photos.map((photo, i) => (
             <div
               key={i}

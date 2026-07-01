@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDedcoStore } from "@/lib/store";
-import { PhoneInput } from "@/components/dedco/phone-input";
 import {
   Mail,
   Lock,
@@ -35,7 +34,6 @@ export function RegisterPage() {
   const [loading, setLoading] = useState(false);
 
   // Step 1 fields
-  const [firstName, setFirstName] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -71,7 +69,7 @@ export function RegisterPage() {
       };
       login({
         role,
-        name: `${firstName} ${name}` || email.split("@")[0] || "Nouvel utilisateur",
+        name: fullName || email.split("@")[0] || "Nouvel utilisateur",
         email: email || "user@dedco.bj",
         avatar: avatars[role],
       });
@@ -94,7 +92,7 @@ export function RegisterPage() {
   };
 
   const canProceed = () => {
-    if (step === 1) return firstName && name && email && phone && password.length >= 6;
+    if (step === 1) return name && email && phone && password.length >= 6;
     if (step === 2) return true;
     return true;
   };
@@ -179,24 +177,7 @@ export function RegisterPage() {
                   </h3>
                   <div>
                     <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
-                      Prénom
-                    </label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2" size={18} style={{ color: "var(--text-3)" }} />
-                      <input
-                        type="text"
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                        placeholder="Kofi"
-                        required
-                        className="w-full pl-10 pr-4 py-3 text-sm rounded-md border focus:outline-none focus:ring-2 transition-all"
-                        style={{ background: "var(--bg-cream)", borderColor: "var(--border)", color: "var(--text-1)" }}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
-                      Nom
+                      Nom complet
                     </label>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 -translate-y-1/2" size={18} style={{ color: "var(--text-3)" }} />
@@ -204,7 +185,7 @@ export function RegisterPage() {
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        placeholder="Akindélé"
+                        placeholder="Kofi Akindélé"
                         required
                         className="w-full pl-10 pr-4 py-3 text-sm rounded-md border focus:outline-none focus:ring-2 transition-all"
                         style={{ background: "var(--bg-cream)", borderColor: "var(--border)", color: "var(--text-1)" }}
@@ -232,11 +213,18 @@ export function RegisterPage() {
                     <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
                       Téléphone
                     </label>
-                    <PhoneInput
-                      value={phone}
-                      onChange={setPhone}
-                      className="w-full"
-                    />
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2" size={18} style={{ color: "var(--text-3)" }} />
+                      <input
+                        type="tel"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder="+229 90 00 00 00"
+                        required
+                        className="w-full pl-10 pr-4 py-3 text-sm rounded-md border focus:outline-none focus:ring-2 transition-all"
+                        style={{ background: "var(--bg-cream)", borderColor: "var(--border)", color: "var(--text-1)" }}
+                      />
+                    </div>
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>

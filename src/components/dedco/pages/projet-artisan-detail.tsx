@@ -52,7 +52,10 @@ type ArtisanProjectMock = {
   // Détails du devis
   prixInitial: number;
   prixFinal: number;
-  montantPaye: number;
+  acomptePaye: number;
+  soldeAPayer: number;
+  acomptePercent: number;
+  soldePercent: number;
   materiaux: string;
   dimensions: string;
   delaiInitial: string;
@@ -65,7 +68,7 @@ type ArtisanProjectMock = {
   jalons: JalonMock[];
   // Modifications
   modifications: ModificationMock[];
-  // Liaison proposition (pour le bouton "Payer maintenant")
+  // Liaison proposition (pour le bouton "Payer l'acompte")
   proposalId?: string;
 };
 
@@ -83,7 +86,10 @@ const MOCK_PROJECTS: Record<string, ArtisanProjectMock> = {
     artisanCity: "Porto-Novo",
     prixInitial: 245000,
     prixFinal: 260000,
-    montantPaye: 122500,
+    acomptePaye: 122500,
+    soldeAPayer: 137500,
+    acomptePercent: 50,
+    soldePercent: 50,
     materiaux: "Rotin naturel, tissu coton, structure bois",
     dimensions: "85 x 90 x 75 cm",
     delaiInitial: "3 semaines",
@@ -132,7 +138,10 @@ const MOCK_PROJECTS: Record<string, ArtisanProjectMock> = {
     artisanCity: "Ouidah",
     prixInitial: 68000,
     prixFinal: 68000,
-    montantPaye: 34000,
+    acomptePaye: 34000,
+    soldeAPayer: 34000,
+    acomptePercent: 50,
+    soldePercent: 50,
     materiaux: "Tissu bogolan, structure métal, douille porcelaine",
     dimensions: "Ø 35 x 45 cm",
     delaiInitial: "10 jours",
@@ -161,7 +170,10 @@ const MOCK_PROJECTS: Record<string, ArtisanProjectMock> = {
     artisanCity: "Cotonou",
     prixInitial: 95000,
     prixFinal: 95000,
-    montantPaye: 47500,
+    acomptePaye: 47500,
+    soldeAPayer: 47500,
+    acomptePercent: 50,
+    soldePercent: 50,
     materiaux: "Raffia tressé, miroir biseauté, contreplaqué",
     dimensions: "Ø 60 cm",
     delaiInitial: "12 jours",
@@ -190,7 +202,10 @@ const MOCK_PROJECTS: Record<string, ArtisanProjectMock> = {
     artisanCity: "Cotonou",
     prixInitial: 76000,
     prixFinal: 76000,
-    montantPaye: 38000,
+    acomptePaye: 38000,
+    soldeAPayer: 38000,
+    acomptePercent: 50,
+    soldePercent: 50,
     materiaux: "Bois iroko, tissu wax, mousse haute densité",
     dimensions: "Ø 40 x 45 cm (x2)",
     delaiInitial: "15 jours",
@@ -219,7 +234,10 @@ const MOCK_PROJECTS: Record<string, ArtisanProjectMock> = {
     artisanCity: "Cotonou",
     prixInitial: 420000,
     prixFinal: 420000,
-    montantPaye: 420000,
+    acomptePaye: 420000,
+    soldeAPayer: 0,
+    acomptePercent: 50,
+    soldePercent: 50,
     materiaux: "Bois massif iroko, tissu coton wax, mousse haute résilience",
     dimensions: "220 x 95 x 85 cm",
     delaiInitial: "4 semaines",
@@ -280,7 +298,7 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
   const displayedStatusConfig = PROJET_ARTISAN_STATUS[displayedStatus];
 
   return (
-    <div className="p-4 sm:p-6 max-w-4xl mx-auto relative">
+    <div className="p-6 max-w-4xl mx-auto relative">
       <button onClick={() => navigate({ page: "client-projets" })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
         <ChevronRight size={16} className="rotate-180" /> Mes projets
       </button>
@@ -315,48 +333,15 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
         </button>
       </div>
 
-      {/* Bandeau récapitulatif — visible dans TOUS les onglets */}
-      <div className="dedco-card p-4 mb-4">
-        <div className="flex items-center gap-4 flex-wrap">
-          {/* Image + titre */}
-          <img src={project.image} alt={project.title} className="w-14 h-14 rounded-lg object-cover flex-shrink-0" />
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1 flex-wrap">
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-full" style={{ color: displayedStatusConfig.color, backgroundColor: displayedStatusConfig.bgColor }}>
-                {displayedStatusConfig.label}
-              </span>
-              {displayedStatusConfig.isUrgent && <span className="dedco-badge dedco-badge-terra">Urgent</span>}
-            </div>
-            <h3 className="font-display font-semibold text-sm truncate text-[var(--text-1)]">{project.title}</h3>
-            <p className="text-xs text-[var(--text-3)] font-numeric">{project.id} · {project.artisanName}</p>
-          </div>
-          {/* Stats clés */}
-          <div className="flex items-center gap-4 text-xs">
-            <div>
-              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)]">Montant</p>
-              <p className="font-numeric font-bold text-[var(--text-1)]">{formatFCFA(project.prixFinal)}</p>
-            </div>
-            <div>
-              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)]">Payé</p>
-              <p className="font-numeric font-semibold text-[var(--forest)]">{formatFCFA(project.montantPaye)}</p>
-            </div>
-            <div>
-              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)]">Échéance</p>
-              <p className="font-numeric text-[var(--text-2)]">{project.delaiFinal}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Tabs */}
-      <div className="flex gap-2 mb-4 overflow-x-auto dedco-hide-scroll -mx-4 px-4 sm:mx-0 sm:px-0">
+      <div className="flex gap-2 mb-4 overflow-x-auto">
         {[
           { id: "avancement", label: "Avancement" },
           { id: "details", label: "Détails" },
           { id: "modifications", label: `Modifications${project.modifications.filter(m => modStatuses[m.id] === "CHANGE_PENDING_CLIENT").length > 0 ? ` (${project.modifications.filter(m => modStatuses[m.id] === "CHANGE_PENDING_CLIENT").length})` : ""}` },
           { id: "messages", label: "Messagerie" },
         ].map((t) => (
-          <button key={t.id} onClick={() => setCurrentTab(t.id as typeof currentTab)} className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${currentTab === t.id ? "bg-[var(--amber)] text-white" : "bg-white border border-[var(--border)] text-[var(--text-2)]"}`}>
+          <button key={t.id} onClick={() => setCurrentTab(t.id as typeof currentTab)} className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${currentTab === t.id ? "bg-[var(--ink)] text-white" : "bg-white border border-[var(--border)] text-[var(--text-2)]"}`}>
             {t.label}
           </button>
         ))}
@@ -427,8 +412,8 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
             <div className="grid sm:grid-cols-2 gap-3">
               <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Prix initial</dt><dd className="font-numeric font-semibold">{formatFCFA(project.prixInitial)}</dd></div>
               <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Prix final</dt><dd className="font-numeric font-semibold text-[var(--amber)]">{formatFCFA(project.prixFinal)}</dd></div>
-              <div className="sm:col-span-2"><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Paiement sécurisé</dt><dd className="font-numeric text-[var(--forest)]">{formatFCFA(project.montantPaye)} — réglé via Mobile Money</dd></div>
-              
+              <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Acompte payé ({project.acomptePercent}%)</dt><dd className="font-numeric text-[var(--forest)]">{formatFCFA(project.acomptePaye)}</dd></div>
+              <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Solde à payer ({project.soldePercent}%)</dt><dd className="font-numeric text-[var(--terracotta)]">{formatFCFA(project.soldeAPayer)}</dd></div>
             </div>
             <div className="pt-3 border-t border-[var(--border)]">
               <dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Matériaux</dt><dd className="flex items-center gap-1"><Hammer size={12} className="text-[var(--amber)]" /> {project.materiaux}</dd>
@@ -589,7 +574,7 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
             onClick={() => navigate({ page: "projet-paiement-artisan", proposalId: project.proposalId! })}
             className="dedco-btn dedco-btn-primary"
           >
-            <CheckCircle2 size={16} /> Payer maintenant
+            <CheckCircle2 size={16} /> Payer l'acompte
           </button>
         )}
         <button

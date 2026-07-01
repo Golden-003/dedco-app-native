@@ -18,7 +18,6 @@ import {
 import { useDedcoStore } from "@/lib/store";
 import { formatFCFA } from "@/lib/dedco-data";
 import { BackButton } from "../layout";
-import { PhoneInput } from "@/components/dedco/phone-input";
 
 // ============================================================
 // Mock transactions
@@ -287,7 +286,7 @@ export function WalletPage() {
 }
 
 // ============================================================
-// Withdraw Modal (Mobile Money)
+// Withdraw Modal (Fedapay Mobile Money)
 // ============================================================
 
 function WithdrawModal({
@@ -331,7 +330,7 @@ function WithdrawModal({
           </div>
           <div>
             <h3 className="font-display font-bold text-lg">Retrait Mobile Money</h3>
-            <p className="text-xs text-ink-mute">Via Mobile Money</p>
+            <p className="text-xs text-ink-mute">Via Fedapay</p>
           </div>
         </div>
 
@@ -339,7 +338,11 @@ function WithdrawModal({
           <p className="text-xs text-ink-mute uppercase tracking-wide mb-1.5">
             Numéro Mobile Money
           </p>
-          <PhoneInput value="" onChange={() => {}} className="w-full" />
+          <input
+            type="tel"
+            placeholder="+229 9X XX XX XX"
+            className="w-full px-3.5 py-2.5 rounded-md border border-border bg-white text-sm focus:outline-none focus:border-amber"
+          />
         </div>
 
         <div className="mb-4">

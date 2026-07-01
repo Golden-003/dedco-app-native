@@ -31,7 +31,6 @@ import {
   Upload,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
-import { PhoneInput } from "@/components/dedco/phone-input";
 import { formatFCFA, ARTISANS } from "@/lib/dedco-data";
 
 // ============================================================
@@ -139,7 +138,7 @@ export function ArtisanDemandesPage() {
         </div>
       </header>
 
-      <div className="flex gap-2 mb-5 overflow-x-auto dedco-hide-scroll -mx-4 px-4 sm:mx-0 sm:px-0">
+      <div className="flex gap-2 mb-5 overflow-x-auto">
         {[
           { id: "tous", label: "Tous" },
           { id: "nouveau", label: "Nouveau" },
@@ -258,13 +257,13 @@ export function ArtisanProjetsPage() {
       </header>
 
       {/* Mobile: tabs */}
-      <div className="lg:hidden flex gap-2 mb-4 overflow-x-auto dedco-hide-scroll">
+      <div className="lg:hidden flex gap-2 mb-4 overflow-x-auto">
         {COLUMNS.map((c) => (
           <button
             key={c.id}
             onClick={() => setMobileCol(c.id)}
             className={`px-3 py-1.5 text-xs font-medium rounded-full whitespace-nowrap border transition-all ${
-              mobileCol === c.id ? "bg-[var(--amber)] text-white border-[var(--amber)]" : "bg-white border-[var(--border)]"
+              mobileCol === c.id ? "bg-[var(--ink)] text-white border-[var(--ink)]" : "bg-white border-[var(--border)]"
             }`}
           >
             {c.label}
@@ -340,16 +339,12 @@ type Tx = { id: string; type: TxType; desc: string; amount: number; date: string
 const MOCK_TXS: Tx[] = [
   { id: "TX-001", type: "credit", desc: "Paiement reçu — Table basse Wax", amount: 185000, date: "18 jan 2026", status: "completed" },
   { id: "TX-002", type: "debit", desc: "Commission Dedco (10%)", amount: -18500, date: "18 jan 2026", status: "completed" },
-  { id: "TX-003", type: "credit", desc: "Avance Brief #123 — Sophie K.", amount: 48500, date: "20 jan 2026", status: "pending" },
+  { id: "TX-003", type: "credit", desc: "Acompte Brief #123 — Sophie K.", amount: 48500, date: "20 jan 2026", status: "pending" },
   { id: "TX-004", type: "retrait", desc: "Retrait MTN Mobile Money", amount: -50000, date: "10 jan 2026", status: "completed" },
   { id: "TX-005", type: "credit", desc: "Paiement reçu — Miroir Raffia", amount: 95000, date: "5 jan 2026", status: "completed" },
 ];
 
 export function ArtisanWalletPage() {
-  const navigate = useDedcoStore((s) => s.navigate);
-  const [toast, setToast] = useState<string | null>(null);
-  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
-
   const [showBalance, setShowBalance] = useState(true);
   const [tab, setTab] = useState<"tout" | "credits" | "debits" | "retraits">("tout");
   const [withdrawAmount, setWithdrawAmount] = useState(50000);
@@ -368,7 +363,7 @@ export function ArtisanWalletPage() {
       </header>
 
       {/* Wallet card */}
-      <div className="rounded-2xl p-6 text-white" style={{ background: "var(--text-1)" }}>
+      <div className="rounded-2xl p-6 text-white" style={{ background: "var(--ink)" }}>
         <p className="text-xs uppercase tracking-wide opacity-60 mb-2">Solde disponible</p>
         <div className="flex items-center gap-3 mb-4">
           <h2 className="font-display text-4xl font-numeric font-bold">
@@ -433,7 +428,7 @@ export function ArtisanWalletPage() {
                   key={op.id}
                   onClick={() => setOperator(op.id)}
                   className={`px-3 py-2.5 rounded-md text-sm font-semibold border-2 transition-all ${
-                    operator === op.id ? "border-[var(--amber)]" : "border-[var(--border)]"
+                    operator === op.id ? "border-[var(--ink)]" : "border-[var(--border)]"
                   }`}
                   style={{ backgroundColor: op.color, color: op.text }}
                 >
@@ -465,7 +460,7 @@ export function ArtisanWalletPage() {
                 key={t.id}
                 onClick={() => setTab(t.id as typeof tab)}
                 className={`px-2.5 py-1 text-xs rounded-md font-medium transition-all ${
-                  tab === t.id ? "bg-[var(--amber)] text-white" : "bg-[var(--bg-warm)] text-[var(--text-2)]"
+                  tab === t.id ? "bg-[var(--ink)] text-white" : "bg-[var(--bg-warm)] text-[var(--text-2)]"
                 }`}
               >
                 {t.label}
@@ -537,8 +532,6 @@ const MOCK_REVIEWS: Review[] = [
 ];
 
 export function ArtisanAvisPage() {
-  const navigate = useDedcoStore((s) => s.navigate);
-
   const avgRating = 4.7;
   const totalReviews = 87;
   const histogram = [
@@ -635,9 +628,6 @@ export function ArtisanAvisPage() {
 // ============================================================
 
 export function ArtisanCertificationPage() {
-  const [toast, setToast] = useState<string | null>(null);
-  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
-
   const criteria = [
     { label: "50+ commandes livrées", value: 87, target: 50, ok: true },
     { label: "Note ≥ 4.5/5", value: 4.7, target: 4.5, ok: true },
@@ -659,7 +649,7 @@ export function ArtisanCertificationPage() {
       </header>
 
       {/* Hero banner */}
-      <div className="rounded-2xl p-6 text-white relative overflow-hidden" style={{ background: "var(--text-1)" }}>
+      <div className="rounded-2xl p-6 text-white relative overflow-hidden" style={{ background: "var(--ink)" }}>
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-3">
             <Award size={32} className="text-[var(--amber)]" />
@@ -753,8 +743,6 @@ export function ArtisanCertificationPage() {
 // ============================================================
 
 export function ArtisanAbonnementPage() {
-  const navigate = useDedcoStore((s) => s.navigate);
-
   const plans = [
     {
       id: "gratuit",
@@ -834,7 +822,7 @@ export function ArtisanAbonnementPage() {
 
       <div className="dedco-card p-5">
         <h3 className="font-display font-bold mb-3">Comparatif détaillé</h3>
-        <div className="overflow-x-auto dedco-hide-scroll">
+        <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[var(--border)]">
@@ -873,9 +861,6 @@ export function ArtisanAbonnementPage() {
 // ============================================================
 
 export function ArtisanParametresPage() {
-  const [toast, setToast] = useState<string | null>(null);
-  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
-
   const [notifEmail, setNotifEmail] = useState({
     brief: true,
     commande: true,
@@ -892,7 +877,7 @@ export function ArtisanParametresPage() {
   });
 
   return (
-    <div className="p-4 sm:p-6 max-w-3xl mx-auto space-y-5">
+    <div className="p-6 max-w-3xl mx-auto space-y-5">
       <header>
         <h1 className="display-lg mb-1">Paramètres</h1>
         <p className="text-sm text-[var(--text-2)]">Gérez votre profil et préférences</p>
@@ -918,7 +903,7 @@ export function ArtisanParametresPage() {
           </div>
           <div>
             <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Téléphone</label>
-            <PhoneInput value="+229 01 97 45 23 10" onChange={() => {}} className="w-full" />
+            <input defaultValue="+229 01 97 45 23 10" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white font-numeric focus:outline-none focus:border-[var(--amber)]" />
           </div>
           <div>
             <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Spécialités (max 3)</label>
@@ -1005,6 +990,14 @@ function EmptyState({ icon, title, desc }: { icon: React.ReactNode; title: strin
       </div>
       <p className="font-display font-semibold text-lg mb-1">{title}</p>
       <p className="text-sm text-[var(--text-2)]">{desc}</p>
+
+      {/* Toast inline */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 dedco-card px-4 py-3 shadow-lg flex items-center gap-2" style={{ backgroundColor: "var(--forest-pale)", borderColor: "var(--forest)" }}>
+          <CheckCircle2 size={16} className="text-[var(--forest)] flex-shrink-0" />
+          <p className="text-sm text-[var(--text-1)]">{toast}</p>
+        </div>
+      )}
     </div>
   );
 }

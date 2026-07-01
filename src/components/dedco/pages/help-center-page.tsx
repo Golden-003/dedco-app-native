@@ -5,11 +5,11 @@ import { HelpCircle, MessageSquare, BookOpen, ShieldCheck, ChevronRight, Search 
 import { useDedcoStore } from "@/lib/store";
 
 const FAQ = [
-  { q: "Comment fonctionne le paiement sécurisé ?", a: "Dedco utilise Mobile Money. Votre paiement est bloqué jusqu'à confirmation de réception. L'artisan est payé uniquement après votre validation." },
+  { q: "Comment fonctionne le paiement séquestré ?", a: "Dedco utilise Fedapay Mobile Money. Votre paiement est bloqué jusqu'à confirmation de réception. L'artisan est payé uniquement après votre validation." },
   { q: "Quels sont les délais de livraison ?", a: "Les délais varient selon le produit (artisanal = 7-21 jours). Chaque commande est tracée en 3 étapes : fabrication, expédition, livraison." },
   { q: "Comment devenir artisan sur Dedco ?", a: "Inscrivez-vous avec le rôle Artisan, complétez votre profil, soumettez vos documents KYC. Notre équipe valide en 48-72h." },
-  { q: "Que faire en cas de litige ?", a: "Ouvrez un litige depuis votre commande. Notre équipe médie entre vous et l'artisan. Le Mobile Money protège votre paiement pendant la résolution." },
-  { q: "Comment fonctionne le service Designer ?", a: "Créez un brief gratuit décrivant votre projet. Les designers vous envoient des propositions. Paiement via Mobile Money, livrables PDF." },
+  { q: "Que faire en cas de litige ?", a: "Ouvrez un litige depuis votre commande. Notre équipe médie entre vous et l'artisan. Le séquestre protège votre paiement pendant la résolution." },
+  { q: "Comment fonctionne le service Designer ?", a: "Créez un brief gratuit décrivant votre projet. Les designers vous envoient des propositions. Paiement via séquestre, livrables PDF." },
   { q: "Qu'est-ce que les niveaux N1-N4 ?", a: "Ce sont les niveaux de confiance des artisans. N1 = nouveau vérifié, N4 = maître artisan avec 50+ avis et 98% de confiance." },
 ];
 

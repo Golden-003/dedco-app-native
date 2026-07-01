@@ -103,12 +103,8 @@ export type AppRoute =
   | { page: 'projet-artisan-detail'; projectId: string }
   // ── PROJET DESIGNER DETAIL (séparé de l'artisan)
   | { page: 'projet-designer-detail'; projectId: string }
-  // ── PAIEMENT ARTISAN (séparé du paiement designer)
-  | { page: 'projet-paiement-artisan'; proposalId: string }
-  // ── BRIEF ARTISAN DÉTAIL (machine d'états)
-  | { page: 'brief-artisan-detail'; briefId: string }
-  // ── BRIEF DESIGNER DÉTAIL (machine d'états)
-  | { page: 'brief-designer-detail'; briefId: string };
+  // ── PAIEMENT ACOMpte ARTISAN (séparé du paiement designer)
+  | { page: 'projet-paiement-artisan'; proposalId: string };
 
 // ============================================================
 // ProjectScope — niveau de projet (pivot économique simplifié)

@@ -10,7 +10,6 @@ import {
   Bookmark,
   ChevronRight,
   MessageSquare,
-  CheckCircle2,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useDedcoStore } from "@/lib/store";
@@ -24,7 +23,7 @@ import { ARTISANS, PRODUCTS, formatFCFA } from "@/lib/dedco-data";
 const RELATED_ARTICLES = [
   {
     id: 2,
-    title: "5 artisans à suivre absolument",
+    title: "5 artisans béninois à suivre absolument",
     author: "Rédaction Dedco",
     date: "15 Jan 2024",
     readTime: "4 min",

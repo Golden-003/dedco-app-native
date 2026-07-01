@@ -54,17 +54,21 @@ export function HomePage({
             alt=""
             aria-hidden
             className="w-full h-full object-cover"
-            style={{ animation: "dedco-fade-in 1s ease-out" }}
           />
           <div
-            className="absolute inset-0 dedco-animated-gradient"
+            className="absolute inset-0"
             style={{
-              background: "linear-gradient(135deg, rgba(30,24,19,0.88) 0%, rgba(30,24,19,0.6) 50%, rgba(191,121,59,0.2) 100%)",
+              background:
+                "linear-gradient(135deg, rgba(30,24,19,0.85) 0%, rgba(30,24,19,0.55) 50%, rgba(30,24,19,0.3) 100%)",
             }}
           />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-36">
           <div className="max-w-xl text-white">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 backdrop-blur text-xs font-semibold mb-5">
+              <Sparkles size={14} className="text-amber-light" />
+              <span>Artisans béninois vérifiés · Paiement sécurisé</span>
+            </div>
             <h1 className="font-display font-bold leading-[1.05] tracking-tight mb-5"
                 style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)" }}>
               Votre intérieur,
@@ -76,9 +80,9 @@ export function HomePage({
               nos artisans
             </h1>
             <p className="text-base sm:text-lg opacity-90 leading-relaxed mb-8 max-w-lg">
-              Du wax au bois iroko, du bogolan au rotin tressé —
-              des pièces uniques façonnées à la main par les artisans
-              de Cotonou, Porto-Novo et Parakou.
+              Découvrez des créations uniques fabriquées à la main par les
+              meilleurs artisans béninois. Du wax au bois iroko, transformez
+              votre espace en œuvre d'art.
             </p>
             <div className="flex flex-wrap gap-3">
               <button
@@ -98,7 +102,7 @@ export function HomePage({
                 Voir les inspirations
               </button>
             </div>
-            <div className="flex items-center gap-3 mt-10 flex-wrap">
+            <div className="flex items-center gap-4 mt-10 flex-wrap">
               <div className="flex">
                 {heroAvatars.map((src, i) => (
                   <img
@@ -110,39 +114,33 @@ export function HomePage({
                   />
                 ))}
               </div>
-              <div className="flex items-center gap-3">
-                <span className="font-numeric text-xl font-bold text-white">2 400+</span>
-                <span className="text-xs text-white/70">clients</span>
-                <span className="text-white/30 text-xs">·</span>
-                <span className="font-numeric text-xl font-bold text-white">180+</span>
-                <span className="text-xs text-white/70">artisans</span>
-                <span className="text-white/30 text-xs">·</span>
-                <span className="font-numeric text-xl font-bold text-white">4.8</span>
-                <span className="text-xs text-white/70">/ 5</span>
-              </div>
+              <p className="text-sm opacity-90">
+                <strong className="font-numeric">2 400+ clients</strong> satisfaits ·{" "}
+                <strong className="font-numeric">180+ artisans</strong> vérifiés
+              </p>
             </div>
           </div>
         </div>
       </section>
 
       {/* TRUST BAR */}
-      <section style={{ background: "var(--bg-warm)" }} className="border-b border-border">
+      <section className="bg-white border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
             {
               icon: <ShieldCheck size={22} className="text-forest" />,
-              title: "Paiement sécurisé",
-              desc: "MTN MoMo · Moov Money",
+              title: "Paiement séquestré",
+              desc: "Sécurisé Fedapay",
             },
             {
               icon: <Users size={22} className="text-amber" />,
               title: "Artisans vérifiés",
-              desc: "De Cotonou à Parakou",
+              desc: "KYC + niveaux N1-N4",
             },
             {
               icon: <Truck size={22} className="text-amber-dark" />,
-              title: "Livraison suivie",
-              desc: "Partout au Bénin",
+              title: "Livraison 3 temps",
+              desc: "Tracée photo par photo",
             },
             {
               icon: <Sparkles size={22} className="text-amber" />,
@@ -166,7 +164,7 @@ export function HomePage({
       </section>
 
       {/* SCENES SECTION */}
-      <section className="py-12 lg:py-16 bg-white">
+      <section className="py-12 lg:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-8 gap-4">
             <div>
@@ -210,7 +208,7 @@ export function HomePage({
       </section>
 
       {/* ARTISANS SECTION */}
-      <section className="py-12 lg:py-16" style={{ background: "#fdf9f3" }}>
+      <section className="py-12 lg:py-16" style={{ background: "var(--bg-warm)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-8 gap-4">
             <div>
@@ -366,7 +364,7 @@ export function HomePage({
               <ul className="space-y-1.5 mb-5 text-sm opacity-90">
                 <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> Mobilier, décoration, aménagement sur mesure</li>
                 <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> 5 à 15 artisans qualifiés notifiés (N2+, note ≥ 4.0)</li>
-                <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> Sélection, paiement sécurisé, livraison confirmation</li>
+                <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> Sélection, paiement séquestré, livraison 3 temps photo</li>
               </ul>
               <button
                 type="button"
@@ -415,7 +413,7 @@ export function HomePage({
       </section>
 
       {/* MAGAZINE */}
-      <section className="py-12 lg:py-16" style={{ background: "var(--bg-warm)" }}>
+      <section className="py-12 lg:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-8 gap-4">
             <div>

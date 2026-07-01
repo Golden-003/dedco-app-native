@@ -242,10 +242,10 @@ export function LoginPage() {
             )}
           </div>
 
-          {/* Mobile Money mention */}
+          {/* Fedapay mention */}
           <div className="mt-6 text-center">
             <div className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full" style={{ background: "var(--bg-warm)", color: "var(--text-3)" }}>
-              Paiements sécurisés via Mobile Money
+              Paiements sécurisés via Fedapay Mobile Money
             </div>
           </div>
         </div>

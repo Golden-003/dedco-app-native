@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Hammer, ShieldCheck, DollarSign, Star, Package, CheckCircle2, ArrowRight } from "lucide-react";
+import { Wrench, ShieldCheck, DollarSign, Star, Package, CheckCircle2, ArrowRight } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
 
 const STEPS = [
@@ -9,13 +9,13 @@ const STEPS = [
   { num: "2", title: "Complétez votre profil", desc: "Ajoutez vos réalisations, certifications et description de savoir-faire." },
   { num: "3", title: "Vérification KYC", desc: "Soumettez vos documents d'identité. Notre équipe valide en 48-72h." },
   { num: "4", title: "Publiez vos produits", desc: "Créez vos fiches produits avec photos, prix et descriptions." },
-  { num: "5", title: "Recevez des commandes", desc: "Gérez vos commandes et livrez. Le paiement est sécurisé par Mobile Money." },
+  { num: "5", title: "Recevez des commandes", desc: "Gérez vos commandes et livrez. Le paiement est sécurisé par séquestre." },
   { num: "6", title: "Montez en niveau", desc: "N1 → N4 : plus de ventes, plus de visibilité, plus de confiance." },
 ];
 
 const BENEFITS = [
   { icon: <DollarSign size={20} />, title: "0% commission sur les 6 premiers mois", desc: "Lancez-vous sans frais. Nous investissons dans votre succès." },
-  { icon: <ShieldCheck size={20} />, title: "Paiement sécurisé par Mobile Money", desc: "Votre argent est protégé. Pas de risque d'impayé." },
+  { icon: <ShieldCheck size={20} />, title: "Paiement sécurisé par séquestre", desc: "Votre argent est protégé. Pas de risque d'impayé." },
   { icon: <Star size={20} />, title: "Système de niveaux N1-N4", desc: "Montez en grade et gagnez la confiance des clients." },
   { icon: <Package size={20} />, title: "Outils de gestion intégrés", desc: "Dashboard, statistiques, gestion de stock et commandes." },
 ];
@@ -39,8 +39,8 @@ export function BecomeArtisanPage() {
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 text-center text-white">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 backdrop-blur text-xs font-semibold mb-5">
-              <Hammer size={14} />
-              Artisans du Bénin
+              <Wrench size={14} />
+              Artisans béninois
             </div>
             <h1 className="font-display text-3xl sm:text-4xl font-bold mb-4">
               Devenez artisan Dedco

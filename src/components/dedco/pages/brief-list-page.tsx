@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
 import { BRIEFS, formatFCFA } from "@/lib/dedco-data-expanded";
-type Brief = { id: number; title: string; description: string; clientName: string; budget: { min: number; max: number }; room: string; style: string; status: 'open' | 'matched' | 'closed'; createdAt: string; responses: number; urgency: 'normal' | 'urgent' | 'flexible'; requirements: string[]; };
+import type { Brief } from "@/lib/dedco-types";
 import { BackButton } from "../layout";
 
 // ============================================================

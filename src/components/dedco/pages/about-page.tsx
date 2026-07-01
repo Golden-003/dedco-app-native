@@ -5,10 +5,10 @@ import { Heart, ShieldCheck, Users, Globe, Award, Truck, ArrowRight } from "luci
 import { useDedcoStore } from "@/lib/store";
 
 const VALUES = [
-  { icon: <ShieldCheck size={24} />, title: "Confiance & Sécurité", desc: "Paiement sécurisé via Mobile Money. Votre argent est protégé jusqu'à satisfaction." },
+  { icon: <ShieldCheck size={24} />, title: "Confiance & Sécurité", desc: "Paiement séquestré via Fedapay. Votre argent est protégé jusqu'à satisfaction." },
   { icon: <Users size={24} />, title: "Artisans Vérifiés", desc: "Chaque artisan passe par un processus KYC rigoureux. Niveaux N1 à N4." },
-  { icon: <Heart size={24} />, title: "Fait main au Bénin", desc: "Chaque pièce est façonnée à la main par des artisans de Cotonou, Porto-Novo, Ouidah et Parakou." },
-  { icon: <Globe size={24} />, title: "Rayonnement africain", desc: "Du wax au bogolan, l'artisanat béninois porté au-delà des frontières." },
+  { icon: <Heart size={24} />, title: "Fait main au Bénin", desc: "Chaque produit est fabriqué à la main par des artisans béninois qualifiés." },
+  { icon: <Globe size={24} />, title: "Rayonnement africain", desc: "Promouvoir l'artisanat béninois et l'afro-design à l'international." },
 ];
 
 const TEAM = [
@@ -76,7 +76,7 @@ export function AboutPage() {
             </p>
             <p>
               Nous croyons que chaque objet fabriqué à la main porte une valeur unique. Grâce à notre
-              système de paiement Mobile Money, nous garantissons une transaction sécurisée pour
+              système de paiement séquestré Fedapay, nous garantissons une transaction sécurisée pour
               les acheteurs comme pour les artisans. Les niveaux de confiance N1-N4 assurent la
               transparence et la qualité.
             </p>

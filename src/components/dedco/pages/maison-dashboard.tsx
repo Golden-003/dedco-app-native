@@ -21,7 +21,7 @@ import { formatFCFA } from "@/lib/dedco-data";
 const BRAND = {
   name: "Maison Zinsou Déco",
   logo: "ZD",
-  description: "Marque de mobilier haut de gamme alliant tradition locale et design contemporain.",
+  description: "Marque de mobilier haut de gamme alliant tradition béninoise et design contemporain.",
   revenue: 2100000,
   productCount: 15,
   designerCount: 3,

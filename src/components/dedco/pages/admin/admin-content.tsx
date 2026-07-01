@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useDedcoStore } from "@/lib/store";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus,
@@ -70,10 +69,6 @@ const fadeUp = {
 };
 
 export function AdminContentPage() {
-  const navigate = useDedcoStore((s) => s.navigate);
-  const [toast, setToast] = useState<string | null>(null);
-  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
-
   const [tab, setTab] = useState<ContentTab>("magazine");
 
   return (
@@ -122,7 +117,7 @@ export function AdminContentPage() {
                 </button>
               </div>
               <div className="dedco-card overflow-hidden">
-                <div className="overflow-x-auto dedco-hide-scroll">
+                <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b border-[var(--border)] bg-[var(--bg-cream)]">
