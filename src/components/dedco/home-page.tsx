@@ -371,7 +371,12 @@ export function HomePage({
               <button
                 type="button"
                 onClick={() => onNavigate({ name: "brief" })}
-                className="dedco-btn dedco-btn-light dedco-btn-lg w-full"
+                className="dedco-btn dedco-btn-xl w-full"
+                style={{
+                  background: "transparent",
+                  color: "white",
+                  border: "2px solid rgba(255,255,255,0.5)",
+                }}
               >
                 Créer un brief artisan
                 <ArrowRight size={18} />
