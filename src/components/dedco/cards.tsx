@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { Star, BadgeCheck, MapPin, Table2, Armchair, Lightbulb, Shirt, Flower2, BookOpen, Sofa, BedDouble, Archive, Lamp, Frame } from "lucide-react";
 import { formatFCFA, getArtisan } from "@/lib/dedco-data";
 import type { Product } from "@/lib/dedco-types";
@@ -57,7 +58,7 @@ export function BadgeCheckIcon({ verified }: { verified: boolean }) {
 // Product Card
 // ============================================================
 
-export function ProductCard({
+export const ProductCard = memo(function ProductCard({
   product,
   isFav,
   onToggleFav,
@@ -160,13 +161,13 @@ export function ProductCard({
       </div>
     </article>
   );
-}
+});
 
 // ============================================================
 // Scene Card
 // ============================================================
 
-export function SceneCard({
+export const SceneCard = memo(function SceneCard({
   scene,
   onOpen,
   onToggleSave,
@@ -261,13 +262,13 @@ export function SceneCard({
       </div>
     </article>
   );
-}
+});
 
 // ============================================================
 // Artisan Card
 // ============================================================
 
-export function ArtisanCard({
+export const ArtisanCard = memo(function ArtisanCard({
   artisan,
   onOpen,
 }: {
@@ -333,13 +334,13 @@ export function ArtisanCard({
       </div>
     </article>
   );
-}
+});
 
 // ============================================================
 // Designer Card
 // ============================================================
 
-export function DesignerCard({
+export const DesignerCard = memo(function DesignerCard({
   designer,
   onOpen,
 }: {
@@ -414,13 +415,13 @@ export function DesignerCard({
       </div>
     </article>
   );
-}
+});
 
 // ============================================================
 // Magazine Card
 // ============================================================
 
-export function MagazineCard({
+export const MagazineCard = memo(function MagazineCard({
   article,
   onOpen,
 }: {
@@ -469,13 +470,13 @@ export function MagazineCard({
       </div>
     </article>
   );
-}
+});
 
 // ============================================================
 // Category Card
 // ============================================================
 
-export function CategoryCard({
+export const CategoryCard = memo(function CategoryCard({
   category,
   onOpen,
 }: {
@@ -505,4 +506,4 @@ export function CategoryCard({
       </p>
     </button>
   );
-}
+});
