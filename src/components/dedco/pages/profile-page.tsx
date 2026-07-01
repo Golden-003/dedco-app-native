@@ -116,7 +116,7 @@ export function ProfilePage() {
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all border ${
                   activeTab === tab.key
                     ? "bg-amber text-white border-amber"
-                    : "bg-white text-ink-soft border-border hover:border-ink-mute"
+                    : "bg-card text-ink-soft border-border hover:border-ink-mute"
                 }`}
               >
                 {tab.icon}
@@ -262,7 +262,7 @@ function ProfileContent({
               className={`p-4 rounded-lg border transition-colors ${
                 addr.isDefault
                   ? "border-amber bg-amber-pale/40"
-                  : "border-border bg-white"
+                  : "border-border bg-card"
               }`}
             >
               <div className="flex items-center gap-2 mb-1.5">
@@ -313,7 +313,7 @@ function EditProfileForm() {
         <input
           type="text"
           defaultValue={PROFILE.name}
-          className="w-full px-3 py-2 rounded-md border border-border bg-white text-sm focus:outline-none focus:border-amber"
+          className="w-full px-3 py-2 rounded-md border border-border bg-card text-sm focus:outline-none focus:border-amber"
         />
       </div>
       <div>
@@ -323,7 +323,7 @@ function EditProfileForm() {
         <input
           type="email"
           defaultValue={PROFILE.email}
-          className="w-full px-3 py-2 rounded-md border border-border bg-white text-sm focus:outline-none focus:border-amber"
+          className="w-full px-3 py-2 rounded-md border border-border bg-card text-sm focus:outline-none focus:border-amber"
         />
       </div>
       <div>
@@ -362,7 +362,7 @@ function OrdersPlaceholder() {
             key={order.id}
             type="button"
             onClick={() => navigate({ page: "order-tracking", id: order.id })}
-            className="w-full flex items-center justify-between p-4 rounded-lg border border-border bg-white hover:border-amber hover:bg-amber-pale/30 transition-all text-left"
+            className="w-full flex items-center justify-between p-4 rounded-lg border border-border bg-card hover:border-amber hover:bg-amber-pale/30 transition-all text-left"
           >
             <div>
               <p className="font-semibold text-sm font-numeric">{order.id}</p>
@@ -396,7 +396,7 @@ function SettingsPlaceholder() {
         ].map((item) => (
           <div
             key={item.label}
-            className="flex items-center justify-between p-3 rounded-lg border border-border bg-white"
+            className="flex items-center justify-between p-3 rounded-lg border border-border bg-card"
           >
             <div className="flex items-center gap-3 text-sm">
               <span className="text-ink-mute">{item.icon}</span>

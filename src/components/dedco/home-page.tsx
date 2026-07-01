@@ -166,7 +166,7 @@ export function HomePage({
       </section>
 
       {/* SCENES SECTION */}
-      <section className="py-12 lg:py-16 bg-white">
+      <section className="py-12 lg:py-16 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-8 gap-4">
             <div>
@@ -352,8 +352,8 @@ export function HomePage({
           <div className="grid sm:grid-cols-2 gap-5 text-left">
 
             {/* CARTE 1 — BRIEF ARTISAN (commande personnalisée) */}
-            <div className="bg-white/10 backdrop-blur rounded-2xl p-6 border border-white/20">
-              <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mb-4">
+            <div className="bg-card/10 backdrop-blur rounded-2xl p-6 border border-white/20">
+              <div className="w-12 h-12 rounded-full bg-card/20 flex items-center justify-center mb-4">
                 <Hammer size={24} className="text-white" />
               </div>
               <h3 className="font-display font-bold text-xl text-white mb-2">
@@ -379,8 +379,8 @@ export function HomePage({
             </div>
 
             {/* CARTE 2 — BRIEF DESIGNER (projet d'aménagement) */}
-            <div className="bg-white/10 backdrop-blur rounded-2xl p-6 border border-white/20">
-              <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mb-4">
+            <div className="bg-card/10 backdrop-blur rounded-2xl p-6 border border-white/20">
+              <div className="w-12 h-12 rounded-full bg-card/20 flex items-center justify-center mb-4">
                 <Palette size={24} className="text-white" />
               </div>
               <h3 className="font-display font-bold text-xl text-white mb-2">

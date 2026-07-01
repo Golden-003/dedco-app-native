@@ -221,7 +221,7 @@ export function DesignerBriefRecuPage({ briefId }: { briefId: string }) {
                 value={q}
                 onChange={(e) => setQuestions(questions.map((qq, idx) => idx === i ? e.target.value : qq))}
                 placeholder={`Question ${i + 1}`}
-                className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white"
+                className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-card"
               />
             ))}
           </div>
@@ -273,38 +273,38 @@ export function DesignerPropositionMissionPage({ briefId }: { briefId: string })
         {/* Structure obligatoire */}
         <div>
           <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Objectif</label>
-          <input value={form.objectif} onChange={(e) => setForm({ ...form, objectif: e.target.value })} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
+          <input value={form.objectif} onChange={(e) => setForm({ ...form, objectif: e.target.value })} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card" />
         </div>
 
         <div>
           <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Prestation choisie</label>
-          <input value={form.prestation} onChange={(e) => setForm({ ...form, prestation: e.target.value })} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
+          <input value={form.prestation} onChange={(e) => setForm({ ...form, prestation: e.target.value })} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card" />
         </div>
 
         <div>
           <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Livrables</label>
-          <textarea value={form.livrables} onChange={(e) => setForm({ ...form, livrables: e.target.value })} rows={2} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white resize-none" />
+          <textarea value={form.livrables} onChange={(e) => setForm({ ...form, livrables: e.target.value })} rows={2} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card resize-none" />
         </div>
 
         <div className="grid sm:grid-cols-2 gap-3">
           <div>
             <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Délai</label>
-            <input value={form.delai} onChange={(e) => setForm({ ...form, delai: e.target.value })} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
+            <input value={form.delai} onChange={(e) => setForm({ ...form, delai: e.target.value })} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card" />
           </div>
           <div>
             <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Prix global (FCFA)</label>
-            <input type="number" value={form.prix} onChange={(e) => setForm({ ...form, prix: Number(e.target.value) })} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white font-numeric" />
+            <input type="number" value={form.prix} onChange={(e) => setForm({ ...form, prix: Number(e.target.value) })} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card font-numeric" />
           </div>
         </div>
 
         <div className="grid sm:grid-cols-2 gap-3">
           <div>
             <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Inclusions</label>
-            <input value={form.inclusions} onChange={(e) => setForm({ ...form, inclusions: e.target.value })} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
+            <input value={form.inclusions} onChange={(e) => setForm({ ...form, inclusions: e.target.value })} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card" />
           </div>
           <div>
             <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Exclusions</label>
-            <input value={form.exclusions} onChange={(e) => setForm({ ...form, exclusions: e.target.value })} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
+            <input value={form.exclusions} onChange={(e) => setForm({ ...form, exclusions: e.target.value })} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card" />
           </div>
         </div>
 
@@ -510,7 +510,7 @@ export function ProjetDetailPage({ projectId }: { projectId: string }) {
 
       <div className="flex gap-2 mb-4">
         {[{ id: "progression", label: "Progression" }, { id: "messages", label: "Messagerie" }, { id: "achats", label: "Achats recommandés" }].map((t) => (
-          <button key={t.id} onClick={() => setTab(t.id as typeof tab)} className={`px-4 py-2 rounded-full text-sm font-medium ${tab === t.id ? "bg-[var(--amber)] text-white" : "bg-white border border-[var(--border)] text-[var(--text-2)]"}`}>{t.label}</button>
+          <button key={t.id} onClick={() => setTab(t.id as typeof tab)} className={`px-4 py-2 rounded-full text-sm font-medium ${tab === t.id ? "bg-[var(--amber)] text-white" : "bg-card border border-[var(--border)] text-[var(--text-2)]"}`}>{t.label}</button>
         ))}
       </div>
 
@@ -538,7 +538,7 @@ export function ProjetDetailPage({ projectId }: { projectId: string }) {
             </div>
           </div>
           <div className="flex gap-2">
-            <input placeholder="Votre message..." className="flex-1 px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
+            <input placeholder="Votre message..." className="flex-1 px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card" />
             <button onClick={() => showToast("Message envoyé.")} className="dedco-btn dedco-btn-primary dedco-btn-sm"><Send size={14} /></button>
           </div>
         </div>
@@ -612,7 +612,7 @@ export function ProjetLivraisonPage({ projectId }: { projectId: string }) {
         <ul className="space-y-2">
           {livrables.map((l) => (
             <li key={l.id} className="flex items-center gap-3 p-3 bg-[var(--bg-warm)] rounded-md">
-              <div className="w-10 h-10 rounded-md bg-white flex items-center justify-center text-[var(--amber)]"><FileText size={18} /></div>
+              <div className="w-10 h-10 rounded-md bg-card flex items-center justify-center text-[var(--amber)]"><FileText size={18} /></div>
               <div className="flex-1 min-w-0"><p className="text-sm font-medium truncate">{l.name}</p><p className="text-xs text-[var(--text-3)] font-numeric">{l.date}</p></div>
               <button onClick={() => showToast("Téléchargement démarré.")} className="dedco-btn dedco-btn-ghost dedco-btn-sm"><Download size={14} /></button>
             </li>

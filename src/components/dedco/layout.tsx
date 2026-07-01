@@ -143,7 +143,7 @@ function UserMenu({
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-lg shadow-lg border border-border overflow-hidden z-50">
+        <div className="absolute right-0 top-full mt-2 w-64 bg-card rounded-lg shadow-lg border border-border overflow-hidden z-50">
           {/* Header card */}
           <div className="p-4 bg-amber-pale/50 border-b border-border">
             <div className="flex items-center gap-3">
@@ -542,7 +542,7 @@ export function BottomNav({
   return (
     <nav
       aria-label="Navigation mobile"
-      className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-border safe-bottom"
+      className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-card border-t border-border safe-bottom"
       style={{ boxShadow: "0 -2px 12px rgba(30, 24, 19, 0.06)" }}
     >
       <div className="grid grid-cols-4">
@@ -598,7 +598,7 @@ export function Footer({
                 <button
                   key={s}
                   type="button"
-                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-amber hover:text-white transition-colors flex items-center justify-center text-[10px] font-semibold"
+                  className="w-9 h-9 rounded-full bg-card/10 hover:bg-amber hover:text-white transition-colors flex items-center justify-center text-[10px] font-semibold"
                   aria-label={s}
                 >
                   {s[0]}
@@ -711,7 +711,7 @@ export function Footer({
                 type="email"
                 placeholder="Votre email"
                 aria-label="Votre adresse email"
-                className="flex-1 min-w-0 px-3 py-2 rounded-md bg-white/10 text-white text-sm placeholder-white/50 border border-white/20 focus:outline-none focus:border-terracotta"
+                className="flex-1 min-w-0 px-3 py-2 rounded-md bg-card/10 text-white text-sm placeholder-white/50 border border-white/20 focus:outline-none focus:border-terracotta"
               />
               <button
                 type="submit"

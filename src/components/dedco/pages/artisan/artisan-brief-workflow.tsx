@@ -194,7 +194,7 @@ export function ArtisanBriefRecuPage({ briefId }: { briefId: string }) {
                 value={q}
                 onChange={(e) => setQuestions(questions.map((qq, idx) => idx === i ? e.target.value : qq))}
                 placeholder={`Question ${i+1}`}
-                className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white"
+                className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-card"
               />
             ))}
           </div>
@@ -281,7 +281,7 @@ export function ArtisanDevisCreatePage({ briefId }: { briefId: string }) {
               onChange={(e) => setForm({ ...form, prixUnitaire: Number(e.target.value) || 0 })}
               step={5000}
               min={0}
-              className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white font-numeric focus:outline-none focus:border-[var(--amber)]"
+              className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-card font-numeric focus:outline-none focus:border-[var(--amber)]"
             />
           </div>
           <div>
@@ -291,7 +291,7 @@ export function ArtisanDevisCreatePage({ briefId }: { briefId: string }) {
               value={form.quantite}
               onChange={(e) => setForm({ ...form, quantite: Number(e.target.value) || 1 })}
               min={1}
-              className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white font-numeric focus:outline-none focus:border-[var(--amber)]"
+              className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-card font-numeric focus:outline-none focus:border-[var(--amber)]"
             />
           </div>
         </div>
@@ -303,7 +303,7 @@ export function ArtisanDevisCreatePage({ briefId }: { briefId: string }) {
             value={form.delaiFabrication}
             onChange={(e) => setForm({ ...form, delaiFabrication: e.target.value })}
             placeholder="Ex : 3 semaines"
-            className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white focus:outline-none focus:border-[var(--amber)]"
+            className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-card focus:outline-none focus:border-[var(--amber)]"
           />
         </div>
 
@@ -315,7 +315,7 @@ export function ArtisanDevisCreatePage({ briefId }: { briefId: string }) {
             onChange={(e) => setForm({ ...form, materiauxUtilises: e.target.value })}
             rows={2}
             placeholder="Ex : Bois iroko massif, tissu wax, vernis..."
-            className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white resize-none focus:outline-none focus:border-[var(--amber)]"
+            className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-card resize-none focus:outline-none focus:border-[var(--amber)]"
           />
         </div>
 
@@ -327,7 +327,7 @@ export function ArtisanDevisCreatePage({ briefId }: { briefId: string }) {
             onChange={(e) => setForm({ ...form, processus: e.target.value })}
             rows={3}
             placeholder="Ex : 1. Sélection bois 2. Découpe 3. Assemblage 4. Finition"
-            className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white resize-none focus:outline-none focus:border-[var(--amber)]"
+            className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-card resize-none focus:outline-none focus:border-[var(--amber)]"
           />
         </div>
 
@@ -338,7 +338,7 @@ export function ArtisanDevisCreatePage({ briefId }: { briefId: string }) {
             value={form.conditions}
             onChange={(e) => setForm({ ...form, conditions: e.target.value })}
             rows={2}
-            className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white resize-none focus:outline-none focus:border-[var(--amber)]"
+            className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-card resize-none focus:outline-none focus:border-[var(--amber)]"
           />
         </div>
 

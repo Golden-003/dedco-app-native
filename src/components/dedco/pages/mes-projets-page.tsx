@@ -1128,7 +1128,7 @@ export function MesProjetsPage() {
                   <span>{tab.label}</span>
                   <span
                     className={`font-numeric text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
-                      isActive ? "bg-white/20 text-white" : "bg-[var(--bg-warm)] text-[var(--text-3)]"
+                      isActive ? "bg-card/20 text-white" : "bg-[var(--bg-warm)] text-[var(--text-3)]"
                     }`}
                     style={!isActive && isReclamation ? { backgroundColor: "var(--terracotta)", color: "white" } : undefined}
                   >

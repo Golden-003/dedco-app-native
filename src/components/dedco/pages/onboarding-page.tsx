@@ -83,7 +83,7 @@ export function OnboardingPage() {
           <button
             type="button"
             onClick={goPrev}
-            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-12 h-12 rounded-full bg-white shadow-md items-center justify-center text-ink-soft hover:text-ink hover:shadow-lg transition-all z-10"
+            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-12 h-12 rounded-full bg-card shadow-md items-center justify-center text-ink-soft hover:text-ink hover:shadow-lg transition-all z-10"
             aria-label="Précédent"
           >
             <ArrowLeft size={20} />
@@ -93,7 +93,7 @@ export function OnboardingPage() {
           <button
             type="button"
             onClick={goNext}
-            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-12 h-12 rounded-full bg-white shadow-md items-center justify-center text-ink-soft hover:text-ink hover:shadow-lg transition-all z-10"
+            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-12 h-12 rounded-full bg-card shadow-md items-center justify-center text-ink-soft hover:text-ink hover:shadow-lg transition-all z-10"
             aria-label="Suivant"
           >
             <ArrowRight size={20} />

@@ -252,7 +252,7 @@ export function DesignerProfilePage() {
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                  <button onClick={() => showToast("Image supprimée du portfolio.")} className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 bg-white/90 rounded-full">
+                  <button onClick={() => showToast("Image supprimée du portfolio.")} className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 bg-card/90 rounded-full">
                     <Trash2 size={14} className="text-[var(--terracotta)]" />
                   </button>
                 </div>

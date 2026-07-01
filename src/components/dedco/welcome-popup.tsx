@@ -55,7 +55,7 @@ export function WelcomePopup({ onNavigate }: { onNavigate: (page: string) => voi
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.92, opacity: 0 }}
               transition={{ type: "spring", damping: 24, stiffness: 300 }}
-              className="relative bg-white rounded-2xl overflow-hidden shadow-2xl max-w-md w-full"
+              className="relative bg-card rounded-2xl overflow-hidden shadow-2xl max-w-md w-full"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Image plein cadre avec overlay */}
@@ -121,7 +121,7 @@ export function WelcomePopup({ onNavigate }: { onNavigate: (page: string) => voi
             transition={{ duration: 0.3 }}
             className="fixed bottom-4 right-4 z-[150] max-w-[280px]"
           >
-            <div className="bg-white rounded-xl shadow-xl border border-[var(--border)] p-4">
+            <div className="bg-card rounded-xl shadow-xl border border-[var(--border)] p-4">
               <div className="flex items-start gap-2 mb-3">
                 <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: "var(--amber-pale)" }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber-dark)" strokeWidth="2">

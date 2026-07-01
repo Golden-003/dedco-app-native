@@ -171,7 +171,7 @@ export function SearchResultsPage() {
             placeholder="Rechercher..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            className="w-full pl-11 pr-4 py-3 text-sm rounded-xl bg-white border border-border focus:outline-none focus:border-amber transition-colors shadow-sm"
+            className="w-full pl-11 pr-4 py-3 text-sm rounded-xl bg-card border border-border focus:outline-none focus:border-amber transition-colors shadow-sm"
             autoFocus
           />
           {searchInput && (

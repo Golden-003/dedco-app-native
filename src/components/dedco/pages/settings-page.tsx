@@ -57,7 +57,7 @@ export function SettingsPage() {
                     if (item.action === "profile") navigate({ page: "profile" });
                     else if (item.action === "notifications") navigate({ page: "notifications" });
                   }}
-                  className="w-full flex items-center justify-between p-3 rounded-lg border border-[var(--border)] bg-white hover:border-[var(--amber)] transition-colors text-left cursor-pointer"
+                  className="w-full flex items-center justify-between p-3 rounded-lg border border-[var(--border)] bg-card hover:border-[var(--amber)] transition-colors text-left cursor-pointer"
                 >
                   <div className="flex items-center gap-3 text-sm">
                     <span className="text-[var(--text-3)]">{item.icon}</span>
@@ -89,7 +89,7 @@ export function SettingsPage() {
               onClick={() => setNotifs(!notifs)}
               className={`w-11 h-6 rounded-full transition-colors relative cursor-pointer ${notifs ? "bg-[var(--amber)]" : "bg-[var(--border)]"}`}
             >
-              <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${notifs ? "translate-x-[22px]" : "translate-x-0.5"}`} />
+              <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-card shadow transition-transform ${notifs ? "translate-x-[22px]" : "translate-x-0.5"}`} />
             </button>
           </div>
         </motion.div>

@@ -381,7 +381,7 @@ export function MarketplaceCategoryPage({ category }: { category: string }) {
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as SortKey)}
-              className="appearance-none pl-3 pr-8 py-2 text-sm bg-white border border-[var(--border)] rounded-lg text-[var(--text-1)] focus:outline-none focus:ring-2 focus:ring-amber/30 focus:border-amber cursor-pointer"
+              className="appearance-none pl-3 pr-8 py-2 text-sm bg-card border border-[var(--border)] rounded-lg text-[var(--text-1)] focus:outline-none focus:ring-2 focus:ring-amber/30 focus:border-amber cursor-pointer"
             >
               {SORT_OPTIONS.map((o) => (
                 <option key={o.value} value={o.value}>

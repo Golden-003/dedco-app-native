@@ -203,7 +203,7 @@ export function ArtisanProductsPage() {
               <span
                 className={`text-xs px-1.5 py-0.5 rounded-full ${
                   filter === tab.key
-                    ? "bg-white/20 text-white"
+                    ? "bg-card/20 text-white"
                     : "bg-[var(--bg-cream)] text-[var(--text-3)]"
                 }`}
               >
@@ -222,7 +222,7 @@ export function ArtisanProductsPage() {
             placeholder="Rechercher..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full sm:w-56 pl-9 pr-3 py-2 text-sm rounded-lg border border-[var(--border)] bg-white focus:outline-none focus:border-[var(--amber)]"
+            className="w-full sm:w-56 pl-9 pr-3 py-2 text-sm rounded-lg border border-[var(--border)] bg-card focus:outline-none focus:border-[var(--amber)]"
           />
         </div>
       </motion.div>

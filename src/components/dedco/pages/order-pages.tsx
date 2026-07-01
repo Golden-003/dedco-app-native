@@ -189,7 +189,7 @@ export function InvoicePage({ orderId }: { orderId: string }) {
           </button>
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg p-8 sm:p-12">
+        <div className="bg-card rounded-xl shadow-lg p-8 sm:p-12">
           <div className="flex items-start justify-between mb-8 pb-8 border-b-2 border-[var(--amber)]">
             <div>
               <div className="font-display text-3xl font-bold mb-1">

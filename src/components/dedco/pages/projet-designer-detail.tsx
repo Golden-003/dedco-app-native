@@ -341,7 +341,7 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
           { id: "revisions", label: `Révisions${project.revisions.length > 0 ? ` (${project.revisions.length})` : ""}` },
           { id: "messages", label: "Messagerie" },
         ].map((t) => (
-          <button key={t.id} onClick={() => setActiveTab(t.id as typeof activeTab)} className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${activeTab === t.id ? "bg-[var(--amber)] text-white" : "bg-white border border-[var(--border)] text-[var(--text-2)]"}`}>
+          <button key={t.id} onClick={() => setActiveTab(t.id as typeof activeTab)} className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${activeTab === t.id ? "bg-[var(--amber)] text-white" : "bg-card border border-[var(--border)] text-[var(--text-2)]"}`}>
             {t.label}
           </button>
         ))}
@@ -527,7 +527,7 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
                     onChange={(e) => setRevisionMotif(e.target.value)}
                     placeholder="Ex. : la palette est trop froide, ajouter des touches terracotta"
                     rows={3}
-                    className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white mb-2"
+                    className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card mb-2"
                   />
                   <div className="flex gap-2">
                     <button
@@ -572,7 +572,7 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter") sendMessage(); }}
               placeholder="Votre message..."
-              className="flex-1 px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white"
+              className="flex-1 px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card"
             />
             <button
               onClick={sendMessage}

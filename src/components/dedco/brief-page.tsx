@@ -273,7 +273,7 @@ export function BriefPage({
                   className={`p-4 rounded-lg border-2 text-center transition-all ${
                     data.categorie === c.id
                       ? "border-amber bg-amber-pale"
-                      : "border-border bg-white hover:border-ink-mute"
+                      : "border-border bg-card hover:border-ink-mute"
                   }`}
                 >
                   <div className={`mx-auto mb-2 ${data.categorie === c.id ? "text-amber" : "text-ink-soft"}`}>
@@ -303,7 +303,7 @@ export function BriefPage({
                   value={data.titre}
                   onChange={(e) => update("titre", e.target.value)}
                   placeholder="Ex : Table basse en bois iroko avec plateau wax"
-                  className="w-full px-3 py-2.5 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-amber"
+                  className="w-full px-3 py-2.5 text-sm border border-border rounded-md bg-card focus:outline-none focus:border-amber"
                 />
               </div>
 
@@ -314,7 +314,7 @@ export function BriefPage({
                 <select
                   value={data.matiere}
                   onChange={(e) => update("matiere", e.target.value)}
-                  className="w-full px-3 py-2.5 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-amber"
+                  className="w-full px-3 py-2.5 text-sm border border-border rounded-md bg-card focus:outline-none focus:border-amber"
                 >
                   <option value="">— Sélectionnez —</option>
                   {matieresDisponibles.map((m) => (
@@ -335,7 +335,7 @@ export function BriefPage({
                     value={data.dimensions}
                     onChange={(e) => update("dimensions", e.target.value)}
                     placeholder="Ex : 120 x 60 x 45 cm"
-                    className="w-full px-3 py-2.5 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-amber"
+                    className="w-full px-3 py-2.5 text-sm border border-border rounded-md bg-card focus:outline-none focus:border-amber"
                   />
                 </div>
                 <div>
@@ -346,7 +346,7 @@ export function BriefPage({
                     value={data.couleur}
                     onChange={(e) => update("couleur", e.target.value)}
                     placeholder="Ex : Naturel + wax bleu"
-                    className="w-full px-3 py-2.5 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-amber"
+                    className="w-full px-3 py-2.5 text-sm border border-border rounded-md bg-card focus:outline-none focus:border-amber"
                   />
                 </div>
               </div>
@@ -359,7 +359,7 @@ export function BriefPage({
                   <button
                     type="button"
                     onClick={() => update("quantite", Math.max(1, data.quantite - 1))}
-                    className="w-10 h-10 rounded-md border border-border bg-white text-lg text-ink-soft hover:text-ink"
+                    className="w-10 h-10 rounded-md border border-border bg-card text-lg text-ink-soft hover:text-ink"
                   >
                     -
                   </button>
@@ -367,7 +367,7 @@ export function BriefPage({
                   <button
                     type="button"
                     onClick={() => update("quantite", data.quantite + 1)}
-                    className="w-10 h-10 rounded-md border border-border bg-white text-lg text-ink-soft hover:text-ink"
+                    className="w-10 h-10 rounded-md border border-border bg-card text-lg text-ink-soft hover:text-ink"
                   >
                     +
                   </button>
@@ -393,7 +393,7 @@ export function BriefPage({
               }}
               rows={6}
               placeholder="Ex : Je veux une table basse pour mon salon de 25m². Plateau en bois iroko avec insert en tissu wax bleu Ankara. Pieds en bois massif. Un tiroir de rangement sur le côté droit. Finition naturelle mate."
-              className="w-full px-4 py-3 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-amber resize-none"
+              className="w-full px-4 py-3 text-sm border border-border rounded-md bg-card focus:outline-none focus:border-amber resize-none"
             />
             <div className="flex justify-between items-center mt-2 text-xs">
               <span className={descLen < 30 ? "text-terracotta" : "text-forest"}>
@@ -414,7 +414,7 @@ export function BriefPage({
 
             <label
               htmlFor="brief-upload"
-              className="block border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer hover:border-amber transition-colors bg-white"
+              className="block border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer hover:border-amber transition-colors bg-card"
             >
               <Upload size={28} className="mx-auto text-ink-mute mb-2" />
               <p className="text-sm font-semibold mb-1">Cliquez pour ajouter des photos</p>
@@ -441,7 +441,7 @@ export function BriefPage({
                     <button
                       type="button"
                       onClick={() => update("references", data.references.filter((_, idx) => idx !== i))}
-                      className="absolute top-1 right-1 w-6 h-6 rounded-full bg-white/90 flex items-center justify-center text-ink hover:text-terracotta"
+                      className="absolute top-1 right-1 w-6 h-6 rounded-full bg-card/90 flex items-center justify-center text-ink hover:text-terracotta"
                       aria-label={`Supprimer la référence ${i + 1}`}
                     >
                       <X size={12} />
@@ -478,7 +478,7 @@ export function BriefPage({
                   <select
                     value={data.ville}
                     onChange={(e) => update("ville", e.target.value)}
-                    className="w-full px-3 py-2.5 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-amber"
+                    className="w-full px-3 py-2.5 text-sm border border-border rounded-md bg-card focus:outline-none focus:border-amber"
                   >
                     <option value="">— Sélectionnez —</option>
                     {VILLES.map((v) => <option key={v} value={v}>{v}</option>)}
@@ -492,7 +492,7 @@ export function BriefPage({
                     value={data.quartier}
                     onChange={(e) => update("quartier", e.target.value)}
                     placeholder="Ex : Akpakpa"
-                    className="w-full px-3 py-2.5 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-amber"
+                    className="w-full px-3 py-2.5 text-sm border border-border rounded-md bg-card focus:outline-none focus:border-amber"
                   />
                 </div>
               </div>
@@ -552,7 +552,7 @@ export function BriefPage({
                         className={`px-4 py-3 rounded-lg border-2 text-sm font-medium transition-all text-center ${
                           active
                             ? "border-amber bg-amber-pale text-amber-dark"
-                            : "border-border bg-white text-ink-soft hover:border-ink-mute"
+                            : "border-border bg-card text-ink-soft hover:border-ink-mute"
                         }`}
                       >
                         {b}

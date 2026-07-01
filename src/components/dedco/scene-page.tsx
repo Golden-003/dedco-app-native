@@ -78,7 +78,7 @@ export function ScenePage({
                   aria-label={`Voir le produit ${product.name}`}
                 >
                   <span
-                    className={`block rounded-full bg-white shadow-lg hotspot-dot ${
+                    className={`block rounded-full bg-card shadow-lg hotspot-dot ${
                       isActive ? "ring-4 ring-amber/40" : ""
                     }`}
                     style={{
@@ -102,8 +102,8 @@ export function ScenePage({
                 onClick={() => setIsSaved((s) => !s)}
                 className={`w-10 h-10 rounded-full flex items-center justify-center backdrop-blur transition-all ${
                   isSaved
-                    ? "bg-white text-terracotta"
-                    : "bg-white/60 text-ink hover:bg-white"
+                    ? "bg-card text-terracotta"
+                    : "bg-card/60 text-ink hover:bg-card"
                 }`}
                 aria-label={isSaved ? "Retirer des favoris" : "Sauvegarder"}
               >
@@ -111,7 +111,7 @@ export function ScenePage({
               </button>
               <button
                 type="button"
-                className="w-10 h-10 rounded-full flex items-center justify-center bg-white/60 text-ink hover:bg-white backdrop-blur"
+                className="w-10 h-10 rounded-full flex items-center justify-center bg-card/60 text-ink hover:bg-card backdrop-blur"
                 aria-label="Partager"
               >
                 <Share2 size={18} />
@@ -275,7 +275,7 @@ export function ScenePage({
                 <button
                   type="button"
                   onClick={() => setActiveHotspot(null)}
-                  className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white shadow flex items-center justify-center z-10"
+                  className="absolute top-3 right-3 w-8 h-8 rounded-full bg-card shadow flex items-center justify-center z-10"
                   aria-label="Fermer"
                 >
                   <X size={16} />

@@ -352,7 +352,7 @@ function WithdrawModal({
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="0"
-              className="w-full px-3.5 py-2.5 rounded-md border border-border bg-white text-sm font-numeric focus:outline-none focus:border-amber pr-16"
+              className="w-full px-3.5 py-2.5 rounded-md border border-border bg-card text-sm font-numeric focus:outline-none focus:border-amber pr-16"
             />
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-ink-mute">
               FCFA

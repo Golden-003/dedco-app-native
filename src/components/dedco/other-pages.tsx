@@ -60,7 +60,7 @@ export function InspirationsPage({
             className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all border ${
               roomFilter === room
                 ? "bg-amber text-white border-amber"
-                : "bg-white text-ink-soft border-border hover:border-ink-mute"
+                : "bg-card text-ink-soft border-border hover:border-ink-mute"
             }`}
           >
             {room === "all" ? "Toutes les pièces" : room}
@@ -131,7 +131,7 @@ export function DesignersPage({
             className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all border ${
               styleFilter === style
                 ? "bg-amber text-white border-amber"
-                : "bg-white text-ink-soft border-border hover:border-ink-mute"
+                : "bg-card text-ink-soft border-border hover:border-ink-mute"
             }`}
           >
             {style === "all" ? "Tous les styles" : style}

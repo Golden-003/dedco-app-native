@@ -144,7 +144,7 @@ export function ArtisansListingPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Rechercher un artisan..."
-                className="w-full pl-9 pr-4 py-2 rounded-lg bg-white border border-[var(--border)] text-sm text-[var(--text-1)] placeholder:text-[var(--text-3)] focus:outline-none focus:ring-2 focus:ring-amber/30 focus:border-amber transition-colors"
+                className="w-full pl-9 pr-4 py-2 rounded-lg bg-card border border-[var(--border)] text-sm text-[var(--text-1)] placeholder:text-[var(--text-3)] focus:outline-none focus:ring-2 focus:ring-amber/30 focus:border-amber transition-colors"
               />
               {search && (
                 <button

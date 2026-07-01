@@ -135,7 +135,7 @@ export function PhoneInput({
         </button>
 
         {isOpen && (
-          <div className="absolute top-full left-0 mt-1 z-50 bg-white border border-[var(--border)] rounded-lg shadow-lg max-h-60 overflow-y-auto dedco-hide-scroll min-w-[220px]">
+          <div className="absolute top-full left-0 mt-1 z-50 bg-card border border-[var(--border)] rounded-lg shadow-lg max-h-60 overflow-y-auto dedco-hide-scroll min-w-[220px]">
             {COUNTRY_CODES.map(c => (
               <button
                 key={c.code}
@@ -162,7 +162,7 @@ export function PhoneInput({
         onChange={handleInput}
         placeholder={placeholder}
         required={required}
-        className="flex-1 px-3 py-2.5 text-sm border border-l-0 border-[var(--border)] rounded-r-md bg-white font-numeric focus:outline-none focus:border-[var(--amber)] transition-colors"
+        className="flex-1 px-3 py-2.5 text-sm border border-l-0 border-[var(--border)] rounded-r-md bg-card font-numeric focus:outline-none focus:border-[var(--amber)] transition-colors"
         inputMode="numeric"
         autoComplete="tel"
       />

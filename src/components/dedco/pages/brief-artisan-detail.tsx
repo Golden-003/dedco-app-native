@@ -539,7 +539,7 @@ function DiscussionSection({
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") onSend(); }}
           placeholder="Votre message..."
-          className="flex-1 px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white"
+          className="flex-1 px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card"
         />
         <button onClick={onSend} disabled={!message.trim()} className="dedco-btn dedco-btn-primary dedco-btn-sm">
           <Send size={14} />

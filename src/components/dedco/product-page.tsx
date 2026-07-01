@@ -232,7 +232,7 @@ export function ProductPage({
 
           {/* Quantity + Add to cart */}
           <div className="flex gap-3 mb-4">
-            <div className="flex items-center border border-border rounded-md bg-white">
+            <div className="flex items-center border border-border rounded-md bg-card">
               <button
                 type="button"
                 onClick={() => setQty((q) => Math.max(1, q - 1))}

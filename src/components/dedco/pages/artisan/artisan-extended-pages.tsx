@@ -152,7 +152,7 @@ export function ArtisanDemandesPage() {
             className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap border transition-all ${
               filter === t.id
                 ? "bg-[var(--amber)] text-white border-[var(--amber)]"
-                : "bg-white text-[var(--text-2)] border-[var(--border)] hover:border-[var(--text-3)]"
+                : "bg-card text-[var(--text-2)] border-[var(--border)] hover:border-[var(--text-3)]"
             }`}
           >
             {t.label}
@@ -264,7 +264,7 @@ export function ArtisanProjetsPage() {
             key={c.id}
             onClick={() => setMobileCol(c.id)}
             className={`px-3 py-1.5 text-xs font-medium rounded-full whitespace-nowrap border transition-all ${
-              mobileCol === c.id ? "bg-[var(--amber)] text-white border-[var(--amber)]" : "bg-white border-[var(--border)]"
+              mobileCol === c.id ? "bg-[var(--amber)] text-white border-[var(--amber)]" : "bg-card border-[var(--border)]"
             }`}
           >
             {c.label}
@@ -282,7 +282,7 @@ export function ArtisanProjetsPage() {
                 <h3 className="text-xs font-bold uppercase tracking-wide" style={{ color: col.color }}>
                   {col.label}
                 </h3>
-                <span className="text-xs font-numeric font-bold bg-white px-2 py-0.5 rounded-full">{items.length}</span>
+                <span className="text-xs font-numeric font-bold bg-card px-2 py-0.5 rounded-full">{items.length}</span>
               </div>
               <div className="space-y-2">
                 {items.map((p) => (
@@ -309,7 +309,7 @@ function ProjectCard({ project, onClick }: { project: Project; onClick: () => vo
   return (
     <button
       onClick={onClick}
-      className="w-full bg-white rounded-lg p-3 text-left hover:shadow-md transition-shadow border border-[var(--border)] cursor-pointer"
+      className="w-full bg-card rounded-lg p-3 text-left hover:shadow-md transition-shadow border border-[var(--border)] cursor-pointer"
     >
       <div className="flex items-center gap-3 mb-2">
         <img src={project.thumb} alt={project.product} className="w-12 h-12 rounded-md object-cover flex-shrink-0" />
@@ -376,7 +376,7 @@ export function ArtisanWalletPage() {
           </h2>
           <button
             onClick={() => setShowBalance(!showBalance)}
-            className="p-2 rounded-full bg-white/10 hover:bg-white/20"
+            className="p-2 rounded-full bg-card/10 hover:bg-card/20"
             aria-label="Masquer/Afficher le solde"
           >
             {showBalance ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -416,7 +416,7 @@ export function ArtisanWalletPage() {
               type="number"
               value={withdrawAmount}
               onChange={(e) => setWithdrawAmount(Number(e.target.value) || 0)}
-              className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white font-numeric focus:outline-none focus:border-[var(--amber)]"
+              className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-card font-numeric focus:outline-none focus:border-[var(--amber)]"
               min={10000}
               step={5000}
             />
@@ -670,7 +670,7 @@ export function ArtisanCertificationPage() {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
             {benefits.map((b) => (
-              <div key={b} className="text-center bg-white/10 rounded-lg p-2">
+              <div key={b} className="text-center bg-card/10 rounded-lg p-2">
                 <p className="text-xs font-semibold">{b}</p>
               </div>
             ))}
@@ -712,7 +712,7 @@ export function ArtisanCertificationPage() {
         <h3 className="font-display font-bold">Dossier de demande</h3>
         <div>
           <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2 block">Photos de votre atelier (3 minimum)</label>
-          <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-6 text-center cursor-pointer hover:border-[var(--amber)] transition-colors bg-white">
+          <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-6 text-center cursor-pointer hover:border-[var(--amber)] transition-colors bg-card">
             <Upload size={24} className="mx-auto text-[var(--text-3)] mb-2" />
             <p className="text-sm font-semibold">Cliquez pour ajouter des photos</p>
             <p className="text-xs text-[var(--text-3)] mt-1">{uploadedPhotos.length}/3 ajoutées</p>
@@ -735,7 +735,7 @@ export function ArtisanCertificationPage() {
             onChange={(e) => setProcessDesc(e.target.value.slice(0, 450))}
             rows={5}
             placeholder="Expliquez votre approche, vos matières premières, vos techniques, votre contrôle qualité..."
-            className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white focus:outline-none focus:border-[var(--amber)] resize-none"
+            className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-card focus:outline-none focus:border-[var(--amber)] resize-none"
           />
           <p className="text-xs text-[var(--text-3)] mt-1 text-right font-numeric">{processDesc.length}/450</p>
         </div>
@@ -910,11 +910,11 @@ export function ArtisanParametresPage() {
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
             <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Nom atelier</label>
-            <input defaultValue="Atelier Akindélé Wood" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white focus:outline-none focus:border-[var(--amber)]" />
+            <input defaultValue="Atelier Akindélé Wood" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card focus:outline-none focus:border-[var(--amber)]" />
           </div>
           <div>
             <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Ville</label>
-            <input defaultValue="Cotonou" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white focus:outline-none focus:border-[var(--amber)]" />
+            <input defaultValue="Cotonou" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card focus:outline-none focus:border-[var(--amber)]" />
           </div>
           <div>
             <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Téléphone</label>
@@ -930,7 +930,7 @@ export function ArtisanParametresPage() {
           </div>
           <div className="sm:col-span-2">
             <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Bio (300 caractères max)</label>
-            <textarea defaultValue="Maître ébéniste formé à Cotonou et Accra, je crée des meubles qui marient les essences locales et les techniques traditionnelles avec un design contemporain." rows={3} maxLength={300} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white focus:outline-none focus:border-[var(--amber)] resize-none" />
+            <textarea defaultValue="Maître ébéniste formé à Cotonou et Accra, je crée des meubles qui marient les essences locales et les techniques traditionnelles avec un design contemporain." rows={3} maxLength={300} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card focus:outline-none focus:border-[var(--amber)] resize-none" />
           </div>
         </div>
       </div>

@@ -171,7 +171,7 @@ export function MessagesPage() {
       <div className="flex-1 flex overflow-hidden">
         {/* Left Panel — Conversation List */}
         <div
-          className={`w-full lg:w-[400px] xl:w-[420px] border-r border-border flex flex-col bg-white ${
+          className={`w-full lg:w-[400px] xl:w-[420px] border-r border-border flex flex-col bg-card ${
             selectedConvId ? "hidden lg:flex" : "flex"
           }`}
         >
@@ -273,7 +273,7 @@ export function MessagesPage() {
                 transition={{ duration: 0.2 }}
               >
                 {/* Chat Header */}
-                <div className="p-4 border-b border-border bg-white flex items-center gap-3">
+                <div className="p-4 border-b border-border bg-card flex items-center gap-3">
                   <button
                     type="button"
                     onClick={handleBack}
@@ -336,7 +336,7 @@ export function MessagesPage() {
                               className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
                                 msg.sent
                                   ? "bg-amber text-white rounded-br-md"
-                                  : "bg-white border border-border text-ink rounded-bl-md"
+                                  : "bg-card border border-border text-ink rounded-bl-md"
                               }`}
                             >
                               {msg.text}
@@ -366,7 +366,7 @@ export function MessagesPage() {
                 </div>
 
                 {/* Message Input */}
-                <div className="p-4 bg-white border-t border-border">
+                <div className="p-4 bg-card border-t border-border">
                   <div className="flex items-center gap-2">
                     <button
                       type="button"

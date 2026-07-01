@@ -35,7 +35,7 @@ export function CartSidebar({
           aria-label="Panier"
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-border bg-white">
+          <div className="flex items-center justify-between p-4 border-b border-border bg-card">
             <div className="flex items-center gap-2">
               <ShoppingBag size={20} className="text-amber" />
               <Dialog.Title className="font-display font-bold text-lg">
@@ -104,7 +104,7 @@ export function CartSidebar({
                       {formatFCFA(item.price)}
                     </p>
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center border border-border rounded-md bg-white">
+                      <div className="flex items-center border border-border rounded-md bg-card">
                         <button
                           type="button"
                           onClick={() => onDecrement(item.id)}
@@ -143,7 +143,7 @@ export function CartSidebar({
 
         {/* Footer */}
         {items.length > 0 && (
-          <div className="border-t border-border bg-white p-4 safe-bottom">
+          <div className="border-t border-border bg-card p-4 safe-bottom">
             <div className="space-y-1 mb-3 text-sm">
               <div className="flex justify-between">
                 <span className="text-ink-soft">Sous-total</span>

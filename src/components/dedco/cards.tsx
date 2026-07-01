@@ -95,8 +95,8 @@ export function ProductCard({
           type="button"
           aria-label={isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
           className={`absolute top-2.5 right-2.5 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all ${
-            isFav ? "bg-white text-terracotta" : "bg-white/60 text-ink-soft"
-          } hover:bg-white hover:scale-110`}
+            isFav ? "bg-card text-terracotta" : "bg-card/60 text-ink-soft"
+          } hover:bg-card hover:scale-110`}
           onClick={(e) => {
             e.stopPropagation();
             onToggleFav(product.id);
@@ -232,9 +232,9 @@ export function SceneCard({
             aria-label={isSaved ? "Retirer des favoris" : "Sauvegarder"}
             className={`absolute top-2.5 right-2.5 w-8 h-8 rounded-full flex items-center justify-center transition-all ${
               isSaved
-                ? "bg-white text-terracotta"
-                : "bg-white/60 text-ink-soft"
-            } hover:bg-white`}
+                ? "bg-card text-terracotta"
+                : "bg-card/60 text-ink-soft"
+            } hover:bg-card`}
             onClick={(e) => {
               e.stopPropagation();
               onToggleSave(scene.slug);

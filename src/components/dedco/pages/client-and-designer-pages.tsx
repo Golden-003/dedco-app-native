@@ -76,7 +76,7 @@ export function DesignerWalletPage() {
           <h2 className="font-display text-4xl font-numeric font-bold">
             {showBalance ? formatFCFA(solde) : "•••••• FCFA"}
           </h2>
-          <button onClick={() => setShowBalance(!showBalance)} className="p-2 rounded-full bg-white/10 hover:bg-white/20">
+          <button onClick={() => setShowBalance(!showBalance)} className="p-2 rounded-full bg-card/10 hover:bg-card/20">
             {showBalance ? <EyeOff size={16} /> : <Eye size={16} />}
           </button>
         </div>
@@ -228,7 +228,7 @@ export function DesignerPortfolioPage() {
               key={p.id}
               onClick={() => setSelectedIdx(i)}
               className={`w-full flex items-center gap-3 p-3 rounded-lg border-2 transition-all text-left ${
-                i === selectedIdx ? "border-[var(--amber)] bg-[var(--amber-pale)]/30" : "border-[var(--border)] bg-white hover:border-[var(--text-3)]"
+                i === selectedIdx ? "border-[var(--amber)] bg-[var(--amber-pale)]/30" : "border-[var(--border)] bg-card hover:border-[var(--text-3)]"
               }`}
             >
               <img src={p.before} alt={p.title} className="w-16 h-16 rounded-md object-cover flex-shrink-0" />
@@ -251,8 +251,8 @@ export function DesignerPortfolioPage() {
             <div className="absolute inset-0 overflow-hidden" style={{ width: `${sliderPos}%` }}>
               <img src={selected.before} alt="Avant" className="absolute inset-0 h-full object-cover" style={{ width: `${100 / (sliderPos / 100)}%` }} />
             </div>
-            <div className="absolute top-0 bottom-0 w-1 bg-white shadow-lg cursor-ew-resize" style={{ left: `${sliderPos}%` }}>
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white shadow flex items-center justify-center">
+            <div className="absolute top-0 bottom-0 w-1 bg-card shadow-lg cursor-ew-resize" style={{ left: `${sliderPos}%` }}>
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-card shadow flex items-center justify-center">
                 <ChevronLeft size={14} className="text-[var(--text-1)]" />
                 <ChevronRight size={14} className="text-[var(--text-1)]" />
               </div>
@@ -294,12 +294,12 @@ export function DesignerPortfolioPage() {
             <div className="p-5 space-y-4">
               <div>
                 <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Titre du projet</label>
-                <input className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" placeholder="Ex : Salon Afro-contemporain" />
+                <input className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card" placeholder="Ex : Salon Afro-contemporain" />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Type</label>
-                  <select className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white">
+                  <select className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card">
                     <option>Aménagement complet</option>
                     <option>Décoration</option>
                     <option>Consultation</option>
@@ -307,7 +307,7 @@ export function DesignerPortfolioPage() {
                 </div>
                 <div>
                   <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Pièce</label>
-                  <select className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white">
+                  <select className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card">
                     <option>Salon</option><option>Chambre</option><option>Bureau</option>
                   </select>
                 </div>
@@ -315,14 +315,14 @@ export function DesignerPortfolioPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Photo AVANT</label>
-                  <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-4 text-center cursor-pointer hover:border-[var(--amber)] bg-white">
+                  <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-4 text-center cursor-pointer hover:border-[var(--amber)] bg-card">
                     <Plus size={20} className="mx-auto text-[var(--text-3)]" />
                     <input type="file" accept="image/*" className="sr-only" />
                   </label>
                 </div>
                 <div>
                   <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Photo APRÈS</label>
-                  <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-4 text-center cursor-pointer hover:border-[var(--amber)] bg-white">
+                  <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-4 text-center cursor-pointer hover:border-[var(--amber)] bg-card">
                     <Plus size={20} className="mx-auto text-[var(--text-3)]" />
                     <input type="file" accept="image/*" className="sr-only" />
                   </label>
@@ -330,7 +330,7 @@ export function DesignerPortfolioPage() {
               </div>
               <div>
                 <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Description (160 chars)</label>
-                <textarea rows={2} maxLength={160} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white resize-none" />
+                <textarea rows={2} maxLength={160} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card resize-none" />
               </div>
               <div>
                 <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Styles</label>
@@ -469,7 +469,7 @@ export function ClientProjetsPage() {
         <button
           onClick={() => setTab("en_cours")}
           className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-            tab === "en_cours" ? "bg-[var(--amber)] text-white" : "bg-white border border-[var(--border)] text-[var(--text-2)]"
+            tab === "en_cours" ? "bg-[var(--amber)] text-white" : "bg-card border border-[var(--border)] text-[var(--text-2)]"
           }`}
         >
           En cours (<span className="font-numeric">{MOCK_CLIENT_PROJECTS.filter((p) => p.status !== "livre").length}</span>)
@@ -477,7 +477,7 @@ export function ClientProjetsPage() {
         <button
           onClick={() => setTab("termines")}
           className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-            tab === "termines" ? "bg-[var(--amber)] text-white" : "bg-white border border-[var(--border)] text-[var(--text-2)]"
+            tab === "termines" ? "bg-[var(--amber)] text-white" : "bg-card border border-[var(--border)] text-[var(--text-2)]"
           }`}
         >
           Terminés (<span className="font-numeric">{MOCK_CLIENT_PROJECTS.filter((p) => p.status === "livre").length}</span>)
@@ -698,21 +698,21 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
                 <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">
                   {scope === "premium" ? "Décrivez votre projet complet" : "Décrivez votre besoin"}
                 </label>
-                <textarea value={besoin} onChange={(e) => setBesoin(e.target.value.slice(0, 500))} rows={3} placeholder="Ex: Moderniser mon salon en gardant une touche africaine..." className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white resize-none" />
+                <textarea value={besoin} onChange={(e) => setBesoin(e.target.value.slice(0, 500))} rows={3} placeholder="Ex: Moderniser mon salon en gardant une touche africaine..." className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card resize-none" />
                 <p className="text-xs text-[var(--text-3)] text-right font-numeric">{besoin.length}/500</p>
               </div>
 
               {scopeConfig.needsEspace && (
                 <div>
                   <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Espace concerné</label>
-                  <input value={espace} onChange={(e) => setEspace(e.target.value)} placeholder="Ex: Salon 25m²" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
+                  <input value={espace} onChange={(e) => setEspace(e.target.value)} placeholder="Ex: Salon 25m²" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card" />
                 </div>
               )}
 
               {scopeConfig.needsMultiples && (
                 <div>
                   <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Espaces concernés</label>
-                  <input value={espacesMultiples} onChange={(e) => setEspacesMultiples(e.target.value)} placeholder="Ex: Salon, cuisine, 2 chambres, entrée" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
+                  <input value={espacesMultiples} onChange={(e) => setEspacesMultiples(e.target.value)} placeholder="Ex: Salon, cuisine, 2 chambres, entrée" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card" />
                 </div>
               )}
 
@@ -732,7 +732,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
                         className={`px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all flex items-center gap-1.5 ${
                           active
                             ? "border-[var(--amber)] bg-[var(--amber-pale)] text-[var(--amber-dark)]"
-                            : "border-[var(--border)] bg-white text-[var(--text-2)] hover:border-[var(--text-3)]"
+                            : "border-[var(--border)] bg-card text-[var(--text-2)] hover:border-[var(--text-3)]"
                         }`}
                       >
                         <PIcon size={16} />
@@ -748,7 +748,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
               {scopeConfig.needsContraintes && (
                 <div>
                   <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Contraintes (facultatif)</label>
-                  <input value={contraintes} onChange={(e) => setContraintes(e.target.value)} placeholder="Ex: Budget limité, travaux en cours..." className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
+                  <input value={contraintes} onChange={(e) => setContraintes(e.target.value)} placeholder="Ex: Budget limité, travaux en cours..." className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card" />
                 </div>
               )}
 
@@ -757,7 +757,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
                   Inspirations {!scopeConfig.inspirationsOptional && ""}{scopeConfig.inspirationsOptional && <span className="italic">(optionnel)</span>}
                 </label>
                 <div className="grid grid-cols-2 gap-3">
-                  <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-4 text-center cursor-pointer hover:border-[var(--amber)] bg-white">
+                  <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-4 text-center cursor-pointer hover:border-[var(--amber)] bg-card">
                     <Upload size={20} className="mx-auto text-[var(--text-3)] mb-1" />
                     <p className="text-xs font-semibold">Photos de l'espace</p>
                     <p className="text-[10px] text-[var(--text-3)]">{photos.length} fichier(s)</p>
@@ -766,7 +766,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
                       setPhotos(files.map((f) => URL.createObjectURL(f)));
                     }} />
                   </label>
-                  <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-4 text-center cursor-pointer hover:border-[var(--amber)] bg-white">
+                  <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-4 text-center cursor-pointer hover:border-[var(--amber)] bg-card">
                     <Sparkles size={20} className="mx-auto text-[var(--text-3)] mb-1" />
                     <p className="text-xs font-semibold">Images d'inspiration</p>
                     <p className="text-[10px] text-[var(--text-3)]">{inspirations.length} fichier(s)</p>
@@ -923,7 +923,7 @@ export function AvisLivraisonPage({ orderId }: { orderId: string }) {
           onChange={(e) => setComment(e.target.value)}
           rows={4}
           placeholder="Racontez votre expérience..."
-          className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white resize-none focus:outline-none focus:border-[var(--amber)]"
+          className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card resize-none focus:outline-none focus:border-[var(--amber)]"
         />
 
         <button

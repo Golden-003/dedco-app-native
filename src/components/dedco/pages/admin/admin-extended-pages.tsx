@@ -191,7 +191,7 @@ export function AdminKYCPage() {
             ))}
           </div>
           {decision === "reject" && (
-            <select className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white mb-3">
+            <select className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card mb-3">
               <option>Raison du rejet...</option>
               <option>Selfie illisible</option>
               <option>Pièce d'identité expirée</option>
@@ -203,7 +203,7 @@ export function AdminKYCPage() {
             <textarea
               rows={3}
               placeholder="Précisez les corrections attendues..."
-              className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white mb-3 resize-none"
+              className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card mb-3 resize-none"
             />
           )}
           <button onClick={() => navigate({ page: "home" })} className="dedco-btn dedco-btn-primary w-full">Valider la décision</button>
@@ -302,7 +302,7 @@ export function AdminMessagesPage() {
             key={t.id}
             onClick={() => setFilter(t.id as typeof filter)}
             className={`px-3 py-1.5 text-xs font-medium rounded-full whitespace-nowrap border transition-all ${
-              filter === t.id ? "bg-[var(--amber)] text-white border-[var(--amber)]" : "bg-white border-[var(--border)]"
+              filter === t.id ? "bg-[var(--amber)] text-white border-[var(--amber)]" : "bg-card border-[var(--border)]"
             }`}
           >
             {t.label}
@@ -333,7 +333,7 @@ export function AdminMessagesPage() {
             </button>
             {expanded === m.id && (
               <div className="p-4 border-t border-[var(--border)] bg-[var(--bg-warm)]/50">
-                <div className="mb-3 p-3 bg-white rounded-md border-l-2 border-[var(--terracotta)]">
+                <div className="mb-3 p-3 bg-card rounded-md border-l-2 border-[var(--terracotta)]">
                   <p className="text-xs text-[var(--text-3)] mb-1">Message complet :</p>
                   <p className="text-sm">{m.full}</p>
                 </div>
@@ -341,7 +341,7 @@ export function AdminMessagesPage() {
                   <p className="text-xs text-[var(--text-3)] mb-1">Contexte (messages autour) :</p>
                   <ul className="space-y-1">
                     {m.context.map((c, i) => (
-                      <li key={i} className="text-xs text-[var(--text-2)] p-2 bg-white rounded">"{c}"</li>
+                      <li key={i} className="text-xs text-[var(--text-2)] p-2 bg-card rounded">"{c}"</li>
                     ))}
                   </ul>
                 </div>
@@ -551,7 +551,7 @@ export function AdminLitigesPage() {
                   onChange={(e) => setComment(e.target.value)}
                   rows={3}
                   placeholder="Justifiez votre décision..."
-                  className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white resize-none focus:outline-none focus:border-[var(--amber)]"
+                  className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card resize-none focus:outline-none focus:border-[var(--amber)]"
                 />
               </div>
               <button onClick={() => navigate({ page: "home" })} className="dedco-btn dedco-btn-primary w-full">Valider la décision</button>
@@ -636,7 +636,7 @@ export function AdminScenesPage() {
             {hotspots.map((h, i) => (
               <div
                 key={i}
-                className="absolute w-7 h-7 rounded-full bg-white border-2 border-[var(--amber)] flex items-center justify-center text-xs font-bold text-[var(--amber)] hotspot-dot"
+                className="absolute w-7 h-7 rounded-full bg-card border-2 border-[var(--amber)] flex items-center justify-center text-xs font-bold text-[var(--amber)] hotspot-dot"
                 style={{ left: `${h.x}%`, top: `${h.y}%`, transform: "translate(-50%, -50%)" }}
               >
                 {i + 1}
@@ -655,15 +655,15 @@ export function AdminScenesPage() {
             <div>
               <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1 block">Coordonnées</label>
               <div className="grid grid-cols-2 gap-2">
-                <input value="30%" readOnly className="px-2 py-1.5 text-xs border border-[var(--border)] rounded-md bg-white font-numeric" />
-                <input value="55%" readOnly className="px-2 py-1.5 text-xs border border-[var(--border)] rounded-md bg-white font-numeric" />
+                <input value="30%" readOnly className="px-2 py-1.5 text-xs border border-[var(--border)] rounded-md bg-card font-numeric" />
+                <input value="55%" readOnly className="px-2 py-1.5 text-xs border border-[var(--border)] rounded-md bg-card font-numeric" />
               </div>
             </div>
             <div>
               <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1 block">Produit</label>
               <div className="relative">
                 <Search size={12} className="absolute left-2 top-1/2 -translate-y-1/2 text-[var(--text-3)]" />
-                <input defaultValue="Fauteuil Sahel Tressé" className="w-full pl-7 pr-2 py-1.5 text-xs border border-[var(--border)] rounded-md bg-white" />
+                <input defaultValue="Fauteuil Sahel Tressé" className="w-full pl-7 pr-2 py-1.5 text-xs border border-[var(--border)] rounded-md bg-card" />
               </div>
             </div>
             <div>
@@ -736,13 +736,13 @@ export function AdminCollectionsPage() {
                 {c.status}
               </span>
               <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                <button onClick={() => showToast("Action effectuée.")} className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[var(--text-1)] hover:bg-white">
+                <button onClick={() => showToast("Action effectuée.")} className="w-8 h-8 rounded-full bg-card/90 flex items-center justify-center text-[var(--text-1)] hover:bg-card">
                   <Edit size={14} />
                 </button>
-                <button onClick={() => showToast("Action effectuée.")} className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[var(--text-1)] hover:bg-white">
+                <button onClick={() => showToast("Action effectuée.")} className="w-8 h-8 rounded-full bg-card/90 flex items-center justify-center text-[var(--text-1)] hover:bg-card">
                   <Eye size={14} />
                 </button>
-                <button onClick={() => showToast("Image supprimée.")} className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-[var(--terracotta)] hover:bg-white">
+                <button onClick={() => showToast("Image supprimée.")} className="w-8 h-8 rounded-full bg-card/90 flex items-center justify-center text-[var(--terracotta)] hover:bg-card">
                   <Trash2 size={14} />
                 </button>
               </div>
@@ -761,15 +761,15 @@ export function AdminCollectionsPage() {
             <div className="p-5 space-y-4">
               <div>
                 <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Titre</label>
-                <input className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white focus:outline-none focus:border-[var(--amber)]" placeholder="Ex : Ambiances naturelles" />
+                <input className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card focus:outline-none focus:border-[var(--amber)]" placeholder="Ex : Ambiances naturelles" />
               </div>
               <div>
                 <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Description (200 chars max)</label>
-                <textarea rows={3} maxLength={200} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white resize-none focus:outline-none focus:border-[var(--amber)]" />
+                <textarea rows={3} maxLength={200} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card resize-none focus:outline-none focus:border-[var(--amber)]" />
               </div>
               <div>
                 <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Photo de couverture</label>
-                <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-6 text-center cursor-pointer hover:border-[var(--amber)] bg-white">
+                <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-6 text-center cursor-pointer hover:border-[var(--amber)] bg-card">
                   <ImageIcon size={24} className="mx-auto text-[var(--text-3)] mb-2" />
                   <p className="text-xs">Cliquez pour uploader</p>
                   <input type="file" accept="image/*" className="sr-only" />
@@ -778,7 +778,7 @@ export function AdminCollectionsPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Thème</label>
-                  <select className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white">
+                  <select className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card">
                     <option>Naturel</option>
                     <option>Contemporain</option>
                     <option>Africain</option>
@@ -787,7 +787,7 @@ export function AdminCollectionsPage() {
                 </div>
                 <div>
                   <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Style</label>
-                  <select className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white">
+                  <select className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card">
                     <option>Minimaliste</option>
                     <option>Tropical</option>
                     <option>Industriel</option>
@@ -798,7 +798,7 @@ export function AdminCollectionsPage() {
                 <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Produits associés</label>
                 <div className="relative">
                   <Search size={14} className="absolute left-2 top-1/2 -translate-y-1/2 text-[var(--text-3)]" />
-                  <input className="w-full pl-7 pr-2 py-2 text-sm border border-[var(--border)] rounded-md bg-white" placeholder="Rechercher un produit..." />
+                  <input className="w-full pl-7 pr-2 py-2 text-sm border border-[var(--border)] rounded-md bg-card" placeholder="Rechercher un produit..." />
                 </div>
               </div>
               <button onClick={() => navigate({ page: "home" })} className="dedco-btn dedco-btn-primary w-full">Créer la collection</button>
@@ -926,7 +926,7 @@ export function AdminCertificationPage() {
               </div>
               <div>
                 <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2 block">Commentaire interne (admin)</label>
-                <textarea rows={3} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white resize-none" />
+                <textarea rows={3} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card resize-none" />
               </div>
               <div className="space-y-2">
                 <button onClick={() => showToast("Action effectuée.")} className="dedco-btn dedco-btn-forest w-full">
@@ -970,11 +970,11 @@ export function AdminParametresPage() {
         <div className="space-y-3">
           <div>
             <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Nom plateforme</label>
-            <input defaultValue="Dedco" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
+            <input defaultValue="Dedco" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card" />
           </div>
           <div>
             <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Email support</label>
-            <input defaultValue="support@dedco.bj" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
+            <input defaultValue="support@dedco.bj" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card" />
           </div>
           <label className="flex items-center justify-between p-3 bg-[var(--bg-warm)] rounded-md cursor-pointer">
             <div>
@@ -984,7 +984,7 @@ export function AdminParametresPage() {
             <input type="checkbox" checked={maintenance} onChange={(e) => setMaintenance(e.target.checked)} className="w-5 h-5" style={{ accentColor: "var(--terracotta)" }} />
           </label>
           {maintenance && (
-            <input placeholder="Message affiché aux utilisateurs..." className="w-full px-3 py-2 text-sm border border-[var(--terracotta)] rounded-md bg-white" />
+            <input placeholder="Message affiché aux utilisateurs..." className="w-full px-3 py-2 text-sm border border-[var(--terracotta)] rounded-md bg-card" />
           )}
         </div>
       </div>
@@ -1007,11 +1007,11 @@ export function AdminParametresPage() {
           <div className="grid sm:grid-cols-2 gap-3">
             <div>
               <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Seuil retrait min (FCFA)</label>
-              <input defaultValue={10000} type="number" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white font-numeric" />
+              <input defaultValue={10000} type="number" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card font-numeric" />
             </div>
             <div>
               <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Délai libération fonds</label>
-              <select className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white">
+              <select className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card">
                 <option>4 jours</option>
                 <option>5 jours</option>
                 <option>7 jours</option>
