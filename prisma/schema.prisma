@@ -1,6 +1,5 @@
 // ============================================================
-// DEDCO — Prisma Schema
-// Modèles métier : User (multi-rôle), Artisan, Product, Order, Brief, Notification
+// DEDCO — Prisma Schema (simplifié pour prototype)
 // ============================================================
 
 generator client {
@@ -12,85 +11,82 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ── User — multi-rôle (client, artisan, designer, admin, maison) ──
+// ── User — multi-rôle ──
 
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
   name      String
-  password  String   // hashé en production
-  role      String   @default("client") // client | artisan | designer | admin | maison
+  password  String
+  role      String   @default("client")
   avatar    String?
   phone     String?
   verified  Boolean  @default(false)
-  kycStatus String?  // null | pending | validated | rejected
+  kycStatus String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Relations
-  products      Product[]      @relation("ArtisanProducts")
-  orders        Order[]        @relation("CustomerOrders")
-  briefs        Brief[]        @relation("ClientBriefs")
+  orders        Order[]
+  briefs        Brief[]
   notifications Notification[]
   proposals     Proposal[]
 
   @@map("users")
 }
 
-// ── Artisan — profil public étendu (lié à un User) ──
+// ── Artisan — profil étendu ──
 
 model Artisan {
   id          String   @id @default(cuid())
   userId      String   @unique
-  level       String   @default("N1") // N1 | N2 | N3 | N4
+  level       String   @default("N1")
   bio         String?
-  zone        String?  // ex: "Cotonou", "Porto-Novo"
+  zone        String?
   rating      Float    @default(0)
   reviewCount Int      @default(0)
   verified    Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  user    User     @relation(fields: [userId], references: [id])
   products Product[]
 
   @@map("artisans")
 }
 
-// ── Product — pièce artisanale ──
+// ── Product ──
 
 model Product {
   id          String   @id @default(cuid())
   name        String
   description String
-  price       Int      // en FCFA
-  category    String   // Mobilier | Sièges | Tables | Luminaires | etc.
-  images      String   // JSON array of URLs
-  badge       String?  // "Nouveau" | "Best-seller" | null
+  price       Int
+  category    String
+  images      String
+  badge       String?
   stock       Int      @default(1)
   artisanId   String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  artisan     Artisan  @relation(fields: [artisanId], references: [id])
+  artisan     Artisan     @relation(fields: [artisanId], references: [id])
   orderItems  OrderItem[]
 
   @@map("products")
 }
 
-// ── Order — commande client ──
+// ── Order ──
 
 model Order {
   id          String   @id @default(cuid())
-  orderNumber String   @unique // CMD-2026-XXXX
+  orderNumber String   @unique
   customerId  String
-  status      String   @default("pending") // pending | paid | shipped | delivered | cancelled
-  totalAmount Int      // en FCFA
+  status      String   @default("pending")
+  totalAmount Int
   shippingFee Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  customer    User       @relation(fields: [customerId], references: [id])
+  customer    User        @relation(fields: [customerId], references: [id])
   items       OrderItem[]
 
   @@map("orders")
@@ -101,7 +97,7 @@ model OrderItem {
   orderId   String
   productId String
   quantity  Int    @default(1)
-  price     Int    // prix unitaire au moment de la commande
+  price     Int
 
   order      Order   @relation(fields: [orderId], references: [id])
   product    Product @relation(fields: [productId], references: [id])
@@ -109,20 +105,20 @@ model OrderItem {
   @@map("order_items")
 }
 
-// ── Brief — brief artisan (workflow machine d'états) ──
+// ── Brief ──
 
 model Brief {
   id          String   @id @default(cuid())
-  briefNumber String   @unique // BRA-000001
+  briefNumber String   @unique
   title       String
   description String
   category    String
   zone        String
-  piece       String   // ex: "Chambre"
-  style       String   // ex: "Moderne épuré"
+  piece       String
+  style       String
   budgetMin   Int
   budgetMax   Int
-  status      String   @default("DRAFT") // voir brief-artisan/statuses.ts
+  status      String   @default("DRAFT")
   clientId    String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -135,33 +131,33 @@ model Brief {
 }
 
 model Proposal {
-  id            String   @id @default(cuid())
-  proposalNumber String  @unique // BAP-000001
-  briefId       String
-  artisanId     String
-  price         Int
-  deliveryTime  String   // ex: "18 jours"
-  materials     String
-  message       String?
-  status        String   @default("pending") // pending | accepted | rejected
-  createdAt     DateTime @default(now())
+  id             String   @id @default(cuid())
+  proposalNumber String   @unique
+  briefId        String
+  artisanId      String
+  price          Int
+  deliveryTime   String
+  materials      String
+  message        String?
+  status         String   @default("pending")
+  createdAt      DateTime @default(now())
 
-  brief         Brief @relation(fields: [briefId], references: [id])
-  artisan       User  @relation(fields: [artisanId], references: [id])
+  brief          Brief @relation(fields: [briefId], references: [id])
+  artisan        User  @relation(fields: [artisanId], references: [id])
 
   @@map("proposals")
 }
 
-// ── Notification — centre de notifications ──
+// ── Notification ──
 
 model Notification {
   id        String   @id @default(cuid())
   userId    String
-  type      String   // brief_artisan | brief_designer | order | payment | delivery | review | system | litige
+  type      String
   title     String
   desc      String
   read      Boolean  @default(false)
-  linkedId  String?  // ID du brief/projet/order lié
+  linkedId  String?
   createdAt DateTime @default(now())
 
   user      User @relation(fields: [userId], references: [id])
