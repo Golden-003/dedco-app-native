@@ -344,23 +344,24 @@ export function Navbar({
 
           {/* Actions */}
           <div className="flex items-center gap-1 sm:gap-2">
+            {/* Search — desktop only */}
             <button
               type="button"
               onClick={onOpenSearch}
               aria-label="Rechercher"
               title="Rechercher"
-              className="w-10 h-10 rounded-full flex items-center justify-center text-ink-soft hover:bg-warm hover:text-ink transition-colors"
+              className="hidden lg:flex w-10 h-10 rounded-full items-center justify-center text-ink-soft hover:bg-warm hover:text-ink transition-colors"
             >
               <Search size={20} />
             </button>
-            {/* Favoris — seulement si connecté */}
+            {/* Favoris — desktop only si connecté */}
             {currentUser && (
               <button
                 type="button"
                 onClick={onOpenFavorites}
                 aria-label="Mes favoris"
                 title="Mes favoris"
-                className="relative w-10 h-10 rounded-full flex items-center justify-center text-ink-soft hover:bg-warm hover:text-ink transition-colors"
+                className="hidden lg:flex relative w-10 h-10 rounded-full items-center justify-center text-ink-soft hover:bg-warm hover:text-ink transition-colors"
               >
                 <Heart size={20} />
                 {favCount > 0 && (
@@ -368,6 +369,7 @@ export function Navbar({
                 )}
               </button>
             )}
+            {/* Panier — toujours visible */}
             <button
               type="button"
               onClick={onOpenCart}
@@ -382,10 +384,17 @@ export function Navbar({
                 </span>
               )}
             </button>
-            {/* ── Cloche notifications — seulement si connecté ── */}
-            {currentUser && <NotificationBell navigate={navigate} />}
+            {/* ── Cloche notifications — desktop only si connecté ── */}
+            {currentUser && (
+              <div className="hidden lg:block">
+                <NotificationBell navigate={navigate} />
+              </div>
+            )}
             {/* ── BLOC 8 — Distinction visiteur / connecté ── */}
-            <UserMenu currentUser={currentUser} navigate={navigate} logout={logout} />
+            <div className="hidden lg:block">
+              <UserMenu currentUser={currentUser} navigate={navigate} logout={logout} />
+            </div>
+            {/* Hamburger — mobile only */}
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
