@@ -107,7 +107,7 @@ export function HomePage({
                     alt=""
                     aria-hidden
                     className="w-9 h-9 rounded-full border-2 border-white/80 object-cover -ml-2.5 first:ml-0"
-                  loading="lazy" />
+                  />
                 ))}
               </div>
               <div className="flex items-center gap-3">
@@ -352,28 +352,18 @@ export function HomePage({
           <div className="grid sm:grid-cols-2 gap-5 text-left">
 
             {/* CARTE 1 — BRIEF ARTISAN (commande personnalisée) */}
-            <div
-              className="rounded-2xl p-6 border"
-              style={{
-                backgroundColor: "rgba(30, 24, 19, 0.25)",
-                borderColor: "rgba(255, 255, 255, 0.2)",
-                backdropFilter: "blur(8px)",
-              }}
-            >
-              <div
-                className="w-12 h-12 rounded-full flex items-center justify-center mb-4"
-                style={{ backgroundColor: "rgba(30, 24, 19, 0.4)" }}
-              >
+            <div className="bg-card/10 backdrop-blur rounded-2xl p-6 border border-white/20">
+              <div className="w-12 h-12 rounded-full bg-card/20 flex items-center justify-center mb-4">
                 <Hammer size={24} className="text-white" />
               </div>
               <h3 className="font-display font-bold text-xl text-white mb-2">
                 Commander sur mesure
               </h3>
-              <p className="text-sm mb-4" style={{ color: "rgba(255, 255, 255, 0.85)" }}>
+              <p className="text-sm opacity-80 mb-4">
                 Vous voulez un mobilier, un objet de décoration ou un aménagement fabriqué par un artisan ? 
                 Décrivez votre besoin en 6 étapes, recevez des propositions d'artisans qualifiés sous 48h.
               </p>
-              <ul className="space-y-1.5 mb-5 text-sm" style={{ color: "rgba(255, 255, 255, 0.9)" }}>
+              <ul className="space-y-1.5 mb-5 text-sm opacity-90">
                 <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> Mobilier, décoration, aménagement sur mesure</li>
                 <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> 5 à 15 artisans qualifiés notifiés (N2+, note ≥ 4.0)</li>
                 <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> Sélection, paiement sécurisé, livraison confirmation</li>
@@ -389,28 +379,18 @@ export function HomePage({
             </div>
 
             {/* CARTE 2 — BRIEF DESIGNER (projet d'aménagement) */}
-            <div
-              className="rounded-2xl p-6 border"
-              style={{
-                backgroundColor: "rgba(30, 24, 19, 0.25)",
-                borderColor: "rgba(255, 255, 255, 0.2)",
-                backdropFilter: "blur(8px)",
-              }}
-            >
-              <div
-                className="w-12 h-12 rounded-full flex items-center justify-center mb-4"
-                style={{ backgroundColor: "rgba(30, 24, 19, 0.4)" }}
-              >
+            <div className="bg-card/10 backdrop-blur rounded-2xl p-6 border border-white/20">
+              <div className="w-12 h-12 rounded-full bg-card/20 flex items-center justify-center mb-4">
                 <Palette size={24} className="text-white" />
               </div>
               <h3 className="font-display font-bold text-xl text-white mb-2">
                 Projet d'aménagement
               </h3>
-              <p className="text-sm mb-4" style={{ color: "rgba(255, 255, 255, 0.85)" }}>
+              <p className="text-sm opacity-80 mb-4">
                 Vous voulez aménager un espace ou transformer une pièce ? 
                 Travaillez avec un designer professionnel de votre choix.
               </p>
-              <ul className="space-y-1.5 mb-5 text-sm" style={{ color: "rgba(255, 255, 255, 0.9)" }}>
+              <ul className="space-y-1.5 mb-5 text-sm opacity-90">
                 <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> Choix du designer, niveau de projet</li>
                 <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> Proposition de mission avec prix</li>
                 <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> Paiement après acceptation</li>
@@ -454,7 +434,7 @@ export function HomePage({
             {MAGAZINE.slice(0, 4).map((article) => (
               <button key={article.id} type="button" onClick={() => navigateStore({ page: "article", id: article.id })} className="dedco-card overflow-hidden text-left cursor-pointer hover:shadow-md transition-shadow">
                 <div className="aspect-[4/3] overflow-hidden bg-warm">
-                  <img src={article.image} alt={article.title} className="w-full h-full object-cover" loading="lazy" />
+                  <img src={article.image} alt={article.title} className="w-full h-full object-cover" />
                 </div>
                 <div className="p-4">
                   <div className="flex items-center gap-2 text-xs text-ink-mute mb-2">
