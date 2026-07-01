@@ -352,28 +352,18 @@ export function HomePage({
           <div className="grid sm:grid-cols-2 gap-5 text-left">
 
             {/* CARTE 1 — BRIEF ARTISAN (commande personnalisée) */}
-            <div
-              className="rounded-2xl p-6 border"
-              style={{
-                backgroundColor: "rgba(30, 24, 19, 0.25)",
-                borderColor: "rgba(255, 255, 255, 0.2)",
-                backdropFilter: "blur(8px)",
-              }}
-            >
-              <div
-                className="w-12 h-12 rounded-full flex items-center justify-center mb-4"
-                style={{ backgroundColor: "rgba(30, 24, 19, 0.4)" }}
-              >
+            <div className="bg-white/10 backdrop-blur rounded-2xl p-6 border border-white/30">
+              <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mb-4">
                 <Hammer size={24} className="text-white" />
               </div>
               <h3 className="font-display font-bold text-xl text-white mb-2">
                 Commander sur mesure
               </h3>
-              <p className="text-sm mb-4" style={{ color: "rgba(255, 255, 255, 0.85)" }}>
+              <p className="text-sm text-white/90 mb-4">
                 Vous voulez un mobilier, un objet de décoration ou un aménagement fabriqué par un artisan ? 
                 Décrivez votre besoin en 6 étapes, recevez des propositions d'artisans qualifiés sous 48h.
               </p>
-              <ul className="space-y-1.5 mb-5 text-sm" style={{ color: "rgba(255, 255, 255, 0.9)" }}>
+              <ul className="space-y-1.5 mb-5 text-sm text-white/90">
                 <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> Mobilier, décoration, aménagement sur mesure</li>
                 <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> 5 à 15 artisans qualifiés notifiés (N2+, note ≥ 4.0)</li>
                 <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> Sélection, paiement sécurisé, livraison confirmation</li>
@@ -389,28 +379,18 @@ export function HomePage({
             </div>
 
             {/* CARTE 2 — BRIEF DESIGNER (projet d'aménagement) */}
-            <div
-              className="rounded-2xl p-6 border"
-              style={{
-                backgroundColor: "rgba(30, 24, 19, 0.25)",
-                borderColor: "rgba(255, 255, 255, 0.2)",
-                backdropFilter: "blur(8px)",
-              }}
-            >
-              <div
-                className="w-12 h-12 rounded-full flex items-center justify-center mb-4"
-                style={{ backgroundColor: "rgba(30, 24, 19, 0.4)" }}
-              >
+            <div className="bg-white/10 backdrop-blur rounded-2xl p-6 border border-white/30">
+              <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mb-4">
                 <Palette size={24} className="text-white" />
               </div>
               <h3 className="font-display font-bold text-xl text-white mb-2">
                 Projet d'aménagement
               </h3>
-              <p className="text-sm mb-4" style={{ color: "rgba(255, 255, 255, 0.85)" }}>
+              <p className="text-sm text-white/90 mb-4">
                 Vous voulez aménager un espace ou transformer une pièce ? 
                 Travaillez avec un designer professionnel de votre choix.
               </p>
-              <ul className="space-y-1.5 mb-5 text-sm" style={{ color: "rgba(255, 255, 255, 0.9)" }}>
+              <ul className="space-y-1.5 mb-5 text-sm text-white/90">
                 <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> Choix du designer, niveau de projet</li>
                 <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> Proposition de mission avec prix</li>
                 <li className="flex items-center gap-2"><Check size={14} className="text-white flex-shrink-0" /> Paiement après acceptation</li>
