@@ -264,7 +264,7 @@ export const MOCK_PRESTATIONS_DESIGNER: DesignerPrestation[] = [
     revisions: 2,
     deliveryTime: "10 jours ouvrables",
     availability: "Disponible à partir du 28 juin",
-    nextActionRoute: { page: "projet-paiement", proposalId: "PRES-D1" },
+    nextActionRoute: { page: "client-proposition-recue", proposalId: "PRES-D1" },
     sourceType: "DESIGNER_BRIEF",
     sourceId: "PRES-D1",
     parentBriefId: "BD-003",

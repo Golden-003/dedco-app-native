@@ -333,7 +333,28 @@ export function DesignerPropositionMissionPage({ briefId }: { briefId: string })
           </div>
         </div>
 
-        <button onClick={() => navigate({ page: "designer-dashboard" })} className="dedco-btn dedco-btn-primary w-full">
+        <button
+          onClick={() => {
+            // Génère un ID de proposition et notifie le client
+            const proposalId = `PROP-${Date.now()}`;
+            // TODO: en production, appel API POST /api/proposals
+            // Pour le prototype, on redirige le designer vers son dashboard
+            // avec un toast de confirmation, et le client pourra voir la proposition
+            // depuis sa page "Mes projets"
+            navigate({ page: "designer-dashboard" });
+            // Afficher un toast de succès (sera capté par le Toaster global)
+            if (typeof window !== "undefined") {
+              window.dispatchEvent(new CustomEvent("dedco-toast", {
+                detail: {
+                  type: "success",
+                  title: "Proposition envoyée !",
+                  message: "Le client a été notifié. Vous serez prévenu dès qu'il aura répondu.",
+                }
+              }));
+            }
+          }}
+          className="dedco-btn dedco-btn-primary w-full"
+        >
           <Send size={16} /> Envoyer la proposition
         </button>
       </div>
