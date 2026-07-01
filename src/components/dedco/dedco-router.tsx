@@ -140,7 +140,8 @@ function appRouteToRoute(ar: AppRoute): Route {
     case "article": return { name: "article", id: ar.id };
     case "favorites": return { name: "favorites" };
     case "brief": return { name: "brief" };
-    default: return { name: "home" };
+    // Routes non-gérées par la navbar → "other" (aucun onglet highlighted)
+    default: return { name: "other" };
   }
 }
 
