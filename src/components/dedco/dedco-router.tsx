@@ -1,6 +1,6 @@
 "use client";
 
-import { useDedcoStore, type AppRoute } from "@/lib/store";
+import { useDedcoStore, type AppRoute, type UserRole } from "@/lib/store";
 import { AnimatePresence, motion } from "framer-motion";
 import type { Route } from "@/lib/dedco-types";
 import { HomePage } from "@/components/dedco/home-page";
@@ -184,6 +184,66 @@ export function isDashboardPage(page: string): boolean {
 }
 
 // ============================================================
+// Route Guarding — vérifie le rôle utilisateur avant d'accéder aux dashboards
+// ============================================================
+
+function getRequiredRole(page: string): UserRole | null {
+  if (ARTISAN_PAGES.has(page)) return "artisan";
+  if (DESIGNER_PAGES.has(page)) return "designer";
+  if (ADMIN_PAGES.has(page)) return "admin";
+  if (page === "maison-dashboard") return "maison";
+  return null; // page publique
+}
+
+function GuardBlocked({ requiredRole }: { requiredRole: UserRole }) {
+  const navigate = useDedcoStore((s) => s.navigate);
+  return (
+    <div style={{
+      minHeight: "100vh",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      background: "#faf8f5",
+      color: "#1e1813",
+      fontFamily: "system-ui, sans-serif",
+      padding: "40px 20px",
+      textAlign: "center",
+    }}>
+      <div style={{
+        fontSize: "64px",
+        fontWeight: 700,
+        color: "#a6442e",
+        marginBottom: "16px",
+        fontFamily: "Georgia, serif",
+      }}>🔒</div>
+      <h1 style={{ fontSize: "24px", fontWeight: 600, marginBottom: "12px" }}>
+        Accès restreint
+      </h1>
+      <p style={{ fontSize: "14px", color: "#5b5048", marginBottom: "24px", maxWidth: "400px" }}>
+        Cette page est réservée aux <strong>{requiredRole}s</strong>. 
+        Connectez-vous avec le bon compte pour y accéder.
+      </p>
+      <button
+        onClick={() => navigate({ page: "login" })}
+        style={{
+          background: "#bf793b",
+          color: "white",
+          border: "none",
+          padding: "10px 20px",
+          borderRadius: "6px",
+          fontSize: "14px",
+          fontWeight: 600,
+          cursor: "pointer",
+        }}
+      >
+        Se connecter
+      </button>
+    </div>
+  );
+}
+
+// ============================================================
 // Router
 // ============================================================
 
@@ -202,6 +262,13 @@ export function DedcoRouter() {
   const toggleFavorite = useDedcoStore((s) => s.toggleFavorite);
   const addToCart = useDedcoStore((s) => s.addToCart);
   const toggleSceneSave = useDedcoStore((s) => s.toggleSceneSave);
+  const currentUser = useDedcoStore((s) => s.currentUser);
+
+  // ── Route Guarding ──
+  const requiredRole = getRequiredRole(route.page);
+  if (requiredRole && (!currentUser || currentUser.role !== requiredRole)) {
+    return <GuardBlocked requiredRole={requiredRole} />;
+  }
 
   const legacyRoute = appRouteToRoute(route);
   const navigateBridge = (r: Route) => navigate(routeToAppRoute(r));

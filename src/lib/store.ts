@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { CartItem } from './dedco-types';
 
 // ============================================================
@@ -173,7 +174,9 @@ interface DedcoState {
 // Zustand Store
 // ============================================================
 
-export const useDedcoStore = create<DedcoState>((set, get) => ({
+export const useDedcoStore = create<DedcoState>()(
+  persist(
+    (set, get) => ({
   // ── Initial State ──
   route: { page: 'home' },
   history: [],
@@ -285,4 +288,16 @@ export const useDedcoStore = create<DedcoState>((set, get) => ({
   // ── Overlay Toggles ──
   setCartOpen: (open) => set({ cartOpen: open }),
   setSearchOpen: (open) => set({ searchOpen: open }),
-}));
+    }),
+    {
+      name: 'dedco-storage',
+      // Persist uniquement les données utilisateur, pas l'état UI éphémère
+      partialize: (state) => ({
+        cart: state.cart,
+        favorites: state.favorites,
+        savedScenes: state.savedScenes,
+        currentUser: state.currentUser,
+      }),
+    }
+  )
+);
