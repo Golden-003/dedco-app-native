@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { ThemeToggle } from "@/components/theme-toggle";
 import {
   Search,
   Heart,
@@ -385,8 +384,6 @@ export function Navbar({
             </button>
             {/* ── Cloche notifications — seulement si connecté ── */}
             {currentUser && <NotificationBell navigate={navigate} />}
-            {/* ── Dark mode toggle ── */}
-            <ThemeToggle />
             {/* ── BLOC 8 — Distinction visiteur / connecté ── */}
             <UserMenu currentUser={currentUser} navigate={navigate} logout={logout} />
             <button
