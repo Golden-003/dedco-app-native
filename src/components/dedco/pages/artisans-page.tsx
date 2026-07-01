@@ -179,7 +179,7 @@ export function ArtisansListingPage() {
 
           {/* Filter chips */}
           <div
-            className={`mt-3 flex flex-wrap gap-2 overflow-x-auto pb-1 transition-all ${
+            className={`mt-3 flex flex-wrap gap-2 overflow-x-auto dedco-hide-scroll pb-1 transition-all ${
               showFilters ? "max-h-40" : "max-h-0 lg:max-h-40 overflow-hidden lg:overflow-visible"
             }`}
           >

@@ -57,6 +57,9 @@ const CATEGORIES = [
 ];
 
 export function AdminProductsPage() {
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
   const [search, setSearch] = useState("");
   const [catFilter, setCatFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState<ProductStatus | "all">("all");
@@ -179,7 +182,7 @@ export function AdminProductsPage() {
 
         {/* Products Table */}
         <motion.div variants={fadeUp} className="dedco-card overflow-hidden">
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto dedco-hide-scroll">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-[var(--border)] bg-[var(--bg-cream)]">

@@ -199,7 +199,7 @@ export function AdminAnalyticsPage() {
             <h3 className="text-sm font-semibold text-[var(--text-1)] mb-4">
               Top artisans
             </h3>
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto dedco-hide-scroll">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-[var(--border)]">

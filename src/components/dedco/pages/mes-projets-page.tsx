@@ -20,6 +20,7 @@ import {
   Timer,
   Hammer,
   Palette,
+  MessageSquare,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
 import { formatFCFA } from "@/lib/dedco-data";
@@ -43,39 +44,46 @@ import {
   PRIORITY_CONFIG,
   TYPE_LABELS,
   parseFrDate,
-} from "@/lib/mes-projets-data";
+} from "@/lib/mock/mes-projets-data";
+import { useBriefArtisanStore } from "@/lib/artisan-brief-store";
+import { useBriefDesignerStore } from "@/lib/designer-brief-store";
+import { BRIEF_ARTISAN_STATUS, BRIEF_DESIGNER_STATUS } from "@/lib/dedco-status";
+import type { ArtisanBrief } from "@/lib/artisan-brief-types";
+import type { DesignerBrief } from "@/lib/designer-brief-types";
 
 // ============================================================
 // HELPERS
 // ============================================================
 
+// Table de correspondance pour la navigation Mes Projets
+// Remplace la longue chaîne de if/else
+const ROUTE_MAP: Record<string, (route: MesProjetsRoute, store: ReturnType<typeof useDedcoStore.getState>) => void> = {
+  "brief-detail": (r, store) => r.id && store.navigate({ page: "artisan-brief-recu", briefId: r.id }),
+  "projet-detail": (r, store) => {
+    if (r.projectId) {
+      if (r.projectId.startsWith("PD-")) {
+        store.navigate({ page: "projet-designer-detail", projectId: r.projectId });
+      } else {
+        store.navigate({ page: "projet-artisan-detail", projectId: r.projectId });
+      }
+    }
+  },
+  "projet-paiement-artisan": (r, store) => r.proposalId && store.navigate({ page: "projet-paiement-artisan", proposalId: r.proposalId }),
+  "projet-paiement": (r, store) => r.proposalId && store.navigate({ page: "projet-paiement", proposalId: r.proposalId }),
+  "payment": (r, store) => r.orderId && store.navigate({ page: "payment", orderId: r.orderId }),
+  "litige": (r, store) => r.id && store.navigate({ page: "litige", id: r.id }),
+  "order-tracking": (r, store) => r.id && store.navigate({ page: "order-tracking", id: r.id }),
+  "marketplace": (_, store) => store.navigate({ page: "marketplace" }),
+  "brief": (_, store) => store.navigate({ page: "brief" }),
+  "brief-designer": (r, store) => r.designerId && store.navigate({ page: "brief-designer", designerId: r.designerId }),
+  "home": (_, store) => store.navigate({ page: "home" }),
+};
+
 function navigateTo(route: MesProjetsRoute) {
   const store = useDedcoStore.getState();
-  if (route.page === "brief-detail" && route.id) {
-    store.navigate({ page: "artisan-brief-recu", briefId: route.id });
-  } else if (route.page === "projet-detail" && route.projectId) {
-    // Routing intelligent : PD- → designer, PA- → artisan
-    if (route.projectId.startsWith("PD-")) {
-      store.navigate({ page: "projet-designer-detail", projectId: route.projectId });
-    } else {
-      store.navigate({ page: "projet-artisan-detail", projectId: route.projectId });
-    }
-  } else if (route.page === "projet-paiement-artisan" && route.proposalId) {
-    store.navigate({ page: "projet-paiement-artisan", proposalId: route.proposalId });
-  } else if (route.page === "projet-paiement" && route.proposalId) {
-    store.navigate({ page: "projet-paiement", proposalId: route.proposalId });
-  } else if (route.page === "payment" && route.orderId) {
-    store.navigate({ page: "payment", orderId: route.orderId });
-  } else if (route.page === "litige" && route.id) {
-    store.navigate({ page: "litige", id: route.id });
-  } else if (route.page === "order-tracking" && route.id) {
-    store.navigate({ page: "order-tracking", id: route.id });
-  } else if (route.page === "marketplace") {
-    store.navigate({ page: "marketplace" });
-  } else if (route.page === "brief") {
-    store.navigate({ page: "brief" });
-  } else if (route.page === "brief-designer" && route.designerId) {
-    store.navigate({ page: "brief-designer", designerId: route.designerId });
+  const handler = ROUTE_MAP[route.page];
+  if (handler) {
+    handler(route, store);
   } else {
     store.navigate({ page: "home" });
   }
@@ -144,33 +152,26 @@ function PriorityBanner({
 // ============================================================
 
 function EnCoursCard({ item }: { item: MesProjetsItem }) {
+  const [expanded, setExpanded] = useState(false);
   const isUrgent = item.priority === "PAYMENT_REQUIRED" || item.priority === "CHANGE_REQUEST_PENDING" || item.priority === "DELIVERY_CONFIRMATION_REQUIRED";
-
-  const actionIcon = (() => {
-    switch (item.priority) {
-      case "PAYMENT_REQUIRED": return <CreditCard size={14} />;
-      case "CHANGE_REQUEST_PENDING": return <GitCompareArrows size={14} />;
-      case "DELIVERY_CONFIRMATION_REQUIRED": return <CheckCircle2 size={14} />;
-      case "RESPONSE_REQUIRED": return <Eye size={14} />;
-      case "DESIGNER_MEETING_OR_DELIVERABLE": return <Eye size={14} />;
-      default: return <Eye size={14} />;
-    }
-  })();
 
   return (
     <div className="dedco-card overflow-hidden hover:shadow-md transition-shadow">
-      {/* Bande urgente */}
       {isUrgent && <div className="h-1 w-full" style={{ backgroundColor: "var(--terracotta)" }} />}
 
       <div className="p-4 sm:p-5">
-        <div className="flex gap-4">
-          <img src={item.image} alt={item.title} className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg object-cover flex-shrink-0" />
+        {/* Header cliquable → page détail */}
+        <button
+          onClick={() => navigateTo(item.nextActionRoute)}
+          className="w-full text-left flex gap-4 items-start hover:opacity-80 transition-opacity cursor-pointer"
+        >
+          <img src={item.image} alt={item.title} className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg object-cover flex-shrink-0" />
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex items-center gap-2 mb-1 flex-wrap">
               <TypeBadge type={item.type} />
               <span className="text-[10px] font-numeric text-[var(--text-3)]">{item.id}</span>
             </div>
-            <h3 className="font-display font-semibold text-sm sm:text-base leading-tight truncate">{item.title}</h3>
+            <h3 className="font-display font-semibold text-sm sm:text-base leading-tight truncate text-[var(--text-1)]">{item.title}</h3>
             {item.partnerName && (
               <div className="flex items-center gap-2 mt-1.5">
                 {item.partnerAvatar && <img src={item.partnerAvatar} alt={item.partnerName} className="w-5 h-5 rounded-full object-cover" />}
@@ -182,79 +183,78 @@ function EnCoursCard({ item }: { item: MesProjetsItem }) {
                 </span>
               </div>
             )}
+            <div className="flex items-center gap-3 mt-2 text-[11px]">
+              {item.amount > 0 && <span className="font-numeric font-semibold text-[var(--text-1)]">{formatFCFA(item.amount)}</span>}
+              {item.progress !== undefined && item.progress < 100 && <span className="font-numeric text-[var(--text-3)]">{item.progress}%</span>}
+              {item.estimatedDate && <span className="font-numeric text-[var(--text-3)]">→ {item.estimatedDate}</span>}
+            </div>
           </div>
-        </div>
+          <ChevronRight size={16} className="text-[var(--text-3)] flex-shrink-0 mt-1" />
+        </button>
 
-        {/* Ligne stats */}
-        <div className="flex items-center gap-4 mt-3 pt-3 border-t border-[var(--border)]">
-          {item.amount > 0 && (
-            <div>
-              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Montant</p>
-              <p className="font-numeric text-sm font-bold text-[var(--text-1)]">{formatFCFA(item.amount)}</p>
-            </div>
-          )}
-          {item.securedAmount !== undefined && item.securedAmount > 0 && (
-            <div>
-              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Sécurisé</p>
-              <p className="font-numeric text-sm font-semibold" style={{ color: "var(--forest)" }}>{formatFCFA(item.securedAmount)}</p>
-            </div>
-          )}
-          {item.estimatedDate && (
-            <div>
-              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Échéance</p>
-              <p className="font-numeric text-xs font-medium text-[var(--text-2)]">{item.estimatedDate}</p>
-            </div>
-          )}
-        </div>
-
-        {/* Progression + statut */}
-        {item.progress !== undefined && item.type !== "ARTISAN_BRIEF" && item.type !== "DESIGNER_BRIEF" && (
-          <div className="mt-3">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ color: item.statusColor, backgroundColor: item.statusBgColor }}>
-                {item.statusLabel}
-              </span>
-              {item.progress < 100 && <span className="text-[10px] font-numeric text-[var(--text-3)]">{item.progress} %</span>}
-            </div>
-            {item.progress < 100 && (
-              <div className="h-1.5 bg-[var(--bg-warm)] rounded-full overflow-hidden">
-                <div
-                  className="h-full rounded-full transition-all duration-500"
-                  style={{
-                    width: `${item.progress}%`,
-                    backgroundColor: isUrgent ? "var(--terracotta)" : item.progress >= 80 ? "var(--forest)" : "var(--amber)",
-                  }}
-                />
-              </div>
-            )}
-          </div>
-        )}
-
-        {(item.type === "ARTISAN_BRIEF" || item.type === "DESIGNER_BRIEF") && (
-          <div className="mt-3">
+        {/* Statut + bouton "Voir le projet" — TOUJOURS visible */}
+        <div className="flex items-center justify-between mt-3 pt-3 border-t border-[var(--border)] gap-3">
+          <div className="flex items-center gap-2 flex-wrap min-w-0">
             <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ color: item.statusColor, backgroundColor: item.statusBgColor }}>
               {item.statusLabel}
             </span>
+            <button
+              onClick={() => setExpanded(!expanded)}
+              className="text-[10px] font-semibold text-[var(--text-3)] hover:text-[var(--amber)] flex items-center gap-1"
+            >
+              {expanded ? "Moins" : "Plus de détails"}
+              <ChevronRight size={10} className={`transition-transform ${expanded ? "rotate-90" : ""}`} />
+            </button>
           </div>
-        )}
-
-        {/* Priorité urgente */}
-        <PriorityBanner priority={item.priority} deadline={item.priorityDeadline} consequence={item.priorityConsequence} />
-
-        {/* Footer : MAJ + bouton action */}
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-[var(--border)]">
-          <span className="text-[11px] text-[var(--text-3)]">
-            <Clock size={10} className="inline mr-1" style={{ verticalAlign: "middle" }} />
-            MAJ <span className="font-numeric">{item.lastUpdate}</span>
-          </span>
           <button
             onClick={() => navigateTo(item.nextActionRoute)}
-            className="dedco-btn dedco-btn-primary dedco-btn-sm flex items-center gap-1.5"
+            className="dedco-btn dedco-btn-primary dedco-btn-sm flex items-center gap-1.5 flex-shrink-0"
           >
-            {actionIcon}
-            {item.nextAction}
+            {(() => {
+              switch (item.priority) {
+                case "PAYMENT_REQUIRED": return <><CreditCard size={14} /> {item.nextAction}</>;
+                case "CHANGE_REQUEST_PENDING": return <><GitCompareArrows size={14} /> {item.nextAction}</>;
+                case "DELIVERY_CONFIRMATION_REQUIRED": return <><CheckCircle2 size={14} /> {item.nextAction}</>;
+                default: return <><Eye size={14} /> {item.nextAction}</>;
+              }
+            })()}
           </button>
         </div>
+
+        {/* Détails dépliables */}
+        {expanded && (
+          <div className="mt-3 pt-3 border-t border-[var(--border)] space-y-3">
+            <div className="flex items-center gap-6">
+              {item.amount > 0 && (
+                <div>
+                  <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Montant</p>
+                  <p className="font-numeric text-sm font-bold text-[var(--text-1)]">{formatFCFA(item.amount)}</p>
+                </div>
+              )}
+              {item.securedAmount !== undefined && item.securedAmount > 0 && (
+                <div>
+                  <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Sécurisé</p>
+                  <p className="font-numeric text-sm font-semibold" style={{ color: "var(--forest)" }}>{formatFCFA(item.securedAmount)}</p>
+                </div>
+              )}
+              {item.estimatedDate && (
+                <div>
+                  <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)] mb-0.5">Échéance</p>
+                  <p className="font-numeric text-xs font-medium text-[var(--text-2)]">{item.estimatedDate}</p>
+                </div>
+              )}
+            </div>
+            {item.progress !== undefined && item.type !== "ARTISAN_BRIEF" && item.type !== "DESIGNER_BRIEF" && item.progress < 100 && (
+              <div className="h-1.5 bg-[var(--bg-warm)] rounded-full overflow-hidden">
+                <div className="h-full rounded-full transition-all duration-500" style={{ width: `${item.progress}%`, backgroundColor: isUrgent ? "var(--terracotta)" : item.progress >= 80 ? "var(--forest)" : "var(--amber)" }} />
+              </div>
+            )}
+            <PriorityBanner priority={item.priority} deadline={item.priorityDeadline} consequence={item.priorityConsequence} />
+            <p className="text-[11px] text-[var(--text-3)]">
+              <Clock size={10} className="inline mr-1" style={{ verticalAlign: "middle" }} /> MAJ <span className="font-numeric">{item.lastUpdate}</span>
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -379,16 +379,13 @@ function BriefProposalsCard({ brief }: { brief: ArtisanBriefWithProposals }) {
                     <th className="text-left px-3 py-2 font-semibold">Artisan</th>
                     <th className="text-right px-3 py-2 font-semibold">Prix</th>
                     <th className="text-right px-3 py-2 font-semibold">Délai</th>
-                    <th className="text-left px-3 py-2 font-semibold">Acompte</th>
+                    <th className="text-left px-3 py-2 font-semibold">Paiement</th>
                     <th className="text-left px-3 py-2 font-semibold">Vérifié</th>
                     <th className="text-right px-3 py-2 font-semibold">Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {brief.proposals.map((prop: ArtisanProposal) => {
-                    // Extraction % acompte depuis "50 % acompte..."
-                    const acompte = prop.paymentConditions.match(/(\d+)\s*%/);
-                    const acomptePct = acompte ? `${acompte[1]} %` : "—";
                     return (
                       <tr key={prop.id} className="border-t border-[var(--border)]">
                         <td className="px-3 py-2.5 font-medium text-[var(--text-1)]">
@@ -401,7 +398,7 @@ function BriefProposalsCard({ brief }: { brief: ArtisanBriefWithProposals }) {
                         </td>
                         <td className="px-3 py-2.5 text-right font-numeric font-bold" style={{ color: "var(--amber-dark)" }}>{formatFCFA(prop.price)}</td>
                         <td className="px-3 py-2.5 text-right font-numeric text-[var(--text-2)]">{prop.deliveryTime}</td>
-                        <td className="px-3 py-2.5 font-numeric text-[var(--text-2)]">{acomptePct}</td>
+                        <td className="px-3 py-2.5 text-[var(--text-2)] text-[11px]">{prop.paymentConditions}</td>
                         <td className="px-3 py-2.5">
                           {prop.artisanVerified
                             ? <ShieldCheck size={14} className="text-[var(--forest)]" />
@@ -734,9 +731,154 @@ function TabEnCours() {
 // ONGLET : A CHOISIR
 // ============================================================
 
+
+// Carte dynamique pour brief artisan (lit le store Zustand)
+function DynamicBriefCard({ brief }: { brief: ArtisanBrief }) {
+  const navigate = useDedcoStore((s) => s.navigate);
+  const selectProposal = useBriefArtisanStore((s) => s.selectProposal);
+  const [toast, setToast] = useState<string | null>(null);
+  const statusConfig = BRIEF_ARTISAN_STATUS[brief.status];
+  const selectedProposal = brief.proposals.find(p => p.id === brief.selectedProposalId);
+
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
+  let actionLabel = "Voir le brief";
+  let actionIcon: React.ReactNode = <Eye size={14} />;
+  switch (brief.status) {
+    case 'PROPOSALS_RECEIVED': actionLabel = "Voir le détail"; break;
+    case 'AWAITING_DEPOSIT':
+      actionLabel = selectedProposal ? `Payer ${formatFCFA(Math.round(selectedProposal.price * 1.015))}` : "Payer";
+      actionIcon = <CreditCard size={14} />; break;
+    case 'ARTISAN_SELECTED': actionLabel = "Confirmer et payer"; actionIcon = <CheckCircle2 size={14} />; break;
+  }
+
+  const targetRoute = brief.status === 'AWAITING_DEPOSIT' && selectedProposal
+    ? { page: "projet-paiement-artisan" as const, proposalId: selectedProposal.id }
+    : { page: "brief-artisan-detail" as const, briefId: brief.id };
+
+  return (
+    <div className="dedco-card overflow-hidden hover:shadow-md transition-shadow">
+      <div className="p-4 sm:p-5">
+        <div className="flex items-start gap-3 mb-3">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+              <TypeBadge type="ARTISAN_BRIEF" />
+              <span className="text-[10px] font-numeric text-[var(--text-3)]">{brief.id}</span>
+              <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ color: statusConfig.color, backgroundColor: statusConfig.bgColor }}>{statusConfig.label}</span>
+            </div>
+            <h3 className="font-display font-semibold text-sm sm:text-base leading-tight mb-1 text-[var(--text-1)]">{brief.title}</h3>
+            <div className="flex items-center gap-2 text-[11px] text-[var(--text-3)] flex-wrap">
+              <span>{brief.category}</span><span className="text-[var(--border)]">·</span>
+              <span>{brief.zone}</span><span className="text-[var(--border)]">·</span>
+              <span className="font-numeric">{formatFCFA(brief.budgetMin)} – {formatFCFA(brief.budgetMax)}</span>
+            </div>
+          </div>
+        </div>
+        {selectedProposal && (brief.status === 'ARTISAN_SELECTED' || brief.status === 'AWAITING_DEPOSIT' || brief.status === 'IN_DISCUSSION') && (
+          <div className="flex items-center gap-3 p-3 rounded-md mb-3" style={{ backgroundColor: "var(--bg-warm)" }}>
+            <img src={selectedProposal.artisanAvatar} alt={selectedProposal.artisanName} className="w-10 h-10 rounded-full object-cover" />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium truncate">{selectedProposal.artisanName}</p>
+              <p className="text-[10px] text-[var(--text-3)] font-numeric">{selectedProposal.deliveryTime} · {formatFCFA(selectedProposal.price)}</p>
+            </div>
+          </div>
+        )}
+        {brief.status === 'PROPOSALS_RECEIVED' && brief.proposals.length > 0 && (
+          <div className="mb-3">
+            <div className="flex items-center gap-2 mb-2 p-2 rounded-md" style={{ backgroundColor: "var(--amber-pale)" }}>
+              <Package size={12} style={{ color: "var(--amber-dark)" }} />
+              <span className="text-xs font-semibold" style={{ color: "var(--amber-dark)" }}><span className="font-numeric">{brief.proposals.length}</span> proposition{brief.proposals.length > 1 ? "s" : ""}</span>
+            </div>
+            <div className="space-y-2">
+              {brief.proposals.map((prop) => (
+                <div key={prop.id} className="p-3 rounded-md border border-[var(--border)] bg-[var(--bg-card)]">
+                  <div className="flex items-center gap-2 mb-2">
+                    <img src={prop.artisanAvatar} alt={prop.artisanName} className="w-9 h-9 rounded-full object-cover" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-medium truncate">{prop.artisanName}</p>
+                      <span className="text-[9px] font-bold px-1 py-0.5 rounded-full" style={{ backgroundColor: "var(--amber-pale)", color: "var(--amber-dark)" }}>{prop.artisanLevel}</span>
+                    </div>
+                    <p className="font-numeric text-sm font-bold" style={{ color: "var(--amber-dark)" }}>{formatFCFA(prop.price)}</p>
+                  </div>
+                  <button onClick={() => { selectProposal(brief.id, prop.id); showToast(`Proposition sélectionnée.`); }} className="dedco-btn dedco-btn-primary dedco-btn-sm w-full">
+                    <CheckCircle2 size={12} /> Choisir
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        <button onClick={() => navigate(targetRoute)} className="dedco-btn dedco-btn-primary dedco-btn-sm w-full flex items-center justify-center gap-1.5">
+          {actionIcon}{actionLabel}
+        </button>
+      </div>
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 dedco-card px-4 py-3 shadow-lg flex items-center gap-2" style={{ backgroundColor: "var(--forest-pale)", borderColor: "var(--forest)" }}>
+          <CheckCircle2 size={16} className="text-[var(--forest)] flex-shrink-0" /><p className="text-sm text-[var(--text-1)]">{toast}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Carte dynamique pour brief designer (lit le store Zustand)
+function DynamicDesignerBriefCard({ brief }: { brief: DesignerBrief }) {
+  const navigate = useDedcoStore((s) => s.navigate);
+  const statusConfig = BRIEF_DESIGNER_STATUS[brief.status];
+  let actionLabel = "Voir la demande";
+  let actionIcon: React.ReactNode = <Eye size={14} />;
+  switch (brief.status) {
+    case 'AWAITING_PAYMENT':
+      actionLabel = brief.prestation ? `Payer ${formatFCFA(Math.round(brief.prestation.price * 1.015))}` : "Payer";
+      actionIcon = <CreditCard size={14} />; break;
+    case 'BOOKING_CONFIRMED': actionLabel = "Voir le rendez-vous"; actionIcon = <CheckCircle2 size={14} />; break;
+    case 'NEEDS_INFO': actionLabel = "Répondre au designer"; actionIcon = <MessageSquare size={14} />; break;
+  }
+  return (
+    <div className="dedco-card overflow-hidden hover:shadow-md transition-shadow">
+      <div className="p-4 sm:p-5">
+        <div className="flex items-start gap-3 mb-3">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+              <TypeBadge type="DESIGNER_BRIEF" />
+              <span className="text-[10px] font-numeric text-[var(--text-3)]">{brief.id}</span>
+              <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ color: statusConfig.color, backgroundColor: statusConfig.bgColor }}>{statusConfig.label}</span>
+            </div>
+            <h3 className="font-display font-semibold text-sm sm:text-base leading-tight mb-1 text-[var(--text-1)]">{brief.title}</h3>
+            <div className="flex items-center gap-2 text-[11px] text-[var(--text-3)] flex-wrap">
+              <span>{brief.piece}</span><span className="text-[var(--border)]">·</span>
+              <span>{brief.style}</span>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 p-3 rounded-md mb-3" style={{ backgroundColor: "var(--bg-warm)" }}>
+          <img src={brief.designerAvatar} alt={brief.designerName} className="w-10 h-10 rounded-full object-cover" />
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium truncate">{brief.designerName}</p>
+            <p className="text-[10px] text-[var(--text-3)]">{brief.designerCity}</p>
+          </div>
+          {brief.prestation && (
+            <div className="text-right">
+              <p className="font-numeric text-sm font-bold" style={{ color: "var(--forest)" }}>{formatFCFA(brief.prestation.price)}</p>
+              <p className="text-[10px] text-[var(--text-3)] font-numeric">{brief.prestation.deliveryTime}</p>
+            </div>
+          )}
+        </div>
+        <button onClick={() => navigate({ page: "brief-designer-detail" as const, briefId: brief.id })} className="dedco-btn dedco-btn-primary dedco-btn-sm w-full flex items-center justify-center gap-1.5">
+          {actionIcon}{actionLabel}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function TabAChoisir() {
-  const hasArtisan = true; // brief avec propositions
-  const hasDesigner = MOCK_PRESTATIONS_DESIGNER.length > 0 || MOCK_PAIEMENTS_EN_ATTENTE.some(p => p.parentBriefId?.startsWith("BD"));
+  const briefsFromStore = useBriefArtisanStore((s) => s.briefs);
+  const proposalsBriefs = briefsFromStore.filter(b => b.status === 'PROPOSALS_RECEIVED' || b.status === 'ARTISAN_SELECTED' || b.status === 'AWAITING_DEPOSIT' || b.status === 'IN_DISCUSSION');
+  const designerBriefsFromStore = useBriefDesignerStore((s) => s.briefs);
+  const designerBriefsToChoose = designerBriefsFromStore.filter(b => b.status === 'AWAITING_PAYMENT' || b.status === 'ACCEPTED' || b.status === 'PENDING_DESIGNER_RESPONSE' || b.status === 'NEEDS_INFO' || b.status === 'BOOKING_CONFIRMED');
+  const hasArtisan = proposalsBriefs.length > 0;
+  const hasDesigner = designerBriefsToChoose.length > 0 || MOCK_PRESTATIONS_DESIGNER.length > 0 || MOCK_PAIEMENTS_EN_ATTENTE.some(p => p.parentBriefId?.startsWith("BD"));
 
   return (
     <div className="space-y-8">
@@ -750,10 +892,10 @@ function TabAChoisir() {
           <SectionHeader icon={Package} title="Briefs avec propositions" count={1} description="Comparez les propositions et choisissez un artisan" accentColor="var(--amber)" />
           <BriefProposalsCard brief={MOCK_BRIEF_WITH_PROPOSALS} />
 
-          {/* Paiements acompte artisan */}
+          {/* Paiements paiement artisan */}
           {MOCK_PAIEMENTS_EN_ATTENTE.filter(p => p.sourceType === "ARTISAN_BRIEF").length > 0 && (
             <div className="mt-6">
-              <SectionHeader icon={CreditCard} title="Acomptes artisan à régler" count={MOCK_PAIEMENTS_EN_ATTENTE.filter(p => p.sourceType === "ARTISAN_BRIEF").length} description="Proposition sélectionnée — payez l'acompte pour démarrer la fabrication" accentColor="var(--amber)" />
+              <SectionHeader icon={CreditCard} title="Paiements artisan à régler" count={MOCK_PAIEMENTS_EN_ATTENTE.filter(p => p.sourceType === "ARTISAN_BRIEF").length} description="Proposition sélectionnée — payez pour démarrer la fabrication" accentColor="var(--amber)" />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {MOCK_PAIEMENTS_EN_ATTENTE.filter(p => p.sourceType === "ARTISAN_BRIEF").map((p) => (
                   <PaiementEnAttenteCard key={p.id} paiement={p} />
@@ -771,6 +913,15 @@ function TabAChoisir() {
             <Palette size={14} style={{ color: "var(--forest)" }} />
             <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: "var(--forest)" }}>Designer</span>
           </div>
+
+          {designerBriefsToChoose.length > 0 && (
+            <div className="mb-6">
+              <SectionHeader icon={Palette} title="Briefs designer à traiter" count={designerBriefsToChoose.length} description="Paiements à effectuer ou demandes en attente" accentColor="var(--forest)" />
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                {designerBriefsToChoose.map(brief => <DynamicDesignerBriefCard key={brief.id} brief={brief} />)}
+              </div>
+            </div>
+          )}
 
           {MOCK_PRESTATIONS_DESIGNER.length > 0 && (
             <div className="mb-6">

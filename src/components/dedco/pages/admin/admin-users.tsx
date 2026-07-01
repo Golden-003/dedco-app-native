@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useDedcoStore } from "@/lib/store";
 import { motion } from "framer-motion";
 import {
   Search,
@@ -173,6 +174,10 @@ const fadeUp = {
 };
 
 export function AdminUsersPage() {
+  const navigate = useDedcoStore((s) => s.navigate);
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState<UserRole | "all">("all");
   const [statusFilter, setStatusFilter] = useState<UserStatus | "all">("all");
@@ -277,7 +282,7 @@ export function AdminUsersPage() {
 
         {/* Table */}
         <motion.div variants={fadeUp} className="dedco-card overflow-hidden">
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto dedco-hide-scroll">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-[var(--border)] bg-[var(--bg-cream)]">

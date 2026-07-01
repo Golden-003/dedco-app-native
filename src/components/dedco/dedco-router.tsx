@@ -32,6 +32,8 @@ import { BriefPage } from "@/components/dedco/brief-page";
 import { ProjetArtisanDetailPage } from "@/components/dedco/pages/projet-artisan-detail";
 import { ProjetDesignerDetailPage } from "@/components/dedco/pages/projet-designer-detail";
 import { ProjetPaiementArtisanPage } from "@/components/dedco/pages/projet-paiement-artisan";
+import { BriefArtisanDetailPage } from "@/components/dedco/pages/brief-artisan-detail";
+import { BriefDesignerDetailPage } from "@/components/dedco/pages/brief-designer-detail";
 import {
   OrderConfirmationPage,
   InvoicePage,
@@ -186,9 +188,9 @@ export function isDashboardPage(page: string): boolean {
 // ============================================================
 
 const pageVariants = {
-  initial: { opacity: 0, y: 8 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -8 },
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.25, ease: [0.4, 0, 0.2, 1] as const } },
+  exit: { opacity: 0, y: -8, transition: { duration: 0.15, ease: "easeIn" as const } },
 };
 
 export function DedcoRouter() {
@@ -506,6 +508,12 @@ export function DedcoRouter() {
 
       case "projet-designer-detail":
         return <ProjetDesignerDetailPage projectId={route.projectId} />;
+
+      case "brief-artisan-detail":
+        return <BriefArtisanDetailPage briefId={route.briefId} />;
+
+      case "brief-designer-detail":
+        return <BriefDesignerDetailPage briefId={route.briefId} />;
 
       case "projet-livraison":
         return <ProjetLivraisonPage projectId={route.projectId} />;

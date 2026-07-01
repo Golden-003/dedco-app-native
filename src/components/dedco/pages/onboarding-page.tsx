@@ -429,7 +429,7 @@ function StepPersonalize() {
       >
         <p className="text-sm text-ink-soft">
           Envoyez un brief gratuit et recevez des propositions de designers
-          professionnels. Paiement sécurisé via séquestre.
+          professionnels. Paiement sécurisé via Mobile Money.
         </p>
       </motion.div>
     </div>

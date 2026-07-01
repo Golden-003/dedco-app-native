@@ -125,14 +125,14 @@
   --forest: #548c45;
   --forest-lt: #6ba35a;
   --forest-pale: #e6f2e3;
-  --bg-cream: #f7f3ed;
-  --bg-warm: #ede8e1;
+  --bg-cream: #ffffff;
+  --bg-warm: #faf8f5;
   --bg-card: #ffffff;
   --text-1: #1e1813;
   --text-2: #5b5048;
   --text-3: #a89e95;
-  --border: #eae3d9;
-  --border-dark: #d6cdc1;
+  --border: #f0eeec;
+  --border-dark: #e0ddd8;
 
   --radius: 0.625rem;
 }
@@ -237,6 +237,11 @@ h1, h2, h3, h4, h5, h6,
 
   /* Sizes */
   .dedco-btn-sm { padding: 8px 14px; font-size: 0.8125rem; }
+  .dedco-btn { transition: transform 150ms ease, box-shadow 150ms ease, background 200ms ease; }
+  .dedco-btn:active { transform: scale(0.97); }
+  .dedco-btn-primary:hover { box-shadow: 0 4px 12px rgba(191, 121, 59, 0.3); }
+  .dedco-btn-terracotta:hover { box-shadow: 0 4px 12px rgba(167, 68, 45, 0.3); }
+  .dedco-btn-forest:hover { box-shadow: 0 4px 12px rgba(84, 140, 69, 0.3); }
   .dedco-btn-lg { padding: 14px 24px; font-size: 1rem; }
   .dedco-btn-xl { padding: 16px 28px; font-size: 1.0625rem; }
 
@@ -259,7 +264,11 @@ h1, h2, h3, h4, h5, h6,
     border: 1px solid var(--border);
     border-radius: 10px;
     box-shadow: var(--shadow-sm);
-    transition: box-shadow 150ms ease, transform 150ms ease;
+    transition: box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1), transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .dedco-card:hover {
+    box-shadow: 0 8px 24px rgba(30, 24, 19, 0.08), 0 2px 8px rgba(30, 24, 19, 0.04);
+    transform: translateY(-2px);
   }
 
   /* Display utilities */
@@ -344,4 +353,158 @@ h1, h2, h3, h4, h5, h6,
 /* Mobile safe area footer */
 .safe-bottom {
   padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Séparateur décoratif inspiré des motifs bogolan */
+.dedco-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 24px 0;
+}
+.dedco-divider::before,
+.dedco-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.dedco-divider-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dedco-divider-dot:nth-child(1) { background: var(--amber); }
+.dedco-divider-dot:nth-child(2) { background: var(--terracotta); }
+.dedco-divider-dot:nth-child(3) { background: var(--forest); }
+
+/* ============================================================
+   ANIMATIONS — Rendre le site vivant
+   ============================================================ */
+
+/* Scroll reveal — éléments qui apparaissent en scrollant */
+@keyframes dedco-fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes dedco-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes dedco-scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes dedco-slide-right {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Classes utilitaires d'animation */
+.dedco-fade-in { animation: dedco-fade-in 0.5s ease-out forwards; }
+.dedco-fade-up { animation: dedco-fade-up 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+.dedco-scale-in { animation: dedco-scale-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+
+/* Délais staggered */
+.dedco-stagger-1 { animation-delay: 0.05s; }
+.dedco-stagger-2 { animation-delay: 0.1s; }
+.dedco-stagger-3 { animation-delay: 0.15s; }
+.dedco-stagger-4 { animation-delay: 0.2s; }
+.dedco-stagger-5 { animation-delay: 0.25s; }
+.dedco-stagger-6 { animation-delay: 0.3s; }
+
+/* Pulse notification bell */
+@keyframes dedco-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+.dedco-pulse { animation: dedco-pulse 2s ease-in-out infinite; }
+
+/* Shimmer loading */
+@keyframes dedco-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.dedco-shimmer {
+  background: linear-gradient(90deg, var(--bg-warm) 25%, #f5f0ea 50%, var(--bg-warm) 75%);
+  background-size: 200% 100%;
+  animation: dedco-shimmer 1.5s infinite;
+}
+
+/* Spin loader */
+@keyframes dedco-spin {
+  to { transform: rotate(360deg); }
+}
+.dedco-spin { animation: dedco-spin 0.8s linear infinite; }
+
+/* Bounce subtil pour badges urgents */
+@keyframes dedco-bounce-soft {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+.dedco-bounce-soft { animation: dedco-bounce-soft 1.5s ease-in-out infinite; }
+
+/* Gradient animé pour le hero */
+@keyframes dedco-gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.dedco-animated-gradient {
+  background-size: 200% 200%;
+  animation: dedco-gradient-shift 8s ease infinite;
+}
+
+/* Image zoom au hover */
+.dedco-img-zoom {
+  overflow: hidden;
+}
+.dedco-img-zoom img {
+  transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.dedco-img-zoom:hover img {
+  transform: scale(1.05);
+}
+
+/* Link underline animé */
+.dedco-link {
+  position: relative;
+  text-decoration: none;
+}
+.dedco-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: var(--amber);
+  transition: width 250ms ease;
+}
+.dedco-link:hover::after {
+  width: 100%;
+}
+
+/* Tab indicator slide */
+@keyframes dedco-tab-enter {
+  from { opacity: 0; transform: translateX(10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.dedco-tab-content { animation: dedco-tab-enter 0.3s ease-out; }
+
+/* Smooth scroll */
+html { scroll-behavior: smooth; }
+
+/* Selection color */
+::selection {
+  background: var(--amber-pale);
+  color: var(--amber-dark);
+}
+
+/* Focus visible amélioré */
+*:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+  border-radius: 4px;
 }

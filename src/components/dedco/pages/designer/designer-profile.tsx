@@ -13,6 +13,7 @@ import {
   Star,
   Trash2,
   Upload,
+  CheckCircle2,
 } from "lucide-react";
 
 // ============================================================
@@ -122,7 +123,7 @@ export function DesignerProfilePage() {
               </div>
               <div className="flex items-center gap-2 text-sm text-[var(--text-2)] mb-2">
                 <MapPin size={14} />
-                <span>{city}, Bénin</span>
+                <span>{city}</span>
               </div>
               <div className="flex items-center gap-3 flex-wrap">
                 <div className="flex items-center gap-1">

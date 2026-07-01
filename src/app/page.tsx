@@ -10,6 +10,7 @@ import {
 } from "@/components/dedco/layout";
 import { DedcoRouter, isDashboardPage } from "@/components/dedco/dedco-router";
 import { CartSidebar, SearchOverlay } from "@/components/dedco/cart-search";
+import { WelcomePopup } from "@/components/dedco/welcome-popup";
 
 // ============================================================
 // Bridge helpers: AppRoute ↔ Route
@@ -108,6 +109,9 @@ export default function Home() {
 
       {showPublicNav && <Footer onNavigate={navigateBridge} />}
       {showPublicNav && <BottomNav currentRoute={legacyRoute} onNavigate={navigateBridge} />}
+
+      {/* Welcome popup + Cookie banner */}
+      <WelcomePopup onNavigate={(page) => navigate({ page: page as any })} />
 
       {showPublicNav && (
         <CartSidebar

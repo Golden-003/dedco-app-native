@@ -18,8 +18,9 @@ import {
   Wallet,
   Smartphone,
 } from "lucide-react";
+import { PhoneInput } from "@/components/dedco/phone-input";
 
-type PaymentMethod = "fedapay" | "mtn" | "moov";
+type PaymentMethod = "mobile_money" | "mtn" | "moov";
 
 const PAYMENT_METHODS: {
   id: PaymentMethod;
@@ -29,9 +30,9 @@ const PAYMENT_METHODS: {
   color: string;
 }[] = [
   {
-    id: "fedapay",
-    label: "Fedapay Mobile Money",
-    desc: "MTN & Moov via Fedapay",
+    id: "mobile_money",
+    label: "Mobile Money",
+    desc: "MTN & Moov via Mobile Money",
     icon: <Wallet size={24} />,
     color: "var(--amber)",
   },
@@ -71,7 +72,7 @@ export function CheckoutPage() {
   const [indication, setIndication] = useState("");
 
   // Payment
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("fedapay");
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("mobile_money");
 
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
   const shipping = cart.length > 0 ? 5000 : 0;
@@ -219,17 +220,11 @@ export function CheckoutPage() {
                       <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
                         Téléphone
                       </label>
-                      <div className="relative">
-                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2" size={16} style={{ color: "var(--text-3)" }} />
-                        <input
-                          type="tel"
-                          value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
-                          placeholder="+229 90 00 00 00"
-                          className="w-full pl-9 pr-4 py-3 text-sm rounded-md border focus:outline-none focus:ring-2 transition-all"
-                          style={{ background: "var(--bg-cream)", borderColor: "var(--border)", color: "var(--text-1)" }}
-                        />
-                      </div>
+                      <PhoneInput
+                        value={phone}
+                        onChange={setPhone}
+                        className="w-full"
+                      />
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
@@ -347,7 +342,7 @@ export function CheckoutPage() {
                       <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                       <path d="M7 11V7a5 5 0 0110 0v4" />
                     </svg>
-                    Vos paiements sont sécurisés et cryptés via Fedapay. Aucune information de carte n'est stockée.
+                    Vos paiements sont sécurisés et cryptés via Mobile Money. Aucune information de carte n'est stockée.
                   </div>
                 </div>
               )}

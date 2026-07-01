@@ -303,7 +303,7 @@ export function DesignerDetailPage({
               </p>
 
               <p className="text-xs text-ink-mute leading-relaxed">
-                Le brief est gratuit. Le paiement se fait uniquement après acceptation de la proposition de mission. Paiement sécurisé via Fedapay avec 1,5% de frais de garantie Dedco.
+                Le brief est gratuit. Le paiement se fait uniquement après acceptation de la proposition de mission. Paiement sécurisé via Mobile Money avec 1,5% de frais de garantie Dedco.
               </p>
             </div>
           </aside>

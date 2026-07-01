@@ -11,6 +11,7 @@ import {
   Eye,
   FolderKanban,
   Wallet,
+  CheckCircle2,
 } from "lucide-react";
 
 // ============================================================

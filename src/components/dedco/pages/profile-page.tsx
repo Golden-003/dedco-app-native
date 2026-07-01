@@ -6,7 +6,6 @@ import {
   User,
   Package,
   Heart,
-  Wallet,
   Settings,
   MapPin,
   Phone,
@@ -18,6 +17,7 @@ import {
   Globe,
   MessageSquare,
 } from "lucide-react";
+import { PhoneInput } from "@/components/dedco/phone-input";
 import { useDedcoStore } from "@/lib/store";
 import { BackButton } from "../layout";
 
@@ -50,14 +50,13 @@ const ADDRESSES = [
   },
 ];
 
-type ProfileTab = "profile" | "orders" | "favorites" | "wallet" | "settings" | "messages";
+type ProfileTab = "profile" | "orders" | "favorites" | "settings" | "messages";
 
 const TABS: { key: ProfileTab; label: string; icon: React.ReactNode }[] = [
   { key: "profile", label: "Profil", icon: <User size={18} /> },
   { key: "orders", label: "Commandes", icon: <Package size={18} /> },
   { key: "messages", label: "Messages", icon: <MessageSquare size={18} /> },
   { key: "favorites", label: "Favoris", icon: <Heart size={18} /> },
-  { key: "wallet", label: "Portefeuille", icon: <Wallet size={18} /> },
   { key: "settings", label: "Paramètres", icon: <Settings size={18} /> },
 ];
 
@@ -87,8 +86,6 @@ export function ProfilePage() {
       navigate({ page: "client-projets" });
     } else if (tab === "favorites") {
       navigate({ page: "favorites" });
-    } else if (tab === "wallet") {
-      navigate({ page: "wallet" });
     } else if (tab === "messages") {
       navigate({ page: "messages" });
     }
@@ -111,7 +108,7 @@ export function ProfilePage() {
         >
           {/* Mobile horizontal tabs */}
           <div className="lg:hidden flex gap-1.5 overflow-x-auto dedco-hide-scroll pb-1 mb-4">
-            {TABS.filter((t) => t.key !== "favorites" && t.key !== "wallet").map((tab) => (
+            {TABS.filter((t) => t.key !== "favorites").map((tab) => (
               <button
                 key={tab.key}
                 type="button"
@@ -144,7 +141,7 @@ export function ProfilePage() {
                   >
                     {tab.icon}
                     {tab.label}
-                    {(tab.key === "favorites" || tab.key === "wallet") && (
+                    {(tab.key === "favorites") && (
                       <ChevronRight size={14} className="ml-auto text-ink-mute" />
                     )}
                   </button>
@@ -288,7 +285,7 @@ function ProfileContent({
         {[
           { label: "Commandes", value: "12", icon: <Package size={16} /> },
           { label: "Favoris", value: "3", icon: <Heart size={16} /> },
-          { label: "Portefeuille", value: "45 000 F", icon: <Wallet size={16} /> },
+          { label: "Projets en cours", value: "5", icon: <Package size={16} /> },
           { label: "Avis donnés", value: "8", icon: <Shield size={16} /> },
         ].map((stat) => (
           <div key={stat.label} className="dedco-card p-4 text-center">
@@ -333,10 +330,10 @@ function EditProfileForm() {
         <label className="text-xs text-ink-mute uppercase tracking-wide mb-1 block">
           Téléphone
         </label>
-        <input
-          type="tel"
-          defaultValue={PROFILE.phone}
-          className="w-full px-3 py-2 rounded-md border border-border bg-white text-sm focus:outline-none focus:border-amber"
+        <PhoneInput
+          value={PROFILE.phone}
+          onChange={() => {}}
+          className="w-full"
         />
       </div>
       <button type="button" className="dedco-btn dedco-btn-primary dedco-btn-sm">

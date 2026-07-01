@@ -48,7 +48,7 @@ type DesignerProjectMock = {
   // Prestation
   prestationLabel: string;
   prix: number;
-  acompte: number; // 50% en général
+  montantPaye: number; // 100% payé au début
   solde: number;
   livrablesPromis: string[];
   revisionsIncluses: number;
@@ -82,7 +82,7 @@ const MOCK_PROJECTS: Record<string, DesignerProjectMock> = {
     designerCity: "Cotonou",
     prestationLabel: "Standard — Plan d'aménagement complet",
     prix: 350000,
-    acompte: 175000,
+    montantPaye: 175000,
     solde: 175000,
     livrablesPromis: ["Plan d'aménagement 2D/3D", "Palette couleurs", "Liste de sourcing", "Conseils d'installation"],
     revisionsIncluses: 2,
@@ -110,7 +110,7 @@ const MOCK_PROJECTS: Record<string, DesignerProjectMock> = {
     designerCity: "Porto-Novo",
     prestationLabel: "Standard — Plan d'aménagement complet",
     prix: 250000,
-    acompte: 125000,
+    montantPaye: 125000,
     solde: 125000,
     livrablesPromis: ["Plan 2D", "Palette", "Sourcing mobilier"],
     revisionsIncluses: 2,
@@ -144,7 +144,7 @@ const MOCK_PROJECTS: Record<string, DesignerProjectMock> = {
     designerCity: "Cotonou",
     prestationLabel: "Standard — Plan d'aménagement complet",
     prix: 250000,
-    acompte: 250000,
+    montantPaye: 250000,
     solde: 0,
     livrablesPromis: ["Plan 2D", "Palette", "Sourcing"],
     revisionsIncluses: 2,
@@ -247,7 +247,7 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-4xl mx-auto">
       <button onClick={() => navigate({ page: "client-projets" })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
         <ChevronRight size={16} className="rotate-180" /> Mes projets
       </button>
@@ -302,15 +302,46 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
         </div>
       )}
 
+      {/* Bandeau récapitulatif — visible dans TOUS les onglets */}
+      <div className="dedco-card p-4 mb-4">
+        <div className="flex items-center gap-4 flex-wrap">
+          <img src={project.image} alt={project.title} className="w-14 h-14 rounded-lg object-cover flex-shrink-0" />
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1 flex-wrap">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-full" style={{ color: statusConfig.color, backgroundColor: statusConfig.bgColor }}>
+                {statusConfig.label}
+              </span>
+              {statusConfig.isUrgent && <span className="dedco-badge dedco-badge-terra">Action requise</span>}
+            </div>
+            <h3 className="font-display font-semibold text-sm truncate text-[var(--text-1)]">{project.title}</h3>
+            <p className="text-xs text-[var(--text-3)] font-numeric">{project.id} · {project.designerName}</p>
+          </div>
+          <div className="flex items-center gap-4 text-xs">
+            <div>
+              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)]">Honoraires</p>
+              <p className="font-numeric font-bold text-[var(--text-1)]">{formatFCFA(project.prix)}</p>
+            </div>
+            <div>
+              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)]">Payé</p>
+              <p className="font-numeric font-semibold text-[var(--forest)]">{formatFCFA(project.montantPaye)}</p>
+            </div>
+            <div>
+              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)]">Livraison</p>
+              <p className="font-numeric text-[var(--text-2)]">{project.dateLivraison}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Tabs */}
-      <div className="flex gap-2 mb-4 overflow-x-auto">
+      <div className="flex gap-2 mb-4 overflow-x-auto dedco-hide-scroll -mx-4 px-4 sm:mx-0 sm:px-0">
         {[
           { id: "livrables", label: `Livrables${project.livrables.length > 0 ? ` (${project.livrables.length})` : ""}` },
           { id: "details", label: "Détails" },
           { id: "revisions", label: `Révisions${project.revisions.length > 0 ? ` (${project.revisions.length})` : ""}` },
           { id: "messages", label: "Messagerie" },
         ].map((t) => (
-          <button key={t.id} onClick={() => setActiveTab(t.id as typeof activeTab)} className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${activeTab === t.id ? "bg-[var(--ink)] text-white" : "bg-white border border-[var(--border)] text-[var(--text-2)]"}`}>
+          <button key={t.id} onClick={() => setActiveTab(t.id as typeof activeTab)} className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${activeTab === t.id ? "bg-[var(--amber)] text-white" : "bg-white border border-[var(--border)] text-[var(--text-2)]"}`}>
             {t.label}
           </button>
         ))}
@@ -387,8 +418,8 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
                 <dd className="font-numeric font-semibold text-[var(--amber)]">{formatFCFA(project.prix)}</dd>
               </div>
               <div>
-                <dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Acompte payé (50%)</dt>
-                <dd className="font-numeric text-[var(--forest)]">{formatFCFA(project.acompte)}</dd>
+                <dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Paiement sécurisé</dt>
+                <dd className="font-numeric text-[var(--forest)]">{formatFCFA(project.montantPaye)}</dd>
               </div>
               <div>
                 <dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Solde à la livraison</dt>

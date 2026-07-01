@@ -26,10 +26,9 @@ import {
   Video,
   MapPin,
   AlertTriangle,
-  Zap,
+  Lightbulb,
   Sofa,
   Home,
-  Lightbulb,
   Palette,
   Ruler,
   ShoppingCart,
@@ -49,11 +48,14 @@ type Tx = { id: string; type: TxType; desc: string; amount: number; date: string
 const MOCK_TXS: Tx[] = [
   { id: "TX-D01", type: "credit", desc: "Honoraires — Projet salon Sophie K.", amount: 250000, date: "20 jan 2026", status: "completed" },
   { id: "TX-D02", type: "retrait", desc: "Retrait MTN Mobile Money", amount: -150000, date: "15 jan 2026", status: "completed" },
-  { id: "TX-D03", type: "credit", desc: "Acompte — Projet bureau Marc A.", amount: 45000, date: "10 jan 2026", status: "pending" },
+  { id: "TX-D03", type: "credit", desc: "Avance — Projet bureau Marc A.", amount: 45000, date: "10 jan 2026", status: "pending" },
   { id: "TX-D04", type: "debit", desc: "Abonnement Pro mensuel", amount: -25000, date: "1 jan 2026", status: "completed" },
 ];
 
 export function DesignerWalletPage() {
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
   const [showBalance, setShowBalance] = useState(true);
   const [tab, setTab] = useState<"tout" | "credits" | "debits" | "retraits">("tout");
   const solde = 89000;
@@ -68,7 +70,7 @@ export function DesignerWalletPage() {
         <p className="text-sm text-[var(--text-2)]">Vos gains designer · Aucune commission Dedco</p>
       </header>
 
-      <div className="rounded-2xl p-6 text-white" style={{ background: "var(--ink)" }}>
+      <div className="rounded-2xl p-6 text-white" style={{ background: "var(--text-1)" }}>
         <p className="text-xs uppercase tracking-wide opacity-60 mb-2">Solde disponible</p>
         <div className="flex items-center gap-3 mb-4">
           <h2 className="font-display text-4xl font-numeric font-bold">
@@ -108,7 +110,7 @@ export function DesignerWalletPage() {
                 key={t.id}
                 onClick={() => setTab(t.id as typeof tab)}
                 className={`px-2.5 py-1 text-xs rounded-md font-medium transition-all ${
-                  tab === t.id ? "bg-[var(--ink)] text-white" : "bg-[var(--bg-warm)] text-[var(--text-2)]"
+                  tab === t.id ? "bg-[var(--amber)] text-white" : "bg-[var(--bg-warm)] text-[var(--text-2)]"
                 }`}
               >
                 {t.label}
@@ -199,6 +201,8 @@ const MOCK_PROJECTS: PortfolioProject[] = [
 ];
 
 export function DesignerPortfolioPage() {
+  const navigate = useDedcoStore((s) => s.navigate);
+
   const [selectedIdx, setSelectedIdx] = useState(0);
   const [showAdd, setShowAdd] = useState(false);
   const [sliderPos, setSliderPos] = useState(50);
@@ -249,8 +253,8 @@ export function DesignerPortfolioPage() {
             </div>
             <div className="absolute top-0 bottom-0 w-1 bg-white shadow-lg cursor-ew-resize" style={{ left: `${sliderPos}%` }}>
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white shadow flex items-center justify-center">
-                <ChevronLeft size={14} className="text-[var(--ink)]" />
-                <ChevronRight size={14} className="text-[var(--ink)]" />
+                <ChevronLeft size={14} className="text-[var(--text-1)]" />
+                <ChevronRight size={14} className="text-[var(--text-1)]" />
               </div>
             </div>
             <div className="absolute top-2 left-2 dedco-badge dedco-badge-white">Avant</div>
@@ -350,6 +354,8 @@ export function DesignerPortfolioPage() {
 // ============================================================
 
 export function DesignerAbonnementPage() {
+  const navigate = useDedcoStore((s) => s.navigate);
+
   const plans = [
     {
       id: "essentiel", name: "Essentiel", price: 10000,
@@ -554,7 +560,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
     { id: "3d", label: "Rendu 3D", icon: Monitor },
     { id: "suivi", label: "Visite de suivi", icon: MapPin },
     { id: "coordination", label: "Coordination chantier", icon: HardHat },
-    { id: "conseil", label: "Conseil déco", icon: Lightbulb },
+    { id: "conseil", label: "Conseil déco", icon: Sofa },
   ];
 
   const toggleObjectif = (id: string) => {
@@ -562,11 +568,11 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
   };
 
   const SCOPE_CONFIG: Record<ProjectScope, {
-    label: string; icon: typeof Zap; desc: string;
+    label: string; icon: typeof Lightbulb; desc: string;
     needsEspace: boolean; needsMultiples: boolean; needsContraintes: boolean; inspirationsOptional: boolean;
   }> = {
     prototype: {
-      label: "Prototype", icon: Zap,
+      label: "Prototype", icon: Sofa,
       desc: "Petit besoin simple. Ajustement ponctuel ou conseil rapide.",
       needsEspace: false, needsMultiples: false, needsContraintes: false, inspirationsOptional: true,
     },
@@ -583,7 +589,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
   };
 
   const scopeConfig = scope ? SCOPE_CONFIG[scope] : null;
-  const ScopeIcon = scopeConfig?.icon;
+  const Lightbulb = scopeConfig?.icon;
   const TOTAL_STEPS = 2; // 0=niveau, 1=brief, 2=récap
 
   const canNext = () => {
@@ -655,7 +661,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
             <div className="space-y-3">
               {(Object.keys(SCOPE_CONFIG) as ProjectScope[]).map((key) => {
                 const cfg = SCOPE_CONFIG[key];
-                const ScopeIcon = cfg.icon;
+                const Lightbulb = cfg.icon;
                 const active = scope === key;
                 return (
                   <button
@@ -666,7 +672,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
                     }`}
                   >
                     <div className="flex items-start gap-3">
-                      <ScopeIcon size={24} className="text-[var(--amber)]" />
+                      <Sofa size={24} className="text-[var(--amber)]" />
                       <div className="flex-1">
                         <p className="font-display font-semibold text-base">{cfg.label}</p>
                         <p className="text-xs text-[var(--text-3)] mt-0.5">{cfg.desc}</p>
@@ -685,7 +691,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
           <div>
             <h2 className="display-sm mb-1">Décrivez votre besoin</h2>
             <p className="text-xs text-[var(--text-3)] mb-4">
-              <span className="dedco-badge dedco-badge-amber"><ScopeIcon size={12} /> {scopeConfig.label}</span>
+              <span className="dedco-badge dedco-badge-amber"><Sofa size={12} /> {scopeConfig.label}</span>
             </p>
             <div className="space-y-4">
               <div>
@@ -780,7 +786,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
           <div>
             <h2 className="display-sm mb-2">Récapitulatif</h2>
             <p className="text-xs text-[var(--text-3)] mb-4">
-              <span className="dedco-badge dedco-badge-amber"><ScopeIcon size={12} /> {scopeConfig.label}</span>
+              <span className="dedco-badge dedco-badge-amber"><Sofa size={12} /> {scopeConfig.label}</span>
             </p>
             <dl className="space-y-2 text-sm">
               <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Niveau</dt><dd className="text-right font-semibold">{scopeConfig.label}</dd></div>
@@ -957,6 +963,9 @@ export function AvisLivraisonPage({ orderId }: { orderId: string }) {
 // ============================================================
 
 export function PlansTarifsPage() {
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
   const navigate = useDedcoStore((s) => s.navigate);
   const [cycle, setCycle] = useState<"mensuel" | "annuel">("mensuel");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -976,7 +985,7 @@ export function PlansTarifsPage() {
 
   const faqs = [
     { q: "Puis-je changer de plan à tout moment ?", a: "Oui, vous pouvez upgrader ou downgrader votre plan à tout moment. Le prorata est calculé automatiquement." },
-    { q: "Comment fonctionne le paiement Mobile Money ?", a: "Le prélèvement auto se fait via Fedapay (MTN ou Moov) à la date anniversaire de votre abonnement." },
+    { q: "Comment fonctionne le paiement Mobile Money ?", a: "Le prélèvement auto se fait via Mobile Money (MTN ou Moov) à la date anniversaire de votre abonnement." },
     { q: "Y a-t-il un essai gratuit ?", a: "Oui, les 3 premiers mois sont gratuits pour tout nouvel inscrit. Sans engagement." },
     { q: "Qu'est-ce que la commission Dedco ?", a: "Pour les artisans, 10% sur chaque vente (incluse dans le prix affiché). Pour les designers, 0% de commission — seulement l'abonnement." },
   ];
@@ -992,13 +1001,13 @@ export function PlansTarifsPage() {
       <div className="flex items-center justify-center gap-3 mb-8">
         <button
           onClick={() => setCycle("mensuel")}
-          className={`px-4 py-2 rounded-full text-sm font-medium ${cycle === "mensuel" ? "bg-[var(--ink)] text-white" : "text-[var(--text-2)]"}`}
+          className={`px-4 py-2 rounded-full text-sm font-medium ${cycle === "mensuel" ? "bg-[var(--amber)] text-white" : "text-[var(--text-2)]"}`}
         >
           Mensuel
         </button>
         <button
           onClick={() => setCycle("annuel")}
-          className={`px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 ${cycle === "annuel" ? "bg-[var(--ink)] text-white" : "text-[var(--text-2)]"}`}
+          className={`px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 ${cycle === "annuel" ? "bg-[var(--amber)] text-white" : "text-[var(--text-2)]"}`}
         >
           Annuel
           <span className="dedco-badge dedco-badge-forest">-20%</span>

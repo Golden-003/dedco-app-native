@@ -42,6 +42,31 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Formatage automatique des numéros de téléphone (Bénin = 10 chiffres)
+              document.addEventListener('input', function(e) {
+                const target = e.target;
+                if (target.tagName === 'INPUT' && target.dataset.phoneFormat) {
+                  const format = target.dataset.phoneFormat;
+                  let digits = target.value.replace(/\\D/g, '');
+                  const maxDigits = format.split('X').length - 1;
+                  digits = digits.slice(0, maxDigits);
+                  let result = '';
+                  let di = 0;
+                  for (let i = 0; i < format.length && di < digits.length; i++) {
+                    if (format[i] === 'X') { result += digits[di]; di++; }
+                    else { result += format[i]; }
+                  }
+                  target.value = result;
+                }
+              });
+            `,
+          }}
+        />
+      </head>
       <body
         className={`${jakarta.variable} antialiased`}
         style={{

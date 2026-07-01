@@ -20,9 +20,12 @@ import {
   Shield,
   Home as HomeIcon,
   FolderKanban,
+  Bell,
 } from "lucide-react";
 import type { Route } from "@/lib/dedco-types";
 import { useDedcoStore, type AppRoute, type CurrentUser, type UserRole } from "@/lib/store";
+import { useNotificationStore } from "@/lib/notification-store";
+import { WelcomePopup } from "@/components/dedco/welcome-popup";
 
 // ============================================================
 // Navbar (desktop) + mobile menu
@@ -203,23 +206,24 @@ function UserMenu({
               </>
             )}
 
-            {/* Wallet commun */}
-            <button
-              type="button"
-              onClick={() => {
-                navigate({
-                  page:
-                    currentUser.role === "artisan" ? "artisan-wallet"
-                    : currentUser.role === "designer" ? "designer-wallet"
-                    : "wallet",
-                });
-                setOpen(false);
-              }}
-              className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-ink hover:bg-warm transition-colors"
-            >
-              <Wallet size={16} className="text-amber" />
-              Mon wallet
-            </button>
+            {/* Wallet — uniquement pour artisans et designers (pas les clients) */}
+            {(currentUser.role === "artisan" || currentUser.role === "designer") && (
+              <button
+                type="button"
+                onClick={() => {
+                  navigate({
+                    page:
+                      currentUser.role === "artisan" ? "artisan-wallet"
+                      : "designer-wallet",
+                  });
+                  setOpen(false);
+                }}
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-ink hover:bg-warm transition-colors"
+              >
+                <Wallet size={16} className="text-amber" />
+                Mon wallet
+              </button>
+            )}
 
             <div className="border-t border-border my-1" />
             <button
@@ -234,6 +238,31 @@ function UserMenu({
         </div>
       )}
     </div>
+  );
+}
+
+// ============================================================
+// NotificationBell — cloche avec badge non-lus
+// ============================================================
+
+function NotificationBell({ navigate }: { navigate: (route: AppRoute) => void }) {
+  const unreadCount = useNotificationStore((s) => s.unreadCount);
+
+  return (
+    <button
+      type="button"
+      onClick={() => navigate({ page: "notifications" })}
+      aria-label="Notifications"
+      title="Notifications"
+      className="relative w-10 h-10 rounded-full flex items-center justify-center text-ink-soft hover:bg-warm hover:text-ink transition-colors"
+    >
+      <Bell size={20} className={unreadCount > 0 ? "dedco-pulse" : ""} />
+      {unreadCount > 0 && (
+        <span className="absolute top-0 right-0 min-w-[18px] h-[18px] px-1 rounded-full bg-terracotta text-white text-[10px] font-bold flex items-center justify-center">
+          {unreadCount > 9 ? "9+" : unreadCount}
+        </span>
+      )}
+    </button>
   );
 }
 
@@ -324,18 +353,21 @@ export function Navbar({
             >
               <Search size={20} />
             </button>
-            <button
-              type="button"
-              onClick={onOpenFavorites}
-              aria-label="Mes favoris"
-              title="Mes favoris"
-              className="relative w-10 h-10 rounded-full flex items-center justify-center text-ink-soft hover:bg-warm hover:text-ink transition-colors"
-            >
-              <Heart size={20} />
-              {favCount > 0 && (
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-terracotta" />
-              )}
-            </button>
+            {/* Favoris — seulement si connecté */}
+            {currentUser && (
+              <button
+                type="button"
+                onClick={onOpenFavorites}
+                aria-label="Mes favoris"
+                title="Mes favoris"
+                className="relative w-10 h-10 rounded-full flex items-center justify-center text-ink-soft hover:bg-warm hover:text-ink transition-colors"
+              >
+                <Heart size={20} />
+                {favCount > 0 && (
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-terracotta" />
+                )}
+              </button>
+            )}
             <button
               type="button"
               onClick={onOpenCart}
@@ -350,6 +382,8 @@ export function Navbar({
                 </span>
               )}
             </button>
+            {/* ── Cloche notifications — seulement si connecté ── */}
+            {currentUser && <NotificationBell navigate={navigate} />}
             {/* ── BLOC 8 — Distinction visiteur / connecté ── */}
             <UserMenu currentUser={currentUser} navigate={navigate} logout={logout} />
             <button
@@ -690,7 +724,17 @@ export function Footer({
         </div>
 
         <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-          <p>© 2026 Dedco · Cotonou, Bénin · Tous droits réservés</p>
+          <div className="flex items-center gap-3">
+            <p>© 2026 Dedco · Tous droits réservés</p>
+            <span className="opacity-30">|</span>
+            <p className="flex items-center gap-1.5 opacity-70">
+              {/* Couleurs du drapeau béninois : vert, jaune, rouge */}
+              <span className="inline-block w-2 h-2 rounded-sm" style={{ backgroundColor: '#008751' }} />
+              <span className="inline-block w-2 h-2 rounded-sm" style={{ backgroundColor: '#FCD116' }} />
+              <span className="inline-block w-2 h-2 rounded-sm" style={{ backgroundColor: '#E8112D' }} />
+              Cotonou, Bénin 🇧🇯
+            </p>
+          </div>
           <div className="flex gap-4">
             <button type="button" onClick={() => navigate({ page: "about" })} className="hover:text-amber transition-colors">
               Mentions légales
