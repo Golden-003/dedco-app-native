@@ -44,7 +44,7 @@ const STYLES = [
   { id: "Afro-contemporain", label: "Afro-contemporain", icon: <Sparkles size={24} />, desc: "Afrique moderne", color: "var(--amber)" },
   { id: "Tropical luxe", label: "Tropical luxe", icon: <Layers size={24} />, desc: "Luxe tropical", color: "var(--forest)" },
   { id: "Zen minimaliste", label: "Zen minimaliste", icon: <Wind size={24} />, desc: "Simplicité zen", color: "var(--text-3)" },
-  { id: "Éclectique", label: "Éclectique", icon: <Sparkles size={24} />, desc: "Mix audacieux", color: "var(--terracotta)" },
+  { id: "Éclectique", label: "Éclectique", icon: <Leaf size={24} />, desc: "Mix audacieux", color: "var(--terracotta)" },
   { id: "Biophilique", label: "Biophilique", icon: <TreePine size={24} />, desc: "Nature intégrée", color: "var(--forest)" },
   { id: "Traditionnel revisité", label: "Traditionnel revisité", icon: <Castle size={24} />, desc: "Héritage moderne", color: "var(--amber-dark)" },
 ];
