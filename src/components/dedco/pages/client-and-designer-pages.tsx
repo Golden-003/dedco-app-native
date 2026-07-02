@@ -589,7 +589,6 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
   };
 
   const scopeConfig = scope ? SCOPE_CONFIG[scope] : null;
-  const Lightbulb = scopeConfig?.icon;
   const TOTAL_STEPS = 2; // 0=niveau, 1=brief, 2=récap
 
   const canNext = () => {
@@ -661,7 +660,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
             <div className="space-y-3">
               {(Object.keys(SCOPE_CONFIG) as ProjectScope[]).map((key) => {
                 const cfg = SCOPE_CONFIG[key];
-                const Lightbulb = cfg.icon;
+                const ScopeIcon = cfg.icon;
                 const active = scope === key;
                 return (
                   <button
@@ -672,7 +671,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
                     }`}
                   >
                     <div className="flex items-start gap-3">
-                      <Sofa size={24} className="text-[var(--amber)]" />
+                      <ScopeIcon size={24} className="text-[var(--amber)]" />
                       <div className="flex-1">
                         <p className="font-display font-semibold text-base">{cfg.label}</p>
                         <p className="text-xs text-[var(--text-3)] mt-0.5">{cfg.desc}</p>
