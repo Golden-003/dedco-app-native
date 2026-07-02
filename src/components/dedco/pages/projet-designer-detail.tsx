@@ -214,6 +214,12 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
 
   const statusConfig = STATUS_CONFIG[project.status];
 
+  // ── Role-aware : designer vs client ──
+  // Le designer EST le prestataire — il voit le client comme partenaire,
+  // gère ses livrables, traite les révisions (ne les demande pas),
+  // attend la validation client.
+  const isDesigner = currentUser?.role === "designer";
+
   // Helper : afficher un toast
   function showToast(msg: string) {
     setToast(msg);
@@ -273,12 +279,22 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
         <img src={project.image} alt={project.title} className="w-20 h-20 rounded-lg object-cover" />
       </div>
 
-      {/* Designer partenaire */}
+      {/* Partenaire — role-aware
+          Designer voit le CLIENT qu'il sert ; Client voit le DESIGNER qu'il a engagé */}
       <div className="dedco-card p-4 mb-4 flex items-center gap-3">
-        <img src={project.designerAvatar} alt={project.designerName} className="w-12 h-12 rounded-full object-cover" />
-        <div className="flex-1">
-          <p className="font-display font-semibold">{project.designerName}</p>
-          <p className="text-xs text-[var(--text-3)] flex items-center gap-1"><MapPin size={11} /> {project.designerCity}</p>
+        <img
+          src={isDesigner ? project.clientAvatar : project.designerAvatar}
+          alt={isDesigner ? project.clientName : project.designerName}
+          className="w-12 h-12 rounded-full object-cover"
+        />
+        <div className="flex-1 min-w-0">
+          <p className="font-display font-semibold truncate">
+            {isDesigner ? project.clientName : project.designerName}
+          </p>
+          <p className="text-xs text-[var(--text-3)] flex items-center gap-1">
+            <MapPin size={11} />
+            {isDesigner ? "Votre client" : project.designerCity}
+          </p>
         </div>
         <button
           onClick={() => navigate({ page: "messages", conversationId: `proj-${project.id}` })}
@@ -301,7 +317,11 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
                 {project.rdvCadrage.mode === "presentiel" && "Présentiel"}
                 {project.rdvCadrage.mode === "tel" && "Téléphone"}
               </p>
-              <p className="text-xs text-[var(--text-3)] mt-1">Préparez vos inspirations et contraintes (budget, surface, usages) pour gagner du temps.</p>
+              <p className="text-xs text-[var(--text-3)] mt-1">
+                {isDesigner
+                  ? "Préparez votre méthodologie et posez vos questions sur le brief du client."
+                  : "Préparez vos inspirations et contraintes (budget, surface, usages) pour gagner du temps."}
+              </p>
             </div>
           </div>
         </div>
@@ -319,15 +339,19 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
               {statusConfig.isUrgent && <span className="dedco-badge dedco-badge-terra">Action requise</span>}
             </div>
             <h3 className="font-display font-semibold text-sm truncate text-[var(--text-1)]">{project.title}</h3>
-            <p className="text-xs text-[var(--text-3)] font-numeric">{project.id} · {project.designerName}</p>
+            <p className="text-xs text-[var(--text-3)] font-numeric truncate">{project.id} · {isDesigner ? project.clientName : project.designerName}</p>
           </div>
           <div className="flex items-center gap-4 text-xs">
             <div>
-              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)]">Honoraires</p>
+              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)]">
+                {isDesigner ? "Mes honoraires" : "Honoraires"}
+              </p>
               <p className="font-numeric font-bold text-[var(--text-1)]">{formatFCFA(project.prix)}</p>
             </div>
             <div>
-              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)]">Payé</p>
+              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)]">
+                {isDesigner ? "Encaissé" : "Payé"}
+              </p>
               <p className="font-numeric font-semibold text-[var(--forest)]">{formatFCFA(project.montantPaye)}</p>
             </div>
             <div>
@@ -355,14 +379,32 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
       {/* Tab: Livrables */}
       {activeTab === "livrables" && (
         <div className="dedco-card p-5 mb-4">
-          <h2 className="font-display font-bold mb-4">Livrables du designer</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-display font-bold">
+              {isDesigner ? "Mes livrables" : "Livrables du designer"}
+            </h2>
+            {isDesigner && (
+              <button
+                onClick={() => showToast("Formulaire d'upload — démo")}
+                className="dedco-btn dedco-btn-primary dedco-btn-sm"
+              >
+                <Download size={14} className="rotate-180" /> Ajouter un livrable
+              </button>
+            )}
+          </div>
 
           {project.livrables.length === 0 ? (
             <div className="text-center py-8">
               <Clock size={32} className="mx-auto text-[var(--text-3)] mb-3" />
-              <p className="text-sm text-[var(--text-2)]">Le designer prépare vos livrables.</p>
+              <p className="text-sm text-[var(--text-2)]">
+                {isDesigner
+                  ? "Vous n'avez pas encore livré de livrables."
+                  : "Le designer prépare vos livrables."}
+              </p>
               <p className="text-xs text-[var(--text-3)] mt-1">
-                Livraison prévue le <span className="font-numeric">{project.dateLivraison}</span>
+                {isDesigner
+                  ? "Ajoutez votre premier livrable quand il est prêt."
+                  : <>Livraison prévue le <span className="font-numeric">{project.dateLivraison}</span></>}
               </p>
             </div>
           ) : (
@@ -395,14 +437,18 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
           )}
 
           {project.livrables.length > 0 && project.status === "DELIVERABLE_READY" && (
-            <div className="mt-4 p-3 rounded-lg" style={{ backgroundColor: "var(--forest-pale)" }}>
-              <p className="text-xs text-[var(--forest)] mb-2">
+            <div className="mt-4 p-3 rounded-lg" style={{ backgroundColor: isDesigner ? "var(--amber-pale)" : "var(--forest-pale)" }}>
+              <p className="text-xs mb-2" style={{ color: isDesigner ? "var(--amber-dark)" : "var(--forest)" }}>
                 <CheckCircle2 size={12} className="inline mr-1" />
-                Tous les livrables sont prêts. Validez la livraison pour libérer le paiement au designer.
+                {isDesigner
+                  ? "Tous vos livrables sont en ligne. En attente de validation par le client pour libérer le solde."
+                  : "Tous les livrables sont prêts. Validez la livraison pour libérer le paiement au designer."}
               </p>
-              <button onClick={() => navigate({ page: "projet-livraison", projectId: project.id })} className="dedco-btn dedco-btn-primary dedco-btn-sm">
-                <CheckCircle2 size={14} /> Valider la livraison
-              </button>
+              {!isDesigner && (
+                <button onClick={() => navigate({ page: "projet-livraison", projectId: project.id })} className="dedco-btn dedco-btn-primary dedco-btn-sm">
+                  <CheckCircle2 size={14} /> Valider la livraison
+                </button>
+              )}
             </div>
           )}
         </div>
@@ -423,11 +469,15 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
                 <dd className="font-numeric font-semibold text-[var(--amber)]">{formatFCFA(project.prix)}</dd>
               </div>
               <div>
-                <dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Paiement sécurisé</dt>
+                <dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">
+                  {isDesigner ? "Déjà encaissé" : "Paiement sécurisé"}
+                </dt>
                 <dd className="font-numeric text-[var(--forest)]">{formatFCFA(project.montantPaye)}</dd>
               </div>
               <div>
-                <dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Solde à la livraison</dt>
+                <dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">
+                  {isDesigner ? "Solde à recevoir" : "Solde à la livraison"}
+                </dt>
                 <dd className="font-numeric text-[var(--terracotta)]">{formatFCFA(project.solde)}</dd>
               </div>
             </div>
@@ -474,7 +524,11 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
             <div className="pt-3 border-t border-[var(--border)]">
               <dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Budget conseil (achats)</dt>
               <dd className="font-numeric text-[var(--text-2)]">{formatFCFA(project.budgetConseil.min)} – {formatFCFA(project.budgetConseil.max)}</dd>
-              <p className="text-xs text-[var(--text-3)] mt-1">Estimation des achats recommandés par le designer. Vous restez libre d'acheter ou non.</p>
+              <p className="text-xs text-[var(--text-3)] mt-1">
+                {isDesigner
+                  ? "Estimation des achats que vous recommandez au client."
+                  : "Estimation des achats recommandés par le designer. Vous restez libre d'acheter ou non."}
+              </p>
             </div>
           </dl>
         </div>
@@ -484,7 +538,9 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
       {activeTab === "revisions" && (
         <div className="dedco-card p-5 mb-4">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-display font-bold">Révisions</h2>
+            <h2 className="font-display font-bold">
+              {isDesigner ? "Révisions à traiter" : "Révisions"}
+            </h2>
             <span className="text-xs text-[var(--text-3)] font-numeric">
               {project.revisionsIncluses - project.revisions.filter(r => r.status === "done").length} restante(s) sur {project.revisionsIncluses}
             </span>
@@ -493,8 +549,16 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
           {project.revisions.length === 0 ? (
             <div className="text-center py-8">
               <RefreshCw size={28} className="mx-auto text-[var(--text-3)] mb-3" />
-              <p className="text-sm text-[var(--text-2)]">Aucune révision demandée pour le moment.</p>
-              <p className="text-xs text-[var(--text-3)] mt-1">{project.revisionsIncluses} révisions incluses dans votre prestation.</p>
+              <p className="text-sm text-[var(--text-2)]">
+                {isDesigner
+                  ? "Aucune révision demandée par le client pour le moment."
+                  : "Aucune révision demandée pour le moment."}
+              </p>
+              <p className="text-xs text-[var(--text-3)] mt-1">
+                {isDesigner
+                  ? `${project.revisionsIncluses} révisions incluses dans votre prestation.`
+                  : `${project.revisionsIncluses} révisions incluses dans votre prestation.`}
+              </p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -505,17 +569,28 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
                       Tour {r.round}
                     </span>
                     {r.status === "done" && <span className="text-xs text-[var(--forest)] flex items-center gap-1"><CheckCircle2 size={12} /> Livrée le <span className="font-numeric">{r.deliveredAt}</span></span>}
-                    {r.status === "in_progress" && <span className="text-xs text-[var(--amber-dark)] flex items-center gap-1"><Clock size={12} /> En cours</span>}
+                    {r.status === "in_progress" && <span className="text-xs text-[var(--amber-dark)] flex items-center gap-1"><Clock size={12} /> {isDesigner ? "À traiter" : "En cours"}</span>}
                     {r.status === "pending" && <span className="text-xs text-[var(--terracotta)] flex items-center gap-1"><Clock size={12} /> En attente</span>}
                   </div>
                   <p className="text-sm text-[var(--text-2)]">{r.motif}</p>
                   <p className="text-xs text-[var(--text-3)] mt-1 font-numeric">Demandée le {r.requestedAt}</p>
+
+                  {/* Designer : bouton "Marquer comme livrée" sur les révisions en cours */}
+                  {isDesigner && r.status === "in_progress" && (
+                    <button
+                      onClick={() => showToast(`Révision ${r.round} marquée comme livrée.`)}
+                      className="dedco-btn dedco-btn-primary dedco-btn-sm mt-3 w-full"
+                    >
+                      <CheckCircle2 size={14} /> Marquer comme livrée
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
           )}
 
-          {project.livrables.length > 0 && project.status !== "COMPLETED" && (
+          {/* Client uniquement : demander une révision */}
+          {!isDesigner && project.livrables.length > 0 && project.status !== "COMPLETED" && (
             <>
               {!showRevisionForm ? (
                 <button
@@ -561,15 +636,23 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
         <div className="dedco-card p-5">
           <h2 className="font-display font-bold mb-4">Messagerie projet</h2>
           <div className="space-y-3 mb-4 min-h-[200px]">
-            {messages.map((m, i) => (
-              <div key={i} className={`flex gap-2 ${m.from === "me" ? "flex-row-reverse" : ""}`}>
-                {m.from === "designer" && <img src={project.designerAvatar} alt="" className="w-8 h-8 rounded-full flex-shrink-0" />}
-                <div className={`max-w-[75%] p-3 rounded-md ${m.from === "me" ? "bg-[var(--forest)] text-white" : "bg-[var(--bg-warm)]"}`}>
-                  <p className="text-xs text-[var(--text-3)] mb-1">{m.from === "designer" ? project.designerName : "Vous"} · {m.time}</p>
-                  <p className="text-sm">{m.text}</p>
+            {messages.map((m, i) => {
+              // Role-aware : "me" = l'user connecté, "designer" = l'autre parti.
+              // Pour un client : from==="me" → moi (droite), from==="designer" → designer (gauche)
+              // Pour un designer : from==="designer" → moi (droite), from==="me" → client (gauche)
+              const isMe = isDesigner ? m.from === "designer" : m.from === "me";
+              const otherAvatar = isDesigner ? project.clientAvatar : project.designerAvatar;
+              const otherName = isDesigner ? project.clientName : project.designerName;
+              return (
+                <div key={i} className={`flex gap-2 ${isMe ? "flex-row-reverse" : ""}`}>
+                  {!isMe && <img src={otherAvatar} alt="" className="w-8 h-8 rounded-full flex-shrink-0" />}
+                  <div className={`max-w-[75%] p-3 rounded-md ${isMe ? "bg-[var(--forest)] text-white" : "bg-[var(--bg-warm)]"}`}>
+                    <p className="text-xs text-[var(--text-3)] mb-1">{isMe ? "Vous" : otherName} · {m.time}</p>
+                    <p className="text-sm">{m.text}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
           <div className="flex gap-2">
             <input
@@ -590,19 +673,29 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
         </div>
       )}
 
-      {/* Actions selon statut — tous fonctionnels */}
+      {/* Actions selon statut — role-aware */}
       <div className="flex gap-3 flex-wrap mt-4">
-        {project.status === "DELIVERABLE_READY" && (
+        {/* Client uniquement : valider la livraison (le designer attend la validation) */}
+        {!isDesigner && project.status === "DELIVERABLE_READY" && (
           <button onClick={() => navigate({ page: "projet-livraison", projectId: project.id })} className="dedco-btn dedco-btn-primary">
             <CheckCircle2 size={16} /> Valider la livraison
           </button>
+        )}
+        {/* Designer : indique qu'il attend la validation client */}
+        {isDesigner && project.status === "DELIVERABLE_READY" && (
+          <div className="dedco-card px-4 py-2.5 flex items-center gap-2" style={{ backgroundColor: "var(--amber-pale)" }}>
+            <Clock size={16} className="text-[var(--amber-dark)]" />
+            <span className="text-sm text-[var(--amber-dark)] font-medium">
+              En attente de validation par le client
+            </span>
+          </div>
         )}
         {project.status === "KICKOFF_SCHEDULED" && (
           <button
             onClick={() => setActiveTab("details")}
             className="dedco-btn dedco-btn-primary"
           >
-            <Eye size={16} /> Préparer le rendez-vous
+            <Eye size={16} /> {isDesigner ? "Préparer le rendez-vous" : "Préparer le rendez-vous"}
           </button>
         )}
         <button
