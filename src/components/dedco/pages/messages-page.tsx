@@ -203,13 +203,14 @@ export function MessagesPage() {
 
   return (
     // Conteneur plein écran — s'inscrit dans le <main> du DashboardSidebar.
-    // h-screen - 64px (header mobile) sur mobile, h-screen sur desktop.
-    <div className="h-[calc(100vh-64px)] lg:h-screen flex flex-col bg-[var(--bg-cream)]">
+    // h-full : le parent <main> a flex-1 dans un h-screen, donc la hauteur
+    // est déterminée automatiquement (header mobile 64px déjà déduit par flex).
+    <div className="h-full flex flex-col bg-[var(--bg-cream)]">
       {/* ── Bandeau de titre (desktop) ──
           Sur desktop, on garde un titre "Messagerie" pour la lisibilité,
           aligné avec les autres pages du dashboard. Sur mobile, le header
-          sticky du DashboardSidebar suffit. */}
-      <div className="hidden lg:flex items-center justify-between px-6 py-4 border-b border-[var(--border)] bg-[var(--bg-card)]">
+          du DashboardSidebar suffit. */}
+      <div className="hidden lg:flex items-center justify-between px-6 py-4 border-b border-[var(--border)] bg-[var(--bg-card)] flex-shrink-0">
         <div>
           <h1 className="font-display text-xl font-semibold text-[var(--text-1)]">
             Messagerie

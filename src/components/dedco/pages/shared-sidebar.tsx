@@ -141,18 +141,20 @@ function DashboardSidebarComponent({
   );
 
   return (
-    <div className="flex min-h-screen bg-[var(--bg-cream)]">
+    <div className="flex h-screen bg-[var(--bg-cream)] overflow-hidden">
       {/* ── Desktop sidebar ── */}
-      <aside className="hidden lg:flex flex-col w-60 bg-[var(--bg-card)] border-r border-[var(--border)] p-4 sticky top-0 h-screen">
+      <aside className="hidden lg:flex flex-col w-60 bg-[var(--bg-card)] border-r border-[var(--border)] p-4 flex-shrink-0">
         {Brand}
         {NavButtons}
         {FooterActions}
       </aside>
 
       {/* ── Main column ── */}
-      <div className="flex-1 flex flex-col min-h-screen min-w-0">
-        {/* Mobile header — sticky, ne se remonte jamais */}
-        <header className="lg:hidden flex items-center justify-between px-4 py-3 bg-[var(--bg-card)] border-b border-[var(--border)] sticky top-0 z-40">
+      <div className="flex-1 flex flex-col min-h-0 min-w-0">
+        {/* Mobile header — hauteur fixe h-16 (64px). Pas besoin de sticky :
+            le parent est h-screen + overflow-hidden, le header est en flux
+            normal en haut de la colonne. */}
+        <header className="lg:hidden flex items-center justify-between px-4 h-16 bg-[var(--bg-card)] border-b border-[var(--border)] flex-shrink-0">
           <div className="flex items-center gap-2">
             <button
               onClick={goHome}

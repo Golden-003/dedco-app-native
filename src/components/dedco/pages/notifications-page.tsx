@@ -43,7 +43,6 @@ function groupByDate(notifs: DedcoNotification[]): { label: string; items: Dedco
 
 export function NotificationsPage() {
   const navigate = useDedcoStore((s) => s.navigate);
-  const goBack = useDedcoStore((s) => s.goBack);
   const notifications = useNotificationStore((s) => s.notifications);
   const unreadCount = useNotificationStore((s) => s.unreadCount);
   const markAsRead = useNotificationStore((s) => s.markAsRead);
@@ -67,30 +66,21 @@ export function NotificationsPage() {
   }
 
   return (
-    <div className="dedco-fade-in max-w-2xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-      {/* Retour + titre compact */}
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+      {/* Titre compact — pas de bouton 'Retour' (la sidebar gère la navigation) */}
       <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={goBack}
-            className="w-9 h-9 rounded-full flex items-center justify-center text-[var(--text-2)] hover:bg-[var(--bg-warm)] transition-colors cursor-pointer"
-            aria-label="Retour"
-          >
-            <ChevronRight size={18} className="rotate-180" />
-          </button>
-          <div>
-            <h1 className="font-display font-bold text-xl text-[var(--text-1)]">Notifications</h1>
-            <p className="text-xs text-[var(--text-3)]">
-              {unreadCount > 0 ? (
-                <span className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--terracotta)] dedco-pulse" />
-                  {unreadCount} non lue{unreadCount > 1 ? "s" : ""}
-                </span>
-              ) : (
-                "Tout est à jour"
-              )}
-            </p>
-          </div>
+        <div>
+          <h1 className="font-display font-bold text-xl text-[var(--text-1)]">Notifications</h1>
+          <p className="text-xs text-[var(--text-3)]">
+            {unreadCount > 0 ? (
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--terracotta)] dedco-pulse" />
+                {unreadCount} non lue{unreadCount > 1 ? "s" : ""}
+              </span>
+            ) : (
+              "Tout est à jour"
+            )}
+          </p>
         </div>
         {unreadCount > 0 && (
           <button
