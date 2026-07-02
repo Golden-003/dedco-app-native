@@ -178,7 +178,7 @@ export function RegisterPage() {
                     Informations du compte
                   </h3>
                   <div>
-                    <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
+                    <label htmlFor="kofi" className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
                       Prénom
                     </label>
                     <div className="relative">
@@ -195,7 +195,7 @@ export function RegisterPage() {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
+                    <label htmlFor="akindele" className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
                       Nom
                     </label>
                     <div className="relative">
@@ -212,7 +212,7 @@ export function RegisterPage() {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
+                    <label htmlFor="votre@email.com" className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
                       Adresse email
                     </label>
                     <div className="relative">
@@ -239,7 +239,7 @@ export function RegisterPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
+                    <label htmlFor="minimum-6-caracteres" className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
                       Mot de passe
                     </label>
                     <div className="relative">
@@ -313,7 +313,7 @@ export function RegisterPage() {
                     Informations professionnelles
                   </h3>
                   <div>
-                    <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
+                    <label htmlFor="ebenisterie,-design-d" className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
                       Spécialité
                     </label>
                     <input
@@ -326,7 +326,7 @@ export function RegisterPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
+                    <label htmlFor="cotonou,-porto-novo..." className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
                       Ville
                     </label>
                     <input
@@ -339,7 +339,7 @@ export function RegisterPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
+                    <label htmlFor="decrivez-votre-savoir-faire-et-vos-realisations..." className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
                       Description de votre portfolio
                     </label>
                     <textarea

@@ -378,11 +378,11 @@ export function OrderTrackingPage({ orderId }: { orderId: string }) {
           <MessageCircle size={18} />
           Contacter l'artisan
         </button>
-        <button type="button" className="dedco-btn dedco-btn-ghost flex-1">
+        <button type="button" onClick={() => navigate({ page: "messages" })} className="dedco-btn dedco-btn-ghost flex-1">
           <Phone size={18} />
           Appeler l'artisan
         </button>
-        <button type="button" className="dedco-btn dedco-btn-ghost flex-1">
+        <button type="button" onClick={() => navigate({ page: "invoice", orderId: order.id })} className="dedco-btn dedco-btn-ghost flex-1">
           <FileText size={18} />
           Facture
         </button>

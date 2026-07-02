@@ -91,20 +91,8 @@ export type Magazine = {
   excerpt: string;
 };
 
-export type Route =
-  | { name: "home" }
-  | { name: "inspirations" }
-  | { name: "marketplace" }
-  | { name: "designers" }
-  | { name: "magazine" }
-  | { name: "product"; id: number }
-  | { name: "scene"; slug: string }
-  | { name: "artisan"; id: number }
-  | { name: "designer"; id: number }
-  | { name: "favorites" }
-  | { name: "brief" }
-  | { name: "artisans" }
-  | { name: "article"; id: number };
+// Route est défini dans navigation.ts — re-exporté ici pour compatibilité
+export type { Route } from "./navigation";
 
 export type CartItem = Product & { qty: number; selectedColor?: string };
 

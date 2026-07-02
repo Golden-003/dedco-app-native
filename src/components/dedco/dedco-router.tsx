@@ -636,6 +636,14 @@ export function DedcoRouter() {
   if (isAdmin) {
     return <AdminLayout key="admin-layout">{renderPage()}</AdminLayout>;
   }
+  if (route.page === "maison-dashboard") {
+    // Maison dashboard — wrapper dans un layout simple avec navbar
+    return (
+      <div className="min-h-screen flex flex-col">
+        <main className="flex-1">{renderPage()}</main>
+      </div>
+    );
+  }
 
   // ── Public pages: with animation ──
   return (

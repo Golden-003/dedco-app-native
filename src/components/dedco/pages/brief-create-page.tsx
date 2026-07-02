@@ -328,7 +328,7 @@ function StepDescription({
       </p>
 
       {/* Title */}
-      <label className="block text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">
+      <label htmlFor="ex-:-amenagement-salon-afro-contemporain" className="block text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">
         Titre du projet
       </label>
       <input
@@ -340,7 +340,7 @@ function StepDescription({
       />
 
       {/* Description */}
-      <label className="block text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">
+      <label htmlFor="decrivez-votre-piece-actuelle,-vos-goûts,-vos-contraintes,-les-couleurs-que-vous-aimez..." className="block text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">
         Description
       </label>
       <textarea

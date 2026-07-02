@@ -134,6 +134,7 @@ export function MessagesPage() {
   const route = useDedcoStore((s) => s.route);
   const [searchQuery, setSearchQuery] = useState("");
   const [messageText, setMessageText] = useState("");
+  const [conversations, setConversations] = useState<Conversation[]>(CONVERSATIONS);
 
   const activeConvId =
     route.page === "messages" ? route.conversationId : undefined;
@@ -142,11 +143,11 @@ export function MessagesPage() {
   );
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const filteredConvs = CONVERSATIONS.filter((c) =>
+  const filteredConvs = conversations.filter((c) =>
     c.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const selectedConv = CONVERSATIONS.find((c) => c.id === selectedConvId);
+  const selectedConv = conversations.find((c) => c.id === selectedConvId);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -162,6 +163,20 @@ export function MessagesPage() {
 
   const handleSend = () => {
     if (!messageText.trim()) return;
+    if (!selectedConvId) return;
+    
+    const newMessage: ChatMessage = {
+      id: `msg-${Date.now()}`,
+      text: messageText.trim(),
+      sent: true,
+      time: new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }),
+    };
+    
+    setConversations(prev => prev.map(conv => 
+      conv.id === selectedConvId 
+        ? { ...conv, messages: [...conv.messages, newMessage], lastMessage: newMessage.text, time: newMessage.time }
+        : conv
+    ));
     setMessageText("");
   };
 

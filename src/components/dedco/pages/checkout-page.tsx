@@ -185,7 +185,7 @@ export function CheckoutPage() {
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
+                      <label htmlFor="kofi" className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
                         Prénom
                       </label>
                       <div className="relative">
@@ -201,7 +201,7 @@ export function CheckoutPage() {
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
+                      <label htmlFor="akindele" className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
                         Nom
                       </label>
                       <div className="relative">
@@ -227,7 +227,7 @@ export function CheckoutPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
+                      <label htmlFor="cotonou" className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
                         Ville
                       </label>
                       <div className="relative">
@@ -243,7 +243,7 @@ export function CheckoutPage() {
                       </div>
                     </div>
                     <div className="sm:col-span-2">
-                      <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
+                      <label htmlFor="haie-vive,-cadjehoun..." className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
                         Quartier
                       </label>
                       <div className="relative">
@@ -259,7 +259,7 @@ export function CheckoutPage() {
                       </div>
                     </div>
                     <div className="sm:col-span-2">
-                      <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
+                      <label htmlFor="maison-bleue,-2e-porte-à-gauche..." className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
                         Indication (optionnel)
                       </label>
                       <div className="relative">

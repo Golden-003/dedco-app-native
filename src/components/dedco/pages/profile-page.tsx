@@ -78,6 +78,7 @@ export function ProfilePage() {
   const [activeTab, setActiveTab] = useState<ProfileTab>("profile");
   const navigate = useDedcoStore((s) => s.navigate);
   const goBack = useDedcoStore((s) => s.goBack);
+  const logout = useDedcoStore((s) => s.logout);
   const [editMode, setEditMode] = useState(false);
 
   const handleTabClick = (tab: ProfileTab) => {
@@ -150,6 +151,7 @@ export function ProfilePage() {
               <li className="pt-2 mt-2 border-t border-border">
                 <button
                   type="button"
+                  onClick={() => logout()}
                   className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-terracotta hover:bg-terracotta-pale transition-all"
                 >
                   <LogOut size={18} />
