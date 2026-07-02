@@ -111,6 +111,7 @@ const ProjetLivraisonPage = dynamic(() => import("@/components/dedco/pages/desig
 import { ArtisanLayout } from "@/components/dedco/pages/artisan/artisan-layout";
 import { DesignerLayout } from "@/components/dedco/pages/designer/designer-layout";
 import { AdminLayout } from "@/components/dedco/pages/admin/admin-layout";
+import { MaisonLayout } from "@/components/dedco/pages/maison/maison-layout";
 
 // ============================================================
 // Bridge: AppRoute ↔ Route
@@ -637,12 +638,7 @@ export function DedcoRouter() {
     return <AdminLayout key="admin-layout">{renderPage()}</AdminLayout>;
   }
   if (route.page === "maison-dashboard") {
-    // Maison dashboard — wrapper dans un layout simple avec navbar
-    return (
-      <div className="min-h-screen flex flex-col">
-        <main className="flex-1">{renderPage()}</main>
-      </div>
-    );
+    return <MaisonLayout key="maison-layout">{renderPage()}</MaisonLayout>;
   }
 
   // ── Public pages: with animation ──

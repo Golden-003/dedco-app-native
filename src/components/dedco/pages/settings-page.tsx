@@ -105,6 +105,7 @@ export function SettingsPage() {
           <button
             onClick={() => {
               logout();
+              navigate({ page: "home" });
               showToast("Vous êtes déconnecté. À bientôt sur Dedco !");
             }}
             className="flex items-center gap-3 text-sm font-medium text-[var(--terracotta)] hover:underline cursor-pointer"

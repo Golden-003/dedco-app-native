@@ -384,11 +384,9 @@ export function Navbar({
                 </span>
               )}
             </button>
-            {/* ── Cloche notifications — desktop only si connecté ── */}
+            {/* ── Cloche notifications — si connecté ── */}
             {currentUser && (
-              <div className="hidden lg:block">
-                <NotificationBell navigate={navigate} />
-              </div>
+              <NotificationBell navigate={navigate} />
             )}
             {/* ── BLOC 8 — Distinction visiteur / connecté ── */}
             <div className="hidden lg:block">

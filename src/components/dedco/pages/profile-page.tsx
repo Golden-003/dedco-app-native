@@ -169,6 +169,17 @@ export function ProfilePage() {
           )}
           {activeTab === "orders" && <OrdersPlaceholder />}
           {activeTab === "settings" && <SettingsPlaceholder />}
+          {/* Déconnexion mobile */}
+          <div className="lg:hidden mt-6">
+            <button
+              type="button"
+              onClick={() => logout()}
+              className="dedco-btn dedco-btn-ghost w-full text-terracotta"
+            >
+              <LogOut size={18} />
+              Déconnexion
+            </button>
+          </div>
         </motion.main>
       </div>
     </div>
