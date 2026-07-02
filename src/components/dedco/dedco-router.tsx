@@ -626,6 +626,23 @@ export function DedcoRouter() {
   const isAdmin = ADMIN_PAGES.has(route.page);
   const isDashboard = isArtisan || isDesigner || isAdmin || route.page === "maison-dashboard";
 
+  // ── Pages partagées (messages, notifications) — wrapper dans le layout du rôle ──
+  const sharedPages = ["messages", "notifications"];
+  if (sharedPages.includes(route.page) && currentUser) {
+    if (currentUser.role === "artisan") {
+      return <ArtisanLayout key="artisan-layout">{renderPage()}</ArtisanLayout>;
+    }
+    if (currentUser.role === "designer") {
+      return <DesignerLayout key="designer-layout">{renderPage()}</DesignerLayout>;
+    }
+    if (currentUser.role === "admin") {
+      return <AdminLayout key="admin-layout">{renderPage()}</AdminLayout>;
+    }
+    if (currentUser.role === "maison") {
+      return <MaisonLayout key="maison-layout">{renderPage()}</MaisonLayout>;
+    }
+  }
+
   // ── Dashboard pages: stable Layout, only children change ──
   if (isArtisan) {
     return <ArtisanLayout key="artisan-layout">{renderPage()}</ArtisanLayout>;
