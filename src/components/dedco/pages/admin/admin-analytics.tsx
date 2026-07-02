@@ -250,8 +250,8 @@ export function AdminAnalyticsPage() {
         </div>
 
         {/* User Growth */}
-        <motion.div variants={fadeUp} className="dedco-card p-5">
-          <h3 className="text-sm font-semibold text-[var(--text-1)] mb-1">
+        <motion.div variants={fadeUp} className="dedco-card p-5 overflow-hidden">
+          <h3 className="text-sm font-semibold text-[var(--text-1)] mb-1 truncate">
             Croissance des utilisateurs
           </h3>
           <p className="text-xs text-[var(--text-3)] mb-6">
