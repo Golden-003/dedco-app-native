@@ -245,7 +245,7 @@ function UserMenu({
 // NotificationBell — cloche avec badge non-lus
 // ============================================================
 
-function NotificationBell({ navigate }: { navigate: (route: AppRoute) => void }) {
+export function NotificationBell({ navigate }: { navigate: (route: AppRoute) => void }) {
   const unreadCount = useNotificationStore((s) => s.unreadCount);
 
   return (

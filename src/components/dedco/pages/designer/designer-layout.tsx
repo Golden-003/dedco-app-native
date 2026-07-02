@@ -10,7 +10,6 @@ import {
   CreditCard,
   Settings,
 } from "lucide-react";
-import { useDedcoStore } from "@/lib/store";
 import { DashboardSidebar, type NavItem } from "../shared-sidebar";
 import type { ReactNode } from "react";
 
@@ -31,14 +30,19 @@ const DESIGNER_NAV: NavItem[] = [
   { label: "Paramètres", page: "designer-settings", icon: Settings },
 ];
 
-export function DesignerLayout({ children }: { children: ReactNode }) {
-  const route = useDedcoStore((s) => s.route);
+export function DesignerLayout({
+  children,
+  currentPage,
+}: {
+  children: ReactNode;
+  currentPage: string;
+}) {
   return (
     <DashboardSidebar
       title="Designer"
       subtitle="Espace Designer"
       items={DESIGNER_NAV}
-      currentPage={route.page as string}
+      currentPage={currentPage}
     >
       {children}
     </DashboardSidebar>

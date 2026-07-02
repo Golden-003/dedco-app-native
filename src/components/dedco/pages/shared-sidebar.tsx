@@ -5,12 +5,12 @@ import {
   Menu,
   X,
   Home,
-  Bell,
   LogOut,
   type LucideIcon,
 } from "lucide-react";
 import { useDedcoStore, type AppRoute } from "@/lib/store";
-import { useState } from "react";
+import { memo, useState, useCallback } from "react";
+import { NotificationBell } from "@/components/dedco/layout";
 
 export type NavItem = {
   label: string;
@@ -21,7 +21,22 @@ export type NavItem = {
   visible?: boolean;
 };
 
-export function DashboardSidebar({
+/**
+ * DashboardSidebar — sidebar partagée par tous les dashboards.
+ *
+ * Stabilité du rendu :
+ *  - Le composant est memoïsé. Les props `title`, `subtitle`, `items`
+ *    sont stables (constantes au niveau du module côté parent).
+ *  - Seuls `currentPage` et `children` changent à la navigation.
+ *  - Le drawer mobile est contrôlé par un état local — l'ouverture/fermeture
+ *    ne provoque pas de re-render des composants frères.
+ *  - La fonction `handleNav` est stable grâce à `useCallback`.
+ *
+ * La sidebar et le header mobile ne sont jamais démontés entre deux pages
+ * d'un même dashboard : React garde le nœud `<aside>` monté, seul l'état
+ * "actif" des boutons change.
+ */
+function DashboardSidebarComponent({
   title,
   subtitle,
   items,
@@ -38,94 +53,126 @@ export function DashboardSidebar({
   const logout = useDedcoStore((s) => s.logout);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const handleNav = (page: AppRoute["page"]) => {
-    navigate({ page } as AppRoute);
+  const handleNav = useCallback(
+    (page: AppRoute["page"]) => {
+      navigate({ page } as AppRoute);
+      setMobileOpen(false);
+    },
+    [navigate]
+  );
+
+  const goHome = useCallback(() => {
+    navigate({ page: "home" });
     setMobileOpen(false);
-  };
+  }, [navigate]);
+
+  const handleLogout = useCallback(() => {
+    logout();
+    navigate({ page: "home" });
+    setMobileOpen(false);
+  }, [logout, navigate]);
 
   const visibleItems = items.filter((i) => i.visible !== false);
 
-  const Sidebar = (
-    <aside className="hidden lg:flex flex-col w-60 bg-[var(--bg-card)] border-r border-[var(--border)] p-4 gap-1 sticky top-0 h-screen">
-      <div className="mb-6 px-2">
-        <button
-          onClick={() => navigate({ page: "home" })}
-          className="font-display text-lg font-semibold cursor-pointer hover:opacity-80 transition-opacity"
-        >
-          <span className="text-[var(--terracotta)]">Dedco</span>
-          <span className="text-[var(--amber)]">.</span>
-        </button>
-        <p className="text-xs text-[var(--text-3)] mt-0.5">{subtitle}</p>
-      </div>
-      <nav className="flex flex-col gap-1 flex-1 overflow-y-auto">
-        {visibleItems.map((item) => {
-          const active = currentPage === item.page;
-          const Icon = item.icon;
-          return (
-            <button
-              key={item.page}
-              onClick={() => handleNav(item.page)}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 cursor-pointer ${
-                active
-                  ? "bg-[var(--amber-pale)] text-[var(--amber-dark)]"
-                  : "text-[var(--text-2)] hover:bg-[var(--bg-warm)] hover:text-[var(--text-1)]"
-              }`}
-            >
-              <Icon size={18} />
-              <span className="flex-1 text-left">{item.label}</span>
-              {item.badge !== undefined && (
-                <span
-                  className="text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center"
-                  style={{
-                    backgroundColor: item.badgeColor || "var(--terracotta)",
-                    color: "white",
-                  }}
-                >
-                  {item.badge}
-                </span>
-              )}
-            </button>
-          );
-        })}
-      </nav>
-      <div className="border-t border-[var(--border)] pt-3 space-y-1">
-        <button
-          onClick={() => navigate({ page: "home" })}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[var(--text-3)] hover:bg-[var(--bg-warm)] hover:text-[var(--text-1)] transition-colors cursor-pointer"
-        >
-          <Home size={18} />
-          Retour au site
-        </button>
-        <button
-          onClick={() => { logout(); navigate({ page: "home" }); }}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[var(--terracotta)] hover:bg-[var(--terracotta-pale)] transition-colors cursor-pointer"
-        >
-          <LogOut size={18} />
-          Déconnexion
-        </button>
-      </div>
-    </aside>
+  // ── Sous-composants rendus à l'identique desktop / mobile ──
+  const Brand = (
+    <div className="mb-6 px-2">
+      <button
+        onClick={goHome}
+        className="font-display text-lg font-semibold cursor-pointer hover:opacity-80 transition-opacity"
+      >
+        <span className="text-[var(--terracotta)]">Dedco</span>
+        <span className="text-[var(--amber)]">.</span>
+      </button>
+      <p className="text-xs text-[var(--text-3)] mt-0.5">{subtitle}</p>
+    </div>
+  );
+
+  const NavButtons = (
+    <nav className="flex flex-col gap-1 flex-1 overflow-y-auto dedco-scroll">
+      {visibleItems.map((item) => {
+        const active = currentPage === item.page;
+        const Icon = item.icon;
+        return (
+          <button
+            key={item.page}
+            onClick={() => handleNav(item.page)}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-150 cursor-pointer ${
+              active
+                ? "bg-[var(--amber-pale)] text-[var(--amber-dark)]"
+                : "text-[var(--text-2)] hover:bg-[var(--bg-warm)] hover:text-[var(--text-1)]"
+            }`}
+          >
+            <Icon size={18} className={active ? "text-[var(--amber)]" : ""} />
+            <span className="flex-1 text-left">{item.label}</span>
+            {item.badge !== undefined && (
+              <span
+                className="text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center text-white"
+                style={{
+                  backgroundColor: item.badgeColor || "var(--terracotta)",
+                }}
+              >
+                {item.badge}
+              </span>
+            )}
+          </button>
+        );
+      })}
+    </nav>
+  );
+
+  const FooterActions = (
+    <div className="border-t border-[var(--border)] pt-3 space-y-1">
+      <button
+        onClick={goHome}
+        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[var(--text-3)] hover:bg-[var(--bg-warm)] hover:text-[var(--text-1)] transition-colors cursor-pointer"
+      >
+        <Home size={18} />
+        Retour au site
+      </button>
+      <button
+        onClick={handleLogout}
+        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[var(--terracotta)] hover:bg-[var(--terracotta-pale)] transition-colors cursor-pointer"
+      >
+        <LogOut size={18} />
+        Déconnexion
+      </button>
+    </div>
   );
 
   return (
     <div className="flex min-h-screen bg-[var(--bg-cream)]">
-      {Sidebar}
+      {/* ── Desktop sidebar ── */}
+      <aside className="hidden lg:flex flex-col w-60 bg-[var(--bg-card)] border-r border-[var(--border)] p-4 sticky top-0 h-screen">
+        {Brand}
+        {NavButtons}
+        {FooterActions}
+      </aside>
+
+      {/* ── Main column ── */}
       <div className="flex-1 flex flex-col min-h-screen min-w-0">
+        {/* Mobile header — sticky, ne se remonte jamais */}
         <header className="lg:hidden flex items-center justify-between px-4 py-3 bg-[var(--bg-card)] border-b border-[var(--border)] sticky top-0 z-40">
           <div className="flex items-center gap-2">
-            <span className="font-display text-base font-semibold">
+            <button
+              onClick={goHome}
+              className="font-display text-base font-semibold cursor-pointer"
+            >
               <span className="text-[var(--terracotta)]">Dedco</span>
               <span className="text-[var(--amber)]">.</span>
-            </span>
-            <span className="text-xs text-[var(--text-3)]">{title}</span>
+            </button>
+            <span className="text-xs text-[var(--text-3)]">· {title}</span>
           </div>
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="p-2 rounded-lg hover:bg-[var(--bg-warm)] transition-colors cursor-pointer"
-            aria-label="Ouvrir le menu"
-          >
-            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+          <div className="flex items-center gap-1">
+            <NotificationBell navigate={navigate} />
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="p-2 rounded-lg hover:bg-[var(--bg-warm)] transition-colors cursor-pointer"
+              aria-label="Ouvrir le menu"
+            >
+              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
         </header>
 
         {/* Mobile drawer */}
@@ -158,54 +205,22 @@ export function DashboardSidebar({
                   <X size={18} />
                 </button>
               </div>
-              <nav className="flex flex-col gap-1 flex-1 overflow-y-auto">
-                {visibleItems.map((item) => {
-                  const active = currentPage === item.page;
-                  const Icon = item.icon;
-                  return (
-                    <button
-                      key={item.page}
-                      onClick={() => handleNav(item.page)}
-                      className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                        active
-                          ? "bg-[var(--amber-pale)] text-[var(--amber-dark)]"
-                          : "text-[var(--text-2)] hover:bg-[var(--bg-warm)]"
-                      }`}
-                    >
-                      <Icon size={18} />
-                      <span className="flex-1 text-left">{item.label}</span>
-                      {item.badge !== undefined && (
-                        <span
-                          className="text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center text-white"
-                          style={{ backgroundColor: item.badgeColor || "var(--terracotta)" }}
-                        >
-                          {item.badge}
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
-              </nav>
-              <button
-                onClick={() => navigate({ page: "home" })}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[var(--text-3)] hover:bg-[var(--bg-warm)] transition-colors"
-              >
-                <Home size={18} />
-                Retour au site
-              </button>
-              <button
-                onClick={() => { logout(); navigate({ page: "home" }); }}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[var(--terracotta)] hover:bg-[var(--terracotta-pale)] transition-colors"
-              >
-                <LogOut size={18} />
-                Déconnexion
-              </button>
+              {NavButtons}
+              {FooterActions}
             </motion.aside>
           </div>
         )}
 
-        <main className="flex-1 overflow-y-auto h-full">{children}</main>
+        {/* ── Page content ──
+            h-screen + overflow-hidden sur le wrapper, main en flex-1 + overflow-y-auto.
+            Permet aux pages "plein écran" (ex: messagerie) de gérer leur propre
+            scroll interne sans impacter la sidebar ni le header mobile. */}
+        <div className="flex-1 flex flex-col min-h-0">
+          <main className="flex-1 overflow-y-auto dedco-scroll">{children}</main>
+        </div>
       </div>
     </div>
   );
 }
+
+export const DashboardSidebar = memo(DashboardSidebarComponent);

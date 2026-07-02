@@ -8,7 +8,6 @@ import {
   TrendingUp,
   Settings,
 } from "lucide-react";
-import { useDedcoStore } from "@/lib/store";
 import { DashboardSidebar, type NavItem } from "../shared-sidebar";
 import type { ReactNode } from "react";
 
@@ -21,14 +20,19 @@ const MAISON_NAV: NavItem[] = [
   { label: "Paramètres", page: "settings", icon: Settings },
 ];
 
-export function MaisonLayout({ children }: { children: ReactNode }) {
-  const route = useDedcoStore((s) => s.route);
+export function MaisonLayout({
+  children,
+  currentPage,
+}: {
+  children: ReactNode;
+  currentPage: string;
+}) {
   return (
     <DashboardSidebar
       title="Dedco."
       subtitle="Espace Maison"
       items={MAISON_NAV}
-      currentPage={route.page}
+      currentPage={currentPage}
     >
       {children}
     </DashboardSidebar>

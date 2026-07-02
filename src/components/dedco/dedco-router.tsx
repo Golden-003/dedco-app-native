@@ -624,37 +624,56 @@ export function DedcoRouter() {
   const isArtisan = ARTISAN_PAGES.has(route.page);
   const isDesigner = DESIGNER_PAGES.has(route.page);
   const isAdmin = ADMIN_PAGES.has(route.page);
-  const isDashboard = isArtisan || isDesigner || isAdmin || route.page === "maison-dashboard";
+  const isMaison = route.page === "maison-dashboard";
 
   // ── Pages partagées (messages, notifications) — wrapper dans le layout du rôle ──
+  // On calcule le layout une seule fois selon le rôle de l'utilisateur connecté.
+  // La sidebar reste ainsi montée entre deux pages d'un même dashboard : seul
+  // le `currentPage` (état actif des boutons) et `children` (contenu) changent.
   const sharedPages = ["messages", "notifications"];
-  if (sharedPages.includes(route.page) && currentUser) {
-    if (currentUser.role === "artisan") {
-      return <ArtisanLayout key="artisan-layout">{renderPage()}</ArtisanLayout>;
-    }
-    if (currentUser.role === "designer") {
-      return <DesignerLayout key="designer-layout">{renderPage()}</DesignerLayout>;
-    }
-    if (currentUser.role === "admin") {
-      return <AdminLayout key="admin-layout">{renderPage()}</AdminLayout>;
-    }
-    if (currentUser.role === "maison") {
-      return <MaisonLayout key="maison-layout">{renderPage()}</MaisonLayout>;
-    }
-  }
+  const isSharedDashboardPage = sharedPages.includes(route.page) && !!currentUser;
+  const activeRole: UserRole | null = isSharedDashboardPage
+    ? (currentUser?.role as UserRole)
+    : isArtisan
+      ? "artisan"
+      : isDesigner
+        ? "designer"
+        : isAdmin
+          ? "admin"
+          : isMaison
+            ? "maison"
+            : null;
 
-  // ── Dashboard pages: stable Layout, only children change ──
-  if (isArtisan) {
-    return <ArtisanLayout key="artisan-layout">{renderPage()}</ArtisanLayout>;
+  // Page à rendre (résout le switch ci-dessus)
+  const pageContent = renderPage();
+
+  if (activeRole === "artisan") {
+    return (
+      <ArtisanLayout key="artisan-layout" currentPage={route.page}>
+        {pageContent}
+      </ArtisanLayout>
+    );
   }
-  if (isDesigner) {
-    return <DesignerLayout key="designer-layout">{renderPage()}</DesignerLayout>;
+  if (activeRole === "designer") {
+    return (
+      <DesignerLayout key="designer-layout" currentPage={route.page}>
+        {pageContent}
+      </DesignerLayout>
+    );
   }
-  if (isAdmin) {
-    return <AdminLayout key="admin-layout">{renderPage()}</AdminLayout>;
+  if (activeRole === "admin") {
+    return (
+      <AdminLayout key="admin-layout" currentPage={route.page}>
+        {pageContent}
+      </AdminLayout>
+    );
   }
-  if (route.page === "maison-dashboard") {
-    return <MaisonLayout key="maison-layout">{renderPage()}</MaisonLayout>;
+  if (activeRole === "maison") {
+    return (
+      <MaisonLayout key="maison-layout" currentPage={route.page}>
+        {pageContent}
+      </MaisonLayout>
+    );
   }
 
   // ── Public pages: with animation ──
@@ -669,7 +688,7 @@ export function DedcoRouter() {
         transition={{ duration: 0.15, ease: "easeOut" }}
         className="min-h-screen"
       >
-        {renderPage()}
+        {pageContent}
       </motion.div>
     </AnimatePresence>
   );

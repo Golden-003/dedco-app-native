@@ -15,7 +15,6 @@ import {
   ClipboardList,
   FileText,
 } from "lucide-react";
-import { useDedcoStore } from "@/lib/store";
 import { DashboardSidebar, type NavItem } from "../shared-sidebar";
 import type { ReactNode } from "react";
 
@@ -35,14 +34,19 @@ const ADMIN_NAV: NavItem[] = [
   { label: "Paramètres", page: "admin-parametres", icon: Settings },
 ];
 
-export function AdminLayout({ children }: { children: ReactNode }) {
-  const route = useDedcoStore((s) => s.route);
+export function AdminLayout({
+  children,
+  currentPage,
+}: {
+  children: ReactNode;
+  currentPage: string;
+}) {
   return (
     <DashboardSidebar
       title="Admin"
       subtitle="Espace Administrateur"
       items={ADMIN_NAV}
-      currentPage={route.page as string}
+      currentPage={currentPage}
     >
       {children}
     </DashboardSidebar>

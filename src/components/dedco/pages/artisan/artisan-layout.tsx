@@ -13,7 +13,6 @@ import {
   CreditCard,
   Settings,
 } from "lucide-react";
-import { useDedcoStore } from "@/lib/store";
 import { DashboardSidebar, type NavItem } from "../shared-sidebar";
 import type { ReactNode } from "react";
 
@@ -42,14 +41,19 @@ const ARTISAN_NAV: NavItem[] = [
   { label: "Paramètres", page: "artisan-parametres", icon: Settings },
 ];
 
-export function ArtisanLayout({ children }: { children: ReactNode }) {
-  const route = useDedcoStore((s) => s.route);
+export function ArtisanLayout({
+  children,
+  currentPage,
+}: {
+  children: ReactNode;
+  currentPage: string;
+}) {
   return (
     <DashboardSidebar
       title="Artisan"
       subtitle="Espace Artisan"
       items={ARTISAN_NAV}
-      currentPage={route.page as string}
+      currentPage={currentPage}
     >
       {children}
     </DashboardSidebar>
