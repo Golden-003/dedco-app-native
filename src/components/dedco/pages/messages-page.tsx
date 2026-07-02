@@ -182,7 +182,7 @@ export function MessagesPage() {
   };
 
   return (
-    <div className="dedco-fade-in h-[calc(100vh-64px)] flex flex-col lg:h-[calc(100vh-64px)]">
+    <div className="dedco-fade-in h-full flex flex-col">
       {/* Mobile: Show conversation list or chat */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left Panel — Conversation List */}

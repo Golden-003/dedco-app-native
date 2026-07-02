@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDedcoStore } from "@/lib/store";
+import { useNotificationStore } from "@/lib/notification-store";
 import { PhoneInput } from "@/components/dedco/phone-input";
 import {
   Mail,
@@ -75,6 +76,7 @@ export function RegisterPage() {
         email: email || "user@dedco.bj",
         avatar: avatars[role],
       });
+      useNotificationStore.getState().initForRole(role);
       // Route to appropriate dashboard based on selected role
       switch (role) {
         case "artisan":

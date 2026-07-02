@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useDedcoStore } from "@/lib/store";
+import { useNotificationStore } from "@/lib/notification-store";
 import { Mail, Lock, Eye, EyeOff, Shield, Wrench, Palette, Briefcase, ChevronRight, Home } from "lucide-react";
 
 const DEMO_ROLES = [
@@ -34,6 +35,7 @@ export function LoginPage() {
         email: email || "client@dedco.bj",
         avatar: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=120&q=80",
       });
+      useNotificationStore.getState().initForRole("client");
       navigate({ page: "home" });
     }, 1000);
   };
@@ -86,6 +88,7 @@ export function LoginPage() {
       role: userRole,
       ...mockUsers[userRole],
     });
+    useNotificationStore.getState().initForRole(userRole);
     navigate({ page });
   };
 
