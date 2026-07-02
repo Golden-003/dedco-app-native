@@ -132,6 +132,7 @@ export function MessagesPage() {
   const navigate = useDedcoStore((s) => s.navigate);
   const goBack = useDedcoStore((s) => s.goBack);
   const route = useDedcoStore((s) => s.route);
+  const currentUser = useDedcoStore((s) => s.currentUser);
   const [searchQuery, setSearchQuery] = useState("");
   const [messageText, setMessageText] = useState("");
   const [conversations, setConversations] = useState<Conversation[]>(CONVERSATIONS);
@@ -143,10 +144,15 @@ export function MessagesPage() {
   );
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const filteredConvs = conversations.filter((c) =>
-    c.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-    c.name !== currentUser?.name // ne pas s'afficher soi-même
-  );
+  // Filtrer : recherche + exclure soi-même (si connecté)
+  const myName = currentUser?.name?.toLowerCase().trim();
+  const filteredConvs = conversations.filter((c) => {
+    const matchesSearch = c.name
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const isMe = myName && c.name.toLowerCase().trim() === myName;
+    return matchesSearch && !isMe;
+  });
 
   const selectedConv = conversations.find((c) => c.id === selectedConvId);
 

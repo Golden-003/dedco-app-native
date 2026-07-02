@@ -234,7 +234,7 @@ function ProfileContent({
           />
           <div className="flex-1 space-y-3">
             {editMode ? (
-              <EditProfileForm />
+              <EditProfileForm onSave={() => setEditMode(false)} />
             ) : (
               <>
                 <div>
@@ -329,7 +329,7 @@ function ProfileContent({
 // Edit Profile Form (simplified)
 // ============================================================
 
-function EditProfileForm() {
+function EditProfileForm({ onSave }: { onSave: () => void }) {
   return (
     <div className="space-y-3">
       <div>
@@ -362,7 +362,7 @@ function EditProfileForm() {
           className="w-full"
         />
       </div>
-      <button type="button" onClick={() => setEditMode(false)} className="dedco-btn dedco-btn-primary dedco-btn-sm">
+      <button type="button" onClick={onSave} className="dedco-btn dedco-btn-primary dedco-btn-sm">
         Enregistrer
       </button>
     </div>
