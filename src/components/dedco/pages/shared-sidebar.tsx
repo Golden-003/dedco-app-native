@@ -115,7 +115,7 @@ function DashboardSidebarComponent({
             }`}
           >
             <Icon size={18} className={active ? "text-[var(--amber)]" : ""} />
-            <span className="flex-1 text-left">{item.label}</span>
+            <span className="flex-1 text-left truncate min-w-0">{item.label}</span>
             {item.badge !== undefined && (
               <span
                 className="text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center text-white"

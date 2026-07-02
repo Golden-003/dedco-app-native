@@ -128,7 +128,7 @@ export function ArtisanDemandesPage() {
   const filtered = filter === "tous" ? MOCK_BRIEFS : MOCK_BRIEFS.filter((b) => b.status === filter);
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-6xl mx-auto">
       <header className="flex items-center justify-between mb-6 flex-wrap gap-3">
         <div>
           <h1 className="display-lg mb-1">Briefs reçus</h1>
@@ -249,7 +249,7 @@ export function ArtisanProjetsPage() {
   const [mobileCol, setMobileCol] = useState<Project["status"]>("production");
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto">
       <header className="mb-6">
         <h1 className="display-lg mb-1">Projets en cours</h1>
         <p className="text-sm text-[var(--text-2)]">
@@ -361,17 +361,17 @@ export function ArtisanWalletPage() {
   const filteredTxs = tab === "tout" ? MOCK_TXS : MOCK_TXS.filter((t) => t.type === (tab === "credits" ? "credit" : tab === "debits" ? "debit" : "retrait"));
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-5">
+    <div className="p-4 sm:p-6 max-w-5xl mx-auto space-y-5">
       <header className="mb-2">
         <h1 className="display-lg mb-1">Mon Wallet</h1>
         <p className="text-sm text-[var(--text-2)]">Gérez vos gains et retraits Mobile Money</p>
       </header>
 
       {/* Wallet card */}
-      <div className="rounded-2xl p-6 text-white" style={{ background: "var(--text-1)" }}>
+      <div className="rounded-2xl p-5 sm:p-6 text-white" style={{ background: "var(--text-1)" }}>
         <p className="text-xs uppercase tracking-wide opacity-60 mb-2">Solde disponible</p>
-        <div className="flex items-center gap-3 mb-4">
-          <h2 className="font-display text-4xl font-numeric font-bold">
+        <div className="flex items-center gap-3 mb-4 min-w-0">
+          <h2 className="font-display text-2xl sm:text-4xl font-numeric font-bold break-words">
             {showBalance ? formatFCFA(solde) : "•••••• FCFA"}
           </h2>
           <button
@@ -555,7 +555,7 @@ export function ArtisanAvisPage() {
   ];
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-5">
+    <div className="p-4 sm:p-6 max-w-5xl mx-auto space-y-5">
       <header>
         <h1 className="display-lg mb-1">Avis et notes</h1>
         <p className="text-sm text-[var(--text-2)]">Vos clients parlent de vous</p>
@@ -652,7 +652,7 @@ export function ArtisanCertificationPage() {
   const eligible = criteria.filter((c) => c.ok).length === criteria.length - 1 && criteria.some((c) => c.pending);
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-5">
+    <div className="p-4 sm:p-6 max-w-5xl mx-auto space-y-5">
       <header>
         <h1 className="display-lg mb-1">Certification N4</h1>
         <p className="text-sm text-[var(--text-2)]">Le plus haut niveau de confiance Dedco</p>
@@ -783,7 +783,7 @@ export function ArtisanAbonnementPage() {
   ];
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-5">
+    <div className="p-4 sm:p-6 max-w-5xl mx-auto space-y-5">
       <header>
         <h1 className="display-lg mb-1">Abonnement</h1>
         <p className="text-sm text-[var(--text-2)]">Choisissez le plan adapté à votre activité</p>
@@ -810,7 +810,7 @@ export function ArtisanAbonnementPage() {
               </span>
             )}
             <h3 className="font-display font-bold text-lg mb-1">{plan.name}</h3>
-            <p className="font-display font-bold text-3xl mb-4">
+            <p className="font-display font-bold text-2xl sm:text-3xl mb-4">
               <span className="font-numeric">{plan.price === 0 ? "0" : plan.price.toLocaleString("fr-FR")}</span>
               <span className="text-xs font-normal text-[var(--text-2)]"> FCFA/mois</span>
             </p>

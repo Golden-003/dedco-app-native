@@ -79,7 +79,7 @@ export function OrderConfirmationPage({ orderId }: { orderId: string }) {
   const isCustom = order.type === "custom";
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-2xl mx-auto">
       <div className="text-center mb-8">
         <div className="w-20 h-20 rounded-full bg-[var(--forest-pale)] mx-auto flex items-center justify-center mb-5">
           <CheckCircle2 size={40} className="text-[var(--forest)]" />
@@ -301,7 +301,7 @@ export function OrderTrackingPage({ orderId }: { orderId: string }) {
   const [showPhoto, setShowPhoto] = useState<number | null>(null);
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-3xl mx-auto">
       <button onClick={() => navigate({ page: isArtisan ? "artisan-projets" : "client-projets" })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
         <ChevronRight size={16} className="rotate-180" /> {isArtisan ? "Projets en cours" : "Mes projets"}
       </button>

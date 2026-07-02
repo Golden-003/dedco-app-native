@@ -51,7 +51,7 @@ export function BriefDesignerDetailPage({ briefId }: { briefId: string }) {
   const statusConfig = BRIEF_DESIGNER_STATUS[brief.status];
 
   return (
-    <div className="p-6 max-w-4xl mx-auto relative">
+    <div className="p-4 sm:p-6 max-w-4xl mx-auto relative">
       <button onClick={() => navigate(backRoute)} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
         <ChevronRight size={16} className="rotate-180" /> {backLabel}
       </button>

@@ -396,7 +396,7 @@ export function MessagesPage() {
                         ) : (
                           msg.text && (
                             <div
-                              className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
+                              className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed break-words ${
                                 msg.sent
                                   ? "bg-[var(--amber)] text-white rounded-br-md"
                                   : "bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-1)] rounded-bl-md"

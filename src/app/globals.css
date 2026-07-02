@@ -349,6 +349,24 @@ h1.eyebrow, h2.eyebrow, h3.eyebrow, h4.eyebrow, h5.eyebrow, h6.eyebrow,
     margin-bottom: 8px;
   }
 
+  /* ── Protection globale contre le débordement de texte ──
+     Sur mobile, les longs mots (URLs, montants FCFA, IDs) peuvent déborder
+     de leur conteneur et casser la mise en page. On force le wrap sur
+     tous les conteneurs de texte par défaut. */
+  .dedco-card,
+  .dedco-card > * {
+    overflow-wrap: break-word;
+    word-break: break-word;
+    min-width: 0;
+  }
+
+  /* Les éléments flex par défaut ne rétrécissent pas assez sur mobile.
+     On force min-w-0 sur les enfants directs de flex pour permettre
+     le truncate correct. */
+  .dedco-card .flex > * {
+    min-width: 0;
+  }
+
   /* Stars */
   .star { color: var(--amber); }
   .star.empty { color: var(--border-dark); }

@@ -161,12 +161,12 @@ export function ProductPage({
           </div>
 
           {/* Price */}
-          <div className="flex items-baseline gap-3 mb-6 pb-6 border-b border-border">
-            <span className="font-numeric font-bold text-3xl text-amber">
+          <div className="flex items-baseline gap-2 sm:gap-3 mb-6 pb-6 border-b border-border flex-wrap">
+            <span className="font-numeric font-bold text-2xl sm:text-3xl text-amber break-words">
               {formatFCFA(product.price)}
             </span>
             {product.originalPrice && (
-              <span className="text-base text-ink-mute line-through font-numeric">
+              <span className="text-sm sm:text-base text-ink-mute line-through font-numeric">
                 {formatFCFA(product.originalPrice)}
               </span>
             )}

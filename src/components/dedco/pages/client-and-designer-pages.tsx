@@ -64,7 +64,7 @@ export function DesignerWalletPage() {
   const filteredTxs = tab === "tout" ? MOCK_TXS : MOCK_TXS.filter((t) => t.type === (tab === "credits" ? "credit" : tab === "debits" ? "debit" : "retrait"));
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-5">
+    <div className="p-4 sm:p-6 max-w-5xl mx-auto space-y-5">
       <header>
         <h1 className="display-lg mb-1">Mon Wallet</h1>
         <p className="text-sm text-[var(--text-2)]">Vos gains designer · Aucune commission Dedco</p>
@@ -209,7 +209,7 @@ export function DesignerPortfolioPage() {
   const selected = MOCK_PROJECTS[selectedIdx];
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-6xl mx-auto">
       <header className="flex items-center justify-between mb-6 flex-wrap gap-3">
         <div>
           <h1 className="display-lg mb-1">Mon Portfolio</h1>
@@ -375,7 +375,7 @@ export function DesignerAbonnementPage() {
   ];
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-5">
+    <div className="p-4 sm:p-6 max-w-5xl mx-auto space-y-5">
       <header>
         <h1 className="display-lg mb-1">Abonnement Designer</h1>
         <p className="text-sm text-[var(--text-2)]">Aucune commission sur vos honoraires · 100% abonnement</p>
@@ -459,7 +459,7 @@ export function ClientProjetsPage() {
   const filtered = tab === "en_cours" ? MOCK_CLIENT_PROJECTS.filter((p) => p.status !== "livre") : MOCK_CLIENT_PROJECTS.filter((p) => p.status === "livre");
 
   return (
-    <div className="p-6 max-w-5xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-5xl mx-auto">
       <header className="mb-6">
         <h1 className="display-lg mb-1">Mes projets</h1>
         <p className="text-sm text-[var(--text-2)] font-numeric">{MOCK_CLIENT_PROJECTS.length} commandes au total</p>
@@ -621,7 +621,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
   }
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-2xl mx-auto">
       <button onClick={() => navigate({ page: "designer", id: designerId })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
         ← Retour au profil
       </button>
@@ -853,7 +853,7 @@ export function AvisLivraisonPage({ orderId }: { orderId: string }) {
   }
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-2xl mx-auto">
       {/* Banner success */}
       <div className="rounded-lg p-4 mb-5 bg-[var(--forest-pale)] flex items-center gap-3">
         <CheckCircle2 size={24} className="text-[var(--forest)] flex-shrink-0" />
@@ -990,7 +990,7 @@ export function PlansTarifsPage() {
   ];
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-6xl mx-auto">
       <header className="text-center mb-8">
         <h1 className="display-xl mb-2">Plans et tarifs</h1>
         <p className="text-sm text-[var(--text-2)] max-w-lg mx-auto">Choisissez le plan adapté à votre activité. Sans engagement. Paiement Mobile Money.</p>

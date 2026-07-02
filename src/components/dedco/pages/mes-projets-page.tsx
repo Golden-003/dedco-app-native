@@ -173,10 +173,10 @@ function EnCoursCard({ item }: { item: MesProjetsItem }) {
             </div>
             <h3 className="font-display font-semibold text-sm sm:text-base leading-tight truncate text-[var(--text-1)]">{item.title}</h3>
             {item.partnerName && (
-              <div className="flex items-center gap-2 mt-1.5">
-                {item.partnerAvatar && <img src={item.partnerAvatar} alt={item.partnerName} className="w-5 h-5 rounded-full object-cover" />}
-                <span className="text-xs text-[var(--text-2)] truncate">{item.partnerName}</span>
-                <span className="text-xs text-[var(--text-3)]">
+              <div className="flex items-center gap-1.5 mt-1.5 min-w-0">
+                {item.partnerAvatar && <img src={item.partnerAvatar} alt={item.partnerName} className="w-5 h-5 rounded-full object-cover flex-shrink-0" />}
+                <span className="text-xs text-[var(--text-2)] truncate min-w-0">{item.partnerName}</span>
+                <span className="text-xs text-[var(--text-3)] flex-shrink-0">
                   {item.partnerType === "artisan" && "— Artisan"}
                   {item.partnerType === "designer" && "— Designer"}
                   {item.partnerType === "maison" && "— Maison deco"}

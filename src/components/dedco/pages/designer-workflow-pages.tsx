@@ -72,7 +72,7 @@ export function DesignerProjetAttentePage({ projectId }: { projectId: string }) 
   const brief = MOCK_BRIEF;
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-2xl mx-auto">
       <button onClick={() => navigate({ page: "home" })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
         ← Retour à l'accueil
       </button>
@@ -122,7 +122,7 @@ export function DesignerBriefRecuPage({ briefId }: { briefId: string }) {
   const canAct = !!prestation; // Le designer DOIT choisir une prestation avant d'agir
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-3xl mx-auto">
       <header className="mb-6">
         <div className="flex items-center gap-3 mb-1 flex-wrap">
           <h1 className="display-lg mb-0">Brief reçu</h1>
@@ -260,7 +260,7 @@ export function DesignerPropositionMissionPage({ briefId }: { briefId: string })
   const netDesigner = form.prix - commission;
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-2xl mx-auto">
       <button onClick={() => navigate({ page: "designer-brief-recu", briefId })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
         ← Retour au brief
       </button>
@@ -388,7 +388,7 @@ export function ClientPropositionRecuePage({ proposalId }: { proposalId: string 
   const total = proposal.prix + garantie;
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-2xl mx-auto">
       <button onClick={() => navigate(backRoute)} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">← {backLabel}</button>
 
       <header className="mb-6">
@@ -460,7 +460,7 @@ export function ProjetPaiementPage({ proposalId }: { proposalId: string }) {
   }
 
   return (
-    <div className="p-6 max-w-md mx-auto">
+    <div className="p-4 sm:p-6 max-w-md mx-auto">
       <header className="mb-6"><h1 className="display-lg mb-1">Paiement</h1><p className="text-sm text-[var(--text-2)]">Aménagement du salon</p></header>
       <div className="dedco-card p-5 mb-4">
         <div className="space-y-2 text-sm">
@@ -505,7 +505,7 @@ export function ProjetDetailPage({ projectId }: { projectId: string }) {
   ];
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-3xl mx-auto">
       <button onClick={() => navigate(backRoute)} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-2 flex items-center gap-1">← {backLabel}</button>
       <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
         <div>
@@ -614,7 +614,7 @@ export function ProjetLivraisonPage({ projectId }: { projectId: string }) {
   }
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-2xl mx-auto">
       <button onClick={() => navigate({ page: "projet-detail", projectId })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">← Retour</button>
       <header className="mb-6"><span className="dedco-badge dedco-badge-amber mb-2">Livrables à valider</span><h1 className="display-lg">Livraison du projet</h1></header>
       <div className="dedco-card p-5 mb-4">

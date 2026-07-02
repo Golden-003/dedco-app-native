@@ -333,7 +333,7 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
               {displayedStatusConfig.isUrgent && <span className="dedco-badge dedco-badge-terra">Urgent</span>}
             </div>
             <h3 className="font-display font-semibold text-sm truncate text-[var(--text-1)]">{project.title}</h3>
-            <p className="text-xs text-[var(--text-3)] font-numeric">{project.id} · {project.artisanName}</p>
+            <p className="text-xs text-[var(--text-3)] font-numeric truncate">{project.id} · {project.artisanName}</p>
           </div>
           {/* Stats clés */}
           <div className="flex items-center gap-4 text-xs">

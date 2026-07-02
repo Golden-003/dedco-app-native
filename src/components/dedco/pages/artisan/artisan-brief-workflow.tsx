@@ -47,7 +47,7 @@ export function ArtisanBriefRecuPage({ briefId }: { briefId: string }) {
   const [questions, setQuestions] = useState(["", "", ""]);
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-3xl mx-auto">
       <header className="mb-6">
         <div className="flex items-center gap-3 mb-1 flex-wrap">
           <h1 className="display-lg mb-0">Demande de fabrication</h1>
@@ -248,7 +248,7 @@ export function ArtisanDevisCreatePage({ briefId }: { briefId: string }) {
   const netArtisan = total - commission;
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-2xl mx-auto">
       <button onClick={() => navigate({ page: "artisan-brief-recu", briefId })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
         <ArrowLeft size={16} /> Retour à la demande
       </button>

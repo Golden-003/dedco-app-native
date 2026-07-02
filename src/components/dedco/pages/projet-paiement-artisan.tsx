@@ -139,7 +139,7 @@ export function ProjetPaiementArtisanPage({ proposalId }: { proposalId: string }
   }
 
   return (
-    <div className="p-6 max-w-md mx-auto">
+    <div className="p-4 sm:p-6 max-w-md mx-auto">
       <button onClick={() => navigate(backRoute)} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
         <ChevronRight size={16} className="rotate-180" /> {backLabel}
       </button>

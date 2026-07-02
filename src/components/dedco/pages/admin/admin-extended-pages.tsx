@@ -91,7 +91,7 @@ export function AdminKYCPage() {
   const selected = MOCK_KYC[selectedIdx];
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-6xl mx-auto">
       <header className="flex items-center justify-between mb-6 flex-wrap gap-3">
         <div>
           <h1 className="display-lg mb-1">Validation KYC</h1>
@@ -283,7 +283,7 @@ export function AdminMessagesPage() {
   const filtered = filter === "tous" ? MOCK_MSGS.filter((m) => m.status === "pending") : filter === "resolved" ? MOCK_MSGS.filter((m) => m.status === "resolved") : MOCK_MSGS.filter((m) => m.reason === filter && m.status === "pending");
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-6xl mx-auto">
       <header className="flex items-center justify-between mb-6 flex-wrap gap-3">
         <div>
           <h1 className="display-lg mb-1">Messages signalés</h1>
@@ -431,7 +431,7 @@ export function AdminLitigesPage() {
   const [comment, setComment] = useState("");
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-6xl mx-auto">
       <header className="flex items-center justify-between mb-6 flex-wrap gap-3">
         <div>
           <h1 className="display-lg mb-1">Litiges actifs</h1>
@@ -588,7 +588,7 @@ export function AdminScenesPage() {
   ];
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto">
       <header className="mb-6">
         <h1 className="display-lg mb-1">Éditeur Scènes & Hotspots</h1>
         <p className="text-sm text-[var(--text-2)]">Créez et éditez les scènes Shop the Look</p>
@@ -711,7 +711,7 @@ export function AdminCollectionsPage() {
   ];
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-6xl mx-auto">
       <header className="flex items-center justify-between mb-6 flex-wrap gap-3">
         <div>
           <h1 className="display-lg mb-1">Collections éditoriales</h1>
@@ -846,7 +846,7 @@ export function AdminCertificationPage() {
   const [selected, setSelected] = useState<typeof candidates[0] | null>(null);
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-6xl mx-auto">
       <header className="mb-6">
         <h1 className="display-lg mb-1">Demandes Certification N4</h1>
         <p className="text-sm text-[var(--text-2)] font-numeric">{candidates.length} candidats en attente</p>
