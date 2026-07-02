@@ -79,7 +79,17 @@ export function ProfilePage() {
   const navigate = useDedcoStore((s) => s.navigate);
   const goBack = useDedcoStore((s) => s.goBack);
   const logout = useDedcoStore((s) => s.logout);
+  const currentUser = useDedcoStore((s) => s.currentUser);
   const [editMode, setEditMode] = useState(false);
+
+  const PROFILE = {
+    name: currentUser?.name || "Utilisateur",
+    email: currentUser?.email || "user@dedco.bj",
+    phone: "+229 97 45 32 10",
+    avatar: currentUser?.avatar || "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=240&q=85",
+    role: currentUser?.role || "client",
+    memberSince: "Janvier 2024",
+  };
 
   const handleTabClick = (tab: ProfileTab) => {
     setActiveTab(tab);
@@ -264,7 +274,7 @@ function ProfileContent({
       <div className="dedco-card p-5 sm:p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-display font-bold text-lg">Adresses enregistrées</h2>
-          <button type="button" className="dedco-btn dedco-btn-ghost dedco-btn-sm">
+          <button type="button" onClick={() => navigate({ page: "settings" })} className="dedco-btn dedco-btn-ghost dedco-btn-sm">
             + Ajouter
           </button>
         </div>
@@ -349,7 +359,7 @@ function EditProfileForm() {
           className="w-full"
         />
       </div>
-      <button type="button" className="dedco-btn dedco-btn-primary dedco-btn-sm">
+      <button type="button" onClick={() => setEditMode(false)} className="dedco-btn dedco-btn-primary dedco-btn-sm">
         Enregistrer
       </button>
     </div>

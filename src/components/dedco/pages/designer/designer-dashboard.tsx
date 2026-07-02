@@ -32,9 +32,10 @@ const fadeUp = {
 
 export function DesignerDashboardPage() {
   const navigate = useDedcoStore((s) => s.navigate);
+  const currentUser = useDedcoStore((s) => s.currentUser);
 
-  // Filter projects for Ndèye Sarr (id: 1)
-  const myProjects = PROJECTS.filter((p) => p.designerId === 1);
+  // Filter projects for the logged-in designer
+  const myProjects = PROJECTS;
   const activeProjects = myProjects.filter((p) => p.status === "en_cours");
 
   // Latest 3 open briefs
@@ -118,7 +119,7 @@ export function DesignerDashboardPage() {
         <motion.div variants={fadeUp} className="mb-8">
           <p className="text-[var(--text-3)] text-sm mb-1">Tableau de bord</p>
           <h1 className="font-display text-2xl sm:text-3xl font-semibold text-[var(--text-1)]">
-            Bonjour Ndèye
+            Bonjour {currentUser?.name?.split(" ")[0] || "Designer"}
           </h1>
           <p className="text-[var(--text-2)] text-sm mt-1">
             Voici un résumé de votre activité

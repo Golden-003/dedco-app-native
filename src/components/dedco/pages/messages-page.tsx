@@ -385,6 +385,7 @@ export function MessagesPage() {
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
+                      onClick={() => {/* TODO: upload fichier */}}
                       className="w-10 h-10 rounded-full flex items-center justify-center text-ink-mute hover:bg-warm hover:text-ink transition-colors"
                       aria-label="Joindre un fichier"
                     >

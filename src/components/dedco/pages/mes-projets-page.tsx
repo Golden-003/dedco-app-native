@@ -572,7 +572,7 @@ function TermineCard({ item }: { item: MesProjetsItem }) {
               onClick={() => {
                 // Routing contextuel : projet designer → brief designer, sinon brief artisan
                 if (item.type === "DESIGNER_PROJECT" || item.type === "DESIGNER_BRIEF") {
-                  navigateTo({ page: "brief-designer", designerId: 1 });
+                  navigateTo({ page: "brief-designer", designerId: Number(item.sourceId) || 1 });
                 } else {
                   navigateTo({ page: "brief" });
                 }

@@ -26,7 +26,6 @@ const CartPage = dynamic(() => import("@/components/dedco/pages/cart-page").then
 const CheckoutPage = dynamic(() => import("@/components/dedco/pages/checkout-page").then(m => ({ default: m.CheckoutPage })));
 const PaymentPage = dynamic(() => import("@/components/dedco/pages/payment-page").then(m => ({ default: m.PaymentPage })));
 const ProfilePage = dynamic(() => import("@/components/dedco/pages/profile-page").then(m => ({ default: m.ProfilePage })));
-const OrderTrackingPage = dynamic(() => import("@/components/dedco/pages/order-tracking-page").then(m => ({ default: m.OrderTrackingPage })));
 const FavoritesPage = dynamic(() => import("@/components/dedco/pages/favorites-page").then(m => ({ default: m.FavoritesPage })));
 const WalletPage = dynamic(() => import("@/components/dedco/pages/wallet-page").then(m => ({ default: m.WalletPage })));
 const KYCPage = dynamic(() => import("@/components/dedco/pages/kyc-page").then(m => ({ default: m.KYCPage })));
