@@ -188,7 +188,6 @@ export function RegisterPage() {
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                         placeholder="Kofi"
-                        required
                         className="w-full pl-10 pr-4 py-3 text-sm rounded-md border focus:outline-none focus:ring-2 transition-all"
                         style={{ background: "var(--bg-cream)", borderColor: "var(--border)", color: "var(--text-1)" }}
                       />
@@ -205,7 +204,6 @@ export function RegisterPage() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="Akindélé"
-                        required
                         className="w-full pl-10 pr-4 py-3 text-sm rounded-md border focus:outline-none focus:ring-2 transition-all"
                         style={{ background: "var(--bg-cream)", borderColor: "var(--border)", color: "var(--text-1)" }}
                       />
@@ -222,7 +220,6 @@ export function RegisterPage() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="votre@email.com"
-                        required
                         className="w-full pl-10 pr-4 py-3 text-sm rounded-md border focus:outline-none focus:ring-2 transition-all"
                         style={{ background: "var(--bg-cream)", borderColor: "var(--border)", color: "var(--text-1)" }}
                       />
@@ -249,7 +246,6 @@ export function RegisterPage() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Minimum 6 caractères"
-                        required
                         minLength={6}
                         className="w-full pl-10 pr-12 py-3 text-sm rounded-md border focus:outline-none focus:ring-2 transition-all"
                         style={{ background: "var(--bg-cream)", borderColor: "var(--border)", color: "var(--text-1)" }}

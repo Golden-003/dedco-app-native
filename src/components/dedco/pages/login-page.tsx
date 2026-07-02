@@ -127,11 +127,10 @@ export function LoginPage() {
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2" size={18} style={{ color: "var(--text-3)" }} />
                 <input
                   id="email"
-                  type="email"
+                  type="text"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="votre@email.com"
-                  required
                   className="w-full pl-10 pr-4 py-3 text-sm rounded-md border focus:outline-none focus:ring-2 transition-all"
                   style={{ background: "var(--bg-cream)", borderColor: "var(--border)", color: "var(--text-1)" }}
                 />
@@ -150,7 +149,6 @@ export function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  required
                   className="w-full pl-10 pr-12 py-3 text-sm rounded-md border focus:outline-none focus:ring-2 transition-all"
                   style={{ background: "var(--bg-cream)", borderColor: "var(--border)", color: "var(--text-1)" }}
                 />

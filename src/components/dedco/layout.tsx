@@ -449,18 +449,8 @@ export function Navbar({
               ))}
             </nav>
             <div className="p-4 border-t border-border">
-              <button
-                type="button"
-                onClick={() => {
-                  onNavigate({ name: "brief" });
-                  setMobileOpen(false);
-                }}
-                className="dedco-btn dedco-btn-primary w-full"
-              >
-                Créer mon brief
-              </button>
               {/* BLOC 8 — Connexion/Inscription mobile */}
-              <div className="grid grid-cols-2 gap-2 mt-2">
+              <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
                   onClick={() => {
