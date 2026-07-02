@@ -161,22 +161,56 @@ function UserMenu({
 
           {/* Actions */}
           <div className="py-1">
-            {/* Prestataire : "Mon espace" → dashboard */}
+            {/* Prestataire : "Mon espace" → dashboard + liens rapides projets/commandes */}
             {isPrestataire && (
-              <button
-                type="button"
-                onClick={() => {
-                  navigate({ page: ROLE_DASHBOARD[currentUser.role] } as AppRoute);
-                  setOpen(false);
-                }}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-ink hover:bg-warm transition-colors"
-              >
-                <LayoutDashboard size={16} className="text-amber" />
-                Mon espace {ROLE_LABEL[currentUser.role]}
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigate({ page: ROLE_DASHBOARD[currentUser.role] } as AppRoute);
+                    setOpen(false);
+                  }}
+                  className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-ink hover:bg-warm transition-colors"
+                >
+                  <LayoutDashboard size={16} className="text-amber" />
+                  Mon espace {ROLE_LABEL[currentUser.role]}
+                </button>
+                {/* Liens rapides vers les pages projets/commandes du rôle */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    const page =
+                      currentUser.role === "artisan" ? "artisan-projets"
+                      : currentUser.role === "designer" ? "designer-projects"
+                      : "admin-dashboard";
+                    navigate({ page } as AppRoute);
+                    setOpen(false);
+                  }}
+                  className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-ink hover:bg-warm transition-colors"
+                >
+                  <FolderKanban size={16} className="text-amber" />
+                  Mes projets
+                </button>
+                {(currentUser.role === "artisan" || currentUser.role === "admin") && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const page =
+                        currentUser.role === "artisan" ? "artisan-orders"
+                        : "admin-orders";
+                      navigate({ page } as AppRoute);
+                      setOpen(false);
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-ink hover:bg-warm transition-colors"
+                  >
+                    <OrdersIcon size={16} className="text-amber" />
+                    Mes commandes
+                  </button>
+                )}
+              </>
             )}
 
-            {/* Client : Mon profil */}
+            {/* Client : Mon profil + Mes projets + Mes commandes */}
             {!isPrestataire && (
               <>
                 <button
@@ -482,6 +516,39 @@ export function Navbar({
                   >
                     Mon espace
                   </button>
+                  {/* Liens rapides projets/commandes — adaptés au rôle */}
+                  <div className="grid grid-cols-2 gap-2 mb-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const page =
+                          currentUser.role === "client" ? "client-projets"
+                          : currentUser.role === "artisan" ? "artisan-projets"
+                          : currentUser.role === "designer" ? "designer-projects"
+                          : "admin-dashboard";
+                        navigate({ page } as AppRoute);
+                        setMobileOpen(false);
+                      }}
+                      className="dedco-btn dedco-btn-ghost w-full text-sm"
+                    >
+                      Mes projets
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const page =
+                          currentUser.role === "client" ? "order-history"
+                          : currentUser.role === "artisan" ? "artisan-orders"
+                          : currentUser.role === "admin" ? "admin-orders"
+                          : "designer-projects";
+                        navigate({ page } as AppRoute);
+                        setMobileOpen(false);
+                      }}
+                      className="dedco-btn dedco-btn-ghost w-full text-sm"
+                    >
+                      Mes commandes
+                    </button>
+                  </div>
                   <button
                     type="button"
                     onClick={() => {

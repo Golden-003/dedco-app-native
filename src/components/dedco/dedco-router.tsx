@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useDedcoStore, type AppRoute, type UserRole } from "@/lib/store";
 import { AnimatePresence, motion } from "framer-motion";
 import dynamic from "next/dynamic";
@@ -200,68 +201,38 @@ export function isDashboardPage(page: string): boolean {
 }
 
 // ============================================================
-// Route Guarding — vérifie le rôle utilisateur avant d'accéder aux dashboards
+// Route Guarding — redirection silencieuse (pas d'écran de blocage)
 // ============================================================
+//
+// Philosophie : chaque acteur navigue normalement. S'il arrive sur une
+// page qui n'est pas la sienne (lien obsolète, URL directe, etc.), il
+// est redirigé sans heurt vers sa propre page équivalente.
+//
+// - Page réservée à un rôle X, mais user a un autre rôle → redirige
+//   vers le dashboard de l'user (ou l'accueil pour un client).
+// - Page auth-required sans user connecté → redirige vers login.
+// - Aucun écran "Accès restreint" : on rend `null` le temps que la
+//   redirection prenne effet (1 frame).
+
+const ROLE_HOME_PAGE: Record<UserRole, AppRoute["page"]> = {
+  client: "home",
+  artisan: "artisan-dashboard",
+  designer: "designer-dashboard",
+  admin: "admin-dashboard",
+  maison: "maison-dashboard",
+};
 
 function getRequiredRole(page: string): UserRole | null {
   if (ARTISAN_PAGES.has(page)) return "artisan";
   if (DESIGNER_PAGES.has(page)) return "designer";
   if (ADMIN_PAGES.has(page)) return "admin";
   if (page === "maison-dashboard") return "maison";
-  return null; // page publique ou auth-required
+  return null;
 }
 
 // Routes qui nécessitent juste une authentification (peu importe le rôle)
 function isAuthRequired(page: string): boolean {
   return AUTH_REQUIRED_PAGES.has(page);
-}
-
-function GuardBlocked({ requiredRole }: { requiredRole: UserRole }) {
-  const navigate = useDedcoStore((s) => s.navigate);
-  return (
-    <div style={{
-      minHeight: "100vh",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      background: "#faf8f5",
-      color: "#1e1813",
-      fontFamily: "system-ui, sans-serif",
-      padding: "40px 20px",
-      textAlign: "center",
-    }}>
-      <div style={{
-        fontSize: "64px",
-        fontWeight: 700,
-        color: "#a6442e",
-        marginBottom: "16px",
-        fontFamily: "Georgia, serif",
-      }}>🔒</div>
-      <h1 style={{ fontSize: "24px", fontWeight: 600, marginBottom: "12px" }}>
-        Accès restreint
-      </h1>
-      <p style={{ fontSize: "14px", color: "#5b5048", marginBottom: "24px", maxWidth: "400px" }}>
-        Cette page est réservée aux <strong>{requiredRole}s</strong>. 
-        Connectez-vous avec le bon compte pour y accéder.
-      </p>
-      <button
-        onClick={() => navigate({ page: "login" })}
-        style={{
-          background: "#bf793b",
-          color: "white",
-          border: "none",
-          padding: "10px 20px",
-          borderRadius: "6px",
-          fontSize: "14px",
-          fontWeight: 600,
-          cursor: "pointer",
-        }}
-      >
-        Se connecter
-      </button>
-    </div>
-  );
 }
 
 // ============================================================
@@ -285,14 +256,33 @@ export function DedcoRouter() {
   const toggleSceneSave = useDedcoStore((s) => s.toggleSceneSave);
   const currentUser = useDedcoStore((s) => s.currentUser);
 
-  // ── Route Guarding ──
+  // ── Route Guarding — redirection silencieuse ──
+  //
+  // Pas d'écran "Accès restreint" : on calcule si la route actuelle est
+  // accessible à l'user, et sinon on redirige via useEffect. Le temps
+  // de la redirection (1 frame), on rend `null` pour éviter un flash
+  // de contenu non autorisé.
   const requiredRole = getRequiredRole(route.page);
-  if (requiredRole && (!currentUser || currentUser.role !== requiredRole)) {
-    return <GuardBlocked requiredRole={requiredRole} />;
-  }
-  // Routes auth-required (peu importe le rôle)
-  if (!requiredRole && isAuthRequired(route.page) && !currentUser) {
-    return <GuardBlocked requiredRole={"client"} />; // affiche écran login générique
+  const needsAuth = isAuthRequired(route.page);
+  const isForbidden =
+    (requiredRole !== null && (!currentUser || currentUser.role !== requiredRole)) ||
+    (needsAuth && !requiredRole && !currentUser);
+
+  useEffect(() => {
+    if (!isForbidden) return;
+    // User non connecté → page de connexion
+    if (!currentUser) {
+      navigate({ page: "login" });
+      return;
+    }
+    // User connecté mais mauvais rôle → sa propre page d'accueil
+    const homePage = ROLE_HOME_PAGE[currentUser.role] ?? "home";
+    navigate({ page: homePage } as AppRoute);
+  }, [isForbidden, currentUser, navigate]);
+
+  if (isForbidden) {
+    // Rendu minimal le temps que la redirection prenne effet
+    return null;
   }
 
   const legacyRoute = appRouteToRoute(route);
