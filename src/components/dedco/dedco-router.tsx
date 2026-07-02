@@ -162,12 +162,17 @@ function routeToAppRoute(r: Route): AppRoute {
 const ARTISAN_PAGES = new Set([
   "artisan-dashboard","artisan-products","artisan-orders","artisan-profile","artisan-stats",
   "artisan-demandes","artisan-projets","artisan-wallet","artisan-avis","artisan-certification","artisan-abonnement","artisan-parametres",
-  "artisan-brief-recu","artisan-devis-create","projet-artisan-detail",
+  "artisan-brief-recu","artisan-devis-create",
+  // NOTE : projet-artisan-detail est volontairement hors ARTISAN_PAGES — c'est
+  // une page partagée (client suit son projet commandé, artisan gère son projet).
+  // Sans ça, le guard redirigerait le client vers home quand il clique "Voir le projet".
 ]);
 const DESIGNER_PAGES = new Set([
   "designer-dashboard","designer-projects","designer-briefs","designer-profile","designer-settings",
   "designer-wallet","designer-portfolio","designer-abonnement",
-  "designer-brief-recu","designer-proposition-mission","projet-designer-detail","brief-designer-detail",
+  "designer-brief-recu","designer-proposition-mission",
+  // NOTE : projet-designer-detail ET brief-designer-detail sont partagés
+  // (le client suit ses briefs/projets designer ; le designer gère ses briefs/projets).
 ]);
 const ADMIN_PAGES = new Set([
   "admin-dashboard","admin-users","admin-products","admin-orders","admin-analytics","admin-content",
@@ -178,11 +183,14 @@ const ADMIN_PAGES = new Set([
 const AUTH_REQUIRED_PAGES = new Set([
   "brief-detail",          // client voit son brief, designer voit un brief reçu
   "brief-artisan-detail",  // détail brief artisan
+  "brief-designer-detail", // détail brief designer — partagé client/designer
   "client-proposition-recue", // client voit proposition reçue
   "projet-paiement",       // paiement projet designer
   "projet-paiement-artisan", // paiement projet artisan
   "projet-detail",         // suivi projet
   "projet-livraison",      // livraison projet
+  "projet-artisan-detail", // détail projet artisan — partagé client/artisan
+  "projet-designer-detail", // détail projet designer — partagé client/designer
   "client-projets",        // liste projets client
   "mes-projets",           // page mes projets
   "order-history",         // historique commandes
@@ -198,6 +206,11 @@ const AUTH_REQUIRED_PAGES = new Set([
 
 export function isDashboardPage(page: string): boolean {
   return ARTISAN_PAGES.has(page) || DESIGNER_PAGES.has(page) || ADMIN_PAGES.has(page) || page === "maison-dashboard";
+}
+
+// Rôles prestataires (qui ont un dashboard dédié) vs client (page publique)
+function isPrestataireRole(role: UserRole | undefined | null): boolean {
+  return role === "artisan" || role === "designer" || role === "admin" || role === "maison";
 }
 
 // ============================================================
@@ -616,12 +629,25 @@ export function DedcoRouter() {
   const isAdmin = ADMIN_PAGES.has(route.page);
   const isMaison = route.page === "maison-dashboard";
 
-  // ── Pages partagées (messages, notifications) — wrapper dans le layout du rôle ──
-  // On calcule le layout une seule fois selon le rôle de l'utilisateur connecté.
-  // La sidebar reste ainsi montée entre deux pages d'un même dashboard : seul
-  // le `currentPage` (état actif des boutons) et `children` (contenu) changent.
-  const sharedPages = ["messages", "notifications"];
-  const isSharedDashboardPage = sharedPages.includes(route.page) && !!currentUser;
+  // ── Pages partagées (visibles par plusieurs rôles) ──
+  // Si l'user est un prestataire connecté, on wrapper ces pages dans son
+  // layout dashboard (pour garder la sidebar). Si c'est un client, on les
+  // affiche en page publique (avec la navbar publique).
+  const sharedPages = [
+    "messages",
+    "notifications",
+    // Pages de suivi partagées : client suit son projet, prestataire gère son projet
+    "projet-artisan-detail",
+    "projet-designer-detail",
+    "brief-artisan-detail",
+    "brief-designer-detail",
+    "projet-detail",
+    "projet-livraison",
+    "projet-paiement",
+    "projet-paiement-artisan",
+    "client-proposition-recue",
+  ];
+  const isSharedDashboardPage = sharedPages.includes(route.page) && !!currentUser && isPrestataireRole(currentUser.role);
   const activeRole: UserRole | null = isSharedDashboardPage
     ? (currentUser?.role as UserRole)
     : isArtisan

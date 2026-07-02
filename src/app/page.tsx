@@ -85,10 +85,26 @@ export default function Home() {
   // ── Pages qui s'affichent DANS un dashboard (sidebar + header mobile) ──
   // Pour ces pages, on masque la navbar publique + bottom-nav + footer :
   // ils créeraient un double header et un chevauchement sur mobile.
-  const SHARED_DASHBOARD_PAGES = new Set(["messages", "notifications"]);
+  // IMPORTANT : ne s'applique qu'aux prestataires. Les clients voient
+  // toujours la navbar publique (même sur les pages partagées comme
+  // projet-artisan-detail — ils suivent leur commande en tant que client).
+  const SHARED_DASHBOARD_PAGES = new Set([
+    "messages",
+    "notifications",
+    "projet-artisan-detail",
+    "projet-designer-detail",
+    "brief-artisan-detail",
+    "brief-designer-detail",
+    "projet-detail",
+    "projet-livraison",
+    "projet-paiement",
+    "projet-paiement-artisan",
+    "client-proposition-recue",
+  ]);
+  const isPrestataire = currentUser && currentUser.role !== "client";
   const isWrappedInDashboard =
     isDashboardPage(route.page) ||
-    (SHARED_DASHBOARD_PAGES.has(route.page) && !!currentUser);
+    (SHARED_DASHBOARD_PAGES.has(route.page) && !!isPrestataire);
   const showPublicNav = !isWrappedInDashboard;
 
   useEffect(() => {
