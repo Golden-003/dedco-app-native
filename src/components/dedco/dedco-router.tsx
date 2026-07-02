@@ -282,11 +282,13 @@ export function DedcoRouter() {
     (needsAuth && !requiredRole && !currentUser);
 
   // ── Séparation stricte prestataires / clients ──
-  // Un artisan ou designer ne peut PAS accéder au site public (marketplace,
-  // inspirations, accueil, etc.). Il est enfermé dans son dashboard.
-  // Admin et Maison déco gardent l'accès au site public.
+  // Un artisan, designer ou maison déco ne peut PAS accéder au site public
+  // (marketplace, inspirations, accueil, etc.). Il est enfermé dans son dashboard.
+  // Admin garde l'accès au site public.
   const isPrestataireLocked =
-    currentUser?.role === "artisan" || currentUser?.role === "designer";
+    currentUser?.role === "artisan" ||
+    currentUser?.role === "designer" ||
+    currentUser?.role === "maison";
   const isPublicPage =
     !isDashboardPage(route.page) &&
     !isAuthRequired(route.page) &&
