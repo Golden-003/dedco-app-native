@@ -344,13 +344,13 @@ export function Navbar({
 
           {/* Actions */}
           <div className="flex items-center gap-1 sm:gap-2">
-            {/* Search — desktop only */}
+            {/* Search */}
             <button
               type="button"
               onClick={onOpenSearch}
               aria-label="Rechercher"
               title="Rechercher"
-              className="hidden lg:flex w-10 h-10 rounded-full items-center justify-center text-ink-soft hover:bg-warm hover:text-ink transition-colors"
+              className="w-10 h-10 rounded-full flex items-center justify-center text-ink-soft hover:bg-warm hover:text-ink transition-colors"
             >
               <Search size={20} />
             </button>
