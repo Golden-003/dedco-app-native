@@ -464,29 +464,64 @@ export function Navbar({
               ))}
             </nav>
             <div className="p-4 border-t border-border">
-              {/* BLOC 8 — Connexion/Inscription mobile */}
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    navigate({ page: "login" });
-                    setMobileOpen(false);
-                  }}
-                  className="dedco-btn dedco-btn-ghost w-full"
-                >
-                  Connexion
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    navigate({ page: "register" });
-                    setMobileOpen(false);
-                  }}
-                  className="dedco-btn dedco-btn-secondary w-full"
-                >
-                  S'inscrire
-                </button>
-              </div>
+              {currentUser ? (
+                <>
+                  {/* Connecté sur mobile */}
+                  <div className="flex items-center gap-3 mb-3">
+                    <img src={currentUser.avatar} alt={currentUser.name} className="w-10 h-10 rounded-full object-cover" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold truncate">{currentUser.name}</p>
+                      <p className="text-xs text-ink-mute truncate">{currentUser.email}</p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigate({ page: ROLE_DASHBOARD[currentUser.role] } as AppRoute);
+                      setMobileOpen(false);
+                    }}
+                    className="dedco-btn dedco-btn-primary w-full mb-2"
+                  >
+                    Mon espace
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      logout();
+                      setMobileOpen(false);
+                    }}
+                    className="dedco-btn dedco-btn-ghost w-full text-terracotta"
+                  >
+                    Déconnexion
+                  </button>
+                </>
+              ) : (
+                <>
+                  {/* Pas connecté sur mobile */}
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigate({ page: "login" });
+                        setMobileOpen(false);
+                      }}
+                      className="dedco-btn dedco-btn-ghost w-full"
+                    >
+                      Connexion
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigate({ page: "register" });
+                        setMobileOpen(false);
+                      }}
+                      className="dedco-btn dedco-btn-secondary w-full"
+                    >
+                      S'inscrire
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

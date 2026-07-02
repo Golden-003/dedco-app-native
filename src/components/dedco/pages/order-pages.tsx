@@ -275,7 +275,7 @@ export function InvoicePage({ orderId }: { orderId: string }) {
             ) : (
               <>
                 <p><strong>Produit en stock :</strong> Expédition sous 24-48h.</p>
-                <p><strong>Garantie :</strong> 7 jours pour ouvrir un litige après livraison.</p>
+                {!isArtisan && <p><strong>Garantie :</strong> 7 jours pour ouvrir un litige après livraison.</p>}
               </>
             )}
             <p className="pt-2 text-center">Dedco SARL · Cotonou, Bénin · RCCM BJ-2026-0456</p>
@@ -292,6 +292,8 @@ export function InvoicePage({ orderId }: { orderId: string }) {
 
 export function OrderTrackingPage({ orderId }: { orderId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
+  const currentUser = useDedcoStore((s) => s.currentUser);
+  const isArtisan = currentUser?.role === "artisan";
   const order = orderId.includes("0051") ? MOCK_CUSTOM_ORDER : MOCK_MARKETPLACE_ORDER;
   const isCustom = order.type === "custom";
   const [showPhoto, setShowPhoto] = useState<number | null>(null);
@@ -398,21 +400,37 @@ export function OrderTrackingPage({ orderId }: { orderId: string }) {
 
       {/* Actions */}
       <div className="flex gap-3 flex-wrap">
-        <button onClick={() => navigate({ page: "avis-livraison", orderId: order.id })} className="dedco-btn dedco-btn-primary">
-          <CheckCircle2 size={16} /> Laisser un avis
-        </button>
-        <button
-          onClick={() => navigate({ page: "messages", conversationId: `order-${order.id}` })}
-          className="dedco-btn dedco-btn-ghost"
-        >
-          <MessageSquare size={16} /> Contacter l'artisan
-        </button>
-        <button
-          onClick={() => navigate({ page: "litige", id: `REC-${order.id}` })}
-          className="dedco-btn dedco-btn-ghost text-[var(--terracotta)]"
-        >
-          <AlertTriangle size={16} /> Ouvrir un litige
-        </button>
+        {isArtisan ? (
+          <>
+            <button
+              onClick={() => navigate({ page: "messages", conversationId: `order-${order.id}` })}
+              className="dedco-btn dedco-btn-primary"
+            >
+              <MessageSquare size={16} /> Contacter le client
+            </button>
+            <button onClick={() => navigate({ page: "invoice", orderId: order.id })} className="dedco-btn dedco-btn-ghost">
+              <FileText size={16} /> Facture
+            </button>
+          </>
+        ) : (
+          <>
+            <button onClick={() => navigate({ page: "avis-livraison", orderId: order.id })} className="dedco-btn dedco-btn-primary">
+              <CheckCircle2 size={16} /> Laisser un avis
+            </button>
+            <button
+              onClick={() => navigate({ page: "messages", conversationId: `order-${order.id}` })}
+              className="dedco-btn dedco-btn-ghost"
+            >
+              <MessageSquare size={16} /> Contacter l'artisan
+            </button>
+            <button
+              onClick={() => navigate({ page: "litige", id: `REC-${order.id}` })}
+              className="dedco-btn dedco-btn-ghost text-[var(--terracotta)]"
+            >
+              <AlertTriangle size={16} /> Ouvrir un litige
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
