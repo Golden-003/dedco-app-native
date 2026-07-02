@@ -286,7 +286,7 @@ export function ArtisanProjetsPage() {
               </div>
               <div className="space-y-2">
                 {items.map((p) => (
-                  <ProjectCard key={p.id} project={p} onClick={() => navigate({ page: "order-tracking", id: p.id })} />
+                  <ProjectCard key={p.id} project={p} onClick={() => navigate({ page: "projet-artisan-detail", projectId: p.id })} />
                 ))}
                 {items.length === 0 && <p className="text-xs text-[var(--text-3)] text-center py-4">Aucun projet</p>}
               </div>
@@ -298,7 +298,7 @@ export function ArtisanProjetsPage() {
       {/* Mobile: current column */}
       <div className="lg:hidden space-y-2">
         {MOCK_PROJECTS.filter((p) => p.status === mobileCol).map((p) => (
-          <ProjectCard key={p.id} project={p} onClick={() => navigate({ page: "order-tracking", id: p.id })} />
+          <ProjectCard key={p.id} project={p} onClick={() => navigate({ page: "projet-artisan-detail", projectId: p.id })} />
         ))}
       </div>
     </div>

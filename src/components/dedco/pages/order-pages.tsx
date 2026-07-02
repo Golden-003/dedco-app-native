@@ -302,8 +302,8 @@ export function OrderTrackingPage({ orderId }: { orderId: string }) {
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
-      <button onClick={() => navigate({ page: isArtisan ? "artisan-orders" : "client-projets" })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
-        <ChevronRight size={16} className="rotate-180" /> {isArtisan ? "Mes commandes" : "Mes commandes"}
+      <button onClick={() => navigate({ page: isArtisan ? "artisan-projets" : "client-projets" })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
+        <ChevronRight size={16} className="rotate-180" /> {isArtisan ? "Projets en cours" : "Mes projets"}
       </button>
 
       <header className="mb-6">

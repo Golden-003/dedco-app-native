@@ -161,53 +161,21 @@ function UserMenu({
 
           {/* Actions */}
           <div className="py-1">
-            {/* Prestataire : "Mon espace" → dashboard + liens rapides projets/commandes */}
+            {/* Prestataire : "Mon espace" → dashboard uniquement.
+                Pas de "Mes projets" / "Mes commandes" — ce sont des concepts
+                client. Le prestataire accède à tout depuis sa sidebar. */}
             {isPrestataire && (
-              <>
-                <button
-                  type="button"
-                  onClick={() => {
-                    navigate({ page: ROLE_DASHBOARD[currentUser.role] } as AppRoute);
-                    setOpen(false);
-                  }}
-                  className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-ink hover:bg-warm transition-colors"
-                >
-                  <LayoutDashboard size={16} className="text-amber" />
-                  Mon espace {ROLE_LABEL[currentUser.role]}
-                </button>
-                {/* Liens rapides vers les pages projets/commandes du rôle */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    const page =
-                      currentUser.role === "artisan" ? "artisan-projets"
-                      : currentUser.role === "designer" ? "designer-projects"
-                      : "admin-dashboard";
-                    navigate({ page } as AppRoute);
-                    setOpen(false);
-                  }}
-                  className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-ink hover:bg-warm transition-colors"
-                >
-                  <FolderKanban size={16} className="text-amber" />
-                  Mes projets
-                </button>
-                {(currentUser.role === "artisan" || currentUser.role === "admin") && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const page =
-                        currentUser.role === "artisan" ? "artisan-orders"
-                        : "admin-orders";
-                      navigate({ page } as AppRoute);
-                      setOpen(false);
-                    }}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-ink hover:bg-warm transition-colors"
-                  >
-                    <OrdersIcon size={16} className="text-amber" />
-                    Mes commandes
-                  </button>
-                )}
-              </>
+              <button
+                type="button"
+                onClick={() => {
+                  navigate({ page: ROLE_DASHBOARD[currentUser.role] } as AppRoute);
+                  setOpen(false);
+                }}
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-ink hover:bg-warm transition-colors"
+              >
+                <LayoutDashboard size={16} className="text-amber" />
+                Mon espace {ROLE_LABEL[currentUser.role]}
+              </button>
             )}
 
             {/* Client : Mon profil + Mes projets + Mes commandes */}
