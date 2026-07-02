@@ -6,6 +6,7 @@ import {
   X,
   Home,
   Bell,
+  LogOut,
   type LucideIcon,
 } from "lucide-react";
 import { useDedcoStore, type AppRoute } from "@/lib/store";
@@ -34,6 +35,7 @@ export function DashboardSidebar({
   children?: React.ReactNode;
 }) {
   const navigate = useDedcoStore((s) => s.navigate);
+  const logout = useDedcoStore((s) => s.logout);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleNav = (page: AppRoute["page"]) => {
@@ -93,6 +95,13 @@ export function DashboardSidebar({
         >
           <Home size={18} />
           Retour au site
+        </button>
+        <button
+          onClick={() => { logout(); navigate({ page: "home" }); }}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[var(--terracotta)] hover:bg-[var(--terracotta-pale)] transition-colors cursor-pointer"
+        >
+          <LogOut size={18} />
+          Déconnexion
         </button>
       </div>
     </aside>
