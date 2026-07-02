@@ -11,7 +11,7 @@ import {
   User,
   FolderKanban,
   Sparkles,
-  Truck,
+  Eye,
   CheckCircle2,
   Clock,
 } from "lucide-react";
@@ -20,7 +20,7 @@ import {
 // Types & mocks — projets designer du point de vue PRESTATAIRE
 // ============================================================
 
-type DesignerProjectStatus = "en_cours" | "en_livraison" | "termine";
+type DesignerProjectStatus = "en_cours" | "en_revue" | "termine";
 
 type DesignerProject = {
   id: string;
@@ -79,13 +79,13 @@ const MOCK_PROJECTS: DesignerProject[] = [
     clientAvatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=80&q=85",
     room: "Bureau",
     style: "Minimaliste afro",
-    status: "en_livraison",
+    status: "en_revue",
     progress: 95,
     budget: 420000,
     paid: 399000,
     startDate: "10 mai 2026",
     dueDate: "5 juil. 2026",
-    nextMilestone: "Livraison finale",
+    nextMilestone: "Validation client",
     thumb: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=300&q=80",
   },
   {
@@ -129,7 +129,7 @@ const COLUMNS: {
   icon: typeof Sparkles;
 }[] = [
   { id: "en_cours", label: "En cours", color: "var(--amber)", icon: Sparkles },
-  { id: "en_livraison", label: "En livraison", color: "var(--terracotta)", icon: Truck },
+  { id: "en_revue", label: "En revue", color: "var(--terracotta)", icon: Eye },
   { id: "termine", label: "Terminés", color: "var(--forest)", icon: CheckCircle2 },
 ];
 
@@ -218,7 +218,7 @@ export function DesignerProjectsPage() {
   const [mobileCol, setMobileCol] = useState<DesignerProjectStatus>("en_cours");
 
   const activeCount = MOCK_PROJECTS.filter(
-    (p) => p.status === "en_cours" || p.status === "en_livraison",
+    (p) => p.status === "en_cours" || p.status === "en_revue",
   ).length;
 
   return (
