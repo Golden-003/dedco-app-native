@@ -394,6 +394,21 @@ export function Navbar({
             <div className="hidden lg:block">
               <UserMenu currentUser={currentUser} navigate={navigate} logout={logout} />
             </div>
+            {/* Avatar/profil — mobile only si connecté */}
+            {currentUser && (
+              <button
+                type="button"
+                onClick={() => navigate({ page: "profile" })}
+                aria-label="Mon profil"
+                className="lg:hidden w-9 h-9 rounded-full overflow-hidden flex-shrink-0"
+              >
+                <img
+                  src={currentUser.avatar}
+                  alt={currentUser.name}
+                  className="w-full h-full object-cover"
+                />
+              </button>
+            )}
             {/* Hamburger — mobile only */}
             <button
               type="button"

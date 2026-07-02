@@ -172,6 +172,10 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  /* Empêche le zoom auto sur iOS quand on tape dans un input */
+  input, textarea, select {
+    font-size: 16px;
+  }
 }
 
 /* Quache force-applied to all headings — outside @layer to win specificity.
