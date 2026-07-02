@@ -22,6 +22,7 @@ import {
   MapPin,
 } from "lucide-react";
 import { useDedcoStore, type ProjectScope } from "@/lib/store";
+import { getBackToProjets } from "@/lib/back-to-projets";
 import { formatFCFA, PRODUCTS } from "@/lib/dedco-data";
 import { PhoneInput } from "@/components/dedco/phone-input";
 
@@ -368,6 +369,8 @@ export function DesignerPropositionMissionPage({ briefId }: { briefId: string })
 
 export function ClientPropositionRecuePage({ proposalId }: { proposalId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
+  const currentUser = useDedcoStore((s) => s.currentUser);
+  const { route: backRoute, label: backLabel } = getBackToProjets(currentUser?.role);
   const proposal = {
     scope: "standard" as ProjectScope,
     designerName: "Ndèye Sarr",
@@ -386,7 +389,7 @@ export function ClientPropositionRecuePage({ proposalId }: { proposalId: string 
 
   return (
     <div className="p-6 max-w-2xl mx-auto">
-      <button onClick={() => navigate({ page: "client-projets" })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">← Mes projets</button>
+      <button onClick={() => navigate(backRoute)} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">← {backLabel}</button>
 
       <header className="mb-6">
         <div className="flex items-center gap-2 mb-2 flex-wrap">
@@ -424,7 +427,7 @@ export function ClientPropositionRecuePage({ proposalId }: { proposalId: string 
 
       <div className="flex gap-2">
         <button onClick={() => navigate({ page: "messages", conversationId: `prop-${proposalId}` })} className="dedco-btn dedco-btn-ghost">Demander une modification</button>
-        <button onClick={() => navigate({ page: "client-projets" })} className="dedco-btn dedco-btn-ghost text-[var(--terracotta)]">Refuser</button>
+        <button onClick={() => navigate(backRoute)} className="dedco-btn dedco-btn-ghost text-[var(--terracotta)]">Refuser</button>
         <button onClick={() => navigate({ page: "projet-paiement", proposalId })} className="dedco-btn dedco-btn-primary flex-1">Accepter et payer <ChevronRight size={16} /></button>
       </div>
     </div>
@@ -437,6 +440,8 @@ export function ClientPropositionRecuePage({ proposalId }: { proposalId: string 
 
 export function ProjetPaiementPage({ proposalId }: { proposalId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
+  const currentUser = useDedcoStore((s) => s.currentUser);
+  const { route: backRoute, label: backLabel } = getBackToProjets(currentUser?.role);
   const [operator, setOperator] = useState<"mtn" | "moov">("mtn");
   const [done, setDone] = useState(false);
   const total = 304500;
@@ -483,6 +488,8 @@ export function ProjetPaiementPage({ proposalId }: { proposalId: string }) {
 
 export function ProjetDetailPage({ projectId }: { projectId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
+  const currentUser = useDedcoStore((s) => s.currentUser);
+  const { route: backRoute, label: backLabel } = getBackToProjets(currentUser?.role);
   const [tab, setTab] = useState<"progression" | "messages" | "achats">("progression");
   const [toast, setToast] = useState<string | null>(null);
   function showToast(msg: string) {
@@ -499,7 +506,7 @@ export function ProjetDetailPage({ projectId }: { projectId: string }) {
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
-      <button onClick={() => navigate({ page: "client-projets" })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-2 flex items-center gap-1">← Mes projets</button>
+      <button onClick={() => navigate(backRoute)} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-2 flex items-center gap-1">← {backLabel}</button>
       <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
         <div>
           <div className="flex items-center gap-2 mb-1"><span className="dedco-badge dedco-badge-amber">En cours</span><ScopeBadge scope="standard" /></div>
@@ -582,6 +589,8 @@ export function ProjetLivraisonPage({ projectId }: { projectId: string }) {
   function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
 
   const navigate = useDedcoStore((s) => s.navigate);
+  const currentUser = useDedcoStore((s) => s.currentUser);
+  const { route: backRoute, label: backLabel } = getBackToProjets(currentUser?.role);
   const [validated, setValidated] = useState(false);
   const livrables = [
     { id: 1, name: "Moodboard.pdf", date: "25 juin" },
@@ -597,7 +606,7 @@ export function ProjetLivraisonPage({ projectId }: { projectId: string }) {
         <h1 className="display-xl mb-3">Livraison validée !</h1>
         <p className="text-sm text-[var(--text-2)] mb-6">Paiement libéré au designer.</p>
         <div className="flex gap-2 justify-center">
-          <button onClick={() => navigate({ page: "client-projets" })} className="dedco-btn dedco-btn-primary">Mes projets</button>
+          <button onClick={() => navigate(backRoute)} className="dedco-btn dedco-btn-primary">{backLabel}</button>
           <button onClick={() => navigate({ page: "marketplace" })} className="dedco-btn dedco-btn-ghost">Marketplace</button>
         </div>
       </div>

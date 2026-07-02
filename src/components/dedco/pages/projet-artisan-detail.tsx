@@ -7,6 +7,7 @@ import {
   ChevronRight, Hammer, Ruler, Calendar, Edit3,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
+import { getBackToProjets } from "@/lib/back-to-projets";
 import { formatFCFA } from "@/lib/dedco-data";
 import { PROJET_ARTISAN_STATUS, JALON_LABELS, type ProjetArtisanStatus, type JalonType } from "@/lib/dedco-status";
 
@@ -243,6 +244,7 @@ const MOCK_PROJECTS: Record<string, ArtisanProjectMock> = {
 
 export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
+  const currentUser = useDedcoStore((s) => s.currentUser);
   const project = MOCK_PROJECTS[projectId] || MOCK_PROJECTS["PA-001"];
 
   // Onglet automatique si modification en attente
@@ -279,10 +281,13 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
   const displayedStatus: ProjetArtisanStatus = deliveryConfirmed ? "DELIVERED_CONFIRMED" : project.status;
   const displayedStatusConfig = PROJET_ARTISAN_STATUS[displayedStatus];
 
+  // ── Bouton retour — role-aware ──
+  const { route: backRoute, label: backLabel } = getBackToProjets(currentUser?.role);
+
   return (
     <div className="p-4 sm:p-6 max-w-4xl mx-auto relative">
-      <button onClick={() => navigate({ page: "client-projets" })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
-        <ChevronRight size={16} className="rotate-180" /> Mes projets
+      <button onClick={() => navigate(backRoute)} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
+        <ChevronRight size={16} className="rotate-180" /> {backLabel}
       </button>
 
       {/* Header */}

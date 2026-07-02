@@ -7,6 +7,7 @@ import {
   RefreshCw, Eye, PencilLine, Image as ImageIcon, Palette, Layout,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
+import { getBackToProjets } from "@/lib/back-to-projets";
 import { formatFCFA } from "@/lib/dedco-data";
 
 // ============================================================
@@ -197,6 +198,7 @@ const LIVRABLE_ICONS: Record<DesignerLivrable["type"], typeof FileText> = {
 
 export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
+  const currentUser = useDedcoStore((s) => s.currentUser);
   const project = MOCK_PROJECTS[projectId] || MOCK_PROJECTS["PD-001"];
   const [activeTab, setActiveTab] = useState<"livrables" | "details" | "revisions" | "messages">("livrables");
 
@@ -246,10 +248,13 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
     showToast(`Téléchargement de « ${name} » démarré.`);
   }
 
+  // ── Bouton retour — role-aware ──
+  const { route: backRoute, label: backLabel } = getBackToProjets(currentUser?.role);
+
   return (
     <div className="p-4 sm:p-6 max-w-4xl mx-auto">
-      <button onClick={() => navigate({ page: "client-projets" })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
-        <ChevronRight size={16} className="rotate-180" /> Mes projets
+      <button onClick={() => navigate(backRoute)} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
+        <ChevronRight size={16} className="rotate-180" /> {backLabel}
       </button>
 
       {/* Header */}
