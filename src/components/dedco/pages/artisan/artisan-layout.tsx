@@ -19,10 +19,10 @@ import type { ReactNode } from "react";
 
 const ARTISAN_NAV: NavItem[] = [
   { label: "Tableau de bord", page: "artisan-dashboard", icon: LayoutDashboard },
-  { label: "Briefs reçus", page: "artisan-demandes", icon: Inbox, badge: 3 },
-  { label: "Projets en cours", page: "artisan-projets", icon: ClipboardList, badge: 5 },
+  { label: "Briefs reçus", page: "artisan-demandes", icon: Inbox },
+  { label: "Projets en cours", page: "artisan-projets", icon: ClipboardList },
   { label: "Catalogue", page: "artisan-products", icon: Grid },
-  { label: "Messagerie", page: "messages", icon: MessageCircle, badge: 2 },
+  { label: "Messagerie", page: "messages", icon: MessageCircle },
   { label: "Wallet", page: "artisan-wallet", icon: Wallet },
   { label: "Statistiques", page: "artisan-stats", icon: BarChart2 },
   { label: "Avis et notes", page: "artisan-avis", icon: Star },

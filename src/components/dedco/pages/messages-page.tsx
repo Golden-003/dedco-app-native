@@ -144,7 +144,8 @@ export function MessagesPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const filteredConvs = conversations.filter((c) =>
-    c.name.toLowerCase().includes(searchQuery.toLowerCase())
+    c.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+    c.name !== currentUser?.name // ne pas s'afficher soi-même
   );
 
   const selectedConv = conversations.find((c) => c.id === selectedConvId);

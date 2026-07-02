@@ -16,7 +16,7 @@ import type { ReactNode } from "react";
 
 const DESIGNER_NAV: NavItem[] = [
   { label: "Tableau de bord", page: "designer-dashboard", icon: LayoutDashboard },
-  { label: "Briefs reçus", page: "designer-briefs", icon: Inbox, badge: 4 },
+  { label: "Briefs reçus", page: "designer-briefs", icon: Inbox },
   { label: "Projets en cours", page: "designer-projects", icon: ClipboardList },
   { label: "Portfolio", page: "designer-portfolio", icon: Images },
   { label: "Messagerie", page: "messages", icon: MessageCircle },

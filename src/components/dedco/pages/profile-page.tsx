@@ -94,7 +94,10 @@ export function ProfilePage() {
   const handleTabClick = (tab: ProfileTab) => {
     setActiveTab(tab);
     if (tab === "orders") {
-      navigate({ page: "client-projets" });
+      const role = currentUser?.role;
+      if (role === "artisan") navigate({ page: "artisan-orders" });
+      else if (role === "designer") navigate({ page: "designer-projects" });
+      else navigate({ page: "client-projets" });
     } else if (tab === "favorites") {
       navigate({ page: "favorites" });
     } else if (tab === "messages") {

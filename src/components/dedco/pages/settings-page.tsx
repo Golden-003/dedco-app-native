@@ -7,21 +7,10 @@ import { User, Globe, Shield, Bell, Moon, LogOut, ChevronRight,
 import { useDedcoStore } from "@/lib/store";
 import { useState } from "react";
 
-const SETTINGS = [
-  { section: "Compte", items: [
-    { icon: <User size={18} />, label: "Informations personnelles", value: "Marie Houénou", action: "profile" },
-    { icon: <Shield size={18} />, label: "Sécurité", value: "Mot de passe", action: "password" },
-    { icon: <Bell size={18} />, label: "Notifications", value: "Email & SMS", action: "notifications" },
-  ]},
-  { section: "Préférences", items: [
-    { icon: <Globe size={18} />, label: "Langue", value: "Français" },
-    { icon: <Moon size={18} />, label: "Mode sombre", value: "Désactivé" },
-  ]},
-];
-
 export function SettingsPage() {
   const navigate = useDedcoStore((s) => s.navigate);
   const logout = useDedcoStore((s) => s.logout);
+  const currentUser = useDedcoStore((s) => s.currentUser);
   const [toast, setToast] = useState<string | null>(null);
   function showToast(msg: string) {
     setToast(msg);
@@ -29,6 +18,16 @@ export function SettingsPage() {
   }
   const goBack = useDedcoStore((s) => s.goBack);
   const [notifs, setNotifs] = useState(true);
+
+  const SETTINGS = [
+    { section: "Compte", items: [
+      { icon: <User size={18} />, label: "Informations personnelles", value: currentUser?.name || "Utilisateur", action: "profile" },
+      { icon: <Bell size={18} />, label: "Notifications", value: "Email & SMS", action: "notifications" },
+    ]},
+    { section: "Préférences", items: [
+      { icon: <Globe size={18} />, label: "Langue", value: "Français", action: "langue" },
+    ]},
+  ];
 
   return (
     <div className="dedco-fade-in max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
@@ -57,6 +56,7 @@ export function SettingsPage() {
                   onClick={() => {
                     if (item.action === "profile") navigate({ page: "profile" });
                     else if (item.action === "notifications") navigate({ page: "notifications" });
+                    else if (item.action === "langue") showToast("Langue: Français (une seule langue disponible)");
                   }}
                   className="w-full flex items-center justify-between p-3 rounded-lg border border-[var(--border)] bg-card hover:border-[var(--amber)] transition-colors text-left cursor-pointer"
                 >
