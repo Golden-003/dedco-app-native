@@ -47,6 +47,7 @@ export function AdminLayout({
       subtitle="Espace Administrateur"
       items={ADMIN_NAV}
       currentPage={currentPage}
+      allowExitToSite
     >
       {children}
     </DashboardSidebar>

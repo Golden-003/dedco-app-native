@@ -281,7 +281,28 @@ export function DedcoRouter() {
     (requiredRole !== null && (!currentUser || currentUser.role !== requiredRole)) ||
     (needsAuth && !requiredRole && !currentUser);
 
+  // ── Séparation stricte prestataires / clients ──
+  // Un artisan ou designer ne peut PAS accéder au site public (marketplace,
+  // inspirations, accueil, etc.). Il est enfermé dans son dashboard.
+  // Admin et Maison déco gardent l'accès au site public.
+  const isPrestataireLocked =
+    currentUser?.role === "artisan" || currentUser?.role === "designer";
+  const isPublicPage =
+    !isDashboardPage(route.page) &&
+    !isAuthRequired(route.page) &&
+    route.page !== "login" &&
+    route.page !== "register" &&
+    route.page !== "forgot-password" &&
+    route.page !== "onboarding";
+  const isLockedOut = isPrestataireLocked && isPublicPage;
+
   useEffect(() => {
+    if (isLockedOut) {
+      // Prestataire tente d'accéder au site public → dashboard
+      const homePage = ROLE_HOME_PAGE[currentUser!.role] ?? "home";
+      navigate({ page: homePage } as AppRoute);
+      return;
+    }
     if (!isForbidden) return;
     // User non connecté → page de connexion
     if (!currentUser) {
@@ -291,9 +312,9 @@ export function DedcoRouter() {
     // User connecté mais mauvais rôle → sa propre page d'accueil
     const homePage = ROLE_HOME_PAGE[currentUser.role] ?? "home";
     navigate({ page: homePage } as AppRoute);
-  }, [isForbidden, currentUser, navigate]);
+  }, [isForbidden, isLockedOut, currentUser, navigate]);
 
-  if (isForbidden) {
+  if (isForbidden || isLockedOut) {
     // Rendu minimal le temps que la redirection prenne effet
     return null;
   }

@@ -54,6 +54,7 @@ export function ArtisanLayout({
       subtitle="Espace Artisan"
       items={ARTISAN_NAV}
       currentPage={currentPage}
+      allowExitToSite={false}
     >
       {children}
     </DashboardSidebar>

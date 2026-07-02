@@ -43,6 +43,7 @@ export function DesignerLayout({
       subtitle="Espace Designer"
       items={DESIGNER_NAV}
       currentPage={currentPage}
+      allowExitToSite={false}
     >
       {children}
     </DashboardSidebar>

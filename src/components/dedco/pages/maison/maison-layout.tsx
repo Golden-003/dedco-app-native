@@ -33,6 +33,7 @@ export function MaisonLayout({
       subtitle="Espace Maison"
       items={MAISON_NAV}
       currentPage={currentPage}
+      allowExitToSite
     >
       {children}
     </DashboardSidebar>

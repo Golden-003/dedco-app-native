@@ -42,12 +42,16 @@ function DashboardSidebarComponent({
   items,
   currentPage,
   children,
+  allowExitToSite = false,
 }: {
   title: string;
   subtitle: string;
   items: NavItem[];
   currentPage: string;
   children?: React.ReactNode;
+  /** Si true, affiche le bouton « Retour au site ». Les artisans/designers
+   *  n'ont pas accès au site public — seul leur dashboard. */
+  allowExitToSite?: boolean;
 }) {
   const navigate = useDedcoStore((s) => s.navigate);
   const logout = useDedcoStore((s) => s.logout);
@@ -77,13 +81,20 @@ function DashboardSidebarComponent({
   // ── Sous-composants rendus à l'identique desktop / mobile ──
   const Brand = (
     <div className="mb-6 px-2">
-      <button
-        onClick={goHome}
-        className="font-display text-lg font-semibold cursor-pointer hover:opacity-80 transition-opacity"
-      >
-        <span className="text-[var(--terracotta)]">Dedco</span>
-        <span className="text-[var(--amber)]">.</span>
-      </button>
+      {allowExitToSite ? (
+        <button
+          onClick={goHome}
+          className="font-display text-lg font-semibold cursor-pointer hover:opacity-80 transition-opacity"
+        >
+          <span className="text-[var(--terracotta)]">Dedco</span>
+          <span className="text-[var(--amber)]">.</span>
+        </button>
+      ) : (
+        <span className="font-display text-lg font-semibold">
+          <span className="text-[var(--terracotta)]">Dedco</span>
+          <span className="text-[var(--amber)]">.</span>
+        </span>
+      )}
       <p className="text-xs text-[var(--text-3)] mt-0.5">{subtitle}</p>
     </div>
   );
@@ -123,13 +134,15 @@ function DashboardSidebarComponent({
 
   const FooterActions = (
     <div className="border-t border-[var(--border)] pt-3 space-y-1">
-      <button
-        onClick={goHome}
-        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[var(--text-3)] hover:bg-[var(--bg-warm)] hover:text-[var(--text-1)] transition-colors cursor-pointer"
-      >
-        <Home size={18} />
-        Retour au site
-      </button>
+      {allowExitToSite && (
+        <button
+          onClick={goHome}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[var(--text-3)] hover:bg-[var(--bg-warm)] hover:text-[var(--text-1)] transition-colors cursor-pointer"
+        >
+          <Home size={18} />
+          Retour au site
+        </button>
+      )}
       <button
         onClick={handleLogout}
         className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[var(--terracotta)] hover:bg-[var(--terracotta-pale)] transition-colors cursor-pointer"
@@ -156,13 +169,20 @@ function DashboardSidebarComponent({
             normal en haut de la colonne. */}
         <header className="lg:hidden flex items-center justify-between px-4 h-16 bg-[var(--bg-card)] border-b border-[var(--border)] flex-shrink-0">
           <div className="flex items-center gap-2">
-            <button
-              onClick={goHome}
-              className="font-display text-base font-semibold cursor-pointer"
-            >
-              <span className="text-[var(--terracotta)]">Dedco</span>
-              <span className="text-[var(--amber)]">.</span>
-            </button>
+            {allowExitToSite ? (
+              <button
+                onClick={goHome}
+                className="font-display text-base font-semibold cursor-pointer"
+              >
+                <span className="text-[var(--terracotta)]">Dedco</span>
+                <span className="text-[var(--amber)]">.</span>
+              </button>
+            ) : (
+              <span className="font-display text-base font-semibold">
+                <span className="text-[var(--terracotta)]">Dedco</span>
+                <span className="text-[var(--amber)]">.</span>
+              </span>
+            )}
             <span className="text-xs text-[var(--text-3)]">· {title}</span>
           </div>
           <div className="flex items-center gap-1">

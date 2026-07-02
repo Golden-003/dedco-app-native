@@ -102,7 +102,13 @@ export default function Home() {
     "client-proposition-recue",
   ]);
   const isPrestataire = currentUser && currentUser.role !== "client";
+  // Les artisans et designers sont ENFERMÉS dans leur dashboard : aucune
+  // navbar/bottom-nav/footer public, quelles que soient la page. Admin et
+  // Maison déco gardent l'accès au site public.
+  const isPrestataireLocked =
+    currentUser?.role === "artisan" || currentUser?.role === "designer";
   const isWrappedInDashboard =
+    isPrestataireLocked ||
     isDashboardPage(route.page) ||
     (SHARED_DASHBOARD_PAGES.has(route.page) && !!isPrestataire);
   const showPublicNav = !isWrappedInDashboard;

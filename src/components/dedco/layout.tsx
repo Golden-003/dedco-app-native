@@ -484,39 +484,33 @@ export function Navbar({
                   >
                     Mon espace
                   </button>
-                  {/* Liens rapides projets/commandes — adaptés au rôle */}
-                  <div className="grid grid-cols-2 gap-2 mb-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const page =
-                          currentUser.role === "client" ? "client-projets"
-                          : currentUser.role === "artisan" ? "artisan-projets"
-                          : currentUser.role === "designer" ? "designer-projects"
-                          : "admin-dashboard";
-                        navigate({ page } as AppRoute);
-                        setMobileOpen(false);
-                      }}
-                      className="dedco-btn dedco-btn-ghost w-full text-sm"
-                    >
-                      Mes projets
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const page =
-                          currentUser.role === "client" ? "order-history"
-                          : currentUser.role === "artisan" ? "artisan-orders"
-                          : currentUser.role === "admin" ? "admin-orders"
-                          : "designer-projects";
-                        navigate({ page } as AppRoute);
-                        setMobileOpen(false);
-                      }}
-                      className="dedco-btn dedco-btn-ghost w-full text-sm"
-                    >
-                      Mes commandes
-                    </button>
-                  </div>
+                  {/* Liens rapides projets/commandes — CLIENT uniquement.
+                      Les artisans/designers sont enfermés dans leur dashboard
+                      (la sidebar gère toute la navigation). */}
+                  {currentUser.role === "client" && (
+                    <div className="grid grid-cols-2 gap-2 mb-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigate({ page: "client-projets" });
+                          setMobileOpen(false);
+                        }}
+                        className="dedco-btn dedco-btn-ghost w-full text-sm"
+                      >
+                        Mes projets
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigate({ page: "order-history" });
+                          setMobileOpen(false);
+                        }}
+                        className="dedco-btn dedco-btn-ghost w-full text-sm"
+                      >
+                        Mes commandes
+                      </button>
+                    </div>
+                  )}
                   <button
                     type="button"
                     onClick={() => {
