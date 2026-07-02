@@ -343,7 +343,7 @@ export function DesignerProjectsPage() {
                   </div>
 
                   {/* View project button */}
-                  <button onClick={() => showToast("Action effectuée.")} className="dedco-btn dedco-btn-primary dedco-btn-sm mt-4 w-full justify-center">
+                  <button onClick={() => navigate({ page: "projet-designer-detail", projectId: String(project.id) })} className="dedco-btn dedco-btn-primary dedco-btn-sm mt-4 w-full justify-center">
                     <Eye size={14} />
                     Voir le projet
                     <ChevronRight size={14} />

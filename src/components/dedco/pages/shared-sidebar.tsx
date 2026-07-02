@@ -193,6 +193,13 @@ export function DashboardSidebar({
                 <Home size={18} />
                 Retour au site
               </button>
+              <button
+                onClick={() => { logout(); navigate({ page: "home" }); }}
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[var(--terracotta)] hover:bg-[var(--terracotta-pale)] transition-colors"
+              >
+                <LogOut size={18} />
+                Déconnexion
+              </button>
             </motion.aside>
           </div>
         )}

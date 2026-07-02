@@ -398,8 +398,8 @@ export function Navbar({
             {currentUser && (
               <button
                 type="button"
-                onClick={() => navigate({ page: "profile" })}
-                aria-label="Mon profil"
+                onClick={() => navigate({ page: ROLE_DASHBOARD[currentUser.role] } as AppRoute)}
+                aria-label="Mon espace"
                 className="lg:hidden w-9 h-9 rounded-full overflow-hidden flex-shrink-0"
               >
                 <img

@@ -175,6 +175,8 @@ export function OrderConfirmationPage({ orderId }: { orderId: string }) {
 
 export function InvoicePage({ orderId }: { orderId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
+  const currentUser = useDedcoStore((s) => s.currentUser);
+  const isArtisan = currentUser?.role === "artisan";
   const order = orderId.includes("0051") ? MOCK_CUSTOM_ORDER : MOCK_MARKETPLACE_ORDER;
 
   return (
@@ -300,8 +302,8 @@ export function OrderTrackingPage({ orderId }: { orderId: string }) {
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
-      <button onClick={() => navigate({ page: "client-projets" })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
-        <ChevronRight size={16} className="rotate-180" /> Mes commandes
+      <button onClick={() => navigate({ page: isArtisan ? "artisan-orders" : "client-projets" })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
+        <ChevronRight size={16} className="rotate-180" /> {isArtisan ? "Mes commandes" : "Mes commandes"}
       </button>
 
       <header className="mb-6">
