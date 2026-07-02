@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Dedcco — Moodboard App Mobile</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+@page { size: 720px 1020px; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 720px; background: #1a1612; color: #f5e6d3; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+@media screen { html { display: flex; justify-content: center; background: #1a1612; } body { margin: 20px auto; box-shadow: 0 30px 80px rgba(0,0,0,0.6); } }
+
+:root {
+  --amber: #BF793B; --amber-dark: #9A5A1F; --amber-light: #D4954A; --amber-pale: #F5E6D3;
+  --terracotta: #A6442E; --terracotta-lt: #C4614A;
+  --forest: #548C45; --forest-lt: #6BA35A;
+  --cream: #FFFFFF; --warm: #FAF8F5;
+  --ink: #1E1813; --ink-soft: #5B5048; --ink-mute: #7a7068;
+  --border: rgba(245,230,211,0.12);
+}
+
+/* ========== COVER ========== */
+.cover {
+  width: 720px; height: 1020px; position: relative; overflow: hidden;
+  break-after: page; display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 60px;
+}
+.cover-bg { position: absolute; inset: 0; z-index: 0; }
+.cover-bg img { width: 100%; height: 100%; object-fit: cover; opacity: 0.35; filter: contrast(1.1) saturate(1.2); }
+.cover-overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(26,22,18,0.3) 0%, rgba(26,22,18,0.85) 60%, rgba(26,22,18,0.95) 100%); }
+.cover-content { position: relative; z-index: 2; }
+.cover-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: var(--amber-light); margin-bottom: 16px; }
+.cover-title { font-family: 'Playfair Display', serif; font-size: 64px; font-weight: 700; line-height: 0.95; letter-spacing: -0.025em; color: var(--cream); margin-bottom: 12px; }
+.cover-title .accent { color: var(--amber); font-style: italic; font-weight: 400; }
+.cover-sub { font-family: 'Playfair Display', serif; font-size: 20px; font-style: italic; font-weight: 400; color: var(--amber-pale); max-width: 480px; line-height: 1.4; margin-bottom: 24px; }
+.cover-meta { display: flex; gap: 16px; font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-mute); }
+.cover-meta span { color: var(--amber-light); }
+
+/* ========== SECTIONS ========== */
+.section { padding: 48px 40px; break-inside: avoid; }
+.section-dark { background: #1a1612; }
+.section-warm { background: #faf8f5; color: var(--ink); }
+
+.section-label { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--amber); margin-bottom: 6px; }
+.section-title { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; line-height: 1.05; letter-spacing: -0.015em; margin-bottom: 8px; }
+.section-dark .section-title { color: var(--cream); }
+.section-warm .section-title { color: var(--ink); }
+.section-desc { font-size: 13px; line-height: 1.6; margin-bottom: 24px; max-width: 560px; }
+.section-dark .section-desc { color: var(--amber-pale); opacity: 0.7; }
+.section-warm .section-desc { color: var(--ink-soft); }
+
+/* ========== MOODBOARD GRID ========== */
+.mood-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+.mood-item { position: relative; overflow: hidden; border-radius: 6px; break-inside: avoid; }
+.mood-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
+.mood-item.tall { grid-row: span 2; }
+.mood-item.wide { grid-column: span 2; }
+.mood-item.big { grid-column: span 2; grid-row: span 2; }
+.mood-item::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 60%, rgba(26,22,18,0.4) 100%); pointer-events: none; }
+
+/* ========== CONCEPT CARDS ========== */
+.concept-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+.concept-card {
+  border-radius: 10px; padding: 20px; break-inside: avoid; position: relative; overflow: hidden;
+}
+.concept-card.dark { background: #221e1a; border: 1px solid var(--border); }
+.concept-card.warm { background: var(--warm); border: 1px solid #e0ddd8; }
+.concept-card.amber { background: var(--amber); color: white; }
+.concept-card.terra { background: var(--terracotta); color: white; }
+.concept-card.forest { background: var(--forest); color: white; }
+.concept-card .icon { font-size: 28px; margin-bottom: 12px; }
+.concept-card .title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+.concept-card .desc { font-size: 11px; line-height: 1.5; opacity: 0.85; }
+
+/* ========== PALETTE ========== */
+.palette-strip { display: flex; gap: 0; border-radius: 8px; overflow: hidden; margin: 16px 0; height: 80px; }
+.palette-swatch { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; padding: 10px; }
+.palette-swatch .name { font-size: 11px; font-weight: 700; }
+.palette-swatch .hex { font-family: 'SF Mono', monospace; font-size: 9px; opacity: 0.7; }
+
+/* ========== TYPOGRAPHY ========== */
+.type-spec { margin: 16px 0; padding: 20px; border-radius: 8px; }
+.type-spec.dark { background: #221e1a; border: 1px solid var(--border); }
+.type-spec .label { font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--amber); margin-bottom: 8px; }
+.type-spec .sample { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 700; color: var(--cream); line-height: 1; margin-bottom: 4px; }
+.type-spec .sample.italic { font-style: italic; font-weight: 400; }
+.type-spec .sample-body { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: var(--amber-pale); opacity: 0.7; }
+
+/* ========== UI MOCKUP ========== */
+.ui-mockup {
+  width: 300px; margin: 20px auto; background: #1a1612; border-radius: 32px; padding: 10px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4); break-inside: avoid;
+}
+.ui-screen { background: var(--cream); border-radius: 26px; overflow: hidden; height: 580px; display: flex; flex-direction: column; }
+.ui-header { padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #f0eeec; }
+.ui-header .logo { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--ink); }
+.ui-header .logo .dot { color: var(--amber); }
+.ui-header .actions { display: flex; gap: 6px; }
+.ui-header .act { width: 30px; height: 30px; border-radius: 50%; background: var(--warm); display: flex; align-items: center; justify-content: center; }
+.ui-content { flex: 1; overflow: hidden; padding: 12px; }
+.ui-hero { width: 100%; height: 180px; border-radius: 12px; overflow: hidden; margin-bottom: 12px; position: relative; }
+.ui-hero img { width: 100%; height: 100%; object-fit: cover; }
+.ui-hero .overlay { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(30,24,19,0.8) 100%); }
+.ui-hero .text { position: absolute; bottom: 12px; left: 14px; color: white; }
+.ui-hero .text h4 { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; }
+.ui-hero .text p { font-size: 10px; opacity: 0.8; }
+.ui-cards { display: flex; gap: 8px; overflow: hidden; }
+.ui-card { width: 120px; flex-shrink: 0; }
+.ui-card .img { width: 100%; height: 80px; border-radius: 8px; overflow: hidden; margin-bottom: 4px; }
+.ui-card .img img { width: 100%; height: 100%; object-fit: cover; }
+.ui-card .name { font-size: 10px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ui-card .price { font-size: 10px; font-weight: 700; color: var(--amber-dark); }
+.ui-bottom { display: flex; justify-content: space-around; padding: 10px 0 14px; border-top: 1px solid #f0eeec; background: white; }
+.ui-bottom .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.ui-bottom .nav-dot { width: 20px; height: 20px; border-radius: 6px; }
+.ui-bottom .nav-item.active .nav-dot { background: var(--amber); }
+.ui-bottom .nav-item:not(.active) .nav-dot { background: #d6cdc1; }
+.ui-bottom .nav-label { font-size: 8px; font-weight: 600; color: var(--ink-mute); }
+.ui-bottom .nav-item.active .nav-label { color: var(--amber-dark); }
+
+/* ========== QUOTE ========== */
+.quote { padding: 32px 40px; text-align: center; break-inside: avoid; }
+.quote-text { font-family: 'Playfair Display', serif; font-size: 24px; font-style: italic; font-weight: 400; line-height: 1.4; color: var(--amber-pale); max-width: 500px; margin: 0 auto; }
+.quote-text .highlight { color: var(--amber); font-style: normal; font-weight: 700; }
+
+/* ========== ENDING ========== */
+.ending { width: 720px; height: 400px; background: var(--ink); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; break-before: page; }
+.ending-dots { display: flex; gap: 10px; margin-bottom: 20px; }
+.ending-dots span { width: 10px; height: 10px; border-radius: 50%; }
+.ending-dots .a { background: var(--amber); } .ending-dots .t { background: var(--terracotta); } .ending-dots .f { background: var(--forest); }
+.ending-title { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 700; color: var(--cream); text-align: center; margin-bottom: 12px; }
+.ending-sub { font-size: 13px; color: var(--amber-pale); opacity: 0.6; text-align: center; }
+.ending-brand { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: var(--cream); margin-top: 24px; }
+.ending-brand .dot { color: var(--amber); }
+</style>
+</head>
+<body>
+
+<!-- ========== COVER ========== -->
+<div class="cover">
+  <div class="cover-bg">
+    <img src="https://sfile.chatglm.cn/images-ppt/1390398c97c7.jpg" alt="">
+  </div>
+  <div class="cover-overlay"></div>
+  <div class="cover-content">
+    <div class="cover-eyebrow">Moodboard · Direction Créative</div>
+    <h1 class="cover-title">L'art de vivre<br>chez <span class="accent">soi.</span></h1>
+    <p class="cover-sub">Un produit mobile premium. Pas une déclinaison du web.<br>Le premier réflexe quand on pense « je veux décorer ».</p>
+    <div class="cover-meta">
+      <span>Dedcco</span> · App Mobile · v1.0 · Juillet 2026
+    </div>
+  </div>
+</div>
+
+<!-- ========== SECTION 1: SOUL ========== -->
+<div class="section section-dark">
+  <div class="section-label">01 — L'âme</div>
+  <h2 class="section-title">La terre cuite<br>rencontre l'éditorial</h2>
+  <p class="section-desc">Dedcco n'est pas une marketplace. C'est une expérience sensorielle. L'utilisateur ne cherche pas un meuble — il cherche une idée. Et Dedco transforme cette idée en réalité. Le moodboard ci-dessous capture cette dualité : la chaleur du fait-main africain et la rigueur d'un design system éditorial premium.</p>
+
+  <div class="mood-grid">
+    <div class="mood-item big"><img src="https://sfile.chatglm.cn/images-ppt/50067cf0ddfa.png" alt=""></div>
+    <div class="mood-item tall"><img src="https://sfile.chatglm.cn/images-ppt/94d9628d5dd4.jpg" alt=""></div>
+    <div class="mood-item"><img src="https://sfile.chatglm.cn/images-ppt/9472abaec041.jpg" alt=""></div>
+    <div class="mood-item"><img src="https://sfile.chatglm.cn/images-ppt/c7a5c1223404.jpg" alt=""></div>
+    <div class="mood-item"><img src="https://sfile.chatglm.cn/images-ppt/ab482bdb2ff3.jpg" alt=""></div>
+    <div class="mood-item wide"><img src="https://sfile.chatglm.cn/images-ppt/6af262e5b6b5.jpg" alt=""></div>
+  </div>
+</div>
+
+<!-- ========== SECTION 2: PALETTE ========== -->
+<div class="section section-warm">
+  <div class="section-label">02 — Palette</div>
+  <h2 class="section-title">Trois couleurs. Une histoire.</h2>
+  <p class="section-desc" style="color: var(--ink-soft);">La palette Dedcco est fermée. Trois couleurs primaires — Amber, Terracotta, Forest — portent toutes les décisions visuelles. Aucune couleur parasite. Cette discipline est ce qui donne à l'app sa signature visuelle immédiatement reconnaissable.</p>
+
+  <div class="palette-strip">
+    <div class="palette-swatch" style="background:#BF793B; color:white;"><div class="name">Amber</div><div class="hex">#BF793B</div></div>
+    <div class="palette-swatch" style="background:#9A5A1F; color:white;"><div class="name">Amber Dark</div><div class="hex">#9A5A1F</div></div>
+    <div class="palette-swatch" style="background:#D4954A; color:white;"><div class="name">Amber Light</div><div class="hex">#D4954A</div></div>
+    <div class="palette-swatch" style="background:#F5E6D3; color:#9A5A1F;"><div class="name">Amber Pale</div><div class="hex">#F5E6D3</div></div>
+    <div class="palette-swatch" style="background:#A6442E; color:white;"><div class="name">Terracotta</div><div class="hex">#A6442E</div></div>
+    <div class="palette-swatch" style="background:#FAEAE6; color:#A6442E;"><div class="name">Terra Pale</div><div class="hex">#FAEAE6</div></div>
+    <div class="palette-swatch" style="background:#548C45; color:white;"><div class="name">Forest</div><div class="hex">#548C45</div></div>
+    <div class="palette-swatch" style="background:#E6F2E3; color:#548C45;"><div class="name">Forest Pale</div><div class="hex">#E6F2E3</div></div>
+    <div class="palette-swatch" style="background:#1E1813; color:white;"><div class="name">Ink</div><div class="hex">#1E1813</div></div>
+  </div>
+
+  <div class="concept-row">
+    <div class="concept-card amber">
+      <div class="title">Chaleur</div>
+      <div class="desc">L'Amber est l'action. Le bouton primaire, le focus, l'étoile de rating. La chaleur du bois iroko au soleil de Cotonou.</div>
+    </div>
+    <div class="concept-card terra">
+      <div class="title">Ancrage</div>
+      <div class="desc">La Terracotta est le contraste. L'erreur, l'urgence, le brand point. La latérite rouge des routes du Bénin.</div>
+    </div>
+    <div class="concept-card forest">
+      <div class="title">Confiance</div>
+      <div class="desc">Le Forest est la validation. Le succès, le vérifié, le paiement confirmé. Les champs verdoyants après la pluie.</div>
+    </div>
+    <div class="concept-card dark">
+      <div class="title">Éditorial</div>
+      <div class="desc">L'Ink est le texte. Le fond dark, le bouton CTA. L'encre sur le papier du magazine. Le sérieux de la presse.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SECTION 3: TYPOGRAPHY ========== -->
+<div class="section section-dark">
+  <div class="section-label">03 — Typographie</div>
+  <h2 class="section-title">Serif pour les mots.<br>Sans pour les chiffres.</h2>
+  <p class="section-desc">Le pattern éditorial signature de Dedcco. Quache (display serif) pour les titres et les mots. Plus Jakarta Sans pour le corps et les chiffres. Cette dissociation crée un contraste visuel qui rappelle les magazines premium — le sérieux de la serif, la modernité de la sans-serif.</p>
+
+  <div class="type-spec dark">
+    <div class="label">Display — Quache / Playfair Display</div>
+    <div class="sample">L'atelier de Cotonou</div>
+    <div class="sample italic">Catalogue 2026</div>
+    <div class="sample-body">Utilisée pour les titres, les headings, le logotype. Unicode-range exclut les chiffres → fallback automatique sur Jakarta.</div>
+  </div>
+
+  <div class="type-spec dark">
+    <div class="label">Body — Plus Jakarta Sans</div>
+    <div class="sample-body" style="font-size:16px; color:var(--cream); opacity:1;">Le bois iroko est une essence noble, dense et durable, traditionnellement travaillée par les ébénistes du sud-Bénin.</div>
+    <div class="sample-body" style="margin-top:8px; font-feature-settings:'tnum' 1,'lnum' 1; font-size:20px; font-weight:700; color:var(--amber);">125 000 FCFA · 4.8/5 · 18 jours</div>
+  </div>
+</div>
+
+<!-- ========== SECTION 4: UI ACCUEIL ========== -->
+<div class="section section-warm">
+  <div class="section-label">04 — Écran Accueil</div>
+  <h2 class="section-title">Donner envie d'aménager.</h2>
+  <p class="section-desc" style="color: var(--ink-soft);">Le cœur de l'app. Hero immersif plein cadre avec overlay gradient. Carrousel de coups de cœur en swipe horizontal. Scènes interactives avec hotspots. Le visuel change à chaque ouverture pour renouveler l'expérience.</p>
+
+  <div class="ui-mockup">
+    <div class="ui-screen">
+      <div class="ui-header">
+        <div class="logo">Dedco<span class="dot">.</span></div>
+        <div class="actions"><div class="act"></div><div class="act"></div><div class="act"></div></div>
+      </div>
+      <div class="ui-content">
+        <div class="ui-hero">
+          <img src="https://sfile.chatglm.cn/images-ppt/5151d5986336.jpg" alt="">
+          <div class="overlay"></div>
+          <div class="text">
+            <h4>Inspirations du moment</h4>
+            <p>Bois iroko · Wax · Bogolan</p>
+          </div>
+        </div>
+        <div class="ui-cards">
+          <div class="ui-card">
+            <div class="img"><img src="https://sfile.chatglm.cn/images-ppt/ab482bdb2ff3.jpg" alt=""></div>
+            <div class="name">Fauteuil Sahel</div>
+            <div class="price">125 000 FCFA</div>
+          </div>
+          <div class="ui-card">
+            <div class="img"><img src="https://sfile.chatglm.cn/images-ppt/f8e77be9a77d.jpg" alt=""></div>
+            <div class="name">Lampe Bogolan</div>
+            <div class="price">68 000 FCFA</div>
+          </div>
+          <div class="ui-card">
+            <div class="img"><img src="https://sfile.chatglm.cn/images-ppt/ce021963b00e.png" alt=""></div>
+            <div class="name">Table Iroko</div>
+            <div class="price">245 000 FCFA</div>
+          </div>
+        </div>
+      </div>
+      <div class="ui-bottom">
+        <div class="nav-item active"><div class="nav-dot"></div><div class="nav-label">Accueil</div></div>
+        <div class="nav-item"><div class="nav-dot"></div><div class="nav-label">Inspirations</div></div>
+        <div class="nav-item"><div class="nav-dot"></div><div class="nav-label">Marketplace</div></div>
+        <div class="nav-item"><div class="nav-dot"></div><div class="nav-label">Favoris</div></div>
+        <div class="nav-item"><div class="nav-dot"></div><div class="nav-label">Compte</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== QUOTE ========== -->
+<div class="quote section-dark">
+  <p class="quote-text">L'utilisateur ne doit jamais penser <span class="highlight">« je cherche un meuble »</span>. Il doit penser <span class="highlight">« je cherche une idée »</span>. Puis : Dedco m'aide à transformer cette idée en réalité.</p>
+</div>
+
+<!-- ========== SECTION 5: INSPIRATIONS ========== -->
+<div class="section section-dark">
+  <div class="section-label">05 — Inspirations</div>
+  <h2 class="section-title">Le moteur émotionnel.</h2>
+  <p class="section-desc">Masonry grid Pinterest-style. Chaque inspiration conduit à un produit, un designer, un artisan. Tap → plein écran avec shop the look. Swipe horizontal entre images. Pinch to zoom. L'émotion précède toujours la transaction.</p>
+
+  <div class="mood-grid">
+    <div class="mood-item tall"><img src="https://sfile.chatglm.cn/images-ppt/b9f9a50b3890.jpg" alt=""></div>
+    <div class="mood-item"><img src="https://sfile.chatglm.cn/images-ppt/dadf6151aea6.jpg" alt=""></div>
+    <div class="mood-item"><img src="https://sfile.chatglm.cn/images-ppt/82932269c409.jpg" alt=""></div>
+    <div class="mood-item wide"><img src="https://sfile.chatglm.cn/images-ppt/a607b09bdced.jpg" alt=""></div>
+    <div class="mood-item"><img src="https://sfile.chatglm.cn/images-ppt/91bb13b35a4f.jpg" alt=""></div>
+    <div class="mood-item"><img src="https://sfile.chatglm.cn/images-ppt/763f361a9eb3.jpg" alt=""></div>
+  </div>
+</div>
+
+<!-- ========== SECTION 6: PRODUCT ========== -->
+<div class="section section-warm">
+  <div class="section-label">06 — Fiche Produit</div>
+  <h2 class="section-title">Immersion totale.</h2>
+  <p class="section-desc" style="color: var(--ink-soft);">Galerie plein écran, swipe entre photos, pinch to zoom. Bottom sheet produit qui glisse depuis le bas : nom, prix, artisan, options, ajout au panier. Produits similaires en carrousel. L'image domine. Le texte accompagne.</p>
+
+  <div class="concept-row">
+    <div class="concept-card warm">
+      <div class="title" style="color:var(--ink);">Geste</div>
+      <div class="desc" style="color:var(--ink-soft);">Tap sur l'image → plein écran. Swipe horizontal → photos suivantes. Pinch → zoom. Bottom sheet → infos produit.</div>
+    </div>
+    <div class="concept-card warm">
+      <div class="title" style="color:var(--ink);">Conversion</div>
+      <div class="desc" style="color:var(--ink-soft);">Bouton « Ajouter au panier » sticky dans le bottom sheet. Prix en .font-numeric. Badge artisan vérifié. Avis clients avec photos.</div>
+    </div>
+  </div>
+
+  <div class="mood-grid" style="margin-top:16px;">
+    <div class="mood-item big"><img src="https://sfile.chatglm.cn/images-ppt/cf466321a689.jpeg" alt=""></div>
+    <div class="mood-item"><img src="https://sfile.chatglm.cn/images-ppt/2ea4dde9f407.png" alt=""></div>
+    <div class="mood-item"><img src="https://sfile.chatglm.cn/images-ppt/d66eea09c402.jpeg" alt=""></div>
+    <div class="mood-item wide"><img src="https://sfile.chatglm.cn/images-ppt/526ff6e7d3b1.jpg" alt=""></div>
+    <div class="mood-item"><img src="https://sfile.chatglm.cn/images-ppt/9410f38e8788.jpg" alt=""></div>
+  </div>
+</div>
+
+<!-- ========== SECTION 7: CRAFT ========== -->
+<div class="section section-dark">
+  <div class="section-label">07 — L'artisanat</div>
+  <h2 class="section-title">La main qui façonne.</h2>
+  <p class="section-desc">Dedco célèbre le geste. Chaque pièce est unique, numérotée, signée. L'app doit transmettre cette humanité — pas un catalogue froid, mais une galerie vivante où l'on voit les mains, les outils, les ateliers. Les photos d'artisanat sont traitées avec une lumière chaude, presque cinématographique.</p>
+
+  <div class="mood-grid">
+    <div class="mood-item"><img src="https://sfile.chatglm.cn/images-ppt/ba2c42bc4c16.jpg" alt=""></div>
+    <div class="mood-item tall"><img src="https://sfile.chatglm.cn/images-ppt/0e5abb2aa698.png" alt=""></div>
+    <div class="mood-item"><img src="https://sfile.chatglm.cn/images-ppt/d0d2cc786fe4.jpg" alt=""></div>
+    <div class="mood-item wide"><img src="https://sfile.chatglm.cn/images-ppt/f1b84e17cae1.jpg" alt=""></div>
+    <div class="mood-item"><img src="https://sfile.chatglm.cn/images-ppt/8f3cbd18c918.jpg" alt=""></div>
+    <div class="mood-item"><img src="https://sfile.chatglm.cn/images-ppt/3217f7d573d8.jpg" alt=""></div>
+  </div>
+</div>
+
+<!-- ========== SECTION 8: UI PATTERNS ========== -->
+<div class="section section-warm">
+  <div class="section-label">08 — Patterns UI</div>
+  <h2 class="section-title">Gestes &amp; interactions.</h2>
+  <p class="section-desc" style="color: var(--ink-soft);">L'app doit être très gestuelle. Swipe, bottom sheets, micro-animations, image plein écran. Peu de textes, beaucoup de visuel. Chaque interaction donne un feedback immédiat — l'app réagit, vibre, respire.</p>
+
+  <div class="concept-row">
+    <div class="concept-card amber">
+      <div class="title">Swipe</div>
+      <div class="desc">Navigation entre produits, inspirations, photos. Gesture naturelle, aucune friction. L'utilisateur ne réfléchit pas à la navigation.</div>
+    </div>
+    <div class="concept-card terra">
+      <div class="title">Bottom Sheet</div>
+      <div class="desc">Filtres, options produit, checkout. Style Airbnb. Glisse depuis le bas, peut être glissé vers le bas pour fermer.</div>
+    </div>
+    <div class="concept-card forest">
+      <div class="title">Micro-anim</div>
+      <div class="desc">Feedback tactile sur boutons, cards, favoris. Heart animation sur favori. Scale 0.97 sur tap. L'app est vivante.</div>
+    </div>
+    <div class="concept-card dark">
+      <div class="title">Plein écran</div>
+      <div class="desc">Tap sur une image → plein écran avec zoom/pinch. L'image domine. Le texte disparaît. L'émotion prend le dessus.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SECTION 9: CHAT ========== -->
+<div class="section section-dark">
+  <div class="section-label">09 — Chat</div>
+  <h2 class="section-title">Coordination, pas conversation.</h2>
+  <p class="section-desc">Le chat n'est pas une messagerie. C'est un module de coordination lié aux projets. Pas de chat libre. L'icône Messages n'apparaît que si l'utilisateur a un projet actif. Chaque conversation est attachée à une commande ou un projet. Anti-contournement intégré : détection de téléphone, email, WhatsApp → masquage automatique.</p>
+
+  <div class="mood-grid">
+    <div class="mood-item wide"><img src="https://sfile.chatglm.cn/images-ppt/6761ddc44715.png" alt=""></div>
+    <div class="mood-item"><img src="https://sfile.chatglm.cn/images-ppt/013743c982f7.png" alt=""></div>
+    <div class="mood-item tall"><img src="https://sfile.chatglm.cn/images-ppt/296db0d41a1b.jpeg" alt=""></div>
+    <div class="mood-item"><img src="https://sfile.chatglm.cn/images-ppt/3b827efa0e01.png" alt=""></div>
+    <div class="mood-item"><img src="https://sfile.chatglm.cn/images-ppt/fc286683a31a.jpg" alt=""></div>
+  </div>
+</div>
+
+<!-- ========== QUOTE 2 ========== -->
+<div class="quote section-dark">
+  <p class="quote-text">L'utilisateur ne doit jamais ressentir la protection comme une contrainte. Il doit simplement avoir <span class="highlight">tout ce dont il a besoin</span> dans Dedco.</p>
+</div>
+
+<!-- ========== ENDING ========== -->
+<div class="ending">
+  <div class="ending-dots">
+    <span class="a"></span><span class="t"></span><span class="f"></span>
+  </div>
+  <h2 class="ending-title">Le premier réflexe.</h2>
+  <p class="ending-sub">Quand on pense « je veux décorer », le premier réflexe doit être : j'ouvre Dedco.</p>
+  <div class="ending-brand">Dedco<span class="dot">.</span></div>
+</div>
+
+</body>
+</html>
