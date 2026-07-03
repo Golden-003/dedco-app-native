@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { useDedcoStore, type AppRoute } from "@/lib/store";
 import type { Route } from "@/lib/dedco-types";
 import {
@@ -75,6 +75,24 @@ export default function Home() {
   const removeFromCart = useDedcoStore((s) => s.removeFromCart);
   const currentUser = useDedcoStore((s) => s.currentUser);
 
+  // ── Hydratation Zustand ──
+  // Au premier rendu (SSR + hydratation client), currentUser est null
+  // jusqu'à ce que Zustand réhydrate depuis localStorage. Pendant ce laps,
+  // isPrestataireLocked = false → la navbar publique s'affiche par erreur
+  // pour les prestataires. On bloque donc le rendu jusqu'à hydratation.
+  const [hasHydrated, setHasHydrated] = useState(false);
+  useEffect(() => {
+    // useDedcoStore.persist est exposé par le middleware persist
+    const unsub = (useDedcoStore as any).persist?.onFinishHydration?.(() => {
+      setHasHydrated(true);
+    });
+    // Si déjà hydraté (cas fréquent)
+    if ((useDedcoStore as any).persist?.hasHydrated?.()) {
+      setHasHydrated(true);
+    }
+    return () => unsub?.();
+  }, []);
+
   const navigateBridge = useCallback(
     (r: Route) => navigate(routeToAppRoute(r)),
     [navigate],
@@ -123,6 +141,16 @@ export default function Home() {
       window.scrollTo({ top: 0, behavior: "instant" });
     }
   }, [route, isWrappedInDashboard]);
+
+  if (!hasHydrated) {
+    // Rendu minimal pendant l'hydratation Zustand — évite le flash de
+    // navbar publique pour les prestataires (currentUser = null au 1er rendu).
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--bg-cream)" }}>
+        <div className="w-8 h-8 rounded-full border-2 border-[var(--amber)] border-t-transparent animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: "var(--bg-cream)" }}>
