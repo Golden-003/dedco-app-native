@@ -237,6 +237,14 @@ const MOCK_PROJECTS: Project[] = [
   { id: "CMD-005", client: "Bob M.", product: "Tabouret Tamtam ×2", thumb: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=120&q=80", amount: 76000, dueDate: "18 fév", progress: 30, status: "production" },
 ];
 
+// Prochaine étape pour chaque statut de projet (actions artisan)
+const NEXT_STATUS: Record<Project["status"], { label: string; next: Project["status"] } | null> = {
+  en_attente: { label: "Démarrer la fabrication", next: "production" },
+  production: { label: "Marquer comme expédié", next: "expedie" },
+  expedie: { label: "Marquer comme livré", next: "livre" },
+  livre: null, // terminé
+};
+
 const COLUMNS: { id: Project["status"]; label: string; color: string }[] = [
   { id: "en_attente", label: "En attente paiement", color: "var(--text-3)" },
   { id: "production", label: "En production", color: "var(--amber)" },
@@ -247,6 +255,27 @@ const COLUMNS: { id: Project["status"]; label: string; color: string }[] = [
 export function ArtisanProjetsPage() {
   const navigate = useDedcoStore((s) => s.navigate);
   const [mobileCol, setMobileCol] = useState<Project["status"]>("production");
+  const [projects, setProjects] = useState<Project[]>(MOCK_PROJECTS);
+  const [toast, setToast] = useState<string | null>(null);
+
+  function showToast(msg: string) {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  }
+
+  // Faire avancer un projet au statut suivant
+  function advanceProject(projectId: string) {
+    const project = projects.find((p) => p.id === projectId);
+    if (!project) return;
+    const next = NEXT_STATUS[project.status];
+    if (!next) return;
+    setProjects(prev => prev.map(p =>
+      p.id === projectId
+        ? { ...p, status: next.next, progress: next.next === "livre" ? 100 : p.progress === 0 ? 20 : Math.max(p.progress, 50) }
+        : p
+    ));
+    showToast(`Projet ${projectId} → ${COLUMNS.find(c => c.id === next.next)?.label}`);
+  }
 
   return (
     <div className="p-4 sm:p-6 max-w-7xl mx-auto">
@@ -275,7 +304,7 @@ export function ArtisanProjetsPage() {
       {/* Desktop: 4 columns */}
       <div className="hidden lg:grid grid-cols-4 gap-4">
         {COLUMNS.map((col) => {
-          const items = MOCK_PROJECTS.filter((p) => p.status === col.id);
+          const items = projects.filter((p) => p.status === col.id);
           return (
             <div key={col.id} className="bg-[var(--bg-warm)] rounded-xl p-3">
               <div className="flex items-center justify-between mb-3 px-1">
@@ -286,7 +315,13 @@ export function ArtisanProjetsPage() {
               </div>
               <div className="space-y-2">
                 {items.map((p) => (
-                  <ProjectCard key={p.id} project={p} onClick={() => navigate({ page: "projet-artisan-detail", projectId: p.id })} />
+                  <ProjectCard
+                    key={p.id}
+                    project={p}
+                    onClick={() => navigate({ page: "projet-artisan-detail", projectId: p.id })}
+                    onAdvance={NEXT_STATUS[p.status] ? () => advanceProject(p.id) : undefined}
+                    nextLabel={NEXT_STATUS[p.status]?.label}
+                  />
                 ))}
                 {items.length === 0 && <p className="text-xs text-[var(--text-3)] text-center py-4">Aucun projet</p>}
               </div>
@@ -297,36 +332,70 @@ export function ArtisanProjetsPage() {
 
       {/* Mobile: current column */}
       <div className="lg:hidden space-y-2">
-        {MOCK_PROJECTS.filter((p) => p.status === mobileCol).map((p) => (
-          <ProjectCard key={p.id} project={p} onClick={() => navigate({ page: "projet-artisan-detail", projectId: p.id })} />
+        {projects.filter((p) => p.status === mobileCol).map((p) => (
+          <ProjectCard
+            key={p.id}
+            project={p}
+            onClick={() => navigate({ page: "projet-artisan-detail", projectId: p.id })}
+            onAdvance={NEXT_STATUS[p.status] ? () => advanceProject(p.id) : undefined}
+            nextLabel={NEXT_STATUS[p.status]?.label}
+          />
         ))}
       </div>
+
+      {/* Toast inline */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 dedco-card px-4 py-3 shadow-lg flex items-center gap-2" style={{ backgroundColor: "var(--forest-pale)", borderColor: "var(--forest)" }}>
+          <CheckCircle2 size={16} className="text-[var(--forest)] flex-shrink-0" />
+          <p className="text-sm text-[var(--text-1)]">{toast}</p>
+        </div>
+      )}
     </div>
   );
 }
 
-function ProjectCard({ project, onClick }: { project: Project; onClick: () => void }) {
+function ProjectCard({ project, onClick, onAdvance, nextLabel }: {
+  project: Project;
+  onClick: () => void;
+  onAdvance?: () => void;
+  nextLabel?: string;
+}) {
   return (
-    <button
-      onClick={onClick}
-      className="w-full bg-card rounded-lg p-3 text-left hover:shadow-md transition-shadow border border-[var(--border)] cursor-pointer"
-    >
-      <div className="flex items-center gap-3 mb-2">
-        <img src={project.thumb} alt={project.product} className="w-12 h-12 rounded-md object-cover flex-shrink-0" />
-        <div className="flex-1 min-w-0">
-          <p className="text-xs text-[var(--text-3)] font-numeric">{project.id}</p>
-          <p className="font-display font-semibold text-sm line-clamp-1">{project.product}</p>
-          <p className="text-xs text-[var(--text-2)]">{project.client}</p>
+    <div className="w-full bg-card rounded-lg p-3 text-left hover:shadow-md transition-shadow border border-[var(--border)]">
+      {/* Header cliquable → page détail */}
+      <button onClick={onClick} className="w-full text-left cursor-pointer">
+        <div className="flex items-center gap-3 mb-2">
+          <img src={project.thumb} alt={project.product} className="w-12 h-12 rounded-md object-cover flex-shrink-0" />
+          <div className="flex-1 min-w-0">
+            <p className="text-xs text-[var(--text-3)] font-numeric">{project.id}</p>
+            <p className="font-display font-semibold text-sm line-clamp-1">{project.product}</p>
+            <p className="text-xs text-[var(--text-2)]">{project.client}</p>
+          </div>
         </div>
-      </div>
-      <div className="flex items-center justify-between mb-2">
-        <span className="font-numeric font-bold text-sm text-[var(--amber)]">{formatFCFA(project.amount)}</span>
-        <span className="text-xs text-[var(--text-3)]">⏱ {project.dueDate}</span>
-      </div>
-      <div className="h-1.5 bg-[var(--bg-warm)] rounded-full overflow-hidden">
-        <div className="h-full bg-[var(--amber)] rounded-full" style={{ width: `${project.progress}%` }} />
-      </div>
-    </button>
+        <div className="flex items-center justify-between mb-2">
+          <span className="font-numeric font-bold text-sm text-[var(--amber)]">{formatFCFA(project.amount)}</span>
+          <span className="text-xs text-[var(--text-3)]">⏱ {project.dueDate}</span>
+        </div>
+        <div className="h-1.5 bg-[var(--bg-warm)] rounded-full overflow-hidden">
+          <div className="h-full bg-[var(--amber)] rounded-full" style={{ width: `${project.progress}%` }} />
+        </div>
+      </button>
+
+      {/* Bouton d'action artisan — faire avancer le projet */}
+      {onAdvance && nextLabel && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onAdvance(); }}
+          className="w-full mt-2 dedco-btn dedco-btn-primary dedco-btn-sm text-xs justify-center"
+        >
+          {nextLabel}
+        </button>
+      )}
+      {project.status === "livre" && (
+        <div className="w-full mt-2 text-center text-xs text-[var(--forest)] font-semibold py-1.5 flex items-center justify-center gap-1">
+          <CheckCircle2 size={12} /> Projet livré
+        </div>
+      )}
+    </div>
   );
 }
 
