@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  @page { size: 794px 1123px; margin: 0; }
+  html, body { margin: 0; padding: 0; background: #FAF7F2; font-family: 'Inter', sans-serif; }
+  .cover { position: relative; width: 794px; height: 1123px; overflow: hidden; background: #FAF7F2; }
+  .layer-1 { position: absolute; inset: 0; overflow: hidden; z-index: 1; }
+  .grid-bg {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(30,24,19,0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(30,24,19,0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+  .layer-2 { position: absolute; inset: 0; z-index: 2; }
+  .anchor-line {
+    position: absolute;
+    left: 95px;
+    top: 112px;
+    bottom: 112px;
+    width: 6px;
+    background: #BF793B;
+  }
+  .layer-3 { position: absolute; inset: 0; z-index: 3; }
+  .content {
+    position: absolute;
+    left: 131px;
+    right: 95px;
+    top: 0;
+    bottom: 0;
+  }
+  .kicker {
+    position: absolute;
+    top: 168px;
+    left: 0;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: #BF793B;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+  .title {
+    position: absolute;
+    top: 335px;
+    left: 0;
+    right: 0;
+    font-family: 'Playfair Display', serif;
+    font-size: 64px;
+    font-weight: 900;
+    line-height: 1.05;
+    color: #1E1813;
+    letter-spacing: -0.02em;
+  }
+  .title .dot { color: #BF793B; }
+  .summary {
+    position: absolute;
+    top: 540px;
+    left: 0;
+    right: 95px;
+    font-size: 14px;
+    line-height: 1.65;
+    color: #5B5048;
+    max-width: 480px;
+    opacity: 0.95;
+  }
+  .meta {
+    position: absolute;
+    top: 870px;
+    left: 0;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #7A7068;
+  }
+  .meta strong { color: #1E1813; font-weight: 600; }
+  .meta .sep { color: #BF793B; margin: 0 8px; }
+  .footer {
+    position: absolute;
+    bottom: 60px;
+    left: 131px;
+    right: 95px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #7A7068;
+    opacity: 0.7;
+  }
+  .accent-block {
+    position: absolute;
+    bottom: 130px;
+    right: 95px;
+    width: 4px;
+    height: 80px;
+    background: #A6442E;
+  }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="layer-1">
+    <div class="grid-bg"></div>
+  </div>
+  <div class="layer-2">
+    <div class="anchor-line"></div>
+    <div class="accent-block"></div>
+  </div>
+  <div class="layer-3">
+    <div class="content">
+      <div class="kicker">Architecture Technique &amp; Produit · Juillet 2026</div>
+      <div class="title">Dedco<span class="dot">.</span><br>Marketplace<br>béninoise</div>
+      <div class="summary">
+        Document de référence sur l'architecture technique et produit de Dedco, la marketplace
+        béninoise de l'aménagement intérieur. Stack Next.js 16, séparation stricte des rôles,
+        moteur métier brief-artisan, 60+ pages dynamiques. Synthèse des 21+ corrections
+        d'audit et des chantiers ouverts.
+      </div>
+      <div class="meta">
+        <strong>Préparé par</strong> Équipe Dedco<span class="sep">·</span>
+        <strong>Version</strong> 1.0<span class="sep">·</span>
+        <strong>Date</strong> 3 juillet 2026
+      </div>
+    </div>
+    <div class="footer">
+      <span>Dedco · Cotonou, Bénin</span>
+      <span>Document confidentiel</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>
