@@ -1,11 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { useDedcoStore } from "@/lib/store";
 import { formatFCFA } from "@/lib/dedco-data-expanded";
 import {
-  ChevronRight,
   Calendar,
   Wallet,
   User,
@@ -133,6 +131,13 @@ const COLUMNS: {
   { id: "termine", label: "Terminés", color: "var(--forest)", icon: CheckCircle2 },
 ];
 
+// Prochaine étape pour chaque statut de projet designer (actions designer)
+const NEXT_STATUS: Record<DesignerProjectStatus, { label: string; next: DesignerProjectStatus } | null> = {
+  en_cours: { label: "Soumettre pour revue client", next: "en_revue" },
+  en_revue: { label: "Marquer comme terminé", next: "termine" },
+  termine: null, // terminé
+};
+
 // ============================================================
 // ProjectCard — carte compacte pour le kanban
 // ============================================================
@@ -140,72 +145,91 @@ const COLUMNS: {
 function ProjectCard({
   project,
   onClick,
+  onAdvance,
+  nextLabel,
 }: {
   project: DesignerProject;
   onClick: () => void;
+  onAdvance?: () => void;
+  nextLabel?: string;
 }) {
   const isUrgent = project.status === "en_cours" && project.progress < 50;
   return (
-    <button
-      onClick={onClick}
-      className="w-full bg-[var(--bg-card)] rounded-lg p-3 text-left hover:shadow-md transition-shadow border border-[var(--border)] cursor-pointer"
-    >
-      <div className="flex items-center gap-2.5 mb-2 min-w-0">
-        <img
-          src={project.thumb}
-          alt={project.title}
-          className="w-11 h-11 rounded-md object-cover flex-shrink-0"
-        />
-        <div className="flex-1 min-w-0">
-          <p className="text-[10px] text-[var(--text-3)] font-numeric">{project.id}</p>
-          <p className="font-display font-semibold text-sm line-clamp-1 text-[var(--text-1)]">
-            {project.title}
-          </p>
-          <div className="flex items-center gap-1 text-xs text-[var(--text-2)] min-w-0">
-            <User size={10} className="flex-shrink-0" />
-            <span className="truncate">{project.clientName}</span>
+    <div className="w-full bg-[var(--bg-card)] rounded-lg p-3 text-left hover:shadow-md transition-shadow border border-[var(--border)]">
+      {/* Header cliquable → page détail */}
+      <button onClick={onClick} className="w-full text-left cursor-pointer">
+        <div className="flex items-center gap-2.5 mb-2 min-w-0">
+          <img
+            src={project.thumb}
+            alt={project.title}
+            className="w-11 h-11 rounded-md object-cover flex-shrink-0"
+          />
+          <div className="flex-1 min-w-0">
+            <p className="text-[10px] text-[var(--text-3)] font-numeric">{project.id}</p>
+            <p className="font-display font-semibold text-sm line-clamp-1 text-[var(--text-1)]">
+              {project.title}
+            </p>
+            <div className="flex items-center gap-1 text-xs text-[var(--text-2)] min-w-0">
+              <User size={10} className="flex-shrink-0" />
+              <span className="truncate">{project.clientName}</span>
+            </div>
           </div>
         </div>
-      </div>
-      {/* Milestone */}
-      <div
-        className="text-[11px] px-2 py-1 rounded-md mb-2 flex items-center gap-1.5 min-w-0"
-        style={{
-          backgroundColor: isUrgent ? "var(--terracotta-pale)" : "var(--amber-pale)",
-          color: isUrgent ? "var(--terracotta)" : "var(--amber-dark)",
-        }}
-      >
-        <Clock size={11} className="flex-shrink-0" />
-        <span className="truncate">{project.nextMilestone}</span>
-      </div>
-      {/* Budget + échéance */}
-      <div className="flex items-center justify-between mb-2 text-xs">
-        <span className="font-numeric font-bold text-[var(--amber)]">
-          {formatFCFA(project.paid)}
-        </span>
-        <span className="text-[var(--text-3)] flex items-center gap-1">
-          <Calendar size={10} />
-          <span className="font-numeric">{project.dueDate}</span>
-        </span>
-      </div>
-      {/* Progress */}
-      <div className="h-1.5 bg-[var(--bg-warm)] rounded-full overflow-hidden">
+        {/* Milestone */}
         <div
-          className="h-full rounded-full transition-all"
+          className="text-[11px] px-2 py-1 rounded-md mb-2 flex items-center gap-1.5 min-w-0"
           style={{
-            width: `${project.progress}%`,
-            backgroundColor:
-              project.progress === 100
-                ? "var(--forest)"
-                : project.progress >= 80
-                  ? "var(--forest)"
-                  : isUrgent
-                    ? "var(--terracotta)"
-                    : "var(--amber)",
+            backgroundColor: isUrgent ? "var(--terracotta-pale)" : "var(--amber-pale)",
+            color: isUrgent ? "var(--terracotta)" : "var(--amber-dark)",
           }}
-        />
-      </div>
-    </button>
+        >
+          <Clock size={11} className="flex-shrink-0" />
+          <span className="truncate">{project.nextMilestone}</span>
+        </div>
+        {/* Budget + échéance */}
+        <div className="flex items-center justify-between mb-2 text-xs">
+          <span className="font-numeric font-bold text-[var(--amber)]">
+            {formatFCFA(project.paid)}
+          </span>
+          <span className="text-[var(--text-3)] flex items-center gap-1">
+            <Calendar size={10} />
+            <span className="font-numeric">{project.dueDate}</span>
+          </span>
+        </div>
+        {/* Progress */}
+        <div className="h-1.5 bg-[var(--bg-warm)] rounded-full overflow-hidden">
+          <div
+            className="h-full rounded-full transition-all"
+            style={{
+              width: `${project.progress}%`,
+              backgroundColor:
+                project.progress === 100
+                  ? "var(--forest)"
+                  : project.progress >= 80
+                    ? "var(--forest)"
+                    : isUrgent
+                      ? "var(--terracotta)"
+                      : "var(--amber)",
+            }}
+          />
+        </div>
+      </button>
+
+      {/* Bouton d'action designer — faire avancer le projet */}
+      {onAdvance && nextLabel && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onAdvance(); }}
+          className="w-full mt-2 dedco-btn dedco-btn-primary dedco-btn-sm text-xs justify-center"
+        >
+          {nextLabel}
+        </button>
+      )}
+      {project.status === "termine" && (
+        <div className="w-full mt-2 text-center text-xs text-[var(--forest)] font-semibold py-1.5 flex items-center justify-center gap-1">
+          <CheckCircle2 size={12} /> Mission terminée
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -216,8 +240,34 @@ function ProjectCard({
 export function DesignerProjectsPage() {
   const navigate = useDedcoStore((s) => s.navigate);
   const [mobileCol, setMobileCol] = useState<DesignerProjectStatus>("en_cours");
+  const [projects, setProjects] = useState<DesignerProject[]>(MOCK_PROJECTS);
+  const [toast, setToast] = useState<string | null>(null);
 
-  const activeCount = MOCK_PROJECTS.filter(
+  function showToast(msg: string) {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  }
+
+  // Faire avancer un projet au statut suivant
+  function advanceProject(projectId: string) {
+    const project = projects.find((p) => p.id === projectId);
+    if (!project) return;
+    const next = NEXT_STATUS[project.status];
+    if (!next) return;
+    setProjects(prev => prev.map(p =>
+      p.id === projectId
+        ? {
+            ...p,
+            status: next.next,
+            progress: next.next === "termine" ? 100 : Math.max(p.progress, 80),
+            nextMilestone: next.next === "termine" ? "Terminé" : "Validation client",
+          }
+        : p
+    ));
+    showToast(`Projet ${projectId} → ${COLUMNS.find(c => c.id === next.next)?.label}`);
+  }
+
+  const activeCount = projects.filter(
     (p) => p.status === "en_cours" || p.status === "en_revue",
   ).length;
 
@@ -235,7 +285,7 @@ export function DesignerProjectsPage() {
       {/* Mobile: tabs pour switcher de colonne */}
       <div className="lg:hidden flex gap-2 mb-4 overflow-x-auto dedco-hide-scroll">
         {COLUMNS.map((c) => {
-          const count = MOCK_PROJECTS.filter((p) => p.status === c.id).length;
+          const count = projects.filter((p) => p.status === c.id).length;
           const Icon = c.icon;
           return (
             <button
@@ -258,7 +308,7 @@ export function DesignerProjectsPage() {
       {/* Desktop: kanban 3 colonnes */}
       <div className="hidden lg:grid grid-cols-3 gap-4">
         {COLUMNS.map((col) => {
-          const items = MOCK_PROJECTS.filter((p) => p.status === col.id);
+          const items = projects.filter((p) => p.status === col.id);
           const Icon = col.icon;
           return (
             <div
@@ -285,6 +335,8 @@ export function DesignerProjectsPage() {
                     onClick={() =>
                       navigate({ page: "projet-designer-detail", projectId: p.id })
                     }
+                    onAdvance={NEXT_STATUS[p.status] ? () => advanceProject(p.id) : undefined}
+                    nextLabel={NEXT_STATUS[p.status]?.label}
                   />
                 ))}
                 {items.length === 0 && (
@@ -304,16 +356,18 @@ export function DesignerProjectsPage() {
 
       {/* Mobile: colonne courante */}
       <div className="lg:hidden space-y-3">
-        {MOCK_PROJECTS.filter((p) => p.status === mobileCol).map((p) => (
+        {projects.filter((p) => p.status === mobileCol).map((p) => (
           <ProjectCard
             key={p.id}
             project={p}
             onClick={() =>
               navigate({ page: "projet-designer-detail", projectId: p.id })
             }
+            onAdvance={NEXT_STATUS[p.status] ? () => advanceProject(p.id) : undefined}
+            nextLabel={NEXT_STATUS[p.status]?.label}
           />
         ))}
-        {MOCK_PROJECTS.filter((p) => p.status === mobileCol).length === 0 && (
+        {projects.filter((p) => p.status === mobileCol).length === 0 && (
           <div className="dedco-card p-8 text-center">
             <FolderKanban size={32} className="mx-auto text-[var(--text-3)] mb-2" />
             <p className="text-sm text-[var(--text-2)] font-medium">
@@ -323,13 +377,21 @@ export function DesignerProjectsPage() {
         )}
       </div>
 
+      {/* Toast inline */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 dedco-card px-4 py-3 shadow-lg flex items-center gap-2" style={{ backgroundColor: "var(--forest-pale)", borderColor: "var(--forest)" }}>
+          <CheckCircle2 size={16} className="text-[var(--forest)] flex-shrink-0" />
+          <p className="text-sm text-[var(--text-1)]">{toast}</p>
+        </div>
+      )}
+
       {/* ── Stats récap en bas ── */}
       <div className="grid grid-cols-3 gap-3 mt-6">
         <div className="dedco-card p-3 sm:p-4 text-center">
           <Wallet size={16} className="mx-auto text-[var(--amber)] mb-1" />
           <p className="font-numeric text-base sm:text-lg font-bold text-[var(--text-1)]">
             {formatFCFA(
-              MOCK_PROJECTS.reduce((sum, p) => sum + p.paid, 0),
+              projects.reduce((sum, p) => sum + p.paid, 0),
             )}
           </p>
           <p className="text-[10px] text-[var(--text-3)] uppercase tracking-wide">
@@ -339,7 +401,7 @@ export function DesignerProjectsPage() {
         <div className="dedco-card p-3 sm:p-4 text-center">
           <Clock size={16} className="mx-auto text-[var(--terracotta)] mb-1" />
           <p className="font-numeric text-base sm:text-lg font-bold text-[var(--text-1)]">
-            {MOCK_PROJECTS.filter((p) => p.status === "en_cours").length}
+            {projects.filter((p) => p.status === "en_cours").length}
           </p>
           <p className="text-[10px] text-[var(--text-3)] uppercase tracking-wide">
             En cours
@@ -351,7 +413,7 @@ export function DesignerProjectsPage() {
             className="mx-auto text-[var(--forest)] mb-1"
           />
           <p className="font-numeric text-base sm:text-lg font-bold text-[var(--text-1)]">
-            {MOCK_PROJECTS.filter((p) => p.status === "termine").length}
+            {projects.filter((p) => p.status === "termine").length}
           </p>
           <p className="text-[10px] text-[var(--text-3)] uppercase tracking-wide">
             Terminés
