@@ -113,7 +113,7 @@ export function FavoritesPage() {
                     e.stopPropagation();
                     handleRemove(product.id);
                   }}
-                  className="absolute top-2.5 right-2.5 z-10 w-8 h-8 rounded-full bg-white/90 text-terracotta flex items-center justify-center hover:bg-white hover:scale-110 transition-all"
+                  className="absolute top-2.5 right-2.5 z-10 w-8 h-8 rounded-full bg-white/90 text-terracotta flex items-center justify-center hover:bg-card hover:scale-110 transition-all"
                   aria-label="Retirer des favoris"
                 >
                   <Heart size={16} fill="currentColor" />

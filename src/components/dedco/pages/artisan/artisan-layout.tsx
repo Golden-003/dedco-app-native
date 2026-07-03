@@ -13,16 +13,15 @@ import {
   CreditCard,
   Settings,
 } from "lucide-react";
-import { useDedcoStore } from "@/lib/store";
 import { DashboardSidebar, type NavItem } from "../shared-sidebar";
 import type { ReactNode } from "react";
 
 const ARTISAN_NAV: NavItem[] = [
   { label: "Tableau de bord", page: "artisan-dashboard", icon: LayoutDashboard },
-  { label: "Briefs reçus", page: "artisan-demandes", icon: Inbox, badge: 3 },
-  { label: "Projets en cours", page: "artisan-projets", icon: ClipboardList, badge: 5 },
+  { label: "Briefs reçus", page: "artisan-demandes", icon: Inbox },
+  { label: "Projets en cours", page: "artisan-projets", icon: ClipboardList },
   { label: "Catalogue", page: "artisan-products", icon: Grid },
-  { label: "Messagerie", page: "messages", icon: MessageCircle, badge: 2 },
+  { label: "Messagerie", page: "messages", icon: MessageCircle },
   { label: "Wallet", page: "artisan-wallet", icon: Wallet },
   { label: "Statistiques", page: "artisan-stats", icon: BarChart2 },
   { label: "Avis et notes", page: "artisan-avis", icon: Star },
@@ -42,14 +41,20 @@ const ARTISAN_NAV: NavItem[] = [
   { label: "Paramètres", page: "artisan-parametres", icon: Settings },
 ];
 
-export function ArtisanLayout({ children }: { children: ReactNode }) {
-  const route = useDedcoStore((s) => s.route);
+export function ArtisanLayout({
+  children,
+  currentPage,
+}: {
+  children: ReactNode;
+  currentPage: string;
+}) {
   return (
     <DashboardSidebar
       title="Artisan"
       subtitle="Espace Artisan"
       items={ARTISAN_NAV}
-      currentPage={route.page as string}
+      currentPage={currentPage}
+      allowExitToSite={false}
     >
       {children}
     </DashboardSidebar>

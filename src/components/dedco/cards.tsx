@@ -1,6 +1,8 @@
 "use client";
 
-import { Star, BadgeCheck, MapPin, Table2, Armchair, Lightbulb, Shirt, Flower2, BookOpen, Sofa, BedDouble } from "lucide-react";
+import { memo } from "react";
+import Image from "next/image";
+import { Star, BadgeCheck, MapPin, Table2, Armchair, Lightbulb, Shirt, Flower2, BookOpen, Sofa, BedDouble, Archive, Lamp, Frame } from "lucide-react";
 import { formatFCFA, getArtisan } from "@/lib/dedco-data";
 import type { Product } from "@/lib/dedco-types";
 
@@ -57,7 +59,7 @@ export function BadgeCheckIcon({ verified }: { verified: boolean }) {
 // Product Card
 // ============================================================
 
-export function ProductCard({
+export const ProductCard = memo(function ProductCard({
   product,
   isFav,
   onToggleFav,
@@ -95,8 +97,8 @@ export function ProductCard({
           type="button"
           aria-label={isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
           className={`absolute top-2.5 right-2.5 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all ${
-            isFav ? "bg-white text-terracotta" : "bg-white/60 text-ink-soft"
-          } hover:bg-white hover:scale-110`}
+            isFav ? "bg-card text-terracotta" : "bg-white/60 text-ink-soft"
+          } hover:bg-card hover:scale-110`}
           onClick={(e) => {
             e.stopPropagation();
             onToggleFav(product.id);
@@ -113,11 +115,12 @@ export function ProductCard({
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
           </svg>
         </button>
-        <img
+        <Image
           src={product.images[0]}
           alt={product.name}
-          loading="lazy"
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          fill
+          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
       </div>
       <div className="p-3 sm:p-3.5">
@@ -160,13 +163,13 @@ export function ProductCard({
       </div>
     </article>
   );
-}
+});
 
 // ============================================================
 // Scene Card
 // ============================================================
 
-export function SceneCard({
+export const SceneCard = memo(function SceneCard({
   scene,
   onOpen,
   onToggleSave,
@@ -232,9 +235,9 @@ export function SceneCard({
             aria-label={isSaved ? "Retirer des favoris" : "Sauvegarder"}
             className={`absolute top-2.5 right-2.5 w-8 h-8 rounded-full flex items-center justify-center transition-all ${
               isSaved
-                ? "bg-white text-terracotta"
+                ? "bg-card text-terracotta"
                 : "bg-white/60 text-ink-soft"
-            } hover:bg-white`}
+            } hover:bg-card`}
             onClick={(e) => {
               e.stopPropagation();
               onToggleSave(scene.slug);
@@ -261,13 +264,13 @@ export function SceneCard({
       </div>
     </article>
   );
-}
+});
 
 // ============================================================
 // Artisan Card
 // ============================================================
 
-export function ArtisanCard({
+export const ArtisanCard = memo(function ArtisanCard({
   artisan,
   onOpen,
 }: {
@@ -333,13 +336,13 @@ export function ArtisanCard({
       </div>
     </article>
   );
-}
+});
 
 // ============================================================
 // Designer Card
 // ============================================================
 
-export function DesignerCard({
+export const DesignerCard = memo(function DesignerCard({
   designer,
   onOpen,
 }: {
@@ -414,13 +417,13 @@ export function DesignerCard({
       </div>
     </article>
   );
-}
+});
 
 // ============================================================
 // Magazine Card
 // ============================================================
 
-export function MagazineCard({
+export const MagazineCard = memo(function MagazineCard({
   article,
   onOpen,
 }: {
@@ -469,13 +472,13 @@ export function MagazineCard({
       </div>
     </article>
   );
-}
+});
 
 // ============================================================
 // Category Card
 // ============================================================
 
-export function CategoryCard({
+export const CategoryCard = memo(function CategoryCard({
   category,
   onOpen,
 }: {
@@ -484,6 +487,7 @@ export function CategoryCard({
 }) {
   const ICON_MAP: Record<string, typeof Table2> = {
     Table2, Armchair, Lightbulb, Shirt, Flower2, BookOpen, Sofa, BedDouble,
+    Archive, Lamp, Frame, Vase: Flower2,
   };
   const CatIcon = ICON_MAP[category.icon] || Table2;
 
@@ -504,4 +508,4 @@ export function CategoryCard({
       </p>
     </button>
   );
-}
+});

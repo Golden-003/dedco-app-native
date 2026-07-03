@@ -7,6 +7,7 @@ import {
   CreditCard, Eye, ArrowRight, Palette, Home, Lightbulb,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
+import { getBackToProjets } from "@/lib/back-to-projets";
 import { useBriefDesignerStore } from "@/lib/designer-brief-store";
 import { formatFCFA } from "@/lib/dedco-data";
 import { BRIEF_DESIGNER_STATUS } from "@/lib/dedco-status";
@@ -18,6 +19,7 @@ import type { DesignerBrief } from "@/lib/designer-brief-types";
 
 export function BriefDesignerDetailPage({ briefId }: { briefId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
+  const currentUser = useDedcoStore((s) => s.currentUser);
   const brief = useBriefDesignerStore((s) => s.briefs.find(b => b.id === briefId));
   const submitBrief = useBriefDesignerStore((s) => s.submitBrief);
   const payPrestation = useBriefDesignerStore((s) => s.payPrestation);
@@ -32,12 +34,15 @@ export function BriefDesignerDetailPage({ briefId }: { briefId: string }) {
     setTimeout(() => setToast(null), 3000);
   }
 
+  // ── Bouton retour — role-aware ──
+  const { route: backRoute, label: backLabel } = getBackToProjets(currentUser?.role);
+
   if (!brief) {
     return (
       <div className="p-8 max-w-2xl mx-auto text-center">
         <p className="text-sm text-[var(--text-3)]">Brief introuvable.</p>
-        <button onClick={() => navigate({ page: "client-projets" })} className="dedco-btn dedco-btn-primary mt-4">
-          Retour à Mes projets
+        <button onClick={() => navigate(backRoute)} className="dedco-btn dedco-btn-primary mt-4">
+          Retour à {backLabel}
         </button>
       </div>
     );
@@ -46,9 +51,9 @@ export function BriefDesignerDetailPage({ briefId }: { briefId: string }) {
   const statusConfig = BRIEF_DESIGNER_STATUS[brief.status];
 
   return (
-    <div className="p-6 max-w-4xl mx-auto relative">
-      <button onClick={() => navigate({ page: "client-projets" })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
-        <ChevronRight size={16} className="rotate-180" /> Mes projets
+    <div className="p-4 sm:p-6 max-w-4xl mx-auto relative">
+      <button onClick={() => navigate(backRoute)} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
+        <ChevronRight size={16} className="rotate-180" /> {backLabel}
       </button>
 
       {/* Header */}

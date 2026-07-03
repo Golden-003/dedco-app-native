@@ -7,6 +7,7 @@ import {
   ChevronRight, Hammer, Ruler, Calendar, Edit3,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
+import { getBackToProjets } from "@/lib/back-to-projets";
 import { formatFCFA } from "@/lib/dedco-data";
 import { PROJET_ARTISAN_STATUS, JALON_LABELS, type ProjetArtisanStatus, type JalonType } from "@/lib/dedco-status";
 
@@ -243,6 +244,7 @@ const MOCK_PROJECTS: Record<string, ArtisanProjectMock> = {
 
 export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
+  const currentUser = useDedcoStore((s) => s.currentUser);
   const project = MOCK_PROJECTS[projectId] || MOCK_PROJECTS["PA-001"];
 
   // Onglet automatique si modification en attente
@@ -279,10 +281,13 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
   const displayedStatus: ProjetArtisanStatus = deliveryConfirmed ? "DELIVERED_CONFIRMED" : project.status;
   const displayedStatusConfig = PROJET_ARTISAN_STATUS[displayedStatus];
 
+  // ── Bouton retour — role-aware ──
+  const { route: backRoute, label: backLabel } = getBackToProjets(currentUser?.role);
+
   return (
     <div className="p-4 sm:p-6 max-w-4xl mx-auto relative">
-      <button onClick={() => navigate({ page: "client-projets" })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
-        <ChevronRight size={16} className="rotate-180" /> Mes projets
+      <button onClick={() => navigate(backRoute)} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
+        <ChevronRight size={16} className="rotate-180" /> {backLabel}
       </button>
 
       {/* Header */}
@@ -328,7 +333,7 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
               {displayedStatusConfig.isUrgent && <span className="dedco-badge dedco-badge-terra">Urgent</span>}
             </div>
             <h3 className="font-display font-semibold text-sm truncate text-[var(--text-1)]">{project.title}</h3>
-            <p className="text-xs text-[var(--text-3)] font-numeric">{project.id} · {project.artisanName}</p>
+            <p className="text-xs text-[var(--text-3)] font-numeric truncate">{project.id} · {project.artisanName}</p>
           </div>
           {/* Stats clés */}
           <div className="flex items-center gap-4 text-xs">
@@ -356,7 +361,7 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
           { id: "modifications", label: `Modifications${project.modifications.filter(m => modStatuses[m.id] === "CHANGE_PENDING_CLIENT").length > 0 ? ` (${project.modifications.filter(m => modStatuses[m.id] === "CHANGE_PENDING_CLIENT").length})` : ""}` },
           { id: "messages", label: "Messagerie" },
         ].map((t) => (
-          <button key={t.id} onClick={() => setCurrentTab(t.id as typeof currentTab)} className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${currentTab === t.id ? "bg-[var(--amber)] text-white" : "bg-white border border-[var(--border)] text-[var(--text-2)]"}`}>
+          <button key={t.id} onClick={() => setCurrentTab(t.id as typeof currentTab)} className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${currentTab === t.id ? "bg-[var(--amber)] text-white" : "bg-card border border-[var(--border)] text-[var(--text-2)]"}`}>
             {t.label}
           </button>
         ))}
@@ -558,7 +563,7 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter") sendMessage(); }}
               placeholder="Votre message..."
-              className="flex-1 px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white"
+              className="flex-1 px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card"
             />
             <button
               onClick={sendMessage}

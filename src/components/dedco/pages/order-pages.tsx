@@ -79,7 +79,7 @@ export function OrderConfirmationPage({ orderId }: { orderId: string }) {
   const isCustom = order.type === "custom";
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-2xl mx-auto">
       <div className="text-center mb-8">
         <div className="w-20 h-20 rounded-full bg-[var(--forest-pale)] mx-auto flex items-center justify-center mb-5">
           <CheckCircle2 size={40} className="text-[var(--forest)]" />
@@ -175,6 +175,8 @@ export function OrderConfirmationPage({ orderId }: { orderId: string }) {
 
 export function InvoicePage({ orderId }: { orderId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
+  const currentUser = useDedcoStore((s) => s.currentUser);
+  const isArtisan = currentUser?.role === "artisan";
   const order = orderId.includes("0051") ? MOCK_CUSTOM_ORDER : MOCK_MARKETPLACE_ORDER;
 
   return (
@@ -189,7 +191,7 @@ export function InvoicePage({ orderId }: { orderId: string }) {
           </button>
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg p-8 sm:p-12">
+        <div className="bg-card rounded-xl shadow-lg p-8 sm:p-12">
           <div className="flex items-start justify-between mb-8 pb-8 border-b-2 border-[var(--amber)]">
             <div>
               <div className="font-display text-3xl font-bold mb-1">
@@ -275,7 +277,7 @@ export function InvoicePage({ orderId }: { orderId: string }) {
             ) : (
               <>
                 <p><strong>Produit en stock :</strong> Expédition sous 24-48h.</p>
-                <p><strong>Garantie :</strong> 7 jours pour ouvrir un litige après livraison.</p>
+                {!isArtisan && <p><strong>Garantie :</strong> 7 jours pour ouvrir un litige après livraison.</p>}
               </>
             )}
             <p className="pt-2 text-center">Dedco SARL · Cotonou, Bénin · RCCM BJ-2026-0456</p>
@@ -292,14 +294,16 @@ export function InvoicePage({ orderId }: { orderId: string }) {
 
 export function OrderTrackingPage({ orderId }: { orderId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
+  const currentUser = useDedcoStore((s) => s.currentUser);
+  const isArtisan = currentUser?.role === "artisan";
   const order = orderId.includes("0051") ? MOCK_CUSTOM_ORDER : MOCK_MARKETPLACE_ORDER;
   const isCustom = order.type === "custom";
   const [showPhoto, setShowPhoto] = useState<number | null>(null);
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <button onClick={() => navigate({ page: "client-projets" })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
-        <ChevronRight size={16} className="rotate-180" /> Mes commandes
+    <div className="p-4 sm:p-6 max-w-3xl mx-auto">
+      <button onClick={() => navigate({ page: isArtisan ? "artisan-projets" : "client-projets" })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
+        <ChevronRight size={16} className="rotate-180" /> {isArtisan ? "Projets en cours" : "Mes projets"}
       </button>
 
       <header className="mb-6">
@@ -398,21 +402,37 @@ export function OrderTrackingPage({ orderId }: { orderId: string }) {
 
       {/* Actions */}
       <div className="flex gap-3 flex-wrap">
-        <button onClick={() => navigate({ page: "avis-livraison", orderId: order.id })} className="dedco-btn dedco-btn-primary">
-          <CheckCircle2 size={16} /> Laisser un avis
-        </button>
-        <button
-          onClick={() => navigate({ page: "messages", conversationId: `order-${order.id}` })}
-          className="dedco-btn dedco-btn-ghost"
-        >
-          <MessageSquare size={16} /> Contacter l'artisan
-        </button>
-        <button
-          onClick={() => navigate({ page: "litige", id: `REC-${order.id}` })}
-          className="dedco-btn dedco-btn-ghost text-[var(--terracotta)]"
-        >
-          <AlertTriangle size={16} /> Ouvrir un litige
-        </button>
+        {isArtisan ? (
+          <>
+            <button
+              onClick={() => navigate({ page: "messages", conversationId: `order-${order.id}` })}
+              className="dedco-btn dedco-btn-primary"
+            >
+              <MessageSquare size={16} /> Contacter le client
+            </button>
+            <button onClick={() => navigate({ page: "invoice", orderId: order.id })} className="dedco-btn dedco-btn-ghost">
+              <FileText size={16} /> Facture
+            </button>
+          </>
+        ) : (
+          <>
+            <button onClick={() => navigate({ page: "avis-livraison", orderId: order.id })} className="dedco-btn dedco-btn-primary">
+              <CheckCircle2 size={16} /> Laisser un avis
+            </button>
+            <button
+              onClick={() => navigate({ page: "messages", conversationId: `order-${order.id}` })}
+              className="dedco-btn dedco-btn-ghost"
+            >
+              <MessageSquare size={16} /> Contacter l'artisan
+            </button>
+            <button
+              onClick={() => navigate({ page: "litige", id: `REC-${order.id}` })}
+              className="dedco-btn dedco-btn-ghost text-[var(--terracotta)]"
+            >
+              <AlertTriangle size={16} /> Ouvrir un litige
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

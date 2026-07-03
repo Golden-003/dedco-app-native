@@ -6,6 +6,7 @@
 // ============================================================
 
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { BriefDesignerStatus } from './dedco-status';
 import type { DesignerBrief, DesignerPrestation } from './designer-brief-types';
 
@@ -165,7 +166,9 @@ function todayFr(): string {
   return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
 
-export const useBriefDesignerStore = create<BriefDesignerState>((set, get) => ({
+export const useBriefDesignerStore = create<BriefDesignerState>()(
+  persist(
+    (set, get) => ({
   briefs: MOCK_BRIEFS,
 
   getBrief: (id) => get().briefs.find(b => b.id === id),
@@ -324,4 +327,9 @@ export const useBriefDesignerStore = create<BriefDesignerState>((set, get) => ({
       ),
     }));
   },
-}));
+    }),
+    {
+      name: 'dedco-briefs-designer',
+    }
+  )
+);

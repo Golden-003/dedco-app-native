@@ -366,7 +366,7 @@ function UploadArea({
       </div>
 
       {status === "uploaded" && preview ? (
-        <div className="relative rounded-lg overflow-hidden border border-forest bg-white">
+        <div className="relative rounded-lg overflow-hidden border border-forest bg-card">
           <img
             src={preview}
             alt={label}
@@ -375,14 +375,14 @@ function UploadArea({
           <button
             type="button"
             onClick={onReset}
-            className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 flex items-center justify-center hover:bg-white transition-colors text-ink-mute"
+            className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 flex items-center justify-center hover:bg-card transition-colors text-ink-mute"
             title="Remplacer le fichier"
           >
             <RefreshCw size={14} />
           </button>
         </div>
       ) : (
-        <label className="block">
+        <label htmlFor="phone" className="block">
           <div className="flex flex-col items-center justify-center p-8 rounded-lg border-2 border-dashed border-border hover:border-amber hover:bg-amber-pale/20 transition-all cursor-pointer min-h-[140px]">
             <div className="w-12 h-12 rounded-full bg-amber-pale flex items-center justify-center mb-3">
               <Upload size={20} className="text-amber" />

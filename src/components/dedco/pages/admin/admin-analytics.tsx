@@ -249,43 +249,33 @@ export function AdminAnalyticsPage() {
           </motion.div>
         </div>
 
-        {/* User Growth */}
-        <motion.div variants={fadeUp} className="dedco-card p-5">
-          <h3 className="text-sm font-semibold text-[var(--text-1)] mb-1">
-            Croissance des utilisateurs
-          </h3>
-          <p className="text-xs text-[var(--text-3)] mb-6">
-            Évolution sur les 9 derniers mois
-          </p>
-          <div className="relative h-40 flex items-end">
-            {/* Y axis labels */}
-            <div className="absolute left-0 top-0 bottom-6 flex flex-col justify-between text-[10px] font-numeric text-[var(--text-3)] pr-2">
+        {/* User Growth — pleine largeur */}
+        <motion.div variants={fadeUp} className="dedco-card p-5 sm:p-6">
+          <div className="mb-4">
+            <h3 className="font-display text-base font-semibold text-[var(--text-1)]">
+              Croissance des utilisateurs
+            </h3>
+            <p className="text-xs text-[var(--text-3)] mt-0.5">
+              Évolution sur les 9 derniers mois
+            </p>
+          </div>
+          <div className="relative h-32 sm:h-40">
+            {/* Y axis */}
+            <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-[10px] font-numeric text-[var(--text-3)] pr-2 pb-5">
               <span>1 247</span>
               <span>800</span>
               <span>320</span>
             </div>
-            {/* Chart area */}
-            <div className="ml-10 flex-1 relative">
-              {/* Grid lines */}
-              <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
+            {/* Chart */}
+            <div className="ml-12 flex-1 h-full relative">
+              <div className="absolute inset-0 flex flex-col justify-between pb-5 pointer-events-none">
                 <div className="border-b border-dashed border-[var(--border)]" />
                 <div className="border-b border-dashed border-[var(--border)]" />
                 <div className="border-b border-[var(--border)]" />
               </div>
-              {/* SVG Line */}
-              <svg
-                viewBox="0 0 200 100"
-                className="w-full h-full"
-                preserveAspectRatio="none"
-              >
+              <svg viewBox="0 0 200 100" className="w-full h-full" preserveAspectRatio="none">
                 <defs>
-                  <linearGradient
-                    id="lineGrad"
-                    x1="0"
-                    y1="0"
-                    x2="0"
-                    y2="1"
-                  >
+                  <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="var(--amber)" stopOpacity="0.2" />
                     <stop offset="100%" stopColor="var(--amber)" stopOpacity="0" />
                   </linearGradient>
@@ -311,15 +301,13 @@ export function AdminAnalyticsPage() {
                       const x = (i / (USER_GROWTH.length - 1)) * 200;
                       const y = 100 - ((v - 300) / (1300 - 300)) * 100;
                       return `${i === 0 ? "M" : "L"} ${x} ${y}`;
-                    }).join(" ") +
-                    ` L 200 100 L 0 100 Z`
+                    }).join(" ") + ` L 200 100 L 0 100 Z`
                   }
                   fill="url(#lineGrad)"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 1, delay: 0.5 }}
                 />
-                {/* Dots */}
                 {USER_GROWTH.map((v, i) => {
                   const x = (i / (USER_GROWTH.length - 1)) * 200;
                   const y = 100 - ((v - 300) / (1300 - 300)) * 100;
@@ -338,19 +326,14 @@ export function AdminAnalyticsPage() {
                 })}
               </svg>
             </div>
-          </div>
-          {/* X axis labels */}
-          <div className="ml-10 flex justify-between mt-2">
-            {["Juil", "Août", "Sep", "Oct", "Nov", "Déc", "Jan", "Fév", "Mar"].map(
-              (m) => (
-                <span
-                  key={m}
-                  className="text-[10px] font-numeric text-[var(--text-3)]"
-                >
+            {/* X axis */}
+            <div className="ml-12 flex justify-between absolute bottom-0 left-0 right-0">
+              {["Juil", "Aoû", "Sep", "Oct", "Nov", "Déc", "Jan", "Fév", "Mar"].map((m) => (
+                <span key={m} className="text-[9px] sm:text-[10px] font-numeric text-[var(--text-3)]">
                   {m}
                 </span>
-              )
-            )}
+              ))}
+            </div>
           </div>
         </motion.div>
       </motion.div>

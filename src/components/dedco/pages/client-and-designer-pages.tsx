@@ -26,10 +26,9 @@ import {
   Video,
   MapPin,
   AlertTriangle,
-  Zap,
+  Lightbulb,
   Sofa,
   Home,
-  Lightbulb,
   Palette,
   Ruler,
   ShoppingCart,
@@ -54,6 +53,9 @@ const MOCK_TXS: Tx[] = [
 ];
 
 export function DesignerWalletPage() {
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
   const [showBalance, setShowBalance] = useState(true);
   const [tab, setTab] = useState<"tout" | "credits" | "debits" | "retraits">("tout");
   const solde = 89000;
@@ -62,7 +64,7 @@ export function DesignerWalletPage() {
   const filteredTxs = tab === "tout" ? MOCK_TXS : MOCK_TXS.filter((t) => t.type === (tab === "credits" ? "credit" : tab === "debits" ? "debit" : "retrait"));
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-5">
+    <div className="p-4 sm:p-6 max-w-5xl mx-auto space-y-5">
       <header>
         <h1 className="display-lg mb-1">Mon Wallet</h1>
         <p className="text-sm text-[var(--text-2)]">Vos gains designer · Aucune commission Dedco</p>
@@ -199,13 +201,15 @@ const MOCK_PROJECTS: PortfolioProject[] = [
 ];
 
 export function DesignerPortfolioPage() {
+  const navigate = useDedcoStore((s) => s.navigate);
+
   const [selectedIdx, setSelectedIdx] = useState(0);
   const [showAdd, setShowAdd] = useState(false);
   const [sliderPos, setSliderPos] = useState(50);
   const selected = MOCK_PROJECTS[selectedIdx];
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-6xl mx-auto">
       <header className="flex items-center justify-between mb-6 flex-wrap gap-3">
         <div>
           <h1 className="display-lg mb-1">Mon Portfolio</h1>
@@ -224,7 +228,7 @@ export function DesignerPortfolioPage() {
               key={p.id}
               onClick={() => setSelectedIdx(i)}
               className={`w-full flex items-center gap-3 p-3 rounded-lg border-2 transition-all text-left ${
-                i === selectedIdx ? "border-[var(--amber)] bg-[var(--amber-pale)]/30" : "border-[var(--border)] bg-white hover:border-[var(--text-3)]"
+                i === selectedIdx ? "border-[var(--amber)] bg-[var(--amber-pale)]/30" : "border-[var(--border)] bg-card hover:border-[var(--text-3)]"
               }`}
             >
               <img src={p.before} alt={p.title} className="w-16 h-16 rounded-md object-cover flex-shrink-0" />
@@ -247,8 +251,8 @@ export function DesignerPortfolioPage() {
             <div className="absolute inset-0 overflow-hidden" style={{ width: `${sliderPos}%` }}>
               <img src={selected.before} alt="Avant" className="absolute inset-0 h-full object-cover" style={{ width: `${100 / (sliderPos / 100)}%` }} />
             </div>
-            <div className="absolute top-0 bottom-0 w-1 bg-white shadow-lg cursor-ew-resize" style={{ left: `${sliderPos}%` }}>
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white shadow flex items-center justify-center">
+            <div className="absolute top-0 bottom-0 w-1 bg-card shadow-lg cursor-ew-resize" style={{ left: `${sliderPos}%` }}>
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-card shadow flex items-center justify-center">
                 <ChevronLeft size={14} className="text-[var(--text-1)]" />
                 <ChevronRight size={14} className="text-[var(--text-1)]" />
               </div>
@@ -290,12 +294,12 @@ export function DesignerPortfolioPage() {
             <div className="p-5 space-y-4">
               <div>
                 <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Titre du projet</label>
-                <input className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" placeholder="Ex : Salon Afro-contemporain" />
+                <input className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card" placeholder="Ex : Salon Afro-contemporain" />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Type</label>
-                  <select className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white">
+                  <select className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card">
                     <option>Aménagement complet</option>
                     <option>Décoration</option>
                     <option>Consultation</option>
@@ -303,7 +307,7 @@ export function DesignerPortfolioPage() {
                 </div>
                 <div>
                   <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Pièce</label>
-                  <select className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white">
+                  <select className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card">
                     <option>Salon</option><option>Chambre</option><option>Bureau</option>
                   </select>
                 </div>
@@ -311,14 +315,14 @@ export function DesignerPortfolioPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Photo AVANT</label>
-                  <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-4 text-center cursor-pointer hover:border-[var(--amber)] bg-white">
+                  <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-4 text-center cursor-pointer hover:border-[var(--amber)] bg-card">
                     <Plus size={20} className="mx-auto text-[var(--text-3)]" />
                     <input type="file" accept="image/*" className="sr-only" />
                   </label>
                 </div>
                 <div>
                   <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Photo APRÈS</label>
-                  <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-4 text-center cursor-pointer hover:border-[var(--amber)] bg-white">
+                  <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-4 text-center cursor-pointer hover:border-[var(--amber)] bg-card">
                     <Plus size={20} className="mx-auto text-[var(--text-3)]" />
                     <input type="file" accept="image/*" className="sr-only" />
                   </label>
@@ -326,7 +330,7 @@ export function DesignerPortfolioPage() {
               </div>
               <div>
                 <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Description (160 chars)</label>
-                <textarea rows={2} maxLength={160} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white resize-none" />
+                <textarea rows={2} maxLength={160} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card resize-none" />
               </div>
               <div>
                 <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Styles</label>
@@ -350,6 +354,8 @@ export function DesignerPortfolioPage() {
 // ============================================================
 
 export function DesignerAbonnementPage() {
+  const navigate = useDedcoStore((s) => s.navigate);
+
   const plans = [
     {
       id: "essentiel", name: "Essentiel", price: 10000,
@@ -369,7 +375,7 @@ export function DesignerAbonnementPage() {
   ];
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-5">
+    <div className="p-4 sm:p-6 max-w-5xl mx-auto space-y-5">
       <header>
         <h1 className="display-lg mb-1">Abonnement Designer</h1>
         <p className="text-sm text-[var(--text-2)]">Aucune commission sur vos honoraires · 100% abonnement</p>
@@ -453,7 +459,7 @@ export function ClientProjetsPage() {
   const filtered = tab === "en_cours" ? MOCK_CLIENT_PROJECTS.filter((p) => p.status !== "livre") : MOCK_CLIENT_PROJECTS.filter((p) => p.status === "livre");
 
   return (
-    <div className="p-6 max-w-5xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-5xl mx-auto">
       <header className="mb-6">
         <h1 className="display-lg mb-1">Mes projets</h1>
         <p className="text-sm text-[var(--text-2)] font-numeric">{MOCK_CLIENT_PROJECTS.length} commandes au total</p>
@@ -463,7 +469,7 @@ export function ClientProjetsPage() {
         <button
           onClick={() => setTab("en_cours")}
           className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-            tab === "en_cours" ? "bg-[var(--amber)] text-white" : "bg-white border border-[var(--border)] text-[var(--text-2)]"
+            tab === "en_cours" ? "bg-[var(--amber)] text-white" : "bg-card border border-[var(--border)] text-[var(--text-2)]"
           }`}
         >
           En cours (<span className="font-numeric">{MOCK_CLIENT_PROJECTS.filter((p) => p.status !== "livre").length}</span>)
@@ -471,7 +477,7 @@ export function ClientProjetsPage() {
         <button
           onClick={() => setTab("termines")}
           className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-            tab === "termines" ? "bg-[var(--amber)] text-white" : "bg-white border border-[var(--border)] text-[var(--text-2)]"
+            tab === "termines" ? "bg-[var(--amber)] text-white" : "bg-card border border-[var(--border)] text-[var(--text-2)]"
           }`}
         >
           Terminés (<span className="font-numeric">{MOCK_CLIENT_PROJECTS.filter((p) => p.status === "livre").length}</span>)
@@ -554,7 +560,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
     { id: "3d", label: "Rendu 3D", icon: Monitor },
     { id: "suivi", label: "Visite de suivi", icon: MapPin },
     { id: "coordination", label: "Coordination chantier", icon: HardHat },
-    { id: "conseil", label: "Conseil déco", icon: Lightbulb },
+    { id: "conseil", label: "Conseil déco", icon: Sofa },
   ];
 
   const toggleObjectif = (id: string) => {
@@ -562,11 +568,11 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
   };
 
   const SCOPE_CONFIG: Record<ProjectScope, {
-    label: string; icon: typeof Zap; desc: string;
+    label: string; icon: typeof Lightbulb; desc: string;
     needsEspace: boolean; needsMultiples: boolean; needsContraintes: boolean; inspirationsOptional: boolean;
   }> = {
     prototype: {
-      label: "Prototype", icon: Zap,
+      label: "Prototype", icon: Lightbulb,
       desc: "Petit besoin simple. Ajustement ponctuel ou conseil rapide.",
       needsEspace: false, needsMultiples: false, needsContraintes: false, inspirationsOptional: true,
     },
@@ -583,7 +589,6 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
   };
 
   const scopeConfig = scope ? SCOPE_CONFIG[scope] : null;
-  const ScopeIcon = scopeConfig?.icon;
   const TOTAL_STEPS = 2; // 0=niveau, 1=brief, 2=récap
 
   const canNext = () => {
@@ -616,7 +621,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
   }
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-2xl mx-auto">
       <button onClick={() => navigate({ page: "designer", id: designerId })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
         ← Retour au profil
       </button>
@@ -685,28 +690,28 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
           <div>
             <h2 className="display-sm mb-1">Décrivez votre besoin</h2>
             <p className="text-xs text-[var(--text-3)] mb-4">
-              <span className="dedco-badge dedco-badge-amber"><ScopeIcon size={12} /> {scopeConfig.label}</span>
+              <span className="dedco-badge dedco-badge-amber"><Sofa size={12} /> {scopeConfig.label}</span>
             </p>
             <div className="space-y-4">
               <div>
                 <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">
                   {scope === "premium" ? "Décrivez votre projet complet" : "Décrivez votre besoin"}
                 </label>
-                <textarea value={besoin} onChange={(e) => setBesoin(e.target.value.slice(0, 500))} rows={3} placeholder="Ex: Moderniser mon salon en gardant une touche africaine..." className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white resize-none" />
+                <textarea value={besoin} onChange={(e) => setBesoin(e.target.value.slice(0, 500))} rows={3} placeholder="Ex: Moderniser mon salon en gardant une touche africaine..." className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card resize-none" />
                 <p className="text-xs text-[var(--text-3)] text-right font-numeric">{besoin.length}/500</p>
               </div>
 
               {scopeConfig.needsEspace && (
                 <div>
                   <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Espace concerné</label>
-                  <input value={espace} onChange={(e) => setEspace(e.target.value)} placeholder="Ex: Salon 25m²" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
+                  <input value={espace} onChange={(e) => setEspace(e.target.value)} placeholder="Ex: Salon 25m²" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card" />
                 </div>
               )}
 
               {scopeConfig.needsMultiples && (
                 <div>
                   <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Espaces concernés</label>
-                  <input value={espacesMultiples} onChange={(e) => setEspacesMultiples(e.target.value)} placeholder="Ex: Salon, cuisine, 2 chambres, entrée" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
+                  <input value={espacesMultiples} onChange={(e) => setEspacesMultiples(e.target.value)} placeholder="Ex: Salon, cuisine, 2 chambres, entrée" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card" />
                 </div>
               )}
 
@@ -726,7 +731,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
                         className={`px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all flex items-center gap-1.5 ${
                           active
                             ? "border-[var(--amber)] bg-[var(--amber-pale)] text-[var(--amber-dark)]"
-                            : "border-[var(--border)] bg-white text-[var(--text-2)] hover:border-[var(--text-3)]"
+                            : "border-[var(--border)] bg-card text-[var(--text-2)] hover:border-[var(--text-3)]"
                         }`}
                       >
                         <PIcon size={16} />
@@ -742,7 +747,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
               {scopeConfig.needsContraintes && (
                 <div>
                   <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Contraintes (facultatif)</label>
-                  <input value={contraintes} onChange={(e) => setContraintes(e.target.value)} placeholder="Ex: Budget limité, travaux en cours..." className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white" />
+                  <input value={contraintes} onChange={(e) => setContraintes(e.target.value)} placeholder="Ex: Budget limité, travaux en cours..." className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card" />
                 </div>
               )}
 
@@ -751,7 +756,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
                   Inspirations {!scopeConfig.inspirationsOptional && ""}{scopeConfig.inspirationsOptional && <span className="italic">(optionnel)</span>}
                 </label>
                 <div className="grid grid-cols-2 gap-3">
-                  <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-4 text-center cursor-pointer hover:border-[var(--amber)] bg-white">
+                  <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-4 text-center cursor-pointer hover:border-[var(--amber)] bg-card">
                     <Upload size={20} className="mx-auto text-[var(--text-3)] mb-1" />
                     <p className="text-xs font-semibold">Photos de l'espace</p>
                     <p className="text-[10px] text-[var(--text-3)]">{photos.length} fichier(s)</p>
@@ -760,7 +765,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
                       setPhotos(files.map((f) => URL.createObjectURL(f)));
                     }} />
                   </label>
-                  <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-4 text-center cursor-pointer hover:border-[var(--amber)] bg-white">
+                  <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-4 text-center cursor-pointer hover:border-[var(--amber)] bg-card">
                     <Sparkles size={20} className="mx-auto text-[var(--text-3)] mb-1" />
                     <p className="text-xs font-semibold">Images d'inspiration</p>
                     <p className="text-[10px] text-[var(--text-3)]">{inspirations.length} fichier(s)</p>
@@ -780,7 +785,7 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
           <div>
             <h2 className="display-sm mb-2">Récapitulatif</h2>
             <p className="text-xs text-[var(--text-3)] mb-4">
-              <span className="dedco-badge dedco-badge-amber"><ScopeIcon size={12} /> {scopeConfig.label}</span>
+              <span className="dedco-badge dedco-badge-amber"><Sofa size={12} /> {scopeConfig.label}</span>
             </p>
             <dl className="space-y-2 text-sm">
               <div className="flex justify-between p-2 bg-[var(--bg-warm)] rounded"><dt className="text-[var(--text-3)]">Niveau</dt><dd className="text-right font-semibold">{scopeConfig.label}</dd></div>
@@ -848,7 +853,7 @@ export function AvisLivraisonPage({ orderId }: { orderId: string }) {
   }
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-2xl mx-auto">
       {/* Banner success */}
       <div className="rounded-lg p-4 mb-5 bg-[var(--forest-pale)] flex items-center gap-3">
         <CheckCircle2 size={24} className="text-[var(--forest)] flex-shrink-0" />
@@ -917,7 +922,7 @@ export function AvisLivraisonPage({ orderId }: { orderId: string }) {
           onChange={(e) => setComment(e.target.value)}
           rows={4}
           placeholder="Racontez votre expérience..."
-          className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white resize-none focus:outline-none focus:border-[var(--amber)]"
+          className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card resize-none focus:outline-none focus:border-[var(--amber)]"
         />
 
         <button
@@ -957,6 +962,9 @@ export function AvisLivraisonPage({ orderId }: { orderId: string }) {
 // ============================================================
 
 export function PlansTarifsPage() {
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
   const navigate = useDedcoStore((s) => s.navigate);
   const [cycle, setCycle] = useState<"mensuel" | "annuel">("mensuel");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -982,7 +990,7 @@ export function PlansTarifsPage() {
   ];
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-6xl mx-auto">
       <header className="text-center mb-8">
         <h1 className="display-xl mb-2">Plans et tarifs</h1>
         <p className="text-sm text-[var(--text-2)] max-w-lg mx-auto">Choisissez le plan adapté à votre activité. Sans engagement. Paiement Mobile Money.</p>

@@ -31,6 +31,7 @@ import {
   Upload,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
+import { PhoneInput } from "@/components/dedco/phone-input";
 import { formatFCFA, ARTISANS } from "@/lib/dedco-data";
 
 // ============================================================
@@ -127,7 +128,7 @@ export function ArtisanDemandesPage() {
   const filtered = filter === "tous" ? MOCK_BRIEFS : MOCK_BRIEFS.filter((b) => b.status === filter);
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-6xl mx-auto">
       <header className="flex items-center justify-between mb-6 flex-wrap gap-3">
         <div>
           <h1 className="display-lg mb-1">Briefs reçus</h1>
@@ -151,7 +152,7 @@ export function ArtisanDemandesPage() {
             className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap border transition-all ${
               filter === t.id
                 ? "bg-[var(--amber)] text-white border-[var(--amber)]"
-                : "bg-white text-[var(--text-2)] border-[var(--border)] hover:border-[var(--text-3)]"
+                : "bg-card text-[var(--text-2)] border-[var(--border)] hover:border-[var(--text-3)]"
             }`}
           >
             {t.label}
@@ -248,7 +249,7 @@ export function ArtisanProjetsPage() {
   const [mobileCol, setMobileCol] = useState<Project["status"]>("production");
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto">
       <header className="mb-6">
         <h1 className="display-lg mb-1">Projets en cours</h1>
         <p className="text-sm text-[var(--text-2)]">
@@ -263,7 +264,7 @@ export function ArtisanProjetsPage() {
             key={c.id}
             onClick={() => setMobileCol(c.id)}
             className={`px-3 py-1.5 text-xs font-medium rounded-full whitespace-nowrap border transition-all ${
-              mobileCol === c.id ? "bg-[var(--amber)] text-white border-[var(--amber)]" : "bg-white border-[var(--border)]"
+              mobileCol === c.id ? "bg-[var(--amber)] text-white border-[var(--amber)]" : "bg-card border-[var(--border)]"
             }`}
           >
             {c.label}
@@ -281,11 +282,11 @@ export function ArtisanProjetsPage() {
                 <h3 className="text-xs font-bold uppercase tracking-wide" style={{ color: col.color }}>
                   {col.label}
                 </h3>
-                <span className="text-xs font-numeric font-bold bg-white px-2 py-0.5 rounded-full">{items.length}</span>
+                <span className="text-xs font-numeric font-bold bg-card px-2 py-0.5 rounded-full">{items.length}</span>
               </div>
               <div className="space-y-2">
                 {items.map((p) => (
-                  <ProjectCard key={p.id} project={p} onClick={() => navigate({ page: "order-tracking", id: p.id })} />
+                  <ProjectCard key={p.id} project={p} onClick={() => navigate({ page: "projet-artisan-detail", projectId: p.id })} />
                 ))}
                 {items.length === 0 && <p className="text-xs text-[var(--text-3)] text-center py-4">Aucun projet</p>}
               </div>
@@ -297,7 +298,7 @@ export function ArtisanProjetsPage() {
       {/* Mobile: current column */}
       <div className="lg:hidden space-y-2">
         {MOCK_PROJECTS.filter((p) => p.status === mobileCol).map((p) => (
-          <ProjectCard key={p.id} project={p} onClick={() => navigate({ page: "order-tracking", id: p.id })} />
+          <ProjectCard key={p.id} project={p} onClick={() => navigate({ page: "projet-artisan-detail", projectId: p.id })} />
         ))}
       </div>
     </div>
@@ -308,7 +309,7 @@ function ProjectCard({ project, onClick }: { project: Project; onClick: () => vo
   return (
     <button
       onClick={onClick}
-      className="w-full bg-white rounded-lg p-3 text-left hover:shadow-md transition-shadow border border-[var(--border)] cursor-pointer"
+      className="w-full bg-card rounded-lg p-3 text-left hover:shadow-md transition-shadow border border-[var(--border)] cursor-pointer"
     >
       <div className="flex items-center gap-3 mb-2">
         <img src={project.thumb} alt={project.product} className="w-12 h-12 rounded-md object-cover flex-shrink-0" />
@@ -345,6 +346,10 @@ const MOCK_TXS: Tx[] = [
 ];
 
 export function ArtisanWalletPage() {
+  const navigate = useDedcoStore((s) => s.navigate);
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
   const [showBalance, setShowBalance] = useState(true);
   const [tab, setTab] = useState<"tout" | "credits" | "debits" | "retraits">("tout");
   const [withdrawAmount, setWithdrawAmount] = useState(50000);
@@ -356,17 +361,17 @@ export function ArtisanWalletPage() {
   const filteredTxs = tab === "tout" ? MOCK_TXS : MOCK_TXS.filter((t) => t.type === (tab === "credits" ? "credit" : tab === "debits" ? "debit" : "retrait"));
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-5">
+    <div className="p-4 sm:p-6 max-w-5xl mx-auto space-y-5">
       <header className="mb-2">
         <h1 className="display-lg mb-1">Mon Wallet</h1>
         <p className="text-sm text-[var(--text-2)]">Gérez vos gains et retraits Mobile Money</p>
       </header>
 
       {/* Wallet card */}
-      <div className="rounded-2xl p-6 text-white" style={{ background: "var(--text-1)" }}>
+      <div className="rounded-2xl p-5 sm:p-6 text-white" style={{ background: "var(--text-1)" }}>
         <p className="text-xs uppercase tracking-wide opacity-60 mb-2">Solde disponible</p>
-        <div className="flex items-center gap-3 mb-4">
-          <h2 className="font-display text-4xl font-numeric font-bold">
+        <div className="flex items-center gap-3 mb-4 min-w-0">
+          <h2 className="font-display text-2xl sm:text-4xl font-numeric font-bold break-words">
             {showBalance ? formatFCFA(solde) : "•••••• FCFA"}
           </h2>
           <button
@@ -411,7 +416,7 @@ export function ArtisanWalletPage() {
               type="number"
               value={withdrawAmount}
               onChange={(e) => setWithdrawAmount(Number(e.target.value) || 0)}
-              className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white font-numeric focus:outline-none focus:border-[var(--amber)]"
+              className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-card font-numeric focus:outline-none focus:border-[var(--amber)]"
               min={10000}
               step={5000}
             />
@@ -532,6 +537,8 @@ const MOCK_REVIEWS: Review[] = [
 ];
 
 export function ArtisanAvisPage() {
+  const navigate = useDedcoStore((s) => s.navigate);
+
   const avgRating = 4.7;
   const totalReviews = 87;
   const histogram = [
@@ -548,7 +555,7 @@ export function ArtisanAvisPage() {
   ];
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-5">
+    <div className="p-4 sm:p-6 max-w-5xl mx-auto space-y-5">
       <header>
         <h1 className="display-lg mb-1">Avis et notes</h1>
         <p className="text-sm text-[var(--text-2)]">Vos clients parlent de vous</p>
@@ -628,6 +635,9 @@ export function ArtisanAvisPage() {
 // ============================================================
 
 export function ArtisanCertificationPage() {
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
   const criteria = [
     { label: "50+ commandes livrées", value: 87, target: 50, ok: true },
     { label: "Note ≥ 4.5/5", value: 4.7, target: 4.5, ok: true },
@@ -642,7 +652,7 @@ export function ArtisanCertificationPage() {
   const eligible = criteria.filter((c) => c.ok).length === criteria.length - 1 && criteria.some((c) => c.pending);
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-5">
+    <div className="p-4 sm:p-6 max-w-5xl mx-auto space-y-5">
       <header>
         <h1 className="display-lg mb-1">Certification N4</h1>
         <p className="text-sm text-[var(--text-2)]">Le plus haut niveau de confiance Dedco</p>
@@ -702,7 +712,7 @@ export function ArtisanCertificationPage() {
         <h3 className="font-display font-bold">Dossier de demande</h3>
         <div>
           <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2 block">Photos de votre atelier (3 minimum)</label>
-          <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-6 text-center cursor-pointer hover:border-[var(--amber)] transition-colors bg-white">
+          <label className="block border-2 border-dashed border-[var(--border)] rounded-lg p-6 text-center cursor-pointer hover:border-[var(--amber)] transition-colors bg-card">
             <Upload size={24} className="mx-auto text-[var(--text-3)] mb-2" />
             <p className="text-sm font-semibold">Cliquez pour ajouter des photos</p>
             <p className="text-xs text-[var(--text-3)] mt-1">{uploadedPhotos.length}/3 ajoutées</p>
@@ -725,7 +735,7 @@ export function ArtisanCertificationPage() {
             onChange={(e) => setProcessDesc(e.target.value.slice(0, 450))}
             rows={5}
             placeholder="Expliquez votre approche, vos matières premières, vos techniques, votre contrôle qualité..."
-            className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-white focus:outline-none focus:border-[var(--amber)] resize-none"
+            className="w-full px-3 py-2.5 text-sm border border-[var(--border)] rounded-md bg-card focus:outline-none focus:border-[var(--amber)] resize-none"
           />
           <p className="text-xs text-[var(--text-3)] mt-1 text-right font-numeric">{processDesc.length}/450</p>
         </div>
@@ -743,6 +753,8 @@ export function ArtisanCertificationPage() {
 // ============================================================
 
 export function ArtisanAbonnementPage() {
+  const navigate = useDedcoStore((s) => s.navigate);
+
   const plans = [
     {
       id: "gratuit",
@@ -771,7 +783,7 @@ export function ArtisanAbonnementPage() {
   ];
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-5">
+    <div className="p-4 sm:p-6 max-w-5xl mx-auto space-y-5">
       <header>
         <h1 className="display-lg mb-1">Abonnement</h1>
         <p className="text-sm text-[var(--text-2)]">Choisissez le plan adapté à votre activité</p>
@@ -798,7 +810,7 @@ export function ArtisanAbonnementPage() {
               </span>
             )}
             <h3 className="font-display font-bold text-lg mb-1">{plan.name}</h3>
-            <p className="font-display font-bold text-3xl mb-4">
+            <p className="font-display font-bold text-2xl sm:text-3xl mb-4">
               <span className="font-numeric">{plan.price === 0 ? "0" : plan.price.toLocaleString("fr-FR")}</span>
               <span className="text-xs font-normal text-[var(--text-2)]"> FCFA/mois</span>
             </p>
@@ -861,6 +873,9 @@ export function ArtisanAbonnementPage() {
 // ============================================================
 
 export function ArtisanParametresPage() {
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
   const [notifEmail, setNotifEmail] = useState({
     brief: true,
     commande: true,
@@ -895,15 +910,15 @@ export function ArtisanParametresPage() {
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
             <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Nom atelier</label>
-            <input defaultValue="Atelier Akindélé Wood" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white focus:outline-none focus:border-[var(--amber)]" />
+            <input defaultValue="Atelier Akindélé Wood" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card focus:outline-none focus:border-[var(--amber)]" />
           </div>
           <div>
             <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Ville</label>
-            <input defaultValue="Cotonou" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white focus:outline-none focus:border-[var(--amber)]" />
+            <input defaultValue="Cotonou" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card focus:outline-none focus:border-[var(--amber)]" />
           </div>
           <div>
             <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Téléphone</label>
-            <input defaultValue="+229 01 97 45 23 10" className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white font-numeric focus:outline-none focus:border-[var(--amber)]" />
+            <PhoneInput value="+229 01 97 45 23 10" onChange={() => {}} className="w-full" />
           </div>
           <div>
             <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Spécialités (max 3)</label>
@@ -915,7 +930,7 @@ export function ArtisanParametresPage() {
           </div>
           <div className="sm:col-span-2">
             <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Bio (300 caractères max)</label>
-            <textarea defaultValue="Maître ébéniste formé à Cotonou et Accra, je crée des meubles qui marient les essences locales et les techniques traditionnelles avec un design contemporain." rows={3} maxLength={300} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white focus:outline-none focus:border-[var(--amber)] resize-none" />
+            <textarea defaultValue="Maître ébéniste formé à Cotonou et Accra, je crée des meubles qui marient les essences locales et les techniques traditionnelles avec un design contemporain." rows={3} maxLength={300} className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card focus:outline-none focus:border-[var(--amber)] resize-none" />
           </div>
         </div>
       </div>
@@ -990,14 +1005,6 @@ function EmptyState({ icon, title, desc }: { icon: React.ReactNode; title: strin
       </div>
       <p className="font-display font-semibold text-lg mb-1">{title}</p>
       <p className="text-sm text-[var(--text-2)]">{desc}</p>
-
-      {/* Toast inline */}
-      {toast && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 dedco-card px-4 py-3 shadow-lg flex items-center gap-2" style={{ backgroundColor: "var(--forest-pale)", borderColor: "var(--forest)" }}>
-          <CheckCircle2 size={16} className="text-[var(--forest)] flex-shrink-0" />
-          <p className="text-sm text-[var(--text-1)]">{toast}</p>
-        </div>
-      )}
     </div>
   );
 }

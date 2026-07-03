@@ -6,7 +6,9 @@ import {
   Ruler, Calendar, AlertTriangle, Lock,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
+import { getBackToProjets } from "@/lib/back-to-projets";
 import { formatFCFA } from "@/lib/dedco-data";
+import { PhoneInput } from "@/components/dedco/phone-input";
 
 // ============================================================
 // MOCK — Propositions artisan par ID
@@ -100,6 +102,7 @@ const MOCK_PROPOSALS: Record<string, ArtisanProposalMock> = {
 
 export function ProjetPaiementArtisanPage({ proposalId }: { proposalId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
+  const currentUser = useDedcoStore((s) => s.currentUser);
   const proposal = MOCK_PROPOSALS[proposalId] || MOCK_PROPOSALS["PROP-K1"];
   const [operator, setOperator] = useState<"mtn" | "moov">("mtn");
   const [done, setDone] = useState(false);
@@ -108,6 +111,9 @@ export function ProjetPaiementArtisanPage({ proposalId }: { proposalId: string }
   const garantie = Math.round(proposal.price * proposal.garantiePercent / 100);
   const total = proposal.price + garantie;
   const newProjectId = `PA-${Math.floor(1000 + Math.random() * 9000)}`;
+
+  // ── Bouton retour — role-aware ──
+  const { route: backRoute, label: backLabel } = getBackToProjets(currentUser?.role);
 
   if (done) {
     return (
@@ -124,8 +130,8 @@ export function ProjetPaiementArtisanPage({ proposalId }: { proposalId: string }
           <button onClick={() => navigate({ page: "projet-artisan-detail", projectId: newProjectId })} className="dedco-btn dedco-btn-primary">
             Suivre le projet <ChevronRight size={16} />
           </button>
-          <button onClick={() => navigate({ page: "client-projets" })} className="dedco-btn dedco-btn-ghost">
-            Mes projets
+          <button onClick={() => navigate(backRoute)} className="dedco-btn dedco-btn-ghost">
+            {backLabel}
           </button>
         </div>
       </div>
@@ -133,9 +139,9 @@ export function ProjetPaiementArtisanPage({ proposalId }: { proposalId: string }
   }
 
   return (
-    <div className="p-6 max-w-md mx-auto">
-      <button onClick={() => navigate({ page: "client-projets" })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
-        <ChevronRight size={16} className="rotate-180" /> Mes projets
+    <div className="p-4 sm:p-6 max-w-md mx-auto">
+      <button onClick={() => navigate(backRoute)} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] mb-4 flex items-center gap-1">
+        <ChevronRight size={16} className="rotate-180" /> {backLabel}
       </button>
 
       <header className="mb-6">
@@ -225,9 +231,10 @@ export function ProjetPaiementArtisanPage({ proposalId }: { proposalId: string }
             </button>
           ))}
         </div>
-        <input
-          defaultValue="+229 01 97 45 23 10"
-          className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-white font-numeric"
+        <PhoneInput
+          value="+229 01 97 45 23 10"
+          onChange={() => {}}
+          className="w-full"
         />
       </div>
 

@@ -1,24 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { User, Globe, Shield, Bell, Moon, LogOut, ChevronRight } from "lucide-react";
+import { User, Globe, Shield, Bell, Moon, LogOut, ChevronRight,
+  CheckCircle2, Trash2,
+} from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
 import { useState } from "react";
 
-const SETTINGS = [
-  { section: "Compte", items: [
-    { icon: <User size={18} />, label: "Informations personnelles", value: "Marie Houénou", action: "profile" },
-    { icon: <Shield size={18} />, label: "Sécurité", value: "Mot de passe", action: "password" },
-    { icon: <Bell size={18} />, label: "Notifications", value: "Email & SMS", action: "notifications" },
-  ]},
-  { section: "Préférences", items: [
-    { icon: <Globe size={18} />, label: "Langue", value: "Français" },
-    { icon: <Moon size={18} />, label: "Mode sombre", value: "Désactivé" },
-  ]},
-];
-
 export function SettingsPage() {
   const navigate = useDedcoStore((s) => s.navigate);
+  const logout = useDedcoStore((s) => s.logout);
+  const currentUser = useDedcoStore((s) => s.currentUser);
   const [toast, setToast] = useState<string | null>(null);
   function showToast(msg: string) {
     setToast(msg);
@@ -26,6 +18,16 @@ export function SettingsPage() {
   }
   const goBack = useDedcoStore((s) => s.goBack);
   const [notifs, setNotifs] = useState(true);
+
+  const SETTINGS = [
+    { section: "Compte", items: [
+      { icon: <User size={18} />, label: "Informations personnelles", value: currentUser?.name || "Utilisateur", action: "profile" },
+      { icon: <Bell size={18} />, label: "Notifications", value: "Email & SMS", action: "notifications" },
+    ]},
+    { section: "Préférences", items: [
+      { icon: <Globe size={18} />, label: "Langue", value: "Français", action: "langue" },
+    ]},
+  ];
 
   return (
     <div className="dedco-fade-in max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
@@ -54,8 +56,9 @@ export function SettingsPage() {
                   onClick={() => {
                     if (item.action === "profile") navigate({ page: "profile" });
                     else if (item.action === "notifications") navigate({ page: "notifications" });
+                    else if (item.action === "langue") showToast("Langue: Français (une seule langue disponible)");
                   }}
-                  className="w-full flex items-center justify-between p-3 rounded-lg border border-[var(--border)] bg-white hover:border-[var(--amber)] transition-colors text-left cursor-pointer"
+                  className="w-full flex items-center justify-between p-3 rounded-lg border border-[var(--border)] bg-card hover:border-[var(--amber)] transition-colors text-left cursor-pointer"
                 >
                   <div className="flex items-center gap-3 text-sm">
                     <span className="text-[var(--text-3)]">{item.icon}</span>
@@ -87,7 +90,7 @@ export function SettingsPage() {
               onClick={() => setNotifs(!notifs)}
               className={`w-11 h-6 rounded-full transition-colors relative cursor-pointer ${notifs ? "bg-[var(--amber)]" : "bg-[var(--border)]"}`}
             >
-              <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${notifs ? "translate-x-[22px]" : "translate-x-0.5"}`} />
+              <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-card shadow transition-transform ${notifs ? "translate-x-[22px]" : "translate-x-0.5"}`} />
             </button>
           </div>
         </motion.div>
@@ -100,7 +103,11 @@ export function SettingsPage() {
           className="dedco-card p-5 sm:p-6 border-[var(--terracotta)]/20"
         >
           <button
-            onClick={() => showToast("Demande de suppression de compte envoyée. Notre équipe vous contactera sous 48 h.")}
+            onClick={() => {
+              logout();
+              navigate({ page: "home" });
+              showToast("Vous êtes déconnecté. À bientôt sur Dedco !");
+            }}
             className="flex items-center gap-3 text-sm font-medium text-[var(--terracotta)] hover:underline cursor-pointer"
           >
             <LogOut size={18} />
@@ -108,6 +115,28 @@ export function SettingsPage() {
           </button>
         </motion.div>
       </div>
+
+      {/* Section suppression de compte (séparée) */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.35 }}
+        className="dedco-card p-5 sm:p-6 border-[var(--terracotta)]/20"
+      >
+        <h3 className="font-display font-semibold text-base mb-1 text-[var(--terracotta)]">
+          Supprimer mon compte
+        </h3>
+        <p className="text-xs text-[var(--text-2)] mb-3">
+          Cette action est irréversible. Notre équipe vous contactera sous 48 h pour confirmer.
+        </p>
+        <button
+          onClick={() => showToast("Demande de suppression de compte envoyée. Notre équipe vous contactera sous 48 h.")}
+          className="flex items-center gap-3 text-sm font-medium text-[var(--terracotta)] hover:underline cursor-pointer"
+        >
+          <Trash2 size={18} />
+          Demander la suppression
+        </button>
+      </motion.div>
 
       {/* Toast inline */}
       {toast && (

@@ -126,15 +126,39 @@
   --forest-lt: #6ba35a;
   --forest-pale: #e6f2e3;
   --bg-cream: #ffffff;
-  --bg-warm: #ede8e1;
+  --bg-warm: #faf8f5;
   --bg-card: #ffffff;
   --text-1: #1e1813;
   --text-2: #5b5048;
-  --text-3: #a89e95;
-  --border: #eae3d9;
-  --border-dark: #d6cdc1;
+  --text-3: #7a7068;
+  --border: #f0eeec;
+  --border-dark: #e0ddd8;
 
   --radius: 0.625rem;
+
+  /* Status colors (brief-artisan workflow) — spec §14 */
+  --status-draft: #7A6E65;
+  --status-draft-bg: #F2EDE4;
+  --status-submitted: #B8702F;
+  --status-submitted-bg: #FEF5E9;
+  --status-published: #B8702F;
+  --status-published-bg: #FEF5E9;
+  --status-proposals: #4A7A3C;
+  --status-proposals-bg: #E8F1FA;
+  --status-discussion: #3B6EA5;
+  --status-discussion-bg: #E8F1FA;
+  --status-selected: #A6442E;
+  --status-selected-bg: #FAEAE6;
+  --status-deposit: #A6442E;
+  --status-deposit-bg: #FAEAE6;
+  --status-converted: #4A7A3C;
+  --status-converted-bg: #E6F2E3;
+  --status-expired: #7A6E65;
+  --status-expired-bg: #F2EDE4;
+  --status-cancelled: #7A6E65;
+  --status-cancelled-bg: #F2EDE4;
+  --status-closed: #7A6E65;
+  --status-closed-bg: #F2EDE4;
 }
 
 @layer base {
@@ -148,6 +172,10 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  /* Empêche le zoom auto sur iOS quand on tape dans un input */
+  input, textarea, select {
+    font-size: 16px;
+  }
 }
 
 /* Quache force-applied to all headings — outside @layer to win specificity.
@@ -159,6 +187,14 @@ h1, h2, h3, h4, h5, h6,
 .display-2xl, .display-xl, .display-lg, .display-md, .display-sm {
   font-family: "Quache", var(--font-jakarta), ui-sans-serif, system-ui, sans-serif !important;
   letter-spacing: -0.01em;
+}
+
+/* Eyebrow opt-out — les eyebrows doivent rester en Jakarta (pas Quache)
+   malgré la règle !important ci-dessus */
+h1.eyebrow, h2.eyebrow, h3.eyebrow, h4.eyebrow, h5.eyebrow, h6.eyebrow,
+.eyebrow, .font-sans {
+  font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif !important;
+  letter-spacing: 0.16em;
 }
 
 /* Numeric utility — uses Plus Jakarta Sans for clean digit rendering.
@@ -245,6 +281,32 @@ h1, h2, h3, h4, h5, h6,
   .dedco-btn-lg { padding: 14px 24px; font-size: 1rem; }
   .dedco-btn-xl { padding: 16px 28px; font-size: 1.0625rem; }
 
+  /* Icon buttons — boutons carrés pour icônes seules (favorite, close, etc.) */
+  .dedco-btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 150ms ease;
+    flex-shrink: 0;
+  }
+  .dedco-btn-icon:active { transform: scale(0.95); }
+  .dedco-btn-icon:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+  .dedco-btn-icon-sm { width: 28px; height: 28px; border-radius: 4px; }
+  .dedco-btn-icon-lg { width: 44px; height: 44px; border-radius: 8px; }
+  .dedco-btn-icon-ghost { background: transparent; color: var(--text-2); }
+  .dedco-btn-icon-ghost:hover { background: var(--bg-warm); color: var(--text-1); }
+  .dedco-btn-icon-solid { background: var(--text-1); color: white; }
+  .dedco-btn-icon-solid:hover { background: var(--amber); }
+  .dedco-btn-icon-amber { background: var(--amber); color: white; }
+  .dedco-btn-icon-amber:hover { background: var(--amber-dark); }
+  .dedco-btn-icon-terra { background: var(--terracotta); color: white; }
+  .dedco-btn-icon-terra:hover { background: #8a3828; }
+
   /* Badges */
   .dedco-badge {
     @apply inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-full;
@@ -281,32 +343,42 @@ h1, h2, h3, h4, h5, h6,
   .section-eyebrow {
     font-size: 0.75rem;
     font-weight: 600;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--amber);
     margin-bottom: 8px;
+  }
+
+  /* ── Protection globale contre le débordement de texte ──
+     Sur mobile, les longs mots (URLs, montants FCFA, IDs) peuvent déborder
+     de leur conteneur et casser la mise en page. On force le wrap sur
+     tous les conteneurs de texte par défaut. */
+  .dedco-card,
+  .dedco-card > * {
+    overflow-wrap: break-word;
+    word-break: break-word;
+    min-width: 0;
+  }
+
+  /* Les éléments flex par défaut ne rétrécissent pas assez sur mobile.
+     On force min-w-0 sur les enfants directs de flex pour permettre
+     le truncate correct. */
+  .dedco-card .flex > * {
+    min-width: 0;
   }
 
   /* Stars */
   .star { color: var(--amber); }
   .star.empty { color: var(--border-dark); }
 
-  /* Hotspot pulse */
-  @keyframes dedco-pulse {
-    0%, 100% { opacity: 0.85; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.15); }
-  }
+  /* Hotspot pulse — utilise la keyframe dedco-pulse unifiée (voir plus bas) */
   .hotspot-dot {
     animation: dedco-pulse 2s ease-in-out infinite;
   }
 
-  /* Fade in */
-  @keyframes dedco-fade-in {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  /* Fade in — utilise la keyframe dedco-fade-in unifiée (voir plus bas) */
   .dedco-fade-in {
-    animation: dedco-fade-in 0.35s ease-out;
+    animation: dedco-fade-in 0.5s ease-out forwards;
   }
 
   /* Slide in (sheets) */
@@ -402,7 +474,6 @@ h1, h2, h3, h4, h5, h6,
 }
 
 /* Classes utilitaires d'animation */
-.dedco-fade-in { animation: dedco-fade-in 0.5s ease-out forwards; }
 .dedco-fade-up { animation: dedco-fade-up 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 .dedco-scale-in { animation: dedco-scale-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 
@@ -507,4 +578,87 @@ html { scroll-behavior: smooth; }
   outline: 2px solid var(--amber);
   outline-offset: 2px;
   border-radius: 4px;
+}
+
+/* ============================================================
+   DARK MODE — palette complète pour .dark class
+   ============================================================ */
+
+.dark {
+  color-scheme: dark;
+
+  /* Backgrounds */
+  --bg-cream: #14121a;
+  --bg-warm: #1c1a22;
+  --bg-card: #1e1c24;
+
+  /* Text */
+  --text-1: #f5f2ed;
+  --text-2: #a89e95;
+  --text-3: #6b6258;
+
+  /* Borders */
+  --border: #2a2730;
+  --border-dark: #3a3740;
+
+  /* Brand colors (légèrement ajustés pour dark) */
+  --amber: #d4954a;
+  --amber-dark: #bf793b;
+  --amber-light: #e0a85d;
+  --amber-pale: #2a2018;
+
+  --terracotta: #c4614a;
+  --terracotta-lt: #d4758a;
+  --terracotta-pale: #2a1815;
+
+  --forest: #6ba35a;
+  --forest-lt: #7eb86d;
+  --forest-pale: #1a2818;
+
+  /* Status colors (légèrement plus vifs en dark) */
+  --status-draft: #8a7e75;
+  --status-draft-bg: #2a2520;
+  --status-submitted: #d4954a;
+  --status-submitted-bg: #2a2018;
+  --status-published: #d4954a;
+  --status-published-bg: #2a2018;
+  --status-proposals: #6ba35a;
+  --status-proposals-bg: #1a2818;
+  --status-discussion: #5a8ec5;
+  --status-discussion-bg: #1a2530;
+  --status-selected: #c4614a;
+  --status-selected-bg: #2a1815;
+  --status-deposit: #c4614a;
+  --status-deposit-bg: #2a1815;
+  --status-converted: #6ba35a;
+  --status-converted-bg: #1a2818;
+  --status-expired: #8a7e75;
+  --status-expired-bg: #2a2520;
+  --status-cancelled: #8a7e75;
+  --status-cancelled-bg: #2a2520;
+  --status-closed: #8a7e75;
+  --status-closed-bg: #2a2520;
+}
+
+.dark body {
+  background-color: var(--bg-cream);
+  color: var(--text-1);
+}
+
+/* Z-index scale (tokens centralisés) */
+:root {
+  --z-base: 1;
+  --z-sticky: 40;
+  --z-drawer: 45;
+  --z-modal: 50;
+  --z-toast: 60;
+  --z-tooltip: 70;
+}
+
+/* Motion tokens (durées et easing centralisés) */
+:root {
+  --ease-dedco: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
 }

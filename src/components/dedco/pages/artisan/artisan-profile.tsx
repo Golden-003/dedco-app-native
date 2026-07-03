@@ -138,7 +138,7 @@ export function ArtisanProfilePage() {
                 type="text"
                 value={form.name}
                 onChange={(e) => updateField("name", e.target.value)}
-                className="w-full px-4 py-2.5 text-sm rounded-lg border border-[var(--border)] bg-white focus:outline-none focus:border-[var(--amber)] focus:ring-1 focus:ring-[var(--amber)]/30"
+                className="w-full px-4 py-2.5 text-sm rounded-lg border border-[var(--border)] bg-card focus:outline-none focus:border-[var(--amber)] focus:ring-1 focus:ring-[var(--amber)]/30"
               />
             </div>
 
@@ -152,7 +152,7 @@ export function ArtisanProfilePage() {
                 type="text"
                 value={form.specialty}
                 onChange={(e) => updateField("specialty", e.target.value)}
-                className="w-full px-4 py-2.5 text-sm rounded-lg border border-[var(--border)] bg-white focus:outline-none focus:border-[var(--amber)] focus:ring-1 focus:ring-[var(--amber)]/30"
+                className="w-full px-4 py-2.5 text-sm rounded-lg border border-[var(--border)] bg-card focus:outline-none focus:border-[var(--amber)] focus:ring-1 focus:ring-[var(--amber)]/30"
               />
             </div>
 
@@ -166,7 +166,7 @@ export function ArtisanProfilePage() {
                 type="text"
                 value={form.city}
                 onChange={(e) => updateField("city", e.target.value)}
-                className="w-full px-4 py-2.5 text-sm rounded-lg border border-[var(--border)] bg-white focus:outline-none focus:border-[var(--amber)] focus:ring-1 focus:ring-[var(--amber)]/30"
+                className="w-full px-4 py-2.5 text-sm rounded-lg border border-[var(--border)] bg-card focus:outline-none focus:border-[var(--amber)] focus:ring-1 focus:ring-[var(--amber)]/30"
               />
             </div>
 
@@ -179,7 +179,7 @@ export function ArtisanProfilePage() {
                 rows={4}
                 value={form.bio}
                 onChange={(e) => updateField("bio", e.target.value)}
-                className="w-full px-4 py-2.5 text-sm rounded-lg border border-[var(--border)] bg-white resize-y focus:outline-none focus:border-[var(--amber)] focus:ring-1 focus:ring-[var(--amber)]/30"
+                className="w-full px-4 py-2.5 text-sm rounded-lg border border-[var(--border)] bg-card resize-y focus:outline-none focus:border-[var(--amber)] focus:ring-1 focus:ring-[var(--amber)]/30"
               />
               <p className="text-xs text-[var(--text-3)] mt-1">
                 {form.bio.length} caractères
@@ -218,7 +218,7 @@ export function ArtisanProfilePage() {
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
                   <button
                     type="button"
-                    className="opacity-0 group-hover:opacity-100 transition-opacity w-8 h-8 rounded-full bg-white flex items-center justify-center"
+                    className="opacity-0 group-hover:opacity-100 transition-opacity w-8 h-8 rounded-full bg-card flex items-center justify-center"
                   >
                     <X size={14} />
                   </button>

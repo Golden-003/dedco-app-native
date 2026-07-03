@@ -1,8 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// ============================================================
+// DEDCO — Prisma Schema (simplifié pour prototype)
+// ============================================================
 
 generator client {
   provider = "prisma-client-js"
@@ -13,20 +11,156 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ── User — multi-rôle ──
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
-  name      String?
+  name      String
+  password  String
+  role      String   @default("client")
+  avatar    String?
+  phone     String?
+  verified  Boolean  @default(false)
+  kycStatus String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  orders        Order[]
+  briefs        Brief[]
+  notifications Notification[]
+  proposals     Proposal[]
+
+  @@map("users")
 }
 
-model Post {
+// ── Artisan — profil étendu ──
+
+model Artisan {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  level       String   @default("N1")
+  bio         String?
+  zone        String?
+  rating      Float    @default(0)
+  reviewCount Int      @default(0)
+  verified    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  products Product[]
+
+  @@map("artisans")
+}
+
+// ── Product ──
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  price       Int
+  category    String
+  images      String
+  badge       String?
+  stock       Int      @default(1)
+  artisanId   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  artisan     Artisan     @relation(fields: [artisanId], references: [id])
+  orderItems  OrderItem[]
+
+  @@map("products")
+}
+
+// ── Order ──
+
+model Order {
+  id          String   @id @default(cuid())
+  orderNumber String   @unique
+  customerId  String
+  status      String   @default("pending")
+  totalAmount Int
+  shippingFee Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  customer    User        @relation(fields: [customerId], references: [id])
+  items       OrderItem[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String @id @default(cuid())
+  orderId   String
+  productId String
+  quantity  Int    @default(1)
+  price     Int
+
+  order      Order   @relation(fields: [orderId], references: [id])
+  product    Product @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
+// ── Brief ──
+
+model Brief {
+  id          String   @id @default(cuid())
+  briefNumber String   @unique
+  title       String
+  description String
+  category    String
+  zone        String
+  piece       String
+  style       String
+  budgetMin   Int
+  budgetMax   Int
+  status      String   @default("DRAFT")
+  clientId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  expiresAt   DateTime?
+
+  client      User       @relation(fields: [clientId], references: [id])
+  proposals   Proposal[]
+
+  @@map("briefs")
+}
+
+model Proposal {
+  id             String   @id @default(cuid())
+  proposalNumber String   @unique
+  briefId        String
+  artisanId      String
+  price          Int
+  deliveryTime   String
+  materials      String
+  message        String?
+  status         String   @default("pending")
+  createdAt      DateTime @default(now())
+
+  brief          Brief @relation(fields: [briefId], references: [id])
+  artisan        User  @relation(fields: [artisanId], references: [id])
+
+  @@map("proposals")
+}
+
+// ── Notification ──
+
+model Notification {
   id        String   @id @default(cuid())
+  userId    String
+  type      String
   title     String
-  content   String?
-  published Boolean  @default(false)
-  authorId  String
+  desc      String
+  read      Boolean  @default(false)
+  linkedId  String?
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  user      User @relation(fields: [userId], references: [id])
+
+  @@map("notifications")
 }

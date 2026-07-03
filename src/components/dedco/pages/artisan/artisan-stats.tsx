@@ -90,7 +90,7 @@ export function ArtisanStatsPage() {
             className={`px-4 py-2 text-sm rounded-lg font-medium transition-colors ${
               period === p
                 ? "bg-[var(--amber)] text-white"
-                : "bg-white border border-[var(--border)] text-[var(--text-2)] hover:border-[var(--border-dark)]"
+                : "bg-card border border-[var(--border)] text-[var(--text-2)] hover:border-[var(--border-dark)]"
             }`}
           >
             {PERIOD_LABELS[p]}

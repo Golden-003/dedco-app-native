@@ -10,6 +10,7 @@ import {
 } from "@/components/dedco/layout";
 import { DedcoRouter, isDashboardPage } from "@/components/dedco/dedco-router";
 import { CartSidebar, SearchOverlay } from "@/components/dedco/cart-search";
+import { WelcomePopup } from "@/components/dedco/welcome-popup";
 
 // ============================================================
 // Bridge helpers: AppRoute ↔ Route
@@ -72,12 +73,7 @@ export default function Home() {
   const incrementCart = useDedcoStore((s) => s.incrementCart);
   const decrementCart = useDedcoStore((s) => s.decrementCart);
   const removeFromCart = useDedcoStore((s) => s.removeFromCart);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      window.scrollTo({ top: 0, behavior: "instant" });
-    }
-  }, [route]);
+  const currentUser = useDedcoStore((s) => s.currentUser);
 
   const navigateBridge = useCallback(
     (r: Route) => navigate(routeToAppRoute(r)),
@@ -86,7 +82,47 @@ export default function Home() {
 
   const legacyRoute = appRouteToRoute(route);
   const cartCount = cart.reduce((s, x) => s + x.qty, 0);
-  const showPublicNav = !isDashboardPage(route.page);
+  // ── Pages qui s'affichent DANS un dashboard (sidebar + header mobile) ──
+  // Pour ces pages, on masque la navbar publique + bottom-nav + footer :
+  // ils créeraient un double header et un chevauchement sur mobile.
+  // IMPORTANT : ne s'applique qu'aux prestataires. Les clients voient
+  // toujours la navbar publique (même sur les pages partagées comme
+  // projet-artisan-detail — ils suivent leur commande en tant que client).
+  const SHARED_DASHBOARD_PAGES = new Set([
+    "messages",
+    "notifications",
+    "projet-artisan-detail",
+    "projet-designer-detail",
+    "brief-artisan-detail",
+    "brief-designer-detail",
+    "projet-detail",
+    "projet-livraison",
+    "projet-paiement",
+    "projet-paiement-artisan",
+    "client-proposition-recue",
+  ]);
+  const isPrestataire = currentUser && currentUser.role !== "client";
+  // Les artisans, designers et maison déco sont ENFERMÉS dans leur dashboard :
+  // aucune navbar/bottom-nav/footer public, quelles que soient la page.
+  // Admin garde l'accès au site public.
+  const isPrestataireLocked =
+    currentUser?.role === "artisan" ||
+    currentUser?.role === "designer" ||
+    currentUser?.role === "maison";
+  const isWrappedInDashboard =
+    isPrestataireLocked ||
+    isDashboardPage(route.page) ||
+    (SHARED_DASHBOARD_PAGES.has(route.page) && !!isPrestataire);
+  const showPublicNav = !isWrappedInDashboard;
+
+  useEffect(() => {
+    // Ne scrolle pas en haut quand on est dans un dashboard : la sidebar
+    // est sticky et le scroll interne des pages doit être préservé.
+    if (isWrappedInDashboard) return;
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+  }, [route, isWrappedInDashboard]);
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: "var(--bg-cream)" }}>
@@ -102,12 +138,17 @@ export default function Home() {
         />
       )}
 
-      <main className="flex-1 pb-16 lg:pb-0">
+      {/* Plus de pb-16 sur main quand on est en dashboard : la sidebar gère
+          son propre scroll et le bottom-nav public est masqué. */}
+      <main className={`flex-1 ${showPublicNav ? "pb-16 lg:pb-0" : ""}`}>
         <DedcoRouter />
       </main>
 
       {showPublicNav && <Footer onNavigate={navigateBridge} />}
       {showPublicNav && <BottomNav currentRoute={legacyRoute} onNavigate={navigateBridge} />}
+
+      {/* Welcome popup + Cookie banner */}
+      <WelcomePopup onNavigate={(page) => navigate({ page: page as any })} />
 
       {showPublicNav && (
         <CartSidebar

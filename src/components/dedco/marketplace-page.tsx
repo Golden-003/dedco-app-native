@@ -156,7 +156,7 @@ export function MarketplacePage({
             value={priceMin || ""}
             placeholder="Min"
             onChange={(e) => setPriceMin(Number(e.target.value) || 0)}
-            className="w-full px-2.5 py-1.5 text-xs border border-border rounded-md bg-white font-numeric"
+            className="w-full px-2.5 py-1.5 text-xs border border-border rounded-md bg-card font-numeric"
             aria-label="Prix minimum"
             min={0}
             step={5000}
@@ -169,7 +169,7 @@ export function MarketplacePage({
             onChange={(e) =>
               setPriceMax(Number(e.target.value) || 1500000)
             }
-            className="w-full px-2.5 py-1.5 text-xs border border-border rounded-md bg-white font-numeric"
+            className="w-full px-2.5 py-1.5 text-xs border border-border rounded-md bg-card font-numeric"
             aria-label="Prix maximum"
             min={0}
             step={5000}
@@ -187,7 +187,7 @@ export function MarketplacePage({
           onChange={(e) =>
             setSelectedArtisan(e.target.value ? Number(e.target.value) : null)
           }
-          className="w-full px-3 py-2 text-sm border border-border rounded-md bg-white"
+          className="w-full px-3 py-2 text-sm border border-border rounded-md bg-card"
           aria-label="Filtrer par artisan"
         >
           <option value="">Tous les artisans</option>
@@ -252,7 +252,7 @@ export function MarketplacePage({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Rechercher un produit, une matière, un style..."
-          className="w-full pl-10 pr-4 py-3 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-amber"
+          className="w-full pl-10 pr-4 py-3 text-sm border border-border rounded-md bg-card focus:outline-none focus:border-amber"
           aria-label="Rechercher dans la marketplace"
         />
       </div>
@@ -265,7 +265,7 @@ export function MarketplacePage({
           className={`px-3.5 py-1.5 text-xs font-medium whitespace-nowrap rounded-full border transition-all flex-shrink-0 ${
             selectedCats.size === 0
               ? "bg-ink text-white border-ink"
-              : "bg-white text-ink-soft border-border hover:border-ink-mute"
+              : "bg-card text-ink-soft border-border hover:border-ink-mute"
           }`}
         >
           Tout
@@ -280,7 +280,7 @@ export function MarketplacePage({
               className={`px-3.5 py-1.5 text-xs font-medium whitespace-nowrap rounded-full border transition-all flex-shrink-0 flex items-center gap-1.5 ${
                 active
                   ? "bg-amber text-white border-amber"
-                  : "bg-white text-ink-soft border-border hover:border-ink-mute"
+                  : "bg-card text-ink-soft border-border hover:border-ink-mute"
               }`}
             >
               <span>{cat.icon}</span>
@@ -325,7 +325,7 @@ export function MarketplacePage({
             id="sort-select"
             value={sort}
             onChange={(e) => setSort(e.target.value as SortKey)}
-            className="px-3 py-2 text-xs border border-border rounded-md bg-white focus:outline-none focus:border-amber"
+            className="px-3 py-2 text-xs border border-border rounded-md bg-card focus:outline-none focus:border-amber"
           >
             <option value="pertinence">Pertinence</option>
             <option value="price-asc">Prix croissant</option>

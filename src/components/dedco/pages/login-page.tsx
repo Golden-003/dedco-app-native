@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useDedcoStore } from "@/lib/store";
+import { useNotificationStore } from "@/lib/notification-store";
 import { Mail, Lock, Eye, EyeOff, Shield, Wrench, Palette, Briefcase, ChevronRight, Home } from "lucide-react";
 
 const DEMO_ROLES = [
@@ -34,6 +35,7 @@ export function LoginPage() {
         email: email || "client@dedco.bj",
         avatar: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=120&q=80",
       });
+      useNotificationStore.getState().initForRole("client");
       navigate({ page: "home" });
     }, 1000);
   };
@@ -86,6 +88,7 @@ export function LoginPage() {
       role: userRole,
       ...mockUsers[userRole],
     });
+    useNotificationStore.getState().initForRole(userRole);
     navigate({ page });
   };
 
@@ -127,11 +130,10 @@ export function LoginPage() {
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2" size={18} style={{ color: "var(--text-3)" }} />
                 <input
                   id="email"
-                  type="email"
+                  type="text"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="votre@email.com"
-                  required
                   className="w-full pl-10 pr-4 py-3 text-sm rounded-md border focus:outline-none focus:ring-2 transition-all"
                   style={{ background: "var(--bg-cream)", borderColor: "var(--border)", color: "var(--text-1)" }}
                 />
@@ -150,7 +152,6 @@ export function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  required
                   className="w-full pl-10 pr-12 py-3 text-sm rounded-md border focus:outline-none focus:ring-2 transition-all"
                   style={{ background: "var(--bg-cream)", borderColor: "var(--border)", color: "var(--text-1)" }}
                 />

@@ -18,6 +18,7 @@ import {
   Wallet,
   Smartphone,
 } from "lucide-react";
+import { PhoneInput } from "@/components/dedco/phone-input";
 
 type PaymentMethod = "mobile_money" | "mtn" | "moov";
 
@@ -184,7 +185,7 @@ export function CheckoutPage() {
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
+                      <label htmlFor="kofi" className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
                         Prénom
                       </label>
                       <div className="relative">
@@ -200,7 +201,7 @@ export function CheckoutPage() {
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
+                      <label htmlFor="akindele" className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
                         Nom
                       </label>
                       <div className="relative">
@@ -219,20 +220,14 @@ export function CheckoutPage() {
                       <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
                         Téléphone
                       </label>
-                      <div className="relative">
-                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2" size={16} style={{ color: "var(--text-3)" }} />
-                        <input
-                          type="tel"
-                          value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
-                          placeholder="+229 90 00 00 00"
-                          className="w-full pl-9 pr-4 py-3 text-sm rounded-md border focus:outline-none focus:ring-2 transition-all"
-                          style={{ background: "var(--bg-cream)", borderColor: "var(--border)", color: "var(--text-1)" }}
-                        />
-                      </div>
+                      <PhoneInput
+                        value={phone}
+                        onChange={setPhone}
+                        className="w-full"
+                      />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
+                      <label htmlFor="cotonou" className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
                         Ville
                       </label>
                       <div className="relative">
@@ -248,7 +243,7 @@ export function CheckoutPage() {
                       </div>
                     </div>
                     <div className="sm:col-span-2">
-                      <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
+                      <label htmlFor="haie-vive,-cadjehoun..." className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
                         Quartier
                       </label>
                       <div className="relative">
@@ -264,7 +259,7 @@ export function CheckoutPage() {
                       </div>
                     </div>
                     <div className="sm:col-span-2">
-                      <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
+                      <label htmlFor="maison-bleue,-2e-porte-à-gauche..." className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-1)" }}>
                         Indication (optionnel)
                       </label>
                       <div className="relative">

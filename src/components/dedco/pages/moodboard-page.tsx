@@ -321,7 +321,7 @@ function MoodboardDetailView({
               {/* Like button */}
               <button
                 type="button"
-                className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 text-terracotta flex items-center justify-center hover:bg-white transition-colors opacity-0 group-hover:opacity-100"
+                className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 text-terracotta flex items-center justify-center hover:bg-card transition-colors opacity-0 group-hover:opacity-100"
                 aria-label="Favoris"
               >
                 <Heart size={14} fill="currentColor" />

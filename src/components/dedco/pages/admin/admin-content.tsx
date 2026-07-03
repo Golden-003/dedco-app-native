@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useDedcoStore } from "@/lib/store";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus,
@@ -69,6 +70,10 @@ const fadeUp = {
 };
 
 export function AdminContentPage() {
+  const navigate = useDedcoStore((s) => s.navigate);
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+
   const [tab, setTab] = useState<ContentTab>("magazine");
 
   return (

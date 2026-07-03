@@ -107,7 +107,7 @@ export function ProductPage({
               src={product.images[selectedImageIdx]}
               alt={`${product.name} — vue ${selectedImageIdx + 1}`}
               className="w-full h-full object-cover"
-            />
+            loading="lazy" />
           </div>
           {product.images.length > 1 && (
             <div className="flex gap-2 overflow-x-auto dedco-hide-scroll">
@@ -128,7 +128,7 @@ export function ProductPage({
                     src={img}
                     alt=""
                     className="w-full h-full object-cover"
-                  />
+                  loading="lazy" />
                 </button>
               ))}
             </div>
@@ -161,12 +161,12 @@ export function ProductPage({
           </div>
 
           {/* Price */}
-          <div className="flex items-baseline gap-3 mb-6 pb-6 border-b border-border">
-            <span className="font-numeric font-bold text-3xl text-amber">
+          <div className="flex items-baseline gap-2 sm:gap-3 mb-6 pb-6 border-b border-border flex-wrap">
+            <span className="font-numeric font-bold text-2xl sm:text-3xl text-amber break-words">
               {formatFCFA(product.price)}
             </span>
             {product.originalPrice && (
-              <span className="text-base text-ink-mute line-through font-numeric">
+              <span className="text-sm sm:text-base text-ink-mute line-through font-numeric">
                 {formatFCFA(product.originalPrice)}
               </span>
             )}
@@ -232,7 +232,7 @@ export function ProductPage({
 
           {/* Quantity + Add to cart */}
           <div className="flex gap-3 mb-4">
-            <div className="flex items-center border border-border rounded-md bg-white">
+            <div className="flex items-center border border-border rounded-md bg-card">
               <button
                 type="button"
                 onClick={() => setQty((q) => Math.max(1, q - 1))}
@@ -329,7 +329,7 @@ export function ProductPage({
               src={artisan.avatar}
               alt={artisan.name}
               className="w-20 h-20 rounded-full object-cover flex-shrink-0"
-            />
+            loading="lazy" />
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1 flex-wrap">
                 <h3 className="font-display font-bold text-lg">

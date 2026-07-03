@@ -15,4 +15,5 @@ export type Route =
   | { name: "favorites" }
   | { name: "brief" }
   | { name: "artisans" }
-  | { name: "article"; id: number };
+  | { name: "article"; id: number }
+  | { name: "other" }; // route non-gérée par la navbar (dashboards, cart, etc.)

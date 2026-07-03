@@ -8,7 +8,7 @@ import type { IdPrefix } from '@/lib/types/id-format';
 
 // ── Rôles utilisateurs ──
 
-export type UserRole = 'client' | 'artisan' | 'designer' | 'admin';
+export type UserRole = 'client' | 'artisan' | 'designer' | 'admin' | 'system';
 
 // ── Scope de projet (niveau de prestation) ──
 

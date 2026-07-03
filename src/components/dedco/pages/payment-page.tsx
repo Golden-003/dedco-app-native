@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDedcoStore } from "@/lib/store";
 import { formatFCFA } from "@/lib/dedco-data";
+import { PhoneInput } from "@/components/dedco/phone-input";
 import {
   CheckCircle,
   Phone,
@@ -115,21 +116,7 @@ export function PaymentPage() {
                       Numéro Mobile Money
                     </label>
                     <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2" size={18} style={{ color: "var(--text-3)" }} />
-                      <input
-                        id="payment-phone"
-                        type="tel"
-                        value={phoneNumber}
-                        onChange={(e) => setPhoneNumber(e.target.value)}
-                        placeholder="+229 90 00 00 00"
-                        required
-                        className="w-full pl-10 pr-4 py-3.5 text-sm rounded-md border focus:outline-none focus:ring-2 transition-all"
-                        style={{
-                          background: "var(--bg-cream)",
-                          borderColor: "var(--border)",
-                          color: "var(--text-1)",
-                        }}
-                      />
+                      <PhoneInput value="" onChange={() => {}} className="w-full" />
                     </div>
                   </div>
 

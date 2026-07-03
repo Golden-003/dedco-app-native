@@ -323,6 +323,7 @@ export function ArtisanOrdersPage() {
                       {order.status === "fabrication" && (
                         <button
                           type="button"
+                          onClick={() => navigate({ page: "order-tracking", id: order.id })}
                           className="dedco-btn dedco-btn-primary dedco-btn-sm"
                         >
                           <Truck size={14} />
@@ -331,6 +332,7 @@ export function ArtisanOrdersPage() {
                       )}
                       <button
                         type="button"
+                        onClick={() => navigate({ page: "order-tracking", id: order.id })}
                         className="dedco-btn dedco-btn-ghost dedco-btn-sm"
                       >
                         <Eye size={14} />

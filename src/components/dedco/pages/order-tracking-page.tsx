@@ -233,6 +233,8 @@ function StepperDot({ step, index }: { step: TimelineStep; index: number }) {
 export function OrderTrackingPage({ orderId }: { orderId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
   const goBack = useDedcoStore((s) => s.goBack);
+  const currentUser = useDedcoStore((s) => s.currentUser);
+  const isArtisan = currentUser?.role === "artisan";
 
   const order = MOCK_ORDERS[orderId] ?? MOCK_ORDERS["ORD-001"];
 
@@ -370,22 +372,41 @@ export function OrderTrackingPage({ orderId }: { orderId: string }) {
         transition={{ duration: 0.35, delay: 0.32 }}
         className="flex flex-col sm:flex-row gap-3"
       >
-        <button
-          type="button"
-          onClick={() => navigate({ page: "messages" })}
-          className="dedco-btn dedco-btn-primary flex-1"
-        >
-          <MessageCircle size={18} />
-          Contacter l'artisan
-        </button>
-        <button type="button" className="dedco-btn dedco-btn-ghost flex-1">
-          <Phone size={18} />
-          Appeler l'artisan
-        </button>
-        <button type="button" className="dedco-btn dedco-btn-ghost flex-1">
-          <FileText size={18} />
-          Facture
-        </button>
+        {isArtisan ? (
+          <>
+            <button
+              type="button"
+              onClick={() => navigate({ page: "messages" })}
+              className="dedco-btn dedco-btn-primary flex-1"
+            >
+              <MessageCircle size={18} />
+              Contacter le client
+            </button>
+            <button type="button" onClick={() => navigate({ page: "invoice", orderId: order.id })} className="dedco-btn dedco-btn-ghost flex-1">
+              <FileText size={18} />
+              Facture
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              type="button"
+              onClick={() => navigate({ page: "messages" })}
+              className="dedco-btn dedco-btn-primary flex-1"
+            >
+              <MessageCircle size={18} />
+              Contacter l'artisan
+            </button>
+            <button type="button" onClick={() => navigate({ page: "messages" })} className="dedco-btn dedco-btn-ghost flex-1">
+              <Phone size={18} />
+              Appeler l'artisan
+            </button>
+            <button type="button" onClick={() => navigate({ page: "invoice", orderId: order.id })} className="dedco-btn dedco-btn-ghost flex-1">
+              <FileText size={18} />
+              Facture
+            </button>
+          </>
+        )}
       </motion.div>
     </div>
   );

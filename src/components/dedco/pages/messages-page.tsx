@@ -6,8 +6,9 @@ import {
   Send,
   Paperclip,
   ChevronLeft,
-  ShieldAlert,
+  ShieldCheck,
   Circle,
+  MessageCircle,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDedcoStore } from "@/lib/store";
@@ -129,11 +130,12 @@ const CONVERSATIONS: Conversation[] = [
 // ============================================================
 
 export function MessagesPage() {
-  const navigate = useDedcoStore((s) => s.navigate);
   const goBack = useDedcoStore((s) => s.goBack);
   const route = useDedcoStore((s) => s.route);
+  const currentUser = useDedcoStore((s) => s.currentUser);
   const [searchQuery, setSearchQuery] = useState("");
   const [messageText, setMessageText] = useState("");
+  const [conversations, setConversations] = useState<Conversation[]>(CONVERSATIONS);
 
   const activeConvId =
     route.page === "messages" ? route.conversationId : undefined;
@@ -142,11 +144,17 @@ export function MessagesPage() {
   );
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const filteredConvs = CONVERSATIONS.filter((c) =>
-    c.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Filtrer : recherche + exclure soi-même (si connecté)
+  const myName = currentUser?.name?.toLowerCase().trim();
+  const filteredConvs = conversations.filter((c) => {
+    const matchesSearch = c.name
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const isMe = myName && c.name.toLowerCase().trim() === myName;
+    return matchesSearch && !isMe;
+  });
 
-  const selectedConv = CONVERSATIONS.find((c) => c.id === selectedConvId);
+  const selectedConv = conversations.find((c) => c.id === selectedConvId);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -154,6 +162,10 @@ export function MessagesPage() {
 
   const handleSelectConv = (id: string) => {
     setSelectedConvId(id);
+    // Marquer comme lu
+    setConversations(prev =>
+      prev.map(c => (c.id === id ? { ...c, unread: 0 } : c))
+    );
   };
 
   const handleBack = () => {
@@ -162,103 +174,148 @@ export function MessagesPage() {
 
   const handleSend = () => {
     if (!messageText.trim()) return;
+    if (!selectedConvId) return;
+
+    const newMessage: ChatMessage = {
+      id: `msg-${Date.now()}`,
+      text: messageText.trim(),
+      sent: true,
+      time: new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }),
+    };
+
+    setConversations(prev => prev.map(conv =>
+      conv.id === selectedConvId
+        ? { ...conv, messages: [...conv.messages, newMessage], lastMessage: newMessage.text, time: newMessage.time }
+        : conv
+    ));
     setMessageText("");
   };
 
+  // ── Helper de rôle ──
+  const roleLabel = (role: string) =>
+    role === "artisan"
+      ? "Artisan"
+      : role === "designer"
+        ? "Designer"
+        : role === "admin"
+          ? "Support Dedco"
+          : "Client";
+
   return (
-    <div className="dedco-fade-in h-[calc(100vh-64px)] flex flex-col lg:h-[calc(100vh-64px)]">
-      {/* Mobile: Show conversation list or chat */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Left Panel — Conversation List */}
+    // Conteneur plein écran — s'inscrit dans le <main> du DashboardSidebar.
+    // h-full : le parent <main> a flex-1 dans un h-screen, donc la hauteur
+    // est déterminée automatiquement (header mobile 64px déjà déduit par flex).
+    <div className="h-full flex flex-col bg-[var(--bg-cream)]">
+      {/* ── Bandeau de titre (desktop) ──
+          Sur desktop, on garde un titre "Messagerie" pour la lisibilité,
+          aligné avec les autres pages du dashboard. Sur mobile, le header
+          du DashboardSidebar suffit. */}
+      <div className="hidden lg:flex items-center justify-between px-6 py-4 border-b border-[var(--border)] bg-[var(--bg-card)] flex-shrink-0">
+        <div>
+          <h1 className="font-display text-xl font-semibold text-[var(--text-1)]">
+            Messagerie
+          </h1>
+          <p className="text-xs text-[var(--text-3)] mt-0.5">
+            Échangez avec vos clients, designers et artisans en toute sécurité.
+          </p>
+        </div>
+      </div>
+
+      {/* ── Layout 2 colonnes (liste + chat) ── */}
+      <div className="flex-1 flex overflow-hidden min-h-0">
+        {/* ───── Colonne gauche — Liste des conversations ───── */}
         <div
-          className={`w-full lg:w-[400px] xl:w-[420px] border-r border-border flex flex-col bg-white ${
+          className={`w-full lg:w-[360px] xl:w-[400px] border-r border-[var(--border)] flex flex-col bg-[var(--bg-card)] ${
             selectedConvId ? "hidden lg:flex" : "flex"
           }`}
         >
-          {/* Header */}
-          <div className="p-4 border-b border-border">
-            <button
-              onClick={() => goBack()}
-              className="flex items-center gap-1 text-sm text-[var(--text-3)] hover:text-[var(--amber)] transition-colors mb-3"
-            >
-              <ChevronLeft size={16} /> Retour
-            </button>
-            <h1 className="display-lg mb-3">Messages</h1>
+          {/* Recherche */}
+          <div className="p-4 border-b border-[var(--border)]">
             <div className="relative">
               <Search
                 size={16}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-mute"
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-3)]"
               />
               <input
                 type="text"
                 placeholder="Rechercher une conversation..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2.5 text-sm rounded-lg bg-[var(--bg-warm)] border border-border focus:outline-none focus:border-amber transition-colors"
+                className="w-full pl-9 pr-4 py-2.5 text-sm rounded-lg bg-[var(--bg-warm)] border border-[var(--border)] focus:outline-none focus:border-[var(--amber)] transition-colors"
               />
             </div>
           </div>
 
-          {/* Conversation list */}
+          {/* Liste */}
           <div className="flex-1 overflow-y-auto dedco-scroll">
-            {filteredConvs.map((conv) => (
-              <motion.button
-                key={conv.id}
-                type="button"
-                onClick={() => handleSelectConv(conv.id)}
-                className={`w-full text-left p-4 flex items-center gap-3 transition-colors border-b border-border/50 hover:bg-[var(--bg-warm)] ${
-                  selectedConvId === conv.id ? "bg-[var(--amber-pale)]" : ""
-                }`}
-                whileHover={{ x: 2 }}
-                transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              >
-                <div className="relative flex-shrink-0">
-                  {conv.avatar ? (
-                    <img
-                      src={conv.avatar}
-                      alt={conv.name}
-                      className="w-12 h-12 rounded-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-12 h-12 rounded-full bg-amber flex items-center justify-center text-white font-bold text-lg">
-                      {conv.name[0]}
-                    </div>
-                  )}
-                  {conv.online && (
-                    <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-forest border-2 border-white" />
-                  )}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between mb-0.5">
-                    <h3 className="font-semibold text-sm truncate">
-                      {conv.name}
-                    </h3>
-                    <span className="text-xs text-ink-mute flex-shrink-0 ml-2">
-                      {conv.time}
-                    </span>
+            {filteredConvs.map((conv) => {
+              const active = selectedConvId === conv.id;
+              return (
+                <button
+                  key={conv.id}
+                  type="button"
+                  onClick={() => handleSelectConv(conv.id)}
+                  className={`w-full text-left p-4 flex items-center gap-3 transition-colors border-b border-[var(--border)]/50 hover:bg-[var(--bg-warm)] cursor-pointer ${
+                    active ? "bg-[var(--amber-pale)]" : ""
+                  }`}
+                >
+                  <div className="relative flex-shrink-0">
+                    {conv.avatar ? (
+                      <img
+                        src={conv.avatar}
+                        alt={conv.name}
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-[var(--amber)] flex items-center justify-center text-white font-bold text-lg">
+                        {conv.name[0]}
+                      </div>
+                    )}
+                    {conv.online && (
+                      <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-[var(--forest)] border-2 border-white" />
+                    )}
                   </div>
-                  <p className="text-xs text-ink-soft truncate">
-                    {conv.lastMessage}
-                  </p>
-                </div>
-                {conv.unread > 0 && (
-                  <span className="w-5 h-5 rounded-full bg-amber text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">
-                    {conv.unread}
-                  </span>
-                )}
-              </motion.button>
-            ))}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-0.5">
+                      <h3 className="font-semibold text-sm truncate text-[var(--text-1)]">
+                        {conv.name}
+                      </h3>
+                      <span className="text-[11px] text-[var(--text-3)] flex-shrink-0 ml-2">
+                        {conv.time}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs text-[var(--text-2)] truncate flex-1 mr-2">
+                        {conv.lastMessage}
+                      </p>
+                      {conv.unread > 0 && (
+                        <span className="w-5 h-5 rounded-full bg-[var(--amber)] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">
+                          {conv.unread}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[10px] text-[var(--text-3)] uppercase tracking-wide mt-0.5">
+                      {roleLabel(conv.role)}
+                    </p>
+                  </div>
+                </button>
+              );
+            })}
             {filteredConvs.length === 0 && (
               <div className="p-8 text-center">
-                <p className="text-sm text-ink-mute">Aucune conversation trouvée</p>
+                <MessageCircle size={32} className="text-[var(--text-3)] mx-auto mb-2" />
+                <p className="text-sm text-[var(--text-2)] font-medium">Aucune conversation</p>
+                <p className="text-xs text-[var(--text-3)] mt-1">
+                  Essayez un autre terme de recherche.
+                </p>
               </div>
             )}
           </div>
         </div>
 
-        {/* Right Panel — Chat View */}
+        {/* ───── Colonne droite — Vue conversation ───── */}
         <div
-          className={`flex-1 flex flex-col bg-[var(--bg-cream)] ${
+          className={`flex-1 flex flex-col bg-[var(--bg-cream)] min-w-0 ${
             selectedConvId ? "flex" : "hidden lg:flex"
           }`}
         >
@@ -266,19 +323,19 @@ export function MessagesPage() {
             {selectedConv ? (
               <motion.div
                 key={selectedConv.id}
-                className="flex flex-col h-full"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.2 }}
+                className="flex flex-col h-full min-h-0"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
               >
                 {/* Chat Header */}
-                <div className="p-4 border-b border-border bg-white flex items-center gap-3">
+                <div className="p-3 sm:p-4 border-b border-[var(--border)] bg-[var(--bg-card)] flex items-center gap-3">
                   <button
                     type="button"
                     onClick={handleBack}
-                    className="lg:hidden w-9 h-9 rounded-full flex items-center justify-center hover:bg-warm transition-colors"
-                    aria-label="Retour"
+                    className="lg:hidden w-9 h-9 rounded-full flex items-center justify-center hover:bg-[var(--bg-warm)] transition-colors text-[var(--text-1)]"
+                    aria-label="Retour à la liste"
                   >
                     <ChevronLeft size={20} />
                   </button>
@@ -290,53 +347,59 @@ export function MessagesPage() {
                         className="w-10 h-10 rounded-full object-cover"
                       />
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-amber flex items-center justify-center text-white font-bold">
+                      <div className="w-10 h-10 rounded-full bg-[var(--amber)] flex items-center justify-center text-white font-bold">
                         {selectedConv.name[0]}
                       </div>
                     )}
                     {selectedConv.online && (
-                      <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-forest border-2 border-white" />
+                      <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-[var(--forest)] border-2 border-white" />
                     )}
                   </div>
-                  <div>
-                    <h2 className="font-semibold text-sm">{selectedConv.name}</h2>
-                    <p className="text-xs text-forest flex items-center gap-1">
-                      <Circle size={6} fill="currentColor" />
-                      {selectedConv.online ? "En ligne" : "Hors ligne"}
+                  <div className="flex-1 min-w-0">
+                    <h2 className="font-semibold text-sm text-[var(--text-1)] truncate">
+                      {selectedConv.name}
+                    </h2>
+                    <p className="text-xs flex items-center gap-1">
+                      <Circle
+                        size={6}
+                        fill="currentColor"
+                        className={selectedConv.online ? "text-[var(--forest)]" : "text-[var(--text-3)]"}
+                      />
+                      <span className={selectedConv.online ? "text-[var(--forest)]" : "text-[var(--text-3)]"}>
+                        {selectedConv.online ? "En ligne" : "Hors ligne"}
+                      </span>
+                      <span className="text-[var(--text-3)]">·</span>
+                      <span className="text-[var(--text-3)]">{roleLabel(selectedConv.role)}</span>
                     </p>
                   </div>
                 </div>
 
                 {/* Messages */}
-                <div className="flex-1 overflow-y-auto p-4 dedco-scroll space-y-3">
+                <div className="flex-1 overflow-y-auto p-4 dedco-scroll space-y-3 min-h-0">
                   {selectedConv.messages.map((msg) => (
                     <motion.div
                       key={msg.id}
                       className={`flex ${msg.sent ? "justify-end" : "justify-start"}`}
-                      initial={{ opacity: 0, y: 8 }}
+                      initial={{ opacity: 0, y: 6 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.15 }}
+                      transition={{ duration: 0.12 }}
                     >
-                      <div
-                        className={`max-w-[80%] sm:max-w-[65%] ${
-                          msg.sent ? "order-2" : "order-1"
-                        }`}
-                      >
+                      <div className={`max-w-[80%] sm:max-w-[65%]`}>
                         {msg.image ? (
-                          <div className="rounded-xl overflow-hidden shadow-md mb-1">
+                          <div className="rounded-xl overflow-hidden shadow-sm mb-1">
                             <img
                               src={msg.image}
                               alt="Photo partagée"
-                              className="w-full max-w-[300px] rounded-xl object-cover"
+                              className="w-full max-w-[280px] rounded-xl object-cover"
                             />
                           </div>
                         ) : (
                           msg.text && (
                             <div
-                              className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
+                              className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed break-words ${
                                 msg.sent
-                                  ? "bg-amber text-white rounded-br-md"
-                                  : "bg-white border border-border text-ink rounded-bl-md"
+                                  ? "bg-[var(--amber)] text-white rounded-br-md"
+                                  : "bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-1)] rounded-bl-md"
                               }`}
                             >
                               {msg.text}
@@ -344,7 +407,7 @@ export function MessagesPage() {
                           )
                         )}
                         <p
-                          className={`text-[10px] text-ink-mute mt-0.5 ${
+                          className={`text-[10px] text-[var(--text-3)] mt-0.5 ${
                             msg.sent ? "text-right" : "text-left"
                           }`}
                         >
@@ -356,21 +419,31 @@ export function MessagesPage() {
                   <div ref={messagesEndRef} />
                 </div>
 
-                {/* Security Banner */}
-                <div className="px-4 py-2 bg-forest-pale/50 flex items-center gap-2">
-                  <ShieldAlert size={14} className="text-forest flex-shrink-0" />
-                  <p className="text-[11px] text-forest leading-snug">
-                    Pour votre sécurité, ne partagez pas de coordonnées de
-                    paiement en dehors de Dedco.
-                  </p>
+                {/* ── Bannière de sécurité ──
+                    Texte clair et explicatif : pourquoi il ne faut pas partager
+                    de coordonnées de paiement hors plateforme, et quoi faire
+                    en cas de doute. Style discret, lisible, non intrusif. */}
+                <div className="px-4 py-2.5 bg-[var(--forest-pale)] border-t border-[var(--forest)]/20 flex items-start gap-2.5">
+                  <ShieldCheck size={16} className="text-[var(--forest)] flex-shrink-0 mt-0.5" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[11px] text-[var(--forest)] font-semibold leading-snug">
+                      Échange protégé par Dedco
+                    </p>
+                    <p className="text-[11px] text-[var(--forest)] leading-snug mt-0.5">
+                      Réglez uniquement via le bouton « Payer » de Dedco. Ne
+                      partagez jamais de numéro Mobile Money, RIB ou lien de
+                      paiement externe dans cette conversation. En cas de doute,
+                      signalez le message à notre équipe.
+                    </p>
+                  </div>
                 </div>
 
-                {/* Message Input */}
-                <div className="p-4 bg-white border-t border-border">
+                {/* Input */}
+                <div className="p-3 sm:p-4 bg-[var(--bg-card)] border-t border-[var(--border)]">
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
-                      className="w-10 h-10 rounded-full flex items-center justify-center text-ink-mute hover:bg-warm hover:text-ink transition-colors"
+                      className="w-10 h-10 rounded-full flex items-center justify-center text-[var(--text-3)] hover:bg-[var(--bg-warm)] hover:text-[var(--text-1)] transition-colors"
                       aria-label="Joindre un fichier"
                     >
                       <Paperclip size={18} />
@@ -386,13 +459,13 @@ export function MessagesPage() {
                           handleSend();
                         }
                       }}
-                      className="flex-1 px-4 py-2.5 text-sm rounded-full bg-[var(--bg-warm)] border border-border focus:outline-none focus:border-amber transition-colors"
+                      className="flex-1 px-4 py-2.5 text-sm rounded-full bg-[var(--bg-warm)] border border-[var(--border)] focus:outline-none focus:border-[var(--amber)] transition-colors"
                     />
                     <button
                       type="button"
                       onClick={handleSend}
                       disabled={!messageText.trim()}
-                      className="w-10 h-10 rounded-full bg-amber text-white flex items-center justify-center hover:bg-amber-dark transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="w-10 h-10 rounded-full bg-[var(--amber)] text-white flex items-center justify-center hover:bg-[var(--amber-dark)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                       aria-label="Envoyer"
                     >
                       <Send size={16} />
@@ -403,21 +476,22 @@ export function MessagesPage() {
             ) : (
               <motion.div
                 key="empty"
-                className="flex-1 flex items-center justify-center"
+                className="flex-1 flex items-center justify-center p-8"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
               >
-                <div className="text-center px-4">
-                  <div className="w-16 h-16 rounded-full bg-warm mx-auto mb-4 flex items-center justify-center">
-                    <Send size={24} className="text-ink-mute" />
+                <div className="text-center max-w-sm">
+                  <div className="w-16 h-16 rounded-full bg-[var(--amber-pale)] mx-auto mb-4 flex items-center justify-center">
+                    <MessageCircle size={28} className="text-[var(--amber)]" />
                   </div>
-                  <p className="font-display font-semibold text-lg mb-1">
-                    Sélectionnez une conversation
+                  <p className="font-display font-semibold text-lg mb-2 text-[var(--text-1)]">
+                    Vos conversations
                   </p>
-                  <p className="text-sm text-ink-mute">
-                    Choisissez une conversation dans la liste pour commencer à
-                    discuter
+                  <p className="text-sm text-[var(--text-3)] leading-relaxed">
+                    Sélectionnez une conversation dans la liste pour relire
+                    l'historique et envoyer un message. Vos échanges sont
+                    sécurisés et confidentiels.
                   </p>
                 </div>
               </motion.div>

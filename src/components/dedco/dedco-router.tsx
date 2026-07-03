@@ -1,8 +1,12 @@
 "use client";
 
-import { useDedcoStore, type AppRoute } from "@/lib/store";
+import { useEffect } from "react";
+import { useDedcoStore, type AppRoute, type UserRole } from "@/lib/store";
 import { AnimatePresence, motion } from "framer-motion";
+import dynamic from "next/dynamic";
 import type { Route } from "@/lib/dedco-types";
+
+// Pages critiques — eager load (LCP)
 import { HomePage } from "@/components/dedco/home-page";
 import { MarketplacePage } from "@/components/dedco/marketplace-page";
 import { ProductPage } from "@/components/dedco/product-page";
@@ -15,30 +19,28 @@ import {
   MagazinePage,
 } from "@/components/dedco/other-pages";
 
-import { LoginPage } from "@/components/dedco/pages/login-page";
-import { RegisterPage } from "@/components/dedco/pages/register-page";
-import { ForgotPasswordPage } from "@/components/dedco/pages/forgot-password-page";
-import { CartPage } from "@/components/dedco/pages/cart-page";
-import { CheckoutPage } from "@/components/dedco/pages/checkout-page";
-import { PaymentPage } from "@/components/dedco/pages/payment-page";
-import { ProfilePage } from "@/components/dedco/pages/profile-page";
-import { OrderTrackingPage } from "@/components/dedco/pages/order-tracking-page";
-import { FavoritesPage } from "@/components/dedco/pages/favorites-page";
-import { WalletPage } from "@/components/dedco/pages/wallet-page";
-import { KYCPage } from "@/components/dedco/pages/kyc-page";
-import { BriefListPage } from "@/components/dedco/pages/brief-list-page";
-import { BriefCreatePage } from "@/components/dedco/pages/brief-create-page";
-import { BriefPage } from "@/components/dedco/brief-page";
-import { ProjetArtisanDetailPage } from "@/components/dedco/pages/projet-artisan-detail";
-import { ProjetDesignerDetailPage } from "@/components/dedco/pages/projet-designer-detail";
-import { ProjetPaiementArtisanPage } from "@/components/dedco/pages/projet-paiement-artisan";
-import { BriefArtisanDetailPage } from "@/components/dedco/pages/brief-artisan-detail";
-import { BriefDesignerDetailPage } from "@/components/dedco/pages/brief-designer-detail";
-import {
-  OrderConfirmationPage,
-  InvoicePage,
-  OrderTrackingPage as NewOrderTrackingPage,
-} from "@/components/dedco/pages/order-pages";
+// Pages secondaires — lazy load (code splitting)
+const LoginPage = dynamic(() => import("@/components/dedco/pages/login-page").then(m => ({ default: m.LoginPage })));
+const RegisterPage = dynamic(() => import("@/components/dedco/pages/register-page").then(m => ({ default: m.RegisterPage })));
+const ForgotPasswordPage = dynamic(() => import("@/components/dedco/pages/forgot-password-page").then(m => ({ default: m.ForgotPasswordPage })));
+const CartPage = dynamic(() => import("@/components/dedco/pages/cart-page").then(m => ({ default: m.CartPage })));
+const CheckoutPage = dynamic(() => import("@/components/dedco/pages/checkout-page").then(m => ({ default: m.CheckoutPage })));
+const PaymentPage = dynamic(() => import("@/components/dedco/pages/payment-page").then(m => ({ default: m.PaymentPage })));
+const ProfilePage = dynamic(() => import("@/components/dedco/pages/profile-page").then(m => ({ default: m.ProfilePage })));
+const FavoritesPage = dynamic(() => import("@/components/dedco/pages/favorites-page").then(m => ({ default: m.FavoritesPage })));
+const WalletPage = dynamic(() => import("@/components/dedco/pages/wallet-page").then(m => ({ default: m.WalletPage })));
+const KYCPage = dynamic(() => import("@/components/dedco/pages/kyc-page").then(m => ({ default: m.KYCPage })));
+const BriefListPage = dynamic(() => import("@/components/dedco/pages/brief-list-page").then(m => ({ default: m.BriefListPage })));
+const BriefCreatePage = dynamic(() => import("@/components/dedco/pages/brief-create-page").then(m => ({ default: m.BriefCreatePage })));
+const BriefPage = dynamic(() => import("@/components/dedco/brief-page").then(m => ({ default: m.BriefPage })));
+const ProjetArtisanDetailPage = dynamic(() => import("@/components/dedco/pages/projet-artisan-detail").then(m => ({ default: m.ProjetArtisanDetailPage })));
+const ProjetDesignerDetailPage = dynamic(() => import("@/components/dedco/pages/projet-designer-detail").then(m => ({ default: m.ProjetDesignerDetailPage })));
+const ProjetPaiementArtisanPage = dynamic(() => import("@/components/dedco/pages/projet-paiement-artisan").then(m => ({ default: m.ProjetPaiementArtisanPage })));
+const BriefArtisanDetailPage = dynamic(() => import("@/components/dedco/pages/brief-artisan-detail").then(m => ({ default: m.BriefArtisanDetailPage })));
+const BriefDesignerDetailPage = dynamic(() => import("@/components/dedco/pages/brief-designer-detail").then(m => ({ default: m.BriefDesignerDetailPage })));
+const OrderConfirmationPage = dynamic(() => import("@/components/dedco/pages/order-pages").then(m => ({ default: m.OrderConfirmationPage })));
+const InvoicePage = dynamic(() => import("@/components/dedco/pages/order-pages").then(m => ({ default: m.InvoicePage })));
+const NewOrderTrackingPage = dynamic(() => import("@/components/dedco/pages/order-pages").then(m => ({ default: m.OrderTrackingPage })));
 import { DesignerDashboardPage } from "@/components/dedco/pages/designer/designer-dashboard";
 import { DesignerProjectsPage } from "@/components/dedco/pages/designer/designer-projects";
 import { DesignerBriefsPage } from "@/components/dedco/pages/designer/designer-briefs";
@@ -56,69 +58,60 @@ import { AdminProductsPage } from "@/components/dedco/pages/admin/admin-products
 import { AdminOrdersPage } from "@/components/dedco/pages/admin/admin-orders";
 import { AdminAnalyticsPage } from "@/components/dedco/pages/admin/admin-analytics";
 import { AdminContentPage } from "@/components/dedco/pages/admin/admin-content";
-import { MessagesPage } from "@/components/dedco/pages/messages-page";
-import { LitigePage } from "@/components/dedco/pages/litige-page";
-import { MoodboardPage } from "@/components/dedco/pages/moodboard-page";
-import { SearchResultsPage } from "@/components/dedco/pages/search-page";
-import { OnboardingPage } from "@/components/dedco/pages/onboarding-page";
+const MessagesPage = dynamic(() => import("@/components/dedco/pages/messages-page").then(m => ({ default: m.MessagesPage })));
+const LitigePage = dynamic(() => import("@/components/dedco/pages/litige-page").then(m => ({ default: m.LitigePage })));
+const MoodboardPage = dynamic(() => import("@/components/dedco/pages/moodboard-page").then(m => ({ default: m.MoodboardPage })));
+const SearchResultsPage = dynamic(() => import("@/components/dedco/pages/search-page").then(m => ({ default: m.SearchResultsPage })));
+const OnboardingPage = dynamic(() => import("@/components/dedco/pages/onboarding-page").then(m => ({ default: m.OnboardingPage })));
 import { MaisonDashboardPage } from "@/components/dedco/pages/maison-dashboard";
-import { ArticlePage } from "@/components/dedco/pages/article-page";
-import { ArtisansListingPage } from "@/components/dedco/pages/artisans-page";
-import { MarketplaceCategoryPage } from "@/components/dedco/pages/marketplace-category-page";
-import { OrderHistoryPage } from "@/components/dedco/pages/order-history-page";
-import { SettingsPage } from "@/components/dedco/pages/settings-page";
-import { NotificationsPage } from "@/components/dedco/pages/notifications-page";
-import { HelpCenterPage } from "@/components/dedco/pages/help-center-page";
-import { AboutPage } from "@/components/dedco/pages/about-page";
-import { BecomeArtisanPage } from "@/components/dedco/pages/become-artisan-page";
+const ArticlePage = dynamic(() => import("@/components/dedco/pages/article-page").then(m => ({ default: m.ArticlePage })));
+const ArtisansListingPage = dynamic(() => import("@/components/dedco/pages/artisans-page").then(m => ({ default: m.ArtisansListingPage })));
+const MarketplaceCategoryPage = dynamic(() => import("@/components/dedco/pages/marketplace-category-page").then(m => ({ default: m.MarketplaceCategoryPage })));
+const OrderHistoryPage = dynamic(() => import("@/components/dedco/pages/order-history-page").then(m => ({ default: m.OrderHistoryPage })));
+const SettingsPage = dynamic(() => import("@/components/dedco/pages/settings-page").then(m => ({ default: m.SettingsPage })));
+const NotificationsPage = dynamic(() => import("@/components/dedco/pages/notifications-page").then(m => ({ default: m.NotificationsPage })));
+const HelpCenterPage = dynamic(() => import("@/components/dedco/pages/help-center-page").then(m => ({ default: m.HelpCenterPage })));
+const AboutPage = dynamic(() => import("@/components/dedco/pages/about-page").then(m => ({ default: m.AboutPage })));
+const BecomeArtisanPage = dynamic(() => import("@/components/dedco/pages/become-artisan-page").then(m => ({ default: m.BecomeArtisanPage })));
 
-// BLOC 6 — New pages (audit)
-import {
-  ArtisanDemandesPage,
-  ArtisanProjetsPage,
-  ArtisanWalletPage,
-  ArtisanAvisPage,
-  ArtisanCertificationPage,
-  ArtisanAbonnementPage,
-  ArtisanParametresPage,
-} from "@/components/dedco/pages/artisan/artisan-extended-pages";
-import {
-  ArtisanBriefRecuPage,
-  ArtisanDevisCreatePage,
-} from "@/components/dedco/pages/artisan/artisan-brief-workflow";
-import {
-  AdminKYCPage,
-  AdminMessagesPage,
-  AdminLitigesPage,
-  AdminScenesPage,
-  AdminCollectionsPage,
-  AdminCertificationPage,
-  AdminParametresPage,
-} from "@/components/dedco/pages/admin/admin-extended-pages";
-import {
-  DesignerWalletPage,
-  DesignerPortfolioPage,
-  DesignerAbonnementPage,
-  BriefDesignerPage,
-  AvisLivraisonPage,
-  PlansTarifsPage,
-} from "@/components/dedco/pages/client-and-designer-pages";
-import { MesProjetsPage } from "@/components/dedco/pages/mes-projets-page";
-// Workflow designer (version simplifiée)
-import {
-  DesignerProjetAttentePage,
-  DesignerBriefRecuPage,
-  DesignerPropositionMissionPage,
-  ClientPropositionRecuePage,
-  ProjetPaiementPage,
-  ProjetDetailPage,
-  ProjetLivraisonPage,
-} from "@/components/dedco/pages/designer-workflow-pages";
+// BLOC 6 — New pages (lazy)
+const ArtisanDemandesPage = dynamic(() => import("@/components/dedco/pages/artisan/artisan-extended-pages").then(m => ({ default: m.ArtisanDemandesPage })));
+const ArtisanProjetsPage = dynamic(() => import("@/components/dedco/pages/artisan/artisan-extended-pages").then(m => ({ default: m.ArtisanProjetsPage })));
+const ArtisanWalletPage = dynamic(() => import("@/components/dedco/pages/artisan/artisan-extended-pages").then(m => ({ default: m.ArtisanWalletPage })));
+const ArtisanAvisPage = dynamic(() => import("@/components/dedco/pages/artisan/artisan-extended-pages").then(m => ({ default: m.ArtisanAvisPage })));
+const ArtisanCertificationPage = dynamic(() => import("@/components/dedco/pages/artisan/artisan-extended-pages").then(m => ({ default: m.ArtisanCertificationPage })));
+const ArtisanAbonnementPage = dynamic(() => import("@/components/dedco/pages/artisan/artisan-extended-pages").then(m => ({ default: m.ArtisanAbonnementPage })));
+const ArtisanParametresPage = dynamic(() => import("@/components/dedco/pages/artisan/artisan-extended-pages").then(m => ({ default: m.ArtisanParametresPage })));
+const ArtisanBriefRecuPage = dynamic(() => import("@/components/dedco/pages/artisan/artisan-brief-workflow").then(m => ({ default: m.ArtisanBriefRecuPage })));
+const ArtisanDevisCreatePage = dynamic(() => import("@/components/dedco/pages/artisan/artisan-brief-workflow").then(m => ({ default: m.ArtisanDevisCreatePage })));
+const AdminKYCPage = dynamic(() => import("@/components/dedco/pages/admin/admin-extended-pages").then(m => ({ default: m.AdminKYCPage })));
+const AdminMessagesPage = dynamic(() => import("@/components/dedco/pages/admin/admin-extended-pages").then(m => ({ default: m.AdminMessagesPage })));
+const AdminLitigesPage = dynamic(() => import("@/components/dedco/pages/admin/admin-extended-pages").then(m => ({ default: m.AdminLitigesPage })));
+const AdminScenesPage = dynamic(() => import("@/components/dedco/pages/admin/admin-extended-pages").then(m => ({ default: m.AdminScenesPage })));
+const AdminCollectionsPage = dynamic(() => import("@/components/dedco/pages/admin/admin-extended-pages").then(m => ({ default: m.AdminCollectionsPage })));
+const AdminCertificationPage = dynamic(() => import("@/components/dedco/pages/admin/admin-extended-pages").then(m => ({ default: m.AdminCertificationPage })));
+const AdminParametresPage = dynamic(() => import("@/components/dedco/pages/admin/admin-extended-pages").then(m => ({ default: m.AdminParametresPage })));
+const DesignerWalletPage = dynamic(() => import("@/components/dedco/pages/client-and-designer-pages").then(m => ({ default: m.DesignerWalletPage })));
+const DesignerPortfolioPage = dynamic(() => import("@/components/dedco/pages/client-and-designer-pages").then(m => ({ default: m.DesignerPortfolioPage })));
+const DesignerAbonnementPage = dynamic(() => import("@/components/dedco/pages/client-and-designer-pages").then(m => ({ default: m.DesignerAbonnementPage })));
+const BriefDesignerPage = dynamic(() => import("@/components/dedco/pages/client-and-designer-pages").then(m => ({ default: m.BriefDesignerPage })));
+const AvisLivraisonPage = dynamic(() => import("@/components/dedco/pages/client-and-designer-pages").then(m => ({ default: m.AvisLivraisonPage })));
+const PlansTarifsPage = dynamic(() => import("@/components/dedco/pages/client-and-designer-pages").then(m => ({ default: m.PlansTarifsPage })));
+const MesProjetsPage = dynamic(() => import("@/components/dedco/pages/mes-projets-page").then(m => ({ default: m.MesProjetsPage })));
+// Workflow designer (lazy)
+const DesignerProjetAttentePage = dynamic(() => import("@/components/dedco/pages/designer-workflow-pages").then(m => ({ default: m.DesignerProjetAttentePage })));
+const DesignerBriefRecuPage = dynamic(() => import("@/components/dedco/pages/designer-workflow-pages").then(m => ({ default: m.DesignerBriefRecuPage })));
+const DesignerPropositionMissionPage = dynamic(() => import("@/components/dedco/pages/designer-workflow-pages").then(m => ({ default: m.DesignerPropositionMissionPage })));
+const ClientPropositionRecuePage = dynamic(() => import("@/components/dedco/pages/designer-workflow-pages").then(m => ({ default: m.ClientPropositionRecuePage })));
+const ProjetPaiementPage = dynamic(() => import("@/components/dedco/pages/designer-workflow-pages").then(m => ({ default: m.ProjetPaiementPage })));
+const ProjetDetailPage = dynamic(() => import("@/components/dedco/pages/designer-workflow-pages").then(m => ({ default: m.ProjetDetailPage })));
+const ProjetLivraisonPage = dynamic(() => import("@/components/dedco/pages/designer-workflow-pages").then(m => ({ default: m.ProjetLivraisonPage })));
 
-// Layouts
+// Layouts (eager — utilisés partout)
 import { ArtisanLayout } from "@/components/dedco/pages/artisan/artisan-layout";
 import { DesignerLayout } from "@/components/dedco/pages/designer/designer-layout";
 import { AdminLayout } from "@/components/dedco/pages/admin/admin-layout";
+import { MaisonLayout } from "@/components/dedco/pages/maison/maison-layout";
 
 // ============================================================
 // Bridge: AppRoute ↔ Route
@@ -140,7 +133,8 @@ function appRouteToRoute(ar: AppRoute): Route {
     case "article": return { name: "article", id: ar.id };
     case "favorites": return { name: "favorites" };
     case "brief": return { name: "brief" };
-    default: return { name: "home" };
+    // Routes non-gérées par la navbar → "other" (aucun onglet highlighted)
+    default: return { name: "other" };
   }
 }
 
@@ -169,18 +163,89 @@ const ARTISAN_PAGES = new Set([
   "artisan-dashboard","artisan-products","artisan-orders","artisan-profile","artisan-stats",
   "artisan-demandes","artisan-projets","artisan-wallet","artisan-avis","artisan-certification","artisan-abonnement","artisan-parametres",
   "artisan-brief-recu","artisan-devis-create",
+  // NOTE : projet-artisan-detail est volontairement hors ARTISAN_PAGES — c'est
+  // une page partagée (client suit son projet commandé, artisan gère son projet).
+  // Sans ça, le guard redirigerait le client vers home quand il clique "Voir le projet".
 ]);
 const DESIGNER_PAGES = new Set([
-  "designer-dashboard","designer-projects","designer-briefs","designer-profile","designer-settings","brief-detail",
+  "designer-dashboard","designer-projects","designer-briefs","designer-profile","designer-settings",
   "designer-wallet","designer-portfolio","designer-abonnement",
+  "designer-brief-recu","designer-proposition-mission",
+  // NOTE : projet-designer-detail ET brief-designer-detail sont partagés
+  // (le client suit ses briefs/projets designer ; le designer gère ses briefs/projets).
 ]);
 const ADMIN_PAGES = new Set([
   "admin-dashboard","admin-users","admin-products","admin-orders","admin-analytics","admin-content",
   "admin-kyc","admin-messages","admin-litiges","admin-scenes","admin-collections","admin-certification","admin-parametres",
 ]);
 
+// Routes workflow accessibles à tout utilisateur authentifié (client, artisan, designer)
+const AUTH_REQUIRED_PAGES = new Set([
+  "brief-detail",          // client voit son brief, designer voit un brief reçu
+  "brief-artisan-detail",  // détail brief artisan
+  "brief-designer-detail", // détail brief designer — partagé client/designer
+  "client-proposition-recue", // client voit proposition reçue
+  "projet-paiement",       // paiement projet designer
+  "projet-paiement-artisan", // paiement projet artisan
+  "projet-detail",         // suivi projet
+  "projet-livraison",      // livraison projet
+  "projet-artisan-detail", // détail projet artisan — partagé client/artisan
+  "projet-designer-detail", // détail projet designer — partagé client/designer
+  "client-projets",        // liste projets client
+  "mes-projets",           // page mes projets
+  "order-history",         // historique commandes
+  "profile",               // profil utilisateur
+  "wallet",                // portefeuille
+  "settings",              // paramètres
+  "notifications",         // notifications
+  "messages",              // messagerie
+  "kyc",                   // KYC artisan
+  "moodboard",             // moodboard (sauvegardes)
+  "onboarding",            // onboarding post-inscription
+]);
+
 export function isDashboardPage(page: string): boolean {
   return ARTISAN_PAGES.has(page) || DESIGNER_PAGES.has(page) || ADMIN_PAGES.has(page) || page === "maison-dashboard";
+}
+
+// Rôles prestataires (qui ont un dashboard dédié) vs client (page publique)
+function isPrestataireRole(role: UserRole | undefined | null): boolean {
+  return role === "artisan" || role === "designer" || role === "admin" || role === "maison";
+}
+
+// ============================================================
+// Route Guarding — redirection silencieuse (pas d'écran de blocage)
+// ============================================================
+//
+// Philosophie : chaque acteur navigue normalement. S'il arrive sur une
+// page qui n'est pas la sienne (lien obsolète, URL directe, etc.), il
+// est redirigé sans heurt vers sa propre page équivalente.
+//
+// - Page réservée à un rôle X, mais user a un autre rôle → redirige
+//   vers le dashboard de l'user (ou l'accueil pour un client).
+// - Page auth-required sans user connecté → redirige vers login.
+// - Aucun écran "Accès restreint" : on rend `null` le temps que la
+//   redirection prenne effet (1 frame).
+
+const ROLE_HOME_PAGE: Record<UserRole, AppRoute["page"]> = {
+  client: "home",
+  artisan: "artisan-dashboard",
+  designer: "designer-dashboard",
+  admin: "admin-dashboard",
+  maison: "maison-dashboard",
+};
+
+function getRequiredRole(page: string): UserRole | null {
+  if (ARTISAN_PAGES.has(page)) return "artisan";
+  if (DESIGNER_PAGES.has(page)) return "designer";
+  if (ADMIN_PAGES.has(page)) return "admin";
+  if (page === "maison-dashboard") return "maison";
+  return null;
+}
+
+// Routes qui nécessitent juste une authentification (peu importe le rôle)
+function isAuthRequired(page: string): boolean {
+  return AUTH_REQUIRED_PAGES.has(page);
 }
 
 // ============================================================
@@ -202,6 +267,59 @@ export function DedcoRouter() {
   const toggleFavorite = useDedcoStore((s) => s.toggleFavorite);
   const addToCart = useDedcoStore((s) => s.addToCart);
   const toggleSceneSave = useDedcoStore((s) => s.toggleSceneSave);
+  const currentUser = useDedcoStore((s) => s.currentUser);
+
+  // ── Route Guarding — redirection silencieuse ──
+  //
+  // Pas d'écran "Accès restreint" : on calcule si la route actuelle est
+  // accessible à l'user, et sinon on redirige via useEffect. Le temps
+  // de la redirection (1 frame), on rend `null` pour éviter un flash
+  // de contenu non autorisé.
+  const requiredRole = getRequiredRole(route.page);
+  const needsAuth = isAuthRequired(route.page);
+  const isForbidden =
+    (requiredRole !== null && (!currentUser || currentUser.role !== requiredRole)) ||
+    (needsAuth && !requiredRole && !currentUser);
+
+  // ── Séparation stricte prestataires / clients ──
+  // Un artisan, designer ou maison déco ne peut PAS accéder au site public
+  // (marketplace, inspirations, accueil, etc.). Il est enfermé dans son dashboard.
+  // Admin garde l'accès au site public.
+  const isPrestataireLocked =
+    currentUser?.role === "artisan" ||
+    currentUser?.role === "designer" ||
+    currentUser?.role === "maison";
+  const isPublicPage =
+    !isDashboardPage(route.page) &&
+    !isAuthRequired(route.page) &&
+    route.page !== "login" &&
+    route.page !== "register" &&
+    route.page !== "forgot-password" &&
+    route.page !== "onboarding";
+  const isLockedOut = isPrestataireLocked && isPublicPage;
+
+  useEffect(() => {
+    if (isLockedOut) {
+      // Prestataire tente d'accéder au site public → dashboard
+      const homePage = ROLE_HOME_PAGE[currentUser!.role] ?? "home";
+      navigate({ page: homePage } as AppRoute);
+      return;
+    }
+    if (!isForbidden) return;
+    // User non connecté → page de connexion
+    if (!currentUser) {
+      navigate({ page: "login" });
+      return;
+    }
+    // User connecté mais mauvais rôle → sa propre page d'accueil
+    const homePage = ROLE_HOME_PAGE[currentUser.role] ?? "home";
+    navigate({ page: homePage } as AppRoute);
+  }, [isForbidden, isLockedOut, currentUser, navigate]);
+
+  if (isForbidden || isLockedOut) {
+    // Rendu minimal le temps que la redirection prenne effet
+    return null;
+  }
 
   const legacyRoute = appRouteToRoute(route);
   const navigateBridge = (r: Route) => navigate(routeToAppRoute(r));
@@ -532,17 +650,69 @@ export function DedcoRouter() {
   const isArtisan = ARTISAN_PAGES.has(route.page);
   const isDesigner = DESIGNER_PAGES.has(route.page);
   const isAdmin = ADMIN_PAGES.has(route.page);
-  const isDashboard = isArtisan || isDesigner || isAdmin || route.page === "maison-dashboard";
+  const isMaison = route.page === "maison-dashboard";
 
-  // ── Dashboard pages: stable Layout, only children change ──
-  if (isArtisan) {
-    return <ArtisanLayout key="artisan-layout">{renderPage()}</ArtisanLayout>;
+  // ── Pages partagées (visibles par plusieurs rôles) ──
+  // Si l'user est un prestataire connecté, on wrapper ces pages dans son
+  // layout dashboard (pour garder la sidebar). Si c'est un client, on les
+  // affiche en page publique (avec la navbar publique).
+  const sharedPages = [
+    "messages",
+    "notifications",
+    // Pages de suivi partagées : client suit son projet, prestataire gère son projet
+    "projet-artisan-detail",
+    "projet-designer-detail",
+    "brief-artisan-detail",
+    "brief-designer-detail",
+    "projet-detail",
+    "projet-livraison",
+    "projet-paiement",
+    "projet-paiement-artisan",
+    "client-proposition-recue",
+  ];
+  const isSharedDashboardPage = sharedPages.includes(route.page) && !!currentUser && isPrestataireRole(currentUser.role);
+  const activeRole: UserRole | null = isSharedDashboardPage
+    ? (currentUser?.role as UserRole)
+    : isArtisan
+      ? "artisan"
+      : isDesigner
+        ? "designer"
+        : isAdmin
+          ? "admin"
+          : isMaison
+            ? "maison"
+            : null;
+
+  // Page à rendre (résout le switch ci-dessus)
+  const pageContent = renderPage();
+
+  if (activeRole === "artisan") {
+    return (
+      <ArtisanLayout key="artisan-layout" currentPage={route.page}>
+        {pageContent}
+      </ArtisanLayout>
+    );
   }
-  if (isDesigner) {
-    return <DesignerLayout key="designer-layout">{renderPage()}</DesignerLayout>;
+  if (activeRole === "designer") {
+    return (
+      <DesignerLayout key="designer-layout" currentPage={route.page}>
+        {pageContent}
+      </DesignerLayout>
+    );
   }
-  if (isAdmin) {
-    return <AdminLayout key="admin-layout">{renderPage()}</AdminLayout>;
+  if (activeRole === "admin") {
+    return (
+      <AdminLayout key="admin-layout" currentPage={route.page}>
+        {pageContent}
+      </AdminLayout>
+    );
+  }
+  if (activeRole === "maison") {
+    return (
+      <MaisonLayout key="maison-layout" currentPage={route.page}>
+        {pageContent}
+      </MaisonLayout>
+    );
   }
 
   // ── Public pages: with animation ──
@@ -557,7 +727,7 @@ export function DedcoRouter() {
         transition={{ duration: 0.15, ease: "easeOut" }}
         className="min-h-screen"
       >
-        {renderPage()}
+        {pageContent}
       </motion.div>
     </AnimatePresence>
   );

@@ -10,6 +10,7 @@ import {
   Bookmark,
   ChevronRight,
   MessageSquare,
+  CheckCircle2,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useDedcoStore } from "@/lib/store";

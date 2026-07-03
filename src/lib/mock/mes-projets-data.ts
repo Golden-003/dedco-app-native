@@ -20,7 +20,7 @@ import type {
   DesignerPrestation,
   PendingPayment,
   Reclamation,
-} from "./dedco-types";
+} from "../dedco-types";
 
 // ────────────────────────────────────────────────────────────
 // ONGLET "EN COURS" — projets actifs (pas d'engagement à confirmer)

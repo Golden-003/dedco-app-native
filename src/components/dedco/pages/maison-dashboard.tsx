@@ -200,6 +200,7 @@ export function MaisonDashboardPage() {
           </div>
           <button
             type="button"
+            onClick={() => navigate({ page: "settings" })}
             className="dedco-btn dedco-btn-secondary dedco-btn-sm flex-shrink-0"
           >
             Paramètres
@@ -247,7 +248,7 @@ export function MaisonDashboardPage() {
               <h2 className="font-display font-bold text-lg">
                 Catalogue produits
               </h2>
-              <button type="button" className="dedco-btn dedco-btn-primary dedco-btn-sm">
+              <button type="button" onClick={() => navigate({ page: "marketplace" })} className="dedco-btn dedco-btn-primary dedco-btn-sm">
                 + Ajouter
               </button>
             </div>

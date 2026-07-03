@@ -58,7 +58,7 @@ export function ScenePage({
               src={scene.image}
               alt={scene.title}
               className="w-full h-full object-cover"
-            />
+            loading="lazy" />
             {/* Hotspots */}
             {scene.hotspots.map((h, idx) => {
               const product = getProduct(h.productId);
@@ -78,7 +78,7 @@ export function ScenePage({
                   aria-label={`Voir le produit ${product.name}`}
                 >
                   <span
-                    className={`block rounded-full bg-white shadow-lg hotspot-dot ${
+                    className={`block rounded-full bg-card shadow-lg hotspot-dot ${
                       isActive ? "ring-4 ring-amber/40" : ""
                     }`}
                     style={{
@@ -102,8 +102,8 @@ export function ScenePage({
                 onClick={() => setIsSaved((s) => !s)}
                 className={`w-10 h-10 rounded-full flex items-center justify-center backdrop-blur transition-all ${
                   isSaved
-                    ? "bg-white text-terracotta"
-                    : "bg-white/60 text-ink hover:bg-white"
+                    ? "bg-card text-terracotta"
+                    : "bg-white/60 text-ink hover:bg-card"
                 }`}
                 aria-label={isSaved ? "Retirer des favoris" : "Sauvegarder"}
               >
@@ -111,7 +111,7 @@ export function ScenePage({
               </button>
               <button
                 type="button"
-                className="w-10 h-10 rounded-full flex items-center justify-center bg-white/60 text-ink hover:bg-white backdrop-blur"
+                className="w-10 h-10 rounded-full flex items-center justify-center bg-white/60 text-ink hover:bg-card backdrop-blur"
                 aria-label="Partager"
               >
                 <Share2 size={18} />
@@ -175,7 +175,7 @@ export function ScenePage({
                     src={designer.avatar}
                     alt={designer.name}
                     className="w-10 h-10 rounded-full object-cover"
-                  />
+                  loading="lazy" />
                   <div className="flex-1">
                     <p className="font-semibold text-sm">{designer.name}</p>
                     <p className="text-xs text-ink-mute">{designer.style}</p>
@@ -236,7 +236,7 @@ export function ScenePage({
                   src={s.image}
                   alt={s.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
+                loading="lazy" />
                 <div
                   className="absolute inset-0"
                   style={{
@@ -275,7 +275,7 @@ export function ScenePage({
                 <button
                   type="button"
                   onClick={() => setActiveHotspot(null)}
-                  className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white shadow flex items-center justify-center z-10"
+                  className="absolute top-3 right-3 w-8 h-8 rounded-full bg-card shadow flex items-center justify-center z-10"
                   aria-label="Fermer"
                 >
                   <X size={16} />
@@ -285,7 +285,7 @@ export function ScenePage({
                     src={product.images[0]}
                     alt={product.name}
                     className="w-full h-full object-cover"
-                  />
+                  loading="lazy" />
                 </div>
                 <div className="p-5">
                   {product.badge && (

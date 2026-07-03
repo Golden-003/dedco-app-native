@@ -60,7 +60,7 @@ export function InspirationsPage({
             className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all border ${
               roomFilter === room
                 ? "bg-amber text-white border-amber"
-                : "bg-white text-ink-soft border-border hover:border-ink-mute"
+                : "bg-card text-ink-soft border-border hover:border-ink-mute"
             }`}
           >
             {room === "all" ? "Toutes les pièces" : room}
@@ -131,7 +131,7 @@ export function DesignersPage({
             className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all border ${
               styleFilter === style
                 ? "bg-amber text-white border-amber"
-                : "bg-white text-ink-soft border-border hover:border-ink-mute"
+                : "bg-card text-ink-soft border-border hover:border-ink-mute"
             }`}
           >
             {style === "all" ? "Tous les styles" : style}
@@ -189,7 +189,7 @@ export function DesignerDetailPage({
             src={designer.cover}
             alt=""
             className="w-full h-full object-cover"
-          />
+          loading="lazy" />
           <div
             className="absolute inset-0"
             style={{
@@ -206,7 +206,7 @@ export function DesignerDetailPage({
                 src={designer.avatar}
                 alt={designer.name}
                 className="w-20 h-20 lg:w-24 lg:h-24 rounded-full object-cover border-4 border-cream"
-              />
+              loading="lazy" />
               <div>
                 <h1 className="display-lg text-white drop-shadow-lg">
                   {designer.name}
@@ -353,7 +353,7 @@ export function ArtisanDetailPage({
             src={artisan.avatar}
             alt={artisan.name}
             className="w-24 h-24 rounded-full object-cover"
-          />
+          loading="lazy" />
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1 flex-wrap">
               <h1 className="display-lg">{artisan.name}</h1>
@@ -401,7 +401,7 @@ export function ArtisanDetailPage({
                 src={img}
                 alt={`Réalisation ${i + 1} de ${artisan.name}`}
                 className="w-full h-full object-cover"
-              />
+              loading="lazy" />
             </div>
           ))}
         </div>
@@ -456,7 +456,7 @@ export function MagazinePage() {
               src={featured.image}
               alt={featured.title}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
+            loading="lazy" />
           </div>
           <div className="p-6 sm:p-8 flex flex-col justify-center">
             <div className="flex items-center gap-2 text-xs text-ink-mute mb-3">
@@ -487,7 +487,7 @@ export function MagazinePage() {
         {others.map((article) => (
           <button key={article.id} type="button" onClick={() => navigate({ page: "article", id: article.id })} className="dedco-card overflow-hidden text-left cursor-pointer hover:shadow-md transition-shadow">
             <div className="aspect-[4/3] overflow-hidden bg-warm">
-              <img src={article.image} alt={article.title} className="w-full h-full object-cover" />
+              <img src={article.image} alt={article.title} className="w-full h-full object-cover" loading="lazy" />
             </div>
             <div className="p-4">
               <div className="flex items-center gap-2 text-xs text-ink-mute mb-2">
@@ -506,58 +506,3 @@ export function MagazinePage() {
   );
 }
 
-// ============================================================
-// FAVORITES page
-// ============================================================
-
-export function FavoritesPage({
-  onNavigate,
-  favorites,
-  toggleFav,
-}: {
-  onNavigate: (route: Route) => void;
-  favorites: Set<number>;
-  toggleFav: (id: number) => void;
-}) {
-  const favProducts = PRODUCTS.filter((p) => favorites.has(p.id));
-  return (
-    <div className="dedco-fade-in max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8">
-        <h1 className="display-xl mb-2">Mes favoris</h1>
-        <p className="text-sm text-ink-soft">
-          {favProducts.length} produit{favProducts.length > 1 ? "s" : ""}{" "}
-          sauvegardé{favProducts.length > 1 ? "s" : ""}.
-        </p>
-      </div>
-      {favProducts.length === 0 ? (
-        <div className="dedco-card p-12 text-center">
-          <p className="font-display font-semibold text-lg mb-2">
-            Aucun favori pour le moment
-          </p>
-          <p className="text-sm text-ink-soft mb-4">
-            Cliquez sur le cœur d'un produit pour le retrouver ici.
-          </p>
-          <button
-            type="button"
-            onClick={() => onNavigate({ name: "marketplace" })}
-            className="dedco-btn dedco-btn-primary"
-          >
-            Explorer la marketplace
-          </button>
-        </div>
-      ) : (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          {favProducts.map((p) => (
-            <ProductCard
-              key={p.id}
-              product={p}
-              isFav={true}
-              onToggleFav={toggleFav}
-              onOpen={(id) => onNavigate({ name: "product", id })}
-            />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}

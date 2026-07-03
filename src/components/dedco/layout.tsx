@@ -25,6 +25,7 @@ import {
 import type { Route } from "@/lib/dedco-types";
 import { useDedcoStore, type AppRoute, type CurrentUser, type UserRole } from "@/lib/store";
 import { useNotificationStore } from "@/lib/notification-store";
+import { WelcomePopup } from "@/components/dedco/welcome-popup";
 
 // ============================================================
 // Navbar (desktop) + mobile menu
@@ -142,7 +143,7 @@ function UserMenu({
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-lg shadow-lg border border-border overflow-hidden z-50">
+        <div className="absolute right-0 top-full mt-2 w-64 bg-card rounded-lg shadow-lg border border-border overflow-hidden z-50">
           {/* Header card */}
           <div className="p-4 bg-amber-pale/50 border-b border-border">
             <div className="flex items-center gap-3">
@@ -160,7 +161,9 @@ function UserMenu({
 
           {/* Actions */}
           <div className="py-1">
-            {/* Prestataire : "Mon espace" → dashboard */}
+            {/* Prestataire : "Mon espace" → dashboard uniquement.
+                Pas de "Mes projets" / "Mes commandes" — ce sont des concepts
+                client. Le prestataire accède à tout depuis sa sidebar. */}
             {isPrestataire && (
               <button
                 type="button"
@@ -175,7 +178,7 @@ function UserMenu({
               </button>
             )}
 
-            {/* Client : Mon profil */}
+            {/* Client : Mon profil + Mes projets + Mes commandes */}
             {!isPrestataire && (
               <>
                 <button
@@ -244,7 +247,7 @@ function UserMenu({
 // NotificationBell — cloche avec badge non-lus
 // ============================================================
 
-function NotificationBell({ navigate }: { navigate: (route: AppRoute) => void }) {
+export function NotificationBell({ navigate }: { navigate: (route: AppRoute) => void }) {
   const unreadCount = useNotificationStore((s) => s.unreadCount);
 
   return (
@@ -343,6 +346,7 @@ export function Navbar({
 
           {/* Actions */}
           <div className="flex items-center gap-1 sm:gap-2">
+            {/* Search */}
             <button
               type="button"
               onClick={onOpenSearch}
@@ -352,18 +356,22 @@ export function Navbar({
             >
               <Search size={20} />
             </button>
-            <button
-              type="button"
-              onClick={onOpenFavorites}
-              aria-label="Mes favoris"
-              title="Mes favoris"
-              className="relative w-10 h-10 rounded-full flex items-center justify-center text-ink-soft hover:bg-warm hover:text-ink transition-colors"
-            >
-              <Heart size={20} />
-              {favCount > 0 && (
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-terracotta" />
-              )}
-            </button>
+            {/* Favoris — desktop only si connecté */}
+            {currentUser && (
+              <button
+                type="button"
+                onClick={onOpenFavorites}
+                aria-label="Mes favoris"
+                title="Mes favoris"
+                className="hidden lg:flex relative w-10 h-10 rounded-full items-center justify-center text-ink-soft hover:bg-warm hover:text-ink transition-colors"
+              >
+                <Heart size={20} />
+                {favCount > 0 && (
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-terracotta" />
+                )}
+              </button>
+            )}
+            {/* Panier — toujours visible */}
             <button
               type="button"
               onClick={onOpenCart}
@@ -378,10 +386,30 @@ export function Navbar({
                 </span>
               )}
             </button>
-            {/* ── Cloche notifications ── */}
-            <NotificationBell navigate={navigate} />
+            {/* ── Cloche notifications — si connecté ── */}
+            {currentUser && (
+              <NotificationBell navigate={navigate} />
+            )}
             {/* ── BLOC 8 — Distinction visiteur / connecté ── */}
-            <UserMenu currentUser={currentUser} navigate={navigate} logout={logout} />
+            <div className="hidden lg:block">
+              <UserMenu currentUser={currentUser} navigate={navigate} logout={logout} />
+            </div>
+            {/* Avatar/profil — mobile only si connecté */}
+            {currentUser && (
+              <button
+                type="button"
+                onClick={() => navigate({ page: ROLE_DASHBOARD[currentUser.role] } as AppRoute)}
+                aria-label="Mon espace"
+                className="lg:hidden w-9 h-9 rounded-full overflow-hidden flex-shrink-0"
+              >
+                <img
+                  src={currentUser.avatar}
+                  alt={currentUser.name}
+                  className="w-full h-full object-cover"
+                />
+              </button>
+            )}
+            {/* Hamburger — mobile only */}
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
@@ -436,39 +464,91 @@ export function Navbar({
               ))}
             </nav>
             <div className="p-4 border-t border-border">
-              <button
-                type="button"
-                onClick={() => {
-                  onNavigate({ name: "brief" });
-                  setMobileOpen(false);
-                }}
-                className="dedco-btn dedco-btn-primary w-full"
-              >
-                Créer mon brief
-              </button>
-              {/* BLOC 8 — Connexion/Inscription mobile */}
-              <div className="grid grid-cols-2 gap-2 mt-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    navigate({ page: "login" });
-                    setMobileOpen(false);
-                  }}
-                  className="dedco-btn dedco-btn-ghost w-full"
-                >
-                  Connexion
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    navigate({ page: "register" });
-                    setMobileOpen(false);
-                  }}
-                  className="dedco-btn dedco-btn-secondary w-full"
-                >
-                  S'inscrire
-                </button>
-              </div>
+              {currentUser ? (
+                <>
+                  {/* Connecté sur mobile */}
+                  <div className="flex items-center gap-3 mb-3">
+                    <img src={currentUser.avatar} alt={currentUser.name} className="w-10 h-10 rounded-full object-cover" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold truncate">{currentUser.name}</p>
+                      <p className="text-xs text-ink-mute truncate">{currentUser.email}</p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigate({ page: ROLE_DASHBOARD[currentUser.role] } as AppRoute);
+                      setMobileOpen(false);
+                    }}
+                    className="dedco-btn dedco-btn-primary w-full mb-2"
+                  >
+                    Mon espace
+                  </button>
+                  {/* Liens rapides projets/commandes — CLIENT uniquement.
+                      Les artisans/designers sont enfermés dans leur dashboard
+                      (la sidebar gère toute la navigation). */}
+                  {currentUser.role === "client" && (
+                    <div className="grid grid-cols-2 gap-2 mb-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigate({ page: "client-projets" });
+                          setMobileOpen(false);
+                        }}
+                        className="dedco-btn dedco-btn-ghost w-full text-sm"
+                      >
+                        Mes projets
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigate({ page: "order-history" });
+                          setMobileOpen(false);
+                        }}
+                        className="dedco-btn dedco-btn-ghost w-full text-sm"
+                      >
+                        Mes commandes
+                      </button>
+                    </div>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      logout();
+                      setMobileOpen(false);
+                    }}
+                    className="dedco-btn dedco-btn-ghost w-full text-terracotta"
+                  >
+                    Déconnexion
+                  </button>
+                </>
+              ) : (
+                <>
+                  {/* Pas connecté sur mobile */}
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigate({ page: "login" });
+                        setMobileOpen(false);
+                      }}
+                      className="dedco-btn dedco-btn-ghost w-full"
+                    >
+                      Connexion
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigate({ page: "register" });
+                        setMobileOpen(false);
+                      }}
+                      className="dedco-btn dedco-btn-secondary w-full"
+                    >
+                      S'inscrire
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -538,7 +618,7 @@ export function BottomNav({
   return (
     <nav
       aria-label="Navigation mobile"
-      className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-border safe-bottom"
+      className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-card border-t border-border safe-bottom"
       style={{ boxShadow: "0 -2px 12px rgba(30, 24, 19, 0.06)" }}
     >
       <div className="grid grid-cols-4">
@@ -707,7 +787,7 @@ export function Footer({
                 type="email"
                 placeholder="Votre email"
                 aria-label="Votre adresse email"
-                className="flex-1 min-w-0 px-3 py-2 rounded-md bg-white/10 text-white text-sm placeholder-white/50 border border-white/20 focus:outline-none focus:border-terracotta"
+                className="flex-1 min-w-0 px-3 py-2 rounded-md bg-white/10 text-white text-sm placeholder-white/50 border border-white/30 focus:outline-none focus:border-terracotta"
               />
               <button
                 type="submit"

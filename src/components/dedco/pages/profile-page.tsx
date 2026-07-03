@@ -17,6 +17,7 @@ import {
   Globe,
   MessageSquare,
 } from "lucide-react";
+import { PhoneInput } from "@/components/dedco/phone-input";
 import { useDedcoStore } from "@/lib/store";
 import { BackButton } from "../layout";
 
@@ -77,12 +78,26 @@ export function ProfilePage() {
   const [activeTab, setActiveTab] = useState<ProfileTab>("profile");
   const navigate = useDedcoStore((s) => s.navigate);
   const goBack = useDedcoStore((s) => s.goBack);
+  const logout = useDedcoStore((s) => s.logout);
+  const currentUser = useDedcoStore((s) => s.currentUser);
   const [editMode, setEditMode] = useState(false);
+
+  const PROFILE = {
+    name: currentUser?.name || "Utilisateur",
+    email: currentUser?.email || "user@dedco.bj",
+    phone: "+229 97 45 32 10",
+    avatar: currentUser?.avatar || "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=240&q=85",
+    role: currentUser?.role || "client",
+    memberSince: "Janvier 2024",
+  };
 
   const handleTabClick = (tab: ProfileTab) => {
     setActiveTab(tab);
     if (tab === "orders") {
-      navigate({ page: "client-projets" });
+      const role = currentUser?.role;
+      if (role === "artisan") navigate({ page: "artisan-orders" });
+      else if (role === "designer") navigate({ page: "designer-projects" });
+      else navigate({ page: "client-projets" });
     } else if (tab === "favorites") {
       navigate({ page: "favorites" });
     } else if (tab === "messages") {
@@ -115,7 +130,7 @@ export function ProfilePage() {
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all border ${
                   activeTab === tab.key
                     ? "bg-amber text-white border-amber"
-                    : "bg-white text-ink-soft border-border hover:border-ink-mute"
+                    : "bg-card text-ink-soft border-border hover:border-ink-mute"
                 }`}
               >
                 {tab.icon}
@@ -149,6 +164,7 @@ export function ProfilePage() {
               <li className="pt-2 mt-2 border-t border-border">
                 <button
                   type="button"
+                  onClick={() => logout()}
                   className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-terracotta hover:bg-terracotta-pale transition-all"
                 >
                   <LogOut size={18} />
@@ -166,6 +182,17 @@ export function ProfilePage() {
           )}
           {activeTab === "orders" && <OrdersPlaceholder />}
           {activeTab === "settings" && <SettingsPlaceholder />}
+          {/* Déconnexion mobile */}
+          <div className="lg:hidden mt-6">
+            <button
+              type="button"
+              onClick={() => logout()}
+              className="dedco-btn dedco-btn-ghost w-full text-terracotta"
+            >
+              <LogOut size={18} />
+              Déconnexion
+            </button>
+          </div>
         </motion.main>
       </div>
     </div>
@@ -207,7 +234,7 @@ function ProfileContent({
           />
           <div className="flex-1 space-y-3">
             {editMode ? (
-              <EditProfileForm />
+              <EditProfileForm onSave={() => setEditMode(false)} />
             ) : (
               <>
                 <div>
@@ -250,7 +277,7 @@ function ProfileContent({
       <div className="dedco-card p-5 sm:p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-display font-bold text-lg">Adresses enregistrées</h2>
-          <button type="button" className="dedco-btn dedco-btn-ghost dedco-btn-sm">
+          <button type="button" onClick={() => navigate({ page: "settings" })} className="dedco-btn dedco-btn-ghost dedco-btn-sm">
             + Ajouter
           </button>
         </div>
@@ -261,7 +288,7 @@ function ProfileContent({
               className={`p-4 rounded-lg border transition-colors ${
                 addr.isDefault
                   ? "border-amber bg-amber-pale/40"
-                  : "border-border bg-white"
+                  : "border-border bg-card"
               }`}
             >
               <div className="flex items-center gap-2 mb-1.5">
@@ -302,7 +329,7 @@ function ProfileContent({
 // Edit Profile Form (simplified)
 // ============================================================
 
-function EditProfileForm() {
+function EditProfileForm({ onSave }: { onSave: () => void }) {
   return (
     <div className="space-y-3">
       <div>
@@ -312,7 +339,7 @@ function EditProfileForm() {
         <input
           type="text"
           defaultValue={PROFILE.name}
-          className="w-full px-3 py-2 rounded-md border border-border bg-white text-sm focus:outline-none focus:border-amber"
+          className="w-full px-3 py-2 rounded-md border border-border bg-card text-sm focus:outline-none focus:border-amber"
         />
       </div>
       <div>
@@ -322,20 +349,20 @@ function EditProfileForm() {
         <input
           type="email"
           defaultValue={PROFILE.email}
-          className="w-full px-3 py-2 rounded-md border border-border bg-white text-sm focus:outline-none focus:border-amber"
+          className="w-full px-3 py-2 rounded-md border border-border bg-card text-sm focus:outline-none focus:border-amber"
         />
       </div>
       <div>
         <label className="text-xs text-ink-mute uppercase tracking-wide mb-1 block">
           Téléphone
         </label>
-        <input
-          type="tel"
-          defaultValue={PROFILE.phone}
-          className="w-full px-3 py-2 rounded-md border border-border bg-white text-sm focus:outline-none focus:border-amber"
+        <PhoneInput
+          value={PROFILE.phone}
+          onChange={() => {}}
+          className="w-full"
         />
       </div>
-      <button type="button" className="dedco-btn dedco-btn-primary dedco-btn-sm">
+      <button type="button" onClick={onSave} className="dedco-btn dedco-btn-primary dedco-btn-sm">
         Enregistrer
       </button>
     </div>
@@ -361,7 +388,7 @@ function OrdersPlaceholder() {
             key={order.id}
             type="button"
             onClick={() => navigate({ page: "order-tracking", id: order.id })}
-            className="w-full flex items-center justify-between p-4 rounded-lg border border-border bg-white hover:border-amber hover:bg-amber-pale/30 transition-all text-left"
+            className="w-full flex items-center justify-between p-4 rounded-lg border border-border bg-card hover:border-amber hover:bg-amber-pale/30 transition-all text-left"
           >
             <div>
               <p className="font-semibold text-sm font-numeric">{order.id}</p>
@@ -395,7 +422,7 @@ function SettingsPlaceholder() {
         ].map((item) => (
           <div
             key={item.label}
-            className="flex items-center justify-between p-3 rounded-lg border border-border bg-white"
+            className="flex items-center justify-between p-3 rounded-lg border border-border bg-card"
           >
             <div className="flex items-center gap-3 text-sm">
               <span className="text-ink-mute">{item.icon}</span>

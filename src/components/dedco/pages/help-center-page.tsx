@@ -47,7 +47,7 @@ export function HelpCenterPage() {
           <input
             type="text"
             placeholder="Rechercher dans l'aide..."
-            className="w-full pl-11 pr-4 py-3 rounded-xl border border-[var(--border)] bg-white text-sm focus:outline-none focus:border-[var(--amber)] transition-colors"
+            className="w-full pl-11 pr-4 py-3 rounded-xl border border-[var(--border)] bg-card text-sm focus:outline-none focus:border-[var(--amber)] transition-colors"
           />
         </div>
       </div>
