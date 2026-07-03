@@ -4,38 +4,44 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>Dedco — App v2 Immersif</title>
+<title>Dedco — v3 Éditorial</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════════════════
-   DEDCO APP v2 — IMMERSIF (Pinterest/Airbnb style)
+   DEDCO v3 — ÉDITORIAL CHALEUREUX MINIMAL
+   Principes : Inspiration before Commerce · Guide don't overwhelm
+               Native before Responsive · Invisible Security
+   UX Laws : 1 action = 1 objectif · jamais 2 CTA principaux
+             pas de surcharge · une couleur d'action (amber)
    ═══════════════════════════════════════════════════════════ */
 
 :root {
+  /* Palette Dedco — une seule couleur d'action (amber) */
   --amber: #BF793B;
   --amber-dark: #9A5A1F;
   --amber-pale: #F5E6D3;
   --terracotta: #A6442E;
-  --terracotta-pale: #FAEAE6;
   --forest: #548C45;
-  --forest-pale: #E6F2E3;
-  --bg-cream: #FAF7F2;
+  --bg: #FFFFFF;           /* blanc minimal (Apple/Linear) */
+  --bg-warm: #FAF7F2;      /* crème très subtil pour sections */
   --bg-card: #FFFFFF;
-  --bg-warm: #F2EDE4;
   --text-1: #1E1813;
   --text-2: #5B5048;
-  --text-3: #7A7068;
-  --border: #E8E1D5;
-  --border-light: #F0EEEC;
+  --text-3: #8A8077;
+  --border: #EFE9DF;
+  --border-light: #F5F0E8;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
-  --r-md: 12px;
-  --r-lg: 16px;
-  --r-xl: 20px;
+  --r-md: 14px;
+  --r-lg: 18px;
+  --r-xl: 24px;
   --r-full: 999px;
+  /* Ombres très douces — éditorial premium */
+  --shadow-sm: 0 1px 2px rgba(30, 24, 19, 0.04);
+  --shadow-md: 0 4px 16px rgba(30, 24, 19, 0.06);
+  --shadow-lg: 0 8px 28px rgba(30, 24, 19, 0.08);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -47,9 +53,10 @@ html, body {
   overflow: hidden;
   height: 100%;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.display { font-family: 'Plus Jakarta Sans', serif; font-weight: 700; letter-spacing: -0.02em; }
+.serif { font-family: 'Playfair Display', Georgia, serif; }
 .numeric { font-variant-numeric: tabular-nums; }
 
 /* ═══ APP SHELL ═══ */
@@ -58,18 +65,16 @@ html, body {
   width: 393px;
   height: 852px;
   margin: 20px auto;
-  background: var(--bg-cream);
+  background: var(--bg);
   border-radius: 55px;
   overflow: hidden;
   box-shadow: 0 0 0 12px #1a1a1a, 0 0 0 14px #2a2a2a, 0 50px 100px rgba(0,0,0,0.5);
 }
 .notch {
   position: absolute;
-  top: 0;
-  left: 50%;
+  top: 0; left: 50%;
   transform: translateX(-50%);
-  width: 120px;
-  height: 30px;
+  width: 120px; height: 30px;
   background: #1a1a1a;
   border-radius: 0 0 18px 18px;
   z-index: 100;
@@ -78,258 +83,362 @@ html, body {
 /* ═══ STATUS BAR ═══ */
 .status-bar {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   height: calc(44px + var(--safe-top));
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 32px;
-  padding-top: var(--safe-top);
-  font-size: 15px;
-  font-weight: 600;
-  z-index: 90;
-  pointer-events: none;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; padding-top: var(--safe-top);
+  font-size: 15px; font-weight: 600;
+  z-index: 90; pointer-events: none;
   color: var(--text-1);
 }
 .status-bar .icons { display: flex; gap: 5px; align-items: center; }
 .status-bar .icons svg { width: 16px; height: 16px; }
 
 /* ═══ HEADER MINIMAL ═══ */
-.header-min {
+.header {
   position: absolute;
   top: calc(44px + var(--safe-top));
-  left: 0;
-  right: 0;
-  height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  left: 0; right: 0;
+  height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
   padding: 0 20px;
-  background: rgba(250, 247, 242, 0.92);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   z-index: 50;
 }
-.header-logo {
-  font-family: 'Plus Jakarta Sans', serif;
+.logo {
+  font-family: 'Playfair Display', serif;
   font-weight: 800;
-  font-size: 22px;
+  font-size: 24px;
   letter-spacing: -0.03em;
   color: var(--text-1);
 }
-.header-logo .dot { color: var(--amber); }
-.header-cart {
+.logo .dot { color: var(--amber); }
+
+.cart-btn {
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 40px; height: 40px;
   border-radius: var(--r-full);
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: var(--bg-warm);
+  display: flex; align-items: center; justify-content: center;
   cursor: pointer;
   transition: transform 0.15s;
 }
-.header-cart:active { transform: scale(0.92); }
-.header-cart svg { width: 20px; height: 20px; color: var(--text-1); }
-.header-cart .badge {
-  position: absolute;
-  top: -2px;
-  right: -2px;
-  min-width: 18px;
-  height: 18px;
+.cart-btn:active { transform: scale(0.92); }
+.cart-btn svg { width: 19px; height: 19px; color: var(--text-1); }
+.cart-badge {
+  position: absolute; top: -2px; right: -2px;
+  min-width: 18px; height: 18px;
   border-radius: var(--r-full);
-  background: var(--amber);
-  color: white;
-  font-size: 10px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: var(--amber); color: white;
+  font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
   padding: 0 5px;
-  border: 2px solid var(--bg-cream);
+  border: 2px solid var(--bg);
 }
 
-/* ═══ FEED SCROLL ═══ */
-.feed {
+/* ═══ SCROLL CONTENT ═══ */
+.scroll {
   position: absolute;
-  top: calc(44px + var(--safe-top) + 52px);
-  bottom: calc(64px + var(--safe-bottom));
-  left: 0;
-  right: 0;
+  top: calc(44px + var(--safe-top) + 56px);
+  bottom: calc(72px + var(--safe-bottom));
+  left: 0; right: 0;
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  padding: 0 16px 20px;
 }
-.feed::-webkit-scrollbar { display: none; }
+.scroll::-webkit-scrollbar { display: none; }
 
-/* ═══ CARD FULL OVERLAY (Airbnb style) ═══ */
-.feed-card {
-  position: relative;
-  width: 100%;
-  margin-bottom: 14px;
-  border-radius: var(--r-lg);
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.15s;
-  background: var(--bg-card);
+/* ═══ GREETING — chaleureux, éditorial ═══ */
+.greeting {
+  padding: 28px 20px 20px;
 }
-.feed-card:active { transform: scale(0.98); }
-.feed-card-img {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 4/5;
-  overflow: hidden;
-  background: var(--bg-warm);
-}
-.feed-card-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.feed-card-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 40%, transparent 60%);
-  pointer-events: none;
-}
-
-/* Badge coin haut */
-.feed-badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  padding: 5px 10px;
-  border-radius: var(--r-full);
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: white;
-  z-index: 5;
-}
-.feed-badge.amber { background: var(--amber); }
-.feed-badge.forest { background: var(--forest); }
-.feed-badge.dark { background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); }
-
-/* Favoris coin haut droit */
-.feed-fav {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--r-full);
-  background: rgba(255,255,255,0.2);
-  backdrop-filter: blur(12px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 5;
-  transition: transform 0.2s, background 0.2s;
-}
-.feed-fav:active { transform: scale(0.85); }
-.feed-fav svg { width: 18px; height: 18px; color: white; stroke: white; fill: none; transition: fill 0.2s; }
-.feed-fav.active svg { fill: var(--terracotta); stroke: var(--terracotta); }
-
-/* Contenu overlay bas */
-.feed-content {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 16px;
-  color: white;
-  z-index: 4;
-}
-.feed-artisan-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.greeting-hello {
+  font-size: 14px;
+  color: var(--text-3);
+  font-weight: 500;
   margin-bottom: 4px;
 }
-.feed-artisan-avatar {
-  width: 22px;
-  height: 22px;
-  border-radius: var(--r-full);
-  border: 1.5px solid white;
+.greeting-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--text-1);
+}
+.greeting-title em {
+  font-style: italic;
+  color: var(--amber);
+}
+
+/* ═══ SEARCH BAR — premium, pas agressive ═══ */
+.search-wrap {
+  padding: 20px 20px 8px;
+}
+.search-bar {
+  display: flex; align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  background: var(--bg-warm);
+  border-radius: var(--r-md);
+  border: 1px solid var(--border-light);
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s;
+}
+.search-bar:active { transform: scale(0.99); border-color: var(--amber); }
+.search-bar svg { width: 18px; height: 18px; color: var(--text-3); }
+.search-placeholder {
+  font-size: 14px;
+  color: var(--text-3);
+  flex: 1;
+}
+
+/* ═══ HERO ÉDITORIAL — chaleureux, pas rotatif ═══ */
+.hero {
+  margin: 16px 20px 0;
+  position: relative;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  aspect-ratio: 16/10;
+  background: var(--bg-warm);
+  cursor: pointer;
+  transition: transform 0.2s;
+  box-shadow: var(--shadow-md);
+}
+.hero:active { transform: scale(0.98); }
+.hero img {
+  width: 100%; height: 100%;
   object-fit: cover;
 }
-.feed-artisan-name {
-  font-size: 11px;
-  font-weight: 600;
-  opacity: 0.95;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(30,24,19,0.75) 0%, rgba(30,24,19,0.1) 50%, transparent 70%);
 }
-.feed-artisan-verified {
-  width: 13px;
-  height: 13px;
-  color: var(--forest);
-  flex-shrink: 0;
+.hero-content {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 20px;
+  color: white;
 }
-.feed-name {
-  font-family: 'Plus Jakarta Sans', serif;
-  font-size: 18px;
+.hero-eyebrow {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
   font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1.2;
   margin-bottom: 4px;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
-.feed-meta-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
+.hero-subtitle {
+  font-size: 13px;
+  opacity: 0.92;
 }
-.feed-price {
-  font-family: 'Plus Jakarta Sans', serif;
-  font-size: 16px;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  text-shadow: 0 1px 6px rgba(0,0,0,0.5);
-}
-.feed-rating {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  font-size: 12px;
-  font-weight: 600;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
-}
-.feed-rating svg { width: 12px; height: 12px; color: var(--amber); fill: var(--amber); }
 
-/* Variant : card horizontale large (scène inspiration) */
-.feed-card.scene {
-  aspect-ratio: 4/5;
+/* ═══ SECTION HEADER — éditorial ═══ */
+.section {
+  padding: 32px 0 0;
 }
-.feed-card.scene .feed-scene-tag {
+.section-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: 0 20px 14px;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-1);
+}
+.section-link {
+  font-size: 12px;
+  color: var(--amber);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ═══ CARROUSEL — Collections éditoriales ═══ */
+.carousel {
+  display: flex;
+  gap: 12px;
+  padding: 0 20px 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+}
+.carousel::-webkit-scrollbar { display: none; }
+
+.collection-card {
+  flex-shrink: 0;
+  width: 220px;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  cursor: pointer;
+  scroll-snap-align: start;
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s;
+}
+.collection-card:active { transform: scale(0.98); }
+.collection-img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  background: var(--bg-warm);
+}
+.collection-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.collection-info {
+  padding: 12px 14px;
+}
+.collection-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-1);
+  margin-bottom: 2px;
+}
+.collection-meta {
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+/* ═══ INSPIRATIONS GRID — big images 2 colonnes ═══ */
+.inspo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 0 20px;
+}
+.inspo-card {
+  position: relative;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--bg-warm);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s;
+}
+.inspo-card:active { transform: scale(0.98); }
+.inspo-card img {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+}
+.inspo-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(30,24,19,0.65) 0%, transparent 50%);
+  pointer-events: none;
+}
+.inspo-tag {
   position: absolute;
-  bottom: 16px;
-  right: 16px;
-  padding: 5px 10px;
-  background: rgba(84, 140, 69, 0.9);
+  top: 10px; left: 10px;
+  padding: 4px 9px;
+  background: rgba(255,255,255,0.9);
   backdrop-filter: blur(8px);
   border-radius: var(--r-full);
-  font-size: 10px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-1);
+}
+.inspo-name {
+  position: absolute;
+  bottom: 12px; left: 12px; right: 12px;
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
   font-weight: 700;
   color: white;
-  z-index: 5;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+  line-height: 1.2;
 }
+.inspo-fav {
+  position: absolute;
+  top: 10px; right: 10px;
+  width: 28px; height: 28px;
+  border-radius: var(--r-full);
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.inspo-fav:active { transform: scale(0.85); }
+.inspo-fav svg { width: 14px; height: 14px; color: var(--text-3); fill: none; stroke: currentColor; }
+.inspo-fav.active svg { color: var(--terracotta); fill: var(--terracotta); }
+
+/* ═══ CRÉATEURS — designers + artisans ═══ */
+.creators-row {
+  display: flex;
+  gap: 14px;
+  padding: 0 20px 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.creators-row::-webkit-scrollbar { display: none; }
+.creator-card {
+  flex-shrink: 0;
+  width: 130px;
+  display: flex; flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+.creator-avatar-wrap {
+  position: relative;
+  width: 80px; height: 80px;
+  margin-bottom: 8px;
+}
+.creator-avatar {
+  width: 80px; height: 80px;
+  border-radius: var(--r-full);
+  object-fit: cover;
+  border: 2px solid var(--bg);
+  box-shadow: var(--shadow-sm);
+}
+.creator-verified {
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 22px; height: 22px;
+  background: var(--forest);
+  border: 2px solid var(--bg);
+  border-radius: var(--r-full);
+  display: flex; align-items: center; justify-content: center;
+}
+.creator-verified svg { width: 11px; height: 11px; color: white; }
+.creator-name {
+  font-family: 'Plus Jakarta Sans', serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-1);
+  text-align: center;
+  margin-bottom: 1px;
+}
+.creator-specialty {
+  font-size: 10px;
+  color: var(--text-3);
+  text-align: center;
+}
+
+/* ═══ SPACER en bas (avant tab bar) ═══ */
+.bottom-spacer { height: 40px; }
 
 /* ═══ TAB BAR ═══ */
 .tab-bar {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: calc(64px + var(--safe-bottom));
+  bottom: 0; left: 0; right: 0;
+  height: calc(72px + var(--safe-bottom));
   padding-bottom: var(--safe-bottom);
   background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(20px);
@@ -341,60 +450,35 @@ html, body {
 }
 .tab-item {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
   gap: 3px;
-  padding-top: 10px;
+  padding-top: 12px;
   cursor: pointer;
   color: var(--text-3);
   transition: color 0.15s;
   position: relative;
 }
 .tab-item.active { color: var(--amber); }
-.tab-item .tab-icon {
-  width: 24px;
-  height: 24px;
-  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+.tab-icon {
+  width: 24px; height: 24px;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.tab-item.active .tab-icon { transform: scale(1.15); }
-.tab-item .tab-label { font-size: 10px; font-weight: 500; }
+.tab-item.active .tab-icon { transform: scale(1.1); }
+.tab-label { font-size: 10px; font-weight: 500; }
 .tab-item.active .tab-label { font-weight: 700; }
 .tab-badge {
   position: absolute;
-  top: 6px;
-  margin-left: 18px;
-  min-width: 16px;
-  height: 16px;
+  top: 8px; left: 50%;
+  margin-left: 10px;
+  min-width: 16px; height: 16px;
   border-radius: var(--r-full);
   background: var(--amber);
   color: white;
-  font-size: 10px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
   padding: 0 4px;
 }
-
-/* ═══ PULL TO REFRESH hint ═══ */
-.refresh-hint {
-  position: absolute;
-  top: calc(44px + var(--safe-top) + 52px);
-  left: 50%;
-  transform: translateX(-50%);
-  width: 28px;
-  height: 28px;
-  border-radius: var(--r-full);
-  border: 2.5px solid var(--amber);
-  border-top-color: transparent;
-  opacity: 0;
-  z-index: 30;
-  pointer-events: none;
-}
-.refresh-hint.spin { animation: spin 0.8s linear infinite; opacity: 1; }
-@keyframes spin { to { transform: translateX(-50%) rotate(360deg); } }
 
 /* ═══ HINT ═══ */
 .app-hint {
@@ -416,33 +500,11 @@ html, body {
 }
 .app-hint.show { opacity: 1; }
 
-/* ═══ INSTRUCTIONS ═══ */
-.instructions {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  background: rgba(30, 24, 19, 0.95);
-  color: white;
-  padding: 14px 18px;
-  border-radius: var(--r-md);
-  font-size: 12px;
-  max-width: 260px;
-  z-index: 1000;
-  backdrop-filter: blur(10px);
-  line-height: 1.5;
-  display: none;
-}
-.instructions.show { display: block; }
-.instructions strong { color: var(--amber-light); }
-.instructions ul { margin-left: 16px; margin-top: 6px; }
-.instructions li { margin-bottom: 2px; }
-
-/* ═══ V2 BADGE (en haut à droite hors app) ═══ */
+/* ═══ VERSION TAG ═══ */
 .version-tag {
   position: fixed;
-  top: 30px;
-  right: 30px;
-  background: var(--forest);
+  top: 30px; right: 30px;
+  background: var(--amber);
   color: white;
   padding: 6px 12px;
   border-radius: var(--r-full);
@@ -450,23 +512,44 @@ html, body {
   font-weight: 700;
   z-index: 1001;
 }
-.version-tag a { color: white; text-decoration: none; margin-left: 8px; opacity: 0.8; }
+.version-tag a { color: white; text-decoration: none; margin-left: 8px; opacity: 0.85; }
+
+/* ═══ INSTRUCTIONS ═══ */
+.instructions {
+  position: fixed;
+  top: 20px; left: 20px;
+  background: rgba(30, 24, 19, 0.95);
+  color: white;
+  padding: 14px 18px;
+  border-radius: var(--r-md);
+  font-size: 12px;
+  max-width: 270px;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  line-height: 1.5;
+  display: none;
+}
+.instructions.show { display: block; }
+.instructions strong { color: #D4954A; }
+.instructions ul { margin-left: 16px; margin-top: 6px; }
+.instructions li { margin-bottom: 3px; }
 </style>
 </head>
 <body>
 
-<div class="version-tag">v2 Immersif · <a href="/app-simulator-v1-web.html">voir v1 web</a></div>
+<div class="version-tag">v3 Éditorial · <a href="/app-v2-feed.html">v2 feed</a> · <a href="/app-simulator-v1-web.html">v1 web</a></div>
 
 <div class="instructions" id="instructions">
-  <strong>Dedco v2 — Feed immersif</strong>
+  <strong>Dedco v3 — Éditorial chaleureux minimal</strong>
   <ul>
-    <li>Scroll vertical : feed de cards pleine largeur</li>
-    <li>Tape un cœur : favoris</li>
-    <li>Tape une card : aperçu produit (démo)</li>
-    <li>Tab bar en bas</li>
-    <li>Pull-to-refresh (tire vers le bas en haut)</li>
+    <li>Greeting + recherche premium</li>
+    <li>Hero éditorial (pas rotatif)</li>
+    <li>Carrousel Collections</li>
+    <li>Inspirations à la une (grille 2 col)</li>
+    <li>Créateurs vedettes</li>
+    <li>Tab bar 5 onglets (Projets en 4e)</li>
   </ul>
-  <span style="opacity:0.6; font-size:11px;">Tape n'importe où pour fermer</span>
+  <span style="opacity:0.6; font-size:11px;">Tape pour fermer</span>
 </div>
 
 <div class="app-shell" id="appShell">
@@ -483,20 +566,176 @@ html, body {
   </div>
 
   <!-- HEADER MINIMAL -->
-  <div class="header-min">
-    <div class="header-logo">Dedco<span class="dot">.</span></div>
-    <div class="header-cart" onclick="showHint('Panier')">
+  <div class="header">
+    <div class="logo">Dedco<span class="dot">.</span></div>
+    <div class="cart-btn" onclick="showHint('Panier — 2 articles')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-      <span class="badge">2</span>
+      <span class="cart-badge">2</span>
     </div>
   </div>
 
-  <!-- REFRESH HINT -->
-  <div class="refresh-hint" id="refreshHint"></div>
+  <!-- SCROLL CONTENT -->
+  <div class="scroll" id="scroll">
 
-  <!-- FEED -->
-  <div class="feed" id="feed">
-    <!-- Cards rendues en JS -->
+    <!-- GREETING chaleureux -->
+    <div class="greeting">
+      <div class="greeting-hello">Bonjour, Fatou</div>
+      <div class="greeting-title">Quelques idées pour<br><em>votre intérieur</em></div>
+    </div>
+
+    <!-- SEARCH premium -->
+    <div class="search-wrap">
+      <div class="search-bar" onclick="showHint('Recherche')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <span class="search-placeholder">Cherchez une pièce, un style, un artisan…</span>
+      </div>
+    </div>
+
+    <!-- HERO éditorial (pas rotatif) -->
+    <div class="hero" onclick="showHint('Scène : Salon Tropical Akpakpa')">
+      <img src="https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&w=800&q=85" alt="">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="hero-eyebrow">Scène du moment</div>
+        <div class="hero-title">Salon Tropical Akpakpa</div>
+        <div class="hero-subtitle">3 pièces · par Kofi Akindélé</div>
+      </div>
+    </div>
+
+    <!-- COLLECTIONS — carrousel -->
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title">Collections</div>
+        <div class="section-link" onclick="showHint('Toutes les collections')">Voir tout</div>
+      </div>
+      <div class="carousel">
+        <div class="collection-card" onclick="showHint('Collection : Été tropical')">
+          <div class="collection-img">
+            <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=400&q=85" alt="">
+          </div>
+          <div class="collection-info">
+            <div class="collection-name">Été tropical</div>
+            <div class="collection-meta">24 pièces · Cotonou</div>
+          </div>
+        </div>
+        <div class="collection-card" onclick="showHint('Collection : Bois & Wax')">
+          <div class="collection-img">
+            <img src="https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=400&q=85" alt="">
+          </div>
+          <div class="collection-info">
+            <div class="collection-name">Bois & Wax</div>
+            <div class="collection-meta">18 pièces · Porto-Novo</div>
+          </div>
+        </div>
+        <div class="collection-card" onclick="showHint('Collection : Bogolan Moderne')">
+          <div class="collection-img">
+            <img src="https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=400&q=85" alt="">
+          </div>
+          <div class="collection-info">
+            <div class="collection-name">Bogolan Moderne</div>
+            <div class="collection-meta">12 pièces · Parakou</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INSPIRATIONS À LA UNE — grille big images -->
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title">Inspirations à la une</div>
+        <div class="section-link" onclick="showHint('Toutes les inspirations')">Voir tout</div>
+      </div>
+      <div class="inspo-grid">
+        <div class="inspo-card" onclick="showHint('Scène inspiration')">
+          <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=85" alt="">
+          <div class="inspo-overlay"></div>
+          <span class="inspo-tag">Bureau</span>
+          <div class="inspo-fav" onclick="event.stopPropagation(); toggleFav(this)">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <div class="inspo-name">Bureau Afro-contemporain</div>
+        </div>
+        <div class="inspo-card" onclick="showHint('Scène inspiration')">
+          <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=400&q=85" alt="">
+          <div class="inspo-overlay"></div>
+          <span class="inspo-tag">Salle à manger</span>
+          <div class="inspo-fav" onclick="event.stopPropagation(); toggleFav(this)">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <div class="inspo-name">Salle à manger Kente</div>
+        </div>
+        <div class="inspo-card" onclick="showHint('Scène inspiration')">
+          <img src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=400&q=85" alt="">
+          <div class="inspo-overlay"></div>
+          <span class="inspo-tag">Salon</span>
+          <div class="inspo-fav" onclick="event.stopPropagation(); toggleFav(this)">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <div class="inspo-name">Salon Bénin Wax</div>
+        </div>
+        <div class="inspo-card" onclick="showHint('Scène inspiration')">
+          <img src="https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=400&q=85" alt="">
+          <div class="inspo-overlay"></div>
+          <span class="inspo-tag">Chambre</span>
+          <div class="inspo-fav" onclick="event.stopPropagation(); toggleFav(this)">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <div class="inspo-name">Chambre Sahel</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CRÉATEURS VEDETTES -->
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title">Créateurs vedettes</div>
+        <div class="section-link" onclick="showHint('Tous les créateurs')">Voir tout</div>
+      </div>
+      <div class="creators-row">
+        <div class="creator-card" onclick="showHint('Profil Kofi')">
+          <div class="creator-avatar-wrap">
+            <img class="creator-avatar" src="https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=160&q=85" alt="">
+            <div class="creator-verified">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+          <div class="creator-name">Kofi A.</div>
+          <div class="creator-specialty">Mobilier bois · N3</div>
+        </div>
+        <div class="creator-card" onclick="showHint('Profil Ndèye')">
+          <div class="creator-avatar-wrap">
+            <img class="creator-avatar" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=160&q=85" alt="">
+            <div class="creator-verified">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+          <div class="creator-name">Ndèye S.</div>
+          <div class="creator-specialty">Designer · N4</div>
+        </div>
+        <div class="creator-card" onclick="showHint('Profil Amara')">
+          <div class="creator-avatar-wrap">
+            <img class="creator-avatar" src="https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&crop=faces&w=160&q=85" alt="">
+            <div class="creator-verified">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+          <div class="creator-name">Amara D.</div>
+          <div class="creator-specialty">Rotin tressé · N3</div>
+        </div>
+        <div class="creator-card" onclick="showHint('Profil Sophie')">
+          <div class="creator-avatar-wrap">
+            <img class="creator-avatar" src="https://images.unsplash.com/photo-1614317226704-8b1f7a4c4d3e?auto=format&fit=crop&crop=faces&w=160&q=85" alt="">
+            <div class="creator-verified">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+          <div class="creator-name">Sophie K.</div>
+          <div class="creator-specialty">Décoration wax · N2</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-spacer"></div>
   </div>
 
   <!-- HINT -->
@@ -504,24 +743,24 @@ html, body {
 
   <!-- TAB BAR -->
   <div class="tab-bar">
-    <div class="tab-item active" data-tab="home">
+    <div class="tab-item active">
       <svg class="tab-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M3 12l9-9 9 9v9a2 2 0 0 1-2 2h-4v-6H10v6H6a2 2 0 0 1-2-2v-9z"/></svg>
       <span class="tab-label">Accueil</span>
     </div>
-    <div class="tab-item" data-tab="inspirations" onclick="showHint('Inspirations')">
+    <div class="tab-item" onclick="showHint('Inspirations')">
       <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
       <span class="tab-label">Inspirations</span>
     </div>
-    <div class="tab-item" data-tab="marketplace" onclick="showHint('Marché')">
+    <div class="tab-item" onclick="showHint('Marché')">
       <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9"/><path d="M9 22V12h6v10"/></svg>
       <span class="tab-label">Marché</span>
     </div>
-    <div class="tab-item" data-tab="projets" onclick="showHint('Projets')">
+    <div class="tab-item" onclick="showHint('Projets')">
       <span class="tab-badge">3</span>
       <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6"/><path d="M9 16h6"/></svg>
       <span class="tab-label">Projets</span>
     </div>
-    <div class="tab-item" data-tab="compte" onclick="showHint('Compte')">
+    <div class="tab-item" onclick="showHint('Compte')">
       <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       <span class="tab-label">Compte</span>
     </div>
@@ -530,163 +769,6 @@ html, body {
 </div>
 
 <script>
-// ═══ DATA ═══
-const FEED_ITEMS = [
-  {
-    type: 'product',
-    name: "Table basse Bénin Wax",
-    artisan: "Kofi Akindélé",
-    artisanAvatar: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=80&q=85",
-    verified: true,
-    price: 145000,
-    rating: 4.9,
-    reviews: 24,
-    img: "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=800&q=85",
-    badge: "UNIQUE",
-    badgeColor: "amber"
-  },
-  {
-    type: 'scene',
-    name: "Salon Tropical Akpakpa",
-    artisan: "Kofi Akindélé",
-    artisanAvatar: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=80&q=85",
-    verified: true,
-    price: null,
-    rating: null,
-    img: "https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&w=800&q=85",
-    sceneTag: "3 pièces",
-  },
-  {
-    type: 'product',
-    name: "Fauteuil Sahel Tressé",
-    artisan: "Amara Dossou",
-    artisanAvatar: "https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&crop=faces&w=80&q=85",
-    verified: true,
-    price: 245000,
-    rating: 4.8,
-    reviews: 18,
-    img: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=800&q=85",
-    badge: "NOUVEAU",
-    badgeColor: "forest"
-  },
-  {
-    type: 'product',
-    name: "Lampe Abat-jour Bogolan",
-    artisan: "Sophie Kossou",
-    artisanAvatar: "https://images.unsplash.com/photo-1614317226704-8b1f7a4c4d3e?auto=format&fit=crop&crop=faces&w=80&q=85",
-    verified: true,
-    price: 65000,
-    rating: 5.0,
-    reviews: 12,
-    img: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=800&q=85",
-  },
-  {
-    type: 'scene',
-    name: "Salle à manger Kente Akwa",
-    artisan: "Amara Dossou",
-    artisanAvatar: "https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&crop=faces&w=80&q=85",
-    verified: true,
-    price: null,
-    rating: null,
-    img: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=800&q=85",
-    sceneTag: "5 pièces",
-  },
-  {
-    type: 'product',
-    name: "Commode Porto-Novo",
-    artisan: "Amara Dossou",
-    artisanAvatar: "https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&crop=faces&w=80&q=85",
-    verified: true,
-    price: 385000,
-    rating: 4.7,
-    reviews: 9,
-    img: "https://images.unsplash.com/photo-1517467139951-f5a925c9f9de?auto=format&fit=crop&w=800&q=85",
-  },
-  {
-    type: 'product',
-    name: "Miroir Raffia Carré",
-    artisan: "Sophie Kossou",
-    artisanAvatar: "https://images.unsplash.com/photo-1614317226704-8b1f7a4c4d3e?auto=format&fit=crop&crop=faces&w=80&q=85",
-    verified: true,
-    price: 95000,
-    rating: 4.9,
-    reviews: 15,
-    img: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=800&q=85",
-    badge: "UNIQUE",
-    badgeColor: "amber"
-  },
-  {
-    type: 'product',
-    name: "Tabouret Tamtam ×2",
-    artisan: "Brice Gogan",
-    artisanAvatar: "https://images.unsplash.com/photo-1620939514028-960d6f6a3b3e?auto=format&fit=crop&crop=faces&w=80&q=85",
-    verified: false,
-    price: 76000,
-    rating: 4.6,
-    reviews: 7,
-    img: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=800&q=85",
-  },
-];
-
-// ═══ RENDER ═══
-function formatFCFA(n) { return n.toLocaleString('fr-FR') + ' FCFA'; }
-
-function renderFeed() {
-  const feed = document.getElementById('feed');
-  feed.innerHTML = FEED_ITEMS.map((item, i) => {
-    if (item.type === 'scene') {
-      return `
-        <div class="feed-card scene" onclick="showHint('Scène inspiration')">
-          <div class="feed-card-img">
-            <img src="${item.img}" alt="${item.name}">
-            <div class="feed-card-overlay"></div>
-            <div class="feed-fav" onclick="event.stopPropagation(); toggleFav(this)">
-              <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            </div>
-            <div class="feed-scene-tag">${item.sceneTag}</div>
-          </div>
-          <div class="feed-content">
-            <div class="feed-artisan-row">
-              <img class="feed-artisan-avatar" src="${item.artisanAvatar}" alt="">
-              <span class="feed-artisan-name">${item.artisan}</span>
-              ${item.verified ? '<svg class="feed-artisan-verified" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1z"/></svg>' : ''}
-            </div>
-            <div class="feed-name">${item.name}</div>
-          </div>
-        </div>
-      `;
-    }
-    return `
-      <div class="feed-card" onclick="showHint('${item.name}')">
-        <div class="feed-card-img">
-          <img src="${item.img}" alt="${item.name}">
-          <div class="feed-card-overlay"></div>
-          ${item.badge ? `<span class="feed-badge ${item.badgeColor}">${item.badge}</span>` : '<span class="feed-badge dark">★ ${item.rating}</span>'}
-          <div class="feed-fav" onclick="event.stopPropagation(); toggleFav(this)">
-            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </div>
-        </div>
-        <div class="feed-content">
-          <div class="feed-artisan-row">
-            <img class="feed-artisan-avatar" src="${item.artisanAvatar}" alt="">
-            <span class="feed-artisan-name">${item.artisan}</span>
-            ${item.verified ? '<svg class="feed-artisan-verified" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1z"/></svg>' : ''}
-          </div>
-          <div class="feed-name">${item.name}</div>
-          <div class="feed-meta-row">
-            <span class="feed-price numeric">${formatFCFA(item.price)}</span>
-            <span class="feed-rating">
-              <svg viewBox="0 0 24 24"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1z"/></svg>
-              ${item.rating} · ${item.reviews}
-            </span>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-// ═══ FAVORIS ═══
 function toggleFav(el) {
   el.classList.toggle('active');
   if (el.classList.contains('active')) {
@@ -695,37 +777,6 @@ function toggleFav(el) {
   }
 }
 
-// ═══ PULL TO REFRESH ═══
-const feed = document.getElementById('feed');
-let pullStart = 0;
-let pulling = false;
-
-feed.addEventListener('touchstart', (e) => {
-  if (feed.scrollTop === 0) {
-    pullStart = e.touches[0].clientY;
-    pulling = true;
-  }
-}, { passive: true });
-
-feed.addEventListener('touchmove', (e) => {
-  if (!pulling) return;
-  const diff = e.touches[0].clientY - pullStart;
-  if (diff > 60 && diff < 120) {
-    document.getElementById('refreshHint').classList.add('spin');
-  }
-}, { passive: true });
-
-feed.addEventListener('touchend', () => {
-  if (pulling) {
-    setTimeout(() => {
-      document.getElementById('refreshHint').classList.remove('spin');
-      if (feed.scrollTop === 0) showHint('Actualisé');
-    }, 800);
-  }
-  pulling = false;
-});
-
-// ═══ HINT ═══
 let hintTimer;
 function showHint(msg) {
   const hint = document.getElementById('appHint');
@@ -735,18 +786,13 @@ function showHint(msg) {
   hintTimer = setTimeout(() => hint.classList.remove('show'), 1600);
 }
 
-// ═══ INIT ═══
-renderFeed();
-
-// Instructions au démarrage
 const instr = document.getElementById('instructions');
 instr.classList.add('show');
 setTimeout(() => instr.classList.remove('show'), 5000);
 document.addEventListener('click', () => instr.classList.remove('show'), { once: true });
 
-// Prevent body scroll
 document.body.addEventListener('touchmove', (e) => {
-  if (e.target.closest('.feed')) return;
+  if (e.target.closest('.scroll') || e.target.closest('.carousel') || e.target.closest('.creators-row')) return;
   e.preventDefault();
 }, { passive: false });
 </script>
