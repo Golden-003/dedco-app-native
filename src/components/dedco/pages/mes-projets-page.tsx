@@ -56,9 +56,22 @@ import type { DesignerBrief } from "@/lib/designer-brief-types";
 // ============================================================
 
 // Table de correspondance pour la navigation Mes Projets
-// Remplace la longue chaîne de if/else
+// Role-aware : le client voit SES briefs/projets, l'admin peut inspecter.
+// IMPORTANT : ne jamais router un client vers `artisan-brief-recu` ou
+// `designer-brief-recu` — ces pages sont dans ARTISAN_PAGES / DESIGNER_PAGES
+// et le route guard les redirigerait vers home.
 const ROUTE_MAP: Record<string, (route: MesProjetsRoute, store: ReturnType<typeof useDedcoStore.getState>) => void> = {
-  "brief-detail": (r, store) => r.id && store.navigate({ page: "artisan-brief-recu", briefId: r.id }),
+  "brief-detail": (r, store) => {
+    if (!r.id) return;
+    // Client/Admin → brief-artisan-detail (vue propriétaire)
+    // Artisan → artisan-brief-recu (vue prestataire)
+    // Designer → designer-brief-recu (vue prestataire)
+    const role = store.currentUser?.role;
+    const page = role === "artisan" ? "artisan-brief-recu"
+      : role === "designer" ? "designer-brief-recu"
+      : "brief-artisan-detail";
+    store.navigate({ page, briefId: r.id } as any);
+  },
   "projet-detail": (r, store) => {
     if (r.projectId) {
       if (r.projectId.startsWith("PD-")) {
