@@ -5,22 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>Dedco — App Mobile Simulateur</title>
+<title>Dedco — App v2 Immersif</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════════════════
-   DEDCO — APP MOBILE SIMULATEUR
-   Phase pilote : Accueil + Fiche produit + transition shared-element
-   Référence fluidité : Airbnb
+   DEDCO APP v2 — IMMERSIF (Pinterest/Airbnb style)
    ═══════════════════════════════════════════════════════════ */
 
 :root {
-  /* Palette Dedco (cohérente avec le web) */
   --amber: #BF793B;
   --amber-dark: #9A5A1F;
-  --amber-light: #D4954A;
   --amber-pale: #F5E6D3;
   --terracotta: #A6442E;
   --terracotta-pale: #FAEAE6;
@@ -34,13 +30,8 @@
   --text-3: #7A7068;
   --border: #E8E1D5;
   --border-light: #F0EEEC;
-
-  /* Safe areas iOS */
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
-
-  /* Rayons */
-  --r-sm: 8px;
   --r-md: 12px;
   --r-lg: 16px;
   --r-xl: 20px;
@@ -50,22 +41,18 @@
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 html, body {
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #1E1813;
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  background: #0a0a0a;
   color: var(--text-1);
   overflow: hidden;
   height: 100%;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Quache font simulation — serif display pour titres */
 .display { font-family: 'Plus Jakarta Sans', serif; font-weight: 700; letter-spacing: -0.02em; }
-.numeric { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum'; }
+.numeric { font-variant-numeric: tabular-nums; }
 
-/* ═══════════════════════════════════════════════════════════
-   APP SHELL — Frame iPhone au centre
-   ═══════════════════════════════════════════════════════════ */
+/* ═══ APP SHELL ═══ */
 .app-shell {
   position: relative;
   width: 393px;
@@ -76,8 +63,6 @@ html, body {
   overflow: hidden;
   box-shadow: 0 0 0 12px #1a1a1a, 0 0 0 14px #2a2a2a, 0 50px 100px rgba(0,0,0,0.5);
 }
-
-/* Notch */
 .notch {
   position: absolute;
   top: 0;
@@ -90,7 +75,7 @@ html, body {
   z-index: 100;
 }
 
-/* Status bar (heure + batterie) */
+/* ═══ STATUS BAR ═══ */
 .status-bar {
   position: absolute;
   top: 0;
@@ -108,107 +93,237 @@ html, body {
   pointer-events: none;
   color: var(--text-1);
 }
-.status-bar.light { color: white; }
-.status-bar .time { font-feature-settings: 'tnum'; }
 .status-bar .icons { display: flex; gap: 5px; align-items: center; }
 .status-bar .icons svg { width: 16px; height: 16px; }
 
-/* ═══════════════════════════════════════════════════════════
-   SCREENS — chaque écran est un calque absolu
-   ═══════════════════════════════════════════════════════════ */
-.screen {
-  position: absolute;
-  inset: 0;
-  background: var(--bg-cream);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.screen-content {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-.screen-content::-webkit-scrollbar { display: none; }
-
-/* ═══════════════════════════════════════════════════════════
-   HEADER GLOBAL
-   ═══════════════════════════════════════════════════════════ */
-.header {
+/* ═══ HEADER MINIMAL ═══ */
+.header-min {
   position: absolute;
   top: calc(44px + var(--safe-top));
   left: 0;
   right: 0;
-  height: 56px;
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
-  background: rgba(250, 247, 242, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  padding: 0 20px;
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   z-index: 50;
-  transition: background 0.2s, color 0.2s;
 }
-.header.transparent {
-  background: transparent;
-  backdrop-filter: none;
-}
-.header.light { color: white; }
-.header.light .header-icon { background: rgba(0,0,0,0.3); color: white; }
-
-.logo {
+.header-logo {
   font-family: 'Plus Jakarta Sans', serif;
   font-weight: 800;
   font-size: 22px;
   letter-spacing: -0.03em;
   color: var(--text-1);
-  cursor: pointer;
 }
-.logo .dot { color: var(--amber); }
-.header.light .logo { color: white; }
-
-.header-actions { display: flex; gap: 4px; }
-.header-icon {
-  width: 38px;
-  height: 38px;
+.header-logo .dot { color: var(--amber); }
+.header-cart {
+  position: relative;
+  width: 40px;
+  height: 40px;
   border-radius: var(--r-full);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-1);
   cursor: pointer;
-  position: relative;
-  transition: background 0.15s, transform 0.15s;
+  transition: transform 0.15s;
 }
-.header-icon:active { transform: scale(0.92); background: rgba(0,0,0,0.05); }
-.header-icon svg { width: 21px; height: 21px; }
-.badge {
+.header-cart:active { transform: scale(0.92); }
+.header-cart svg { width: 20px; height: 20px; color: var(--text-1); }
+.header-cart .badge {
   position: absolute;
-  top: 4px;
-  right: 4px;
-  min-width: 16px;
-  height: 16px;
+  top: -2px;
+  right: -2px;
+  min-width: 18px;
+  height: 18px;
   border-radius: var(--r-full);
-  background: var(--terracotta);
+  background: var(--amber);
   color: white;
   font-size: 10px;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 4px;
+  padding: 0 5px;
   border: 2px solid var(--bg-cream);
 }
-.badge.amber { background: var(--amber); }
-.header.light .badge { border-color: transparent; }
 
-/* ═══════════════════════════════════════════════════════════
-   TAB BAR — 5 onglets fixes
-   ═══════════════════════════════════════════════════════════ */
+/* ═══ FEED SCROLL ═══ */
+.feed {
+  position: absolute;
+  top: calc(44px + var(--safe-top) + 52px);
+  bottom: calc(64px + var(--safe-bottom));
+  left: 0;
+  right: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 0 16px 20px;
+}
+.feed::-webkit-scrollbar { display: none; }
+
+/* ═══ CARD FULL OVERLAY (Airbnb style) ═══ */
+.feed-card {
+  position: relative;
+  width: 100%;
+  margin-bottom: 14px;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.15s;
+  background: var(--bg-card);
+}
+.feed-card:active { transform: scale(0.98); }
+.feed-card-img {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/5;
+  overflow: hidden;
+  background: var(--bg-warm);
+}
+.feed-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.feed-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 40%, transparent 60%);
+  pointer-events: none;
+}
+
+/* Badge coin haut */
+.feed-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 5px 10px;
+  border-radius: var(--r-full);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: white;
+  z-index: 5;
+}
+.feed-badge.amber { background: var(--amber); }
+.feed-badge.forest { background: var(--forest); }
+.feed-badge.dark { background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); }
+
+/* Favoris coin haut droit */
+.feed-fav {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-full);
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5;
+  transition: transform 0.2s, background 0.2s;
+}
+.feed-fav:active { transform: scale(0.85); }
+.feed-fav svg { width: 18px; height: 18px; color: white; stroke: white; fill: none; transition: fill 0.2s; }
+.feed-fav.active svg { fill: var(--terracotta); stroke: var(--terracotta); }
+
+/* Contenu overlay bas */
+.feed-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  color: white;
+  z-index: 4;
+}
+.feed-artisan-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.feed-artisan-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: var(--r-full);
+  border: 1.5px solid white;
+  object-fit: cover;
+}
+.feed-artisan-name {
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0.95;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+.feed-artisan-verified {
+  width: 13px;
+  height: 13px;
+  color: var(--forest);
+  flex-shrink: 0;
+}
+.feed-name {
+  font-family: 'Plus Jakarta Sans', serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin-bottom: 4px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+.feed-meta-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.feed-price {
+  font-family: 'Plus Jakarta Sans', serif;
+  font-size: 16px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+}
+.feed-rating {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+.feed-rating svg { width: 12px; height: 12px; color: var(--amber); fill: var(--amber); }
+
+/* Variant : card horizontale large (scène inspiration) */
+.feed-card.scene {
+  aspect-ratio: 4/5;
+}
+.feed-card.scene .feed-scene-tag {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  padding: 5px 10px;
+  background: rgba(84, 140, 69, 0.9);
+  backdrop-filter: blur(8px);
+  border-radius: var(--r-full);
+  font-size: 10px;
+  font-weight: 700;
+  color: white;
+  z-index: 5;
+}
+
+/* ═══ TAB BAR ═══ */
 .tab-bar {
   position: absolute;
   bottom: 0;
@@ -216,7 +331,7 @@ html, body {
   right: 0;
   height: calc(64px + var(--safe-bottom));
   padding-bottom: var(--safe-bottom);
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-top: 1px solid var(--border-light);
@@ -230,11 +345,12 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
+  gap: 3px;
   padding-top: 10px;
   cursor: pointer;
   color: var(--text-3);
   transition: color 0.15s;
+  position: relative;
 }
 .tab-item.active { color: var(--amber); }
 .tab-item .tab-icon {
@@ -243,10 +359,7 @@ html, body {
   transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .tab-item.active .tab-icon { transform: scale(1.15); }
-.tab-item .tab-label {
-  font-size: 10px;
-  font-weight: 500;
-}
+.tab-item .tab-label { font-size: 10px; font-weight: 500; }
 .tab-item.active .tab-label { font-weight: 700; }
 .tab-badge {
   position: absolute;
@@ -264,681 +377,46 @@ html, body {
   justify-content: center;
   padding: 0 4px;
 }
-.tab-item { position: relative; }
 
-/* ═══════════════════════════════════════════════════════════
-   HOME SCREEN — Accueil
-   ═══════════════════════════════════════════════════════════ */
-
-/* Hero rotatif plein écran */
-.hero {
-  position: relative;
-  width: 100%;
-  height: 540px;
-  overflow: hidden;
-}
-.hero-slide {
+/* ═══ PULL TO REFRESH hint ═══ */
+.refresh-hint {
   position: absolute;
-  inset: 0;
+  top: calc(44px + var(--safe-top) + 52px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 28px;
+  border-radius: var(--r-full);
+  border: 2.5px solid var(--amber);
+  border-top-color: transparent;
   opacity: 0;
-  transition: opacity 0.6s ease;
+  z-index: 30;
+  pointer-events: none;
 }
-.hero-slide.active { opacity: 1; }
-.hero-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(30,24,19,0.85) 0%, transparent 50%);
-}
-.hero-content {
+.refresh-hint.spin { animation: spin 0.8s linear infinite; opacity: 1; }
+@keyframes spin { to { transform: translateX(-50%) rotate(360deg); } }
+
+/* ═══ HINT ═══ */
+.app-hint {
   position: absolute;
   bottom: 100px;
-  left: 20px;
-  right: 20px;
-  color: white;
-}
-.hero-title {
-  font-family: 'Plus Jakarta Sans', serif;
-  font-size: 30px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  margin-bottom: 8px;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-}
-.hero-subtitle {
-  font-size: 14px;
-  opacity: 0.95;
-  margin-bottom: 16px;
-}
-.hero-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 18px;
-  border: 1.5px solid var(--amber);
-  border-radius: var(--r-full);
-  color: white;
-  font-size: 13px;
-  font-weight: 600;
-  background: rgba(191, 121, 59, 0.15);
-  backdrop-filter: blur(8px);
-  cursor: pointer;
-  transition: transform 0.15s, background 0.15s;
-}
-.hero-cta:active { transform: scale(0.96); background: rgba(191, 121, 59, 0.3); }
-
-/* Hotspots amber animés */
-.hotspot {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  background: var(--amber);
-  border-radius: var(--r-full);
-  cursor: pointer;
-  z-index: 10;
-}
-.hotspot::before {
-  content: '';
-  position: absolute;
-  inset: -6px;
-  border-radius: var(--r-full);
-  background: rgba(191, 121, 59, 0.35);
-  animation: pulse 2s ease-out infinite;
-}
-@keyframes pulse {
-  0% { transform: scale(1); opacity: 0.7; }
-  100% { transform: scale(2.5); opacity: 0; }
-}
-
-/* Dots indicator */
-.hero-dots {
-  position: absolute;
-  bottom: 60px;
   left: 50%;
   transform: translateX(-50%);
-  display: flex;
-  gap: 6px;
-  z-index: 20;
-}
-.hero-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: var(--r-full);
-  background: rgba(255,255,255,0.4);
-  transition: all 0.3s;
-}
-.hero-dot.active { background: var(--amber); width: 18px; }
-
-/* Sections */
-.section {
-  padding: 32px 0 0;
-}
-.section-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  padding: 0 20px 16px;
-}
-.section-title {
-  font-family: 'Plus Jakarta Sans', serif;
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--text-1);
-}
-.section-link {
-  font-size: 13px;
-  color: var(--amber);
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* Chips confiance rapide */
-.trust-chips {
-  display: flex;
-  gap: 8px;
-  padding: 16px 20px;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.trust-chips::-webkit-scrollbar { display: none; }
-.trust-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  background: rgba(30, 24, 19, 0.95);
+  color: white;
+  padding: 10px 20px;
   border-radius: var(--r-full);
   font-size: 12px;
-  font-weight: 600;
-  color: var(--text-1);
+  z-index: 200;
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
   white-space: nowrap;
 }
-.trust-chip svg { width: 14px; height: 14px; color: var(--forest); }
+.app-hint.show { opacity: 1; }
 
-/* Scroll horizontal cards (nouveautés) */
-.h-scroll {
-  display: flex;
-  gap: 12px;
-  padding: 0 20px 8px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  scroll-snap-type: x mandatory;
-}
-.h-scroll::-webkit-scrollbar { display: none; }
-
-/* Card produit mobile */
-.product-card {
-  flex-shrink: 0;
-  width: 160px;
-  background: var(--bg-card);
-  border-radius: var(--r-md);
-  overflow: hidden;
-  cursor: pointer;
-  scroll-snap-align: start;
-  transition: transform 0.15s;
-}
-.product-card:active { transform: scale(0.98); }
-.product-card .product-img-wrap {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1;
-  overflow: hidden;
-  background: var(--bg-warm);
-}
-.product-card .product-img-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.product-badge {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  padding: 4px 8px;
-  border-radius: var(--r-full);
-  font-size: 9px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: white;
-}
-.product-badge.amber { background: var(--amber); }
-.product-badge.forest { background: var(--forest); }
-.fav-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 30px;
-  height: 30px;
-  border-radius: var(--r-full);
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-.fav-btn:active { transform: scale(0.85); }
-.fav-btn svg { width: 16px; height: 16px; color: var(--text-3); }
-.fav-btn.active svg { color: var(--terracotta); fill: var(--terracotta); }
-
-.product-info { padding: 10px 12px 12px; }
-.product-name {
-  font-family: 'Plus Jakarta Sans', serif;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-1);
-  line-height: 1.25;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  margin-bottom: 4px;
-}
-.product-artisan {
-  font-size: 11px;
-  color: var(--text-3);
-  margin-bottom: 6px;
-}
-.product-price {
-  font-family: 'Plus Jakarta Sans', serif;
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--amber);
-  font-variant-numeric: tabular-nums;
-}
-
-/* Artisans à découvrir — avatars xl */
-.artisan-row {
-  display: flex;
-  gap: 16px;
-  padding: 0 20px 8px;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.artisan-row::-webkit-scrollbar { display: none; }
-.artisan-card {
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-}
-.artisan-avatar {
-  width: 72px;
-  height: 72px;
-  border-radius: var(--r-full);
-  object-fit: cover;
-  border: 2px solid var(--amber);
-}
-.artisan-name {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-1);
-  text-align: center;
-}
-.artisan-specialty {
-  font-size: 10px;
-  color: var(--text-3);
-  text-align: center;
-}
-
-/* Collections éditoriales — 2 large cards verticales */
-.collections {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 0 20px;
-}
-.collection-card {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  border-radius: var(--r-lg);
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.15s;
-}
-.collection-card:active { transform: scale(0.98); }
-.collection-card img { width: 100%; height: 100%; object-fit: cover; }
-.collection-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(30,24,19,0.8) 0%, transparent 60%);
-}
-.collection-content {
-  position: absolute;
-  bottom: 16px;
-  left: 16px;
-  right: 16px;
-  color: white;
-}
-.collection-title {
-  font-family: 'Plus Jakarta Sans', serif;
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 2px;
-}
-.collection-count {
-  font-size: 12px;
-  opacity: 0.9;
-}
-
-/* Newsletter CTA */
-.newsletter {
-  margin: 32px 20px 100px;
-  padding: 28px 20px;
-  background: linear-gradient(135deg, var(--amber-pale) 0%, var(--bg-warm) 100%);
-  border-radius: var(--r-lg);
-  text-align: center;
-}
-.newsletter-title {
-  font-family: 'Plus Jakarta Sans', serif;
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--text-1);
-  margin-bottom: 6px;
-}
-.newsletter-subtitle {
-  font-size: 13px;
-  color: var(--text-2);
-  margin-bottom: 16px;
-}
-.newsletter-input-row {
-  display: flex;
-  gap: 8px;
-}
-.newsletter-input {
-  flex: 1;
-  padding: 12px 16px;
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: var(--r-full);
-  font-size: 13px;
-  font-family: inherit;
-  outline: none;
-}
-.newsletter-btn {
-  padding: 12px 20px;
-  background: var(--amber);
-  color: white;
-  border: none;
-  border-radius: var(--r-full);
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: inherit;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   PRODUCT SCREEN — Fiche produit
-   ═══════════════════════════════════════════════════════════ */
-.product-gallery {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 4/3;
-  overflow: hidden;
-  background: var(--bg-warm);
-}
-.product-gallery img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.gallery-top-actions {
-  position: absolute;
-  top: calc(44px + var(--safe-top) + 12px);
-  left: 16px;
-  right: 16px;
-  display: flex;
-  justify-content: space-between;
-  z-index: 20;
-}
-.gallery-action-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: var(--r-full);
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: transform 0.15s;
-}
-.gallery-action-btn:active { transform: scale(0.92); }
-.gallery-action-btn svg { width: 18px; height: 18px; color: var(--text-1); }
-.gallery-action-btn.back { background: rgba(255,255,255,0.85); }
-
-.gallery-dots {
-  position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 5px;
-}
-.gallery-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: var(--r-full);
-  background: rgba(255,255,255,0.5);
-}
-.gallery-dot.active { background: white; width: 16px; }
-
-.product-detail {
-  padding: 20px 20px 120px;
-}
-.breadcrumb {
-  font-size: 12px;
-  color: var(--text-3);
-  margin-bottom: 8px;
-}
-.product-detail-name {
-  font-family: 'Plus Jakarta Sans', serif;
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--text-1);
-  line-height: 1.15;
-  margin-bottom: 6px;
-}
-.product-detail-artisan {
-  font-size: 14px;
-  color: var(--amber);
-  font-weight: 600;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-}
-.verified-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  padding: 2px 8px;
-  background: var(--forest-pale);
-  color: var(--forest);
-  border-radius: var(--r-full);
-  font-size: 11px;
-  font-weight: 600;
-}
-.verified-badge svg { width: 11px; height: 11px; }
-
-.product-price-row {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  margin-bottom: 16px;
-}
-.product-price-main {
-  font-family: 'Plus Jakarta Sans', serif;
-  font-size: 30px;
-  font-weight: 700;
-  color: var(--amber);
-  font-variant-numeric: tabular-nums;
-}
-.stock-badge {
-  padding: 4px 10px;
-  background: var(--forest-pale);
-  color: var(--forest);
-  border-radius: var(--r-full);
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.product-desc {
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--text-2);
-  margin-bottom: 20px;
-}
-
-.specs-section {
-  border-top: 1px solid var(--border-light);
-  padding: 16px 0;
-}
-.spec-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 0;
-  font-size: 13px;
-}
-.spec-label { color: var(--text-3); }
-.spec-value { font-weight: 600; color: var(--text-1); }
-
-.trust-section {
-  display: flex;
-  gap: 8px;
-  margin: 20px 0;
-  flex-wrap: wrap;
-}
-
-/* Floating CTA bar */
-.floating-cta {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: calc(80px + var(--safe-bottom));
-  padding: 12px 16px var(--safe-bottom);
-  padding-bottom: calc(12px + var(--safe-bottom));
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  z-index: 70;
-}
-.btn-secondary {
-  width: 56px;
-  height: 52px;
-  border-radius: var(--r-md);
-  background: var(--bg-warm);
-  border: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: transform 0.15s;
-}
-.btn-secondary:active { transform: scale(0.95); }
-.btn-secondary svg { width: 20px; height: 20px; color: var(--text-1); }
-.btn-primary {
-  flex: 1;
-  height: 52px;
-  border-radius: var(--r-md);
-  background: var(--amber);
-  color: white;
-  border: none;
-  font-size: 15px;
-  font-weight: 700;
-  font-family: inherit;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: transform 0.15s;
-}
-.btn-primary:active { transform: scale(0.97); }
-.btn-primary svg { width: 18px; height: 18px; }
-
-/* ═══════════════════════════════════════════════════════════
-   TRANSITIONS — Shared element + push
-   ═══════════════════════════════════════════════════════════ */
-.screen {
-  transform: translateX(100%);
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-  will-change: transform;
-}
-.screen.active {
-  transform: translateX(0);
-}
-.screen.active ~ .screen {
-  transform: translateX(100%);
-}
-
-/* Variante : accueil par défaut visible */
-#screen-home {
-  transform: translateX(0);
-}
-#screen-home.hidden {
-  transform: translateX(-30%);
-}
-#screen-product {
-  transform: translateX(100%);
-}
-#screen-product.active {
-  transform: translateX(0);
-}
-
-/* Shared element animation */
-.shared-img {
-  position: fixed;
-  z-index: 200;
-  transition: all 0.4s cubic-bezier(0.34, 1.4, 0.64, 1);
-  will-change: transform, width, height, top, left, border-radius;
-  object-fit: cover;
-  pointer-events: none;
-}
-
-/* Bottom sheet produit (depuis hotspot) */
-.bottom-sheet-backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.4);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s;
-  z-index: 150;
-}
-.bottom-sheet-backdrop.visible {
-  opacity: 1;
-  pointer-events: auto;
-}
-.bottom-sheet {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: white;
-  border-radius: var(--r-xl) var(--r-xl) 0 0;
-  padding: 8px 20px calc(20px + var(--safe-bottom));
-  transform: translateY(100%);
-  transition: transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
-  z-index: 160;
-}
-.bottom-sheet.visible { transform: translateY(0); }
-.bottom-sheet-handle {
-  width: 36px;
-  height: 4px;
-  background: var(--border);
-  border-radius: var(--r-full);
-  margin: 0 auto 16px;
-}
-.sheet-product {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-.sheet-product img {
-  width: 90px;
-  height: 90px;
-  border-radius: var(--r-md);
-  object-fit: cover;
-}
-.sheet-product-info { flex: 1; }
-.sheet-product-name {
-  font-family: 'Plus Jakarta Sans', serif;
-  font-size: 15px;
-  font-weight: 600;
-  margin-bottom: 2px;
-}
-.sheet-product-artisan { font-size: 12px; color: var(--text-3); margin-bottom: 6px; }
-.sheet-product-price {
-  font-family: 'Plus Jakarta Sans', serif;
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--amber);
-}
-.sheet-cta-row { display: flex; gap: 8px; }
-
-/* ═══════════════════════════════════════════════════════════
-   INSTRUCTIONS OVERLAY
-   ═══════════════════════════════════════════════════════════ */
+/* ═══ INSTRUCTIONS ═══ */
 .instructions {
   position: fixed;
   top: 20px;
@@ -959,51 +437,34 @@ html, body {
 .instructions ul { margin-left: 16px; margin-top: 6px; }
 .instructions li { margin-bottom: 2px; }
 
-/* Skeleton shimmer (pour démo) */
-@keyframes shimmer {
-  0% { background-position: -200px 0; }
-  100% { background-position: 200px 0; }
-}
-.skeleton {
-  background: linear-gradient(90deg, var(--bg-warm) 25%, var(--border-light) 50%, var(--bg-warm) 75%);
-  background-size: 400px 100%;
-  animation: shimmer 1.5s infinite;
-}
-
-/* Hint badge pour la première fois */
-.hint {
-  position: absolute;
-  bottom: 100px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(30, 24, 19, 0.95);
+/* ═══ V2 BADGE (en haut à droite hors app) ═══ */
+.version-tag {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  background: var(--forest);
   color: white;
-  padding: 10px 18px;
+  padding: 6px 12px;
   border-radius: var(--r-full);
-  font-size: 12px;
-  z-index: 200;
-  backdrop-filter: blur(10px);
-  animation: hintBounce 2s ease-in-out infinite;
-  display: none;
+  font-size: 11px;
+  font-weight: 700;
+  z-index: 1001;
 }
-.hint.show { display: block; }
-@keyframes hintBounce {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(-6px); }
-}
+.version-tag a { color: white; text-decoration: none; margin-left: 8px; opacity: 0.8; }
 </style>
 </head>
 <body>
 
-<!-- Instructions overlay -->
+<div class="version-tag">v2 Immersif · <a href="/app-simulator-v1-web.html">voir v1 web</a></div>
+
 <div class="instructions" id="instructions">
-  <strong>Simulateur Dedco — Phase pilote</strong>
+  <strong>Dedco v2 — Feed immersif</strong>
   <ul>
-    <li>Tape une carte produit → fiche produit</li>
-    <li>Tape les dots du hero → change de scène</li>
-    <li>Tape un hotspot amber → bottom sheet produit</li>
-    <li>Tape le cœur → favoris</li>
-    <li>Tab bar en bas → navigation</li>
+    <li>Scroll vertical : feed de cards pleine largeur</li>
+    <li>Tape un cœur : favoris</li>
+    <li>Tape une card : aperçu produit (démo)</li>
+    <li>Tab bar en bas</li>
+    <li>Pull-to-refresh (tire vers le bas en haut)</li>
   </ul>
   <span style="opacity:0.6; font-size:11px;">Tape n'importe où pour fermer</span>
 </div>
@@ -1011,9 +472,9 @@ html, body {
 <div class="app-shell" id="appShell">
   <div class="notch"></div>
 
-  <!-- ══════════ STATUS BAR ══════════ -->
-  <div class="status-bar" id="statusBar">
-    <span class="time">9:41</span>
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span>9:41</span>
     <div class="icons">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.18L12 21z"/></svg>
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.01 21.49L23.64 7c-.45-.34-4.93-4-11.64-4C5.28 3 .81 6.66.36 7l11.63 14.49.01.01.01-.01z"/></svg>
@@ -1021,272 +482,30 @@ html, body {
     </div>
   </div>
 
-  <!-- ══════════ HEADER GLOBAL ══════════ -->
-  <div class="header" id="appHeader">
-    <div class="logo" onclick="navigate('home')">Dedco<span class="dot">.</span></div>
-    <div class="header-actions">
-      <div class="header-icon" onclick="showHint('Recherche')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      </div>
-      <div class="header-icon" onclick="showHint('Messages')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        <span class="badge">2</span>
-      </div>
-      <div class="header-icon" onclick="showHint('Notifications')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-        <span class="badge amber">3</span>
-      </div>
-      <div class="header-icon" onclick="showHint('Panier')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-      </div>
+  <!-- HEADER MINIMAL -->
+  <div class="header-min">
+    <div class="header-logo">Dedco<span class="dot">.</span></div>
+    <div class="header-cart" onclick="showHint('Panier')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span class="badge">2</span>
     </div>
   </div>
 
-  <!-- ══════════ HOME SCREEN ══════════ -->
-  <div class="screen active" id="screen-home">
-    <div class="screen-content" id="homeScroll">
+  <!-- REFRESH HINT -->
+  <div class="refresh-hint" id="refreshHint"></div>
 
-      <!-- Hero rotatif -->
-      <div class="hero" id="hero">
-        <div class="hero-slide active" data-idx="0">
-          <img src="https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&w=800&q=85" alt="">
-          <div class="hero-overlay"></div>
-          <div class="hero-content">
-            <div class="hero-title">Salon Tropical<br>Akpakpa</div>
-            <div class="hero-subtitle">3 pièces · par Kofi Akindélé</div>
-            <div class="hero-cta" onclick="showHint('Voir la scène complète')">Voir la scène complète →</div>
-          </div>
-          <!-- Hotspots -->
-          <div class="hotspot" style="top: 35%; left: 30%;" onclick="openHotspotSheet('Table basse Bénin Wax', 'Kofi Akindélé', 145000, 'https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=200&q=85')"></div>
-          <div class="hotspot" style="top: 55%; left: 65%;" onclick="openHotspotSheet('Fauteuil Sahel Tressé', 'Kofi Akindélé', 245000, 'https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=200&q=85')"></div>
-        </div>
-        <div class="hero-slide" data-idx="1">
-          <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=800&q=85" alt="">
-          <div class="hero-overlay"></div>
-          <div class="hero-content">
-            <div class="hero-title">Salle à manger<br>Kente Akwa</div>
-            <div class="hero-subtitle">5 pièces · par Amara Dossou</div>
-            <div class="hero-cta" onclick="showHint('Voir la scène complète')">Voir la scène complète →</div>
-          </div>
-          <div class="hotspot" style="top: 40%; left: 25%;" onclick="openHotspotSheet('Table à manger iroko', 'Amara Dossou', 520000, 'https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?auto=format&fit=crop&w=200&q=85')"></div>
-        </div>
-        <div class="hero-slide" data-idx="2">
-          <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=85" alt="">
-          <div class="hero-overlay"></div>
-          <div class="hero-content">
-            <div class="hero-title">Bureau Afro<br>contemporain</div>
-            <div class="hero-subtitle">4 pièces · par Ndèye Sarr</div>
-            <div class="hero-cta" onclick="showHint('Voir la scène complète')">Voir la scène complète →</div>
-          </div>
-          <div class="hotspot" style="top: 45%; left: 50%;" onclick="openHotspotSheet('Bureau rotin tressé', 'Ndèye Sarr', 320000, 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=200&q=85')"></div>
-        </div>
-        <div class="hero-dots" id="heroDots">
-          <div class="hero-dot active"></div>
-          <div class="hero-dot"></div>
-          <div class="hero-dot"></div>
-        </div>
-      </div>
-
-      <!-- Trust chips -->
-      <div class="trust-chips">
-        <div class="trust-chip">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Artisans vérifiés
-        </div>
-        <div class="trust-chip">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
-          MTN & Moov
-        </div>
-        <div class="trust-chip">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c2.39 0 4.68.94 6.36 2.64"/></svg>
-          Garantie Dedco
-        </div>
-      </div>
-
-      <!-- Nouveautés -->
-      <div class="section">
-        <div class="section-header">
-          <div class="section-title">Nouveautés</div>
-          <div class="section-link" onclick="showHint('Voir tout')">Voir tout →</div>
-        </div>
-        <div class="h-scroll" id="nouveautes"></div>
-      </div>
-
-      <!-- Artisans à découvrir -->
-      <div class="section">
-        <div class="section-header">
-          <div class="section-title">Artisans à découvrir</div>
-          <div class="section-link" onclick="showHint('Voir tout')">Voir tout →</div>
-        </div>
-        <div class="artisan-row" id="artisans"></div>
-      </div>
-
-      <!-- Collections éditoriales -->
-      <div class="section">
-        <div class="section-header">
-          <div class="section-title">Collections</div>
-          <div class="section-link" onclick="showHint('Voir tout')">Voir tout →</div>
-        </div>
-        <div class="collections">
-          <div class="collection-card" onclick="showHint('Collection')">
-            <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=85" alt="">
-            <div class="collection-overlay"></div>
-            <div class="collection-content">
-              <div class="collection-title">Été tropical</div>
-              <div class="collection-count">24 pièces</div>
-            </div>
-          </div>
-          <div class="collection-card" onclick="showHint('Collection')">
-            <img src="https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=800&q=85" alt="">
-            <div class="collection-overlay"></div>
-            <div class="collection-content">
-              <div class="collection-title">Bois & Wax</div>
-              <div class="collection-count">18 pièces</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Newsletter -->
-      <div class="newsletter">
-        <div class="newsletter-title">Restez inspiré</div>
-        <div class="newsletter-subtitle">Nouveautés, inspirations et conseils d'aménagement</div>
-        <div class="newsletter-input-row">
-          <input type="email" class="newsletter-input" placeholder="Votre email">
-          <button class="newsletter-btn" onclick="showHint('Inscription')">OK</button>
-        </div>
-      </div>
-
-    </div>
+  <!-- FEED -->
+  <div class="feed" id="feed">
+    <!-- Cards rendues en JS -->
   </div>
 
-  <!-- ══════════ PRODUCT SCREEN ══════════ -->
-  <div class="screen" id="screen-product">
-    <div class="screen-content" id="productScroll">
+  <!-- HINT -->
+  <div class="app-hint" id="appHint"></div>
 
-      <!-- Galerie -->
-      <div class="product-gallery">
-        <img id="productGalleryImg" src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=800&q=85" alt="">
-        <div class="gallery-top-actions">
-          <div class="gallery-action-btn back" onclick="navigate('home')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-          </div>
-          <div style="display:flex; gap:8px;">
-            <div class="gallery-action-btn" onclick="toggleFav(this)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            </div>
-            <div class="gallery-action-btn" onclick="showHint('Partager')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98"/><path d="m15.41 6.51-6.82 3.98"/></svg>
-            </div>
-          </div>
-        </div>
-        <div class="gallery-dots">
-          <div class="gallery-dot active"></div>
-          <div class="gallery-dot"></div>
-          <div class="gallery-dot"></div>
-          <div class="gallery-dot"></div>
-        </div>
-      </div>
-
-      <!-- Détail produit -->
-      <div class="product-detail">
-        <div class="breadcrumb">Accueil · Mobilier · Tables</div>
-        <div class="product-detail-name" id="productName">Table basse Bénin Wax</div>
-        <div class="product-detail-artisan" onclick="showHint('Profil artisan')">
-          par Kofi Akindélé
-          <span class="verified-badge">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Vérifié N3
-          </span>
-        </div>
-
-        <div class="product-price-row">
-          <div class="product-price-main numeric" id="productPrice">145 000 FCFA</div>
-          <div class="stock-badge">En stock</div>
-        </div>
-
-        <div class="product-desc">
-          Table basse en bois iroko massif, plateau incrusté de motifs wax traditionnels du Bénin. Pièce unique fabriquée à la main dans l'atelier de Kofi Akindélé à Cotonou. Dimensions 110×60×40 cm. Traitement naturel anti-termites.
-        </div>
-
-        <div class="specs-section">
-          <div class="spec-row">
-            <span class="spec-label">Matériaux</span>
-            <span class="spec-value">Bois iroko, tissu wax</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-label">Dimensions</span>
-            <span class="spec-value numeric">110 × 60 × 40 cm</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-label">Poids</span>
-            <span class="spec-value numeric">18 kg</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-label">Délai fabrication</span>
-            <span class="spec-value">10 jours</span>
-          </div>
-        </div>
-
-        <div class="trust-section">
-          <div class="trust-chip">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--amber)"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            Garantie Dedco
-          </div>
-          <div class="trust-chip">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--forest)"><polyline points="20 6 9 17 4 12"/></svg>
-            Artisan vérifié
-          </div>
-          <div class="trust-chip">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--forest)"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-            Livraison sécurisée
-          </div>
-        </div>
-
-        <div style="padding: 16px 0; border-top: 1px solid var(--border-light); margin-top: 20px;">
-          <div style="font-size: 13px; color: var(--text-3); margin-bottom: 12px;">Votre paiement est sécurisé par Dedco. Il ne sera versé à l'artisan qu'après confirmation de votre livraison.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Floating CTA -->
-    <div class="floating-cta">
-      <div class="btn-secondary" onclick="showHint('Message artisan')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      </div>
-      <button class="btn-primary" onclick="showHint('Ajouté au panier')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-        Ajouter au panier
-      </button>
-    </div>
-  </div>
-
-  <!-- ══════════ BOTTOM SHEET (hotspot) ══════════ -->
-  <div class="bottom-sheet-backdrop" id="sheetBackdrop" onclick="closeHotspotSheet()"></div>
-  <div class="bottom-sheet" id="hotspotSheet">
-    <div class="bottom-sheet-handle"></div>
-    <div class="sheet-product">
-      <img id="sheetImg" src="" alt="">
-      <div class="sheet-product-info">
-        <div class="sheet-product-name" id="sheetName"></div>
-        <div class="sheet-product-artisan" id="sheetArtisan"></div>
-        <div class="sheet-product-price numeric" id="sheetPrice"></div>
-      </div>
-    </div>
-    <div class="sheet-cta-row">
-      <button class="btn-primary" style="height:44px; font-size:14px;" onclick="closeHotspotSheet(); openProduct()">
-        Voir le produit
-      </button>
-      <div class="btn-secondary" style="width:44px; height:44px;" onclick="toggleFav(this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════ TAB BAR ══════════ -->
+  <!-- TAB BAR -->
   <div class="tab-bar">
-    <div class="tab-item active" data-tab="home" onclick="navigate('home')">
-      <svg class="tab-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M3 12l9-9 9 9v9a2 2 0 0 1-2 2h-4v-6H10v6H6a2 2 0 0 1-2-2v-9z" stroke="currentColor" stroke-width="0"/></svg>
+    <div class="tab-item active" data-tab="home">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M3 12l9-9 9 9v9a2 2 0 0 1-2 2h-4v-6H10v6H6a2 2 0 0 1-2-2v-9z"/></svg>
       <span class="tab-label">Accueil</span>
     </div>
     <div class="tab-item" data-tab="inspirations" onclick="showHint('Inspirations')">
@@ -1311,181 +530,223 @@ html, body {
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════════
-// DATA — produits et artisans mockés
-// ═══════════════════════════════════════════════════════════
-const PRODUCTS = [
-  { id: 1, name: "Table basse Bénin Wax", artisan: "Kofi Akindélé", city: "Cotonou", price: 145000, img: "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber" },
-  { id: 2, name: "Fauteuil Sahel Tressé", artisan: "Kofi Akindélé", city: "Cotonou", price: 245000, img: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=400&q=85", badge: "NOUVEAU", badgeColor: "forest" },
-  { id: 3, name: "Lampe Abat-jour Bogolan", artisan: "Amara Dossou", city: "Parakou", price: 65000, img: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=400&q=85" },
-  { id: 4, name: "Miroir Raffia Carré", artisan: "Sophie Kossou", city: "Porto-Novo", price: 95000, img: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber" },
-  { id: 5, name: "Commode Porto-Novo", artisan: "Amara Dossou", city: "Parakou", price: 385000, img: "https://images.unsplash.com/photo-1517467139951-f5a925c9f9de?auto=format&fit=crop&w=400&q=85" },
-  { id: 6, name: "Tabouret Tamtam ×2", artisan: "Brice Gogan", city: "Cotonou", price: 76000, img: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=400&q=85" },
+// ═══ DATA ═══
+const FEED_ITEMS = [
+  {
+    type: 'product',
+    name: "Table basse Bénin Wax",
+    artisan: "Kofi Akindélé",
+    artisanAvatar: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=80&q=85",
+    verified: true,
+    price: 145000,
+    rating: 4.9,
+    reviews: 24,
+    img: "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=800&q=85",
+    badge: "UNIQUE",
+    badgeColor: "amber"
+  },
+  {
+    type: 'scene',
+    name: "Salon Tropical Akpakpa",
+    artisan: "Kofi Akindélé",
+    artisanAvatar: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=80&q=85",
+    verified: true,
+    price: null,
+    rating: null,
+    img: "https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&w=800&q=85",
+    sceneTag: "3 pièces",
+  },
+  {
+    type: 'product',
+    name: "Fauteuil Sahel Tressé",
+    artisan: "Amara Dossou",
+    artisanAvatar: "https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&crop=faces&w=80&q=85",
+    verified: true,
+    price: 245000,
+    rating: 4.8,
+    reviews: 18,
+    img: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=800&q=85",
+    badge: "NOUVEAU",
+    badgeColor: "forest"
+  },
+  {
+    type: 'product',
+    name: "Lampe Abat-jour Bogolan",
+    artisan: "Sophie Kossou",
+    artisanAvatar: "https://images.unsplash.com/photo-1614317226704-8b1f7a4c4d3e?auto=format&fit=crop&crop=faces&w=80&q=85",
+    verified: true,
+    price: 65000,
+    rating: 5.0,
+    reviews: 12,
+    img: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=800&q=85",
+  },
+  {
+    type: 'scene',
+    name: "Salle à manger Kente Akwa",
+    artisan: "Amara Dossou",
+    artisanAvatar: "https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&crop=faces&w=80&q=85",
+    verified: true,
+    price: null,
+    rating: null,
+    img: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=800&q=85",
+    sceneTag: "5 pièces",
+  },
+  {
+    type: 'product',
+    name: "Commode Porto-Novo",
+    artisan: "Amara Dossou",
+    artisanAvatar: "https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&crop=faces&w=80&q=85",
+    verified: true,
+    price: 385000,
+    rating: 4.7,
+    reviews: 9,
+    img: "https://images.unsplash.com/photo-1517467139951-f5a925c9f9de?auto=format&fit=crop&w=800&q=85",
+  },
+  {
+    type: 'product',
+    name: "Miroir Raffia Carré",
+    artisan: "Sophie Kossou",
+    artisanAvatar: "https://images.unsplash.com/photo-1614317226704-8b1f7a4c4d3e?auto=format&fit=crop&crop=faces&w=80&q=85",
+    verified: true,
+    price: 95000,
+    rating: 4.9,
+    reviews: 15,
+    img: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=800&q=85",
+    badge: "UNIQUE",
+    badgeColor: "amber"
+  },
+  {
+    type: 'product',
+    name: "Tabouret Tamtam ×2",
+    artisan: "Brice Gogan",
+    artisanAvatar: "https://images.unsplash.com/photo-1620939514028-960d6f6a3b3e?auto=format&fit=crop&crop=faces&w=80&q=85",
+    verified: false,
+    price: 76000,
+    rating: 4.6,
+    reviews: 7,
+    img: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=800&q=85",
+  },
 ];
 
-const ARTISANS = [
-  { name: "Kofi Akindélé", specialty: "Mobilier bois", img: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=200&q=85" },
-  { name: "Amara Dossou", specialty: "Rotin tressé", img: "https://images.unsplash.com/photo-1509099836639-18ba17952100?auto=format&fit=crop&crop=faces&w=200&q=85" },
-  { name: "Sophie Kossou", specialty: "Décoration wax", img: "https://images.unsplash.com/photo-1614317226704-8b1f7a4c4d3e?auto=format&fit=crop&crop=faces&w=200&q=85" },
-  { name: "Ndèye Sarr", specialty: "Design intérieur", img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=200&q=85" },
-  { name: "Brice Gogan", specialty: "Sculpture bois", img: "https://images.unsplash.com/photo-1620939514028-960d6f6a3b3e?auto=format&fit=crop&crop=faces&w=200&q=85" },
-];
-
-// ═══════════════════════════════════════════════════════════
-// INIT — render cards
-// ═══════════════════════════════════════════════════════════
+// ═══ RENDER ═══
 function formatFCFA(n) { return n.toLocaleString('fr-FR') + ' FCFA'; }
 
-function renderNouveautes() {
-  const container = document.getElementById('nouveautes');
-  container.innerHTML = PRODUCTS.map(p => `
-    <div class="product-card" onclick="openProduct(${p.id})">
-      <div class="product-img-wrap">
-        <img src="${p.img}" alt="${p.name}">
-        ${p.badge ? `<span class="product-badge ${p.badgeColor}">${p.badge}</span>` : ''}
-        <div class="fav-btn" onclick="event.stopPropagation(); toggleFav(this)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+function renderFeed() {
+  const feed = document.getElementById('feed');
+  feed.innerHTML = FEED_ITEMS.map((item, i) => {
+    if (item.type === 'scene') {
+      return `
+        <div class="feed-card scene" onclick="showHint('Scène inspiration')">
+          <div class="feed-card-img">
+            <img src="${item.img}" alt="${item.name}">
+            <div class="feed-card-overlay"></div>
+            <div class="feed-fav" onclick="event.stopPropagation(); toggleFav(this)">
+              <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+            <div class="feed-scene-tag">${item.sceneTag}</div>
+          </div>
+          <div class="feed-content">
+            <div class="feed-artisan-row">
+              <img class="feed-artisan-avatar" src="${item.artisanAvatar}" alt="">
+              <span class="feed-artisan-name">${item.artisan}</span>
+              ${item.verified ? '<svg class="feed-artisan-verified" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1z"/></svg>' : ''}
+            </div>
+            <div class="feed-name">${item.name}</div>
+          </div>
+        </div>
+      `;
+    }
+    return `
+      <div class="feed-card" onclick="showHint('${item.name}')">
+        <div class="feed-card-img">
+          <img src="${item.img}" alt="${item.name}">
+          <div class="feed-card-overlay"></div>
+          ${item.badge ? `<span class="feed-badge ${item.badgeColor}">${item.badge}</span>` : '<span class="feed-badge dark">★ ${item.rating}</span>'}
+          <div class="feed-fav" onclick="event.stopPropagation(); toggleFav(this)">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+        </div>
+        <div class="feed-content">
+          <div class="feed-artisan-row">
+            <img class="feed-artisan-avatar" src="${item.artisanAvatar}" alt="">
+            <span class="feed-artisan-name">${item.artisan}</span>
+            ${item.verified ? '<svg class="feed-artisan-verified" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1z"/></svg>' : ''}
+          </div>
+          <div class="feed-name">${item.name}</div>
+          <div class="feed-meta-row">
+            <span class="feed-price numeric">${formatFCFA(item.price)}</span>
+            <span class="feed-rating">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1z"/></svg>
+              ${item.rating} · ${item.reviews}
+            </span>
+          </div>
         </div>
       </div>
-      <div class="product-info">
-        <div class="product-name">${p.name}</div>
-        <div class="product-artisan">${p.artisan} · ${p.city}</div>
-        <div class="product-price numeric">${formatFCFA(p.price)}</div>
-      </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
-function renderArtisans() {
-  const container = document.getElementById('artisans');
-  container.innerHTML = ARTISANS.map(a => `
-    <div class="artisan-card" onclick="showHint('Profil ${a.name}')">
-      <img class="artisan-avatar" src="${a.img}" alt="${a.name}">
-      <div class="artisan-name">${a.name.split(' ')[0]}</div>
-      <div class="artisan-specialty">${a.specialty}</div>
-    </div>
-  `).join('');
-}
-
-// ═══════════════════════════════════════════════════════════
-// HERO — rotation automatique + tap dots
-// ═══════════════════════════════════════════════════════════
-let heroIdx = 0;
-let heroTimer;
-
-function showHeroSlide(idx) {
-  document.querySelectorAll('.hero-slide').forEach((s, i) => {
-    s.classList.toggle('active', i === idx);
-  });
-  document.querySelectorAll('.hero-dot').forEach((d, i) => {
-    d.classList.toggle('active', i === idx);
-  });
-  heroIdx = idx;
-}
-
-function nextHero() {
-  showHeroSlide((heroIdx + 1) % 3);
-}
-
-function startHeroRotation() {
-  heroTimer = setInterval(nextHero, 4000);
-}
-
-document.querySelectorAll('.hero-dot').forEach((dot, i) => {
-  dot.addEventListener('click', () => {
-    clearInterval(heroTimer);
-    showHeroSlide(i);
-    startHeroRotation();
-  });
-});
-
-// ═══════════════════════════════════════════════════════════
-// NAVIGATION — push transition
-// ═══════════════════════════════════════════════════════════
-function navigate(target) {
-  if (target === 'home') {
-    document.getElementById('screen-product').classList.remove('active');
-    document.getElementById('homeScroll').scrollTop = 0;
-    // Tab bar state
-    document.querySelectorAll('.tab-item').forEach(t => t.classList.toggle('active', t.dataset.tab === 'home'));
-  }
-}
-
-function openProduct(productId) {
-  const p = PRODUCTS.find(x => x.id === productId) || PRODUCTS[0];
-  document.getElementById('productName').textContent = p.name;
-  document.getElementById('productPrice').textContent = formatFCFA(p.price);
-  document.getElementById('productGalleryImg').src = p.img;
-  document.getElementById('productScroll').scrollTop = 0;
-  document.getElementById('screen-product').classList.add('active');
-}
-
-// ═══════════════════════════════════════════════════════════
-// FAVORIS — toggle avec animation
-// ═══════════════════════════════════════════════════════════
+// ═══ FAVORIS ═══
 function toggleFav(el) {
   el.classList.toggle('active');
-  const svg = el.querySelector('svg');
   if (el.classList.contains('active')) {
-    svg.setAttribute('fill', 'currentColor');
     el.style.transform = 'scale(1.3)';
     setTimeout(() => el.style.transform = '', 200);
-  } else {
-    svg.setAttribute('fill', 'none');
   }
 }
 
-// ═══════════════════════════════════════════════════════════
-// HOTSPOT — bottom sheet produit
-// ═══════════════════════════════════════════════════════════
-function openHotspotSheet(name, artisan, price, img) {
-  document.getElementById('sheetName').textContent = name;
-  document.getElementById('sheetArtisan').textContent = artisan;
-  document.getElementById('sheetPrice').textContent = formatFCFA(price);
-  document.getElementById('sheetImg').src = img;
-  document.getElementById('sheetBackdrop').classList.add('visible');
-  document.getElementById('hotspotSheet').classList.add('visible');
-}
+// ═══ PULL TO REFRESH ═══
+const feed = document.getElementById('feed');
+let pullStart = 0;
+let pulling = false;
 
-function closeHotspotSheet() {
-  document.getElementById('sheetBackdrop').classList.remove('visible');
-  document.getElementById('hotspotSheet').classList.remove('visible');
-}
+feed.addEventListener('touchstart', (e) => {
+  if (feed.scrollTop === 0) {
+    pullStart = e.touches[0].clientY;
+    pulling = true;
+  }
+}, { passive: true });
 
-// ═══════════════════════════════════════════════════════════
-// HINT — petit toast temporaire
-// ═══════════════════════════════════════════════════════════
+feed.addEventListener('touchmove', (e) => {
+  if (!pulling) return;
+  const diff = e.touches[0].clientY - pullStart;
+  if (diff > 60 && diff < 120) {
+    document.getElementById('refreshHint').classList.add('spin');
+  }
+}, { passive: true });
+
+feed.addEventListener('touchend', () => {
+  if (pulling) {
+    setTimeout(() => {
+      document.getElementById('refreshHint').classList.remove('spin');
+      if (feed.scrollTop === 0) showHint('Actualisé');
+    }, 800);
+  }
+  pulling = false;
+});
+
+// ═══ HINT ═══
 let hintTimer;
 function showHint(msg) {
-  let hint = document.getElementById('appHint');
-  if (!hint) {
-    hint = document.createElement('div');
-    hint.id = 'appHint';
-    hint.style.cssText = 'position:absolute; bottom:100px; left:50%; transform:translateX(-50%); background:rgba(30,24,19,0.95); color:white; padding:10px 20px; border-radius:999px; font-size:12px; z-index:300; backdrop-filter:blur(10px); transition:opacity 0.3s; pointer-events:none; white-space:nowrap;';
-    document.getElementById('appShell').appendChild(hint);
-  }
-  hint.textContent = msg + ' (démo)';
-  hint.style.opacity = '1';
+  const hint = document.getElementById('appHint');
+  hint.textContent = msg;
+  hint.classList.add('show');
   clearTimeout(hintTimer);
-  hintTimer = setTimeout(() => hint.style.opacity = '0', 1800);
+  hintTimer = setTimeout(() => hint.classList.remove('show'), 1600);
 }
 
-// ═══════════════════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════════════════
-renderNouveautes();
-renderArtisans();
-startHeroRotation();
+// ═══ INIT ═══
+renderFeed();
 
-// Afficher instructions 4s au démarrage
+// Instructions au démarrage
 const instr = document.getElementById('instructions');
 instr.classList.add('show');
 setTimeout(() => instr.classList.remove('show'), 5000);
 document.addEventListener('click', () => instr.classList.remove('show'), { once: true });
 
-// Empêcher le scroll du body derrière l'app shell
+// Prevent body scroll
 document.body.addEventListener('touchmove', (e) => {
-  if (e.target.closest('.screen-content') || e.target.closest('.h-scroll') || e.target.closest('.artisan-row') || e.target.closest('.trust-chips')) return;
+  if (e.target.closest('.feed')) return;
   e.preventDefault();
 }, { passive: false });
 </script>
