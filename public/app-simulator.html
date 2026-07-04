@@ -91,12 +91,12 @@ html, body {
 .app-shell {
   position: relative;
   width: 375px;
-  height: 750px;
-  margin: 20px auto;
+  height: 720px;
+  margin: 10px auto;
   background: var(--bg-cream);
   border-radius: 50px;
   overflow: hidden;
-  box-shadow: 0 0 0 10px #1a1a1a, 0 0 0 12px #2a2a2a, 0 40px 80px rgba(0,0,0,0.5);
+  box-shadow: 0 0 0 10px #1a1a1a, 0 0 0 12px #2a2a2a, 0 30px 60px rgba(0,0,0,0.5);
 }
 .notch {
   position: absolute;
@@ -218,7 +218,7 @@ html, body {
 .scroll {
   position: absolute;
   top: calc(44px + var(--safe-top) + 100px);
-  bottom: calc(64px + var(--safe-bottom));
+  bottom: 60px;
   left: 0; right: 0;
   overflow-y: auto;
   overflow-x: hidden;
@@ -738,16 +738,13 @@ html, body {
 .tab-bar {
   position: absolute;
   bottom: 0; left: 0; right: 0;
-  height: calc(64px + var(--safe-bottom));
-  padding-bottom: var(--safe-bottom);
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  height: 60px;
+  background: #FFFFFF;
   border-top: 1px solid var(--border);
   display: flex;
   align-items: flex-start;
   z-index: 80;
-  box-shadow: 0 -2px 12px rgba(30, 24, 19, 0.04);
+  box-shadow: 0 -2px 12px rgba(30, 24, 19, 0.06);
 }
 .tab-item {
   flex: 1;
@@ -789,7 +786,7 @@ html, body {
 }
 .app-hint.show { opacity: 1; }
 
-/* ═══ VERSION TAG ═══ */
+/* ═══ VERSION TAG — masqué pour éviter override ═══ */
 .version-tag {
   position: fixed;
   top: 30px; right: 30px;
