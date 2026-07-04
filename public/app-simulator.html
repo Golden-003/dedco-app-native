@@ -217,7 +217,7 @@ html, body {
 /* ═══ SCREEN PAGES — multi-screen system ═══ */
 .screen-page {
   position: absolute;
-  top: calc(44px + var(--safe-top) + 100px);
+  top: calc(44px + var(--safe-top) + 116px);
   bottom: 64px;
   left: 0; right: 0;
   overflow-y: auto;
@@ -240,7 +240,7 @@ html, body {
 /* ═══ SCROLL CONTENT (home — kept for backward compat) ═══ */
 .scroll {
   position: absolute;
-  top: calc(44px + var(--safe-top) + 100px);
+  top: calc(44px + var(--safe-top) + 116px);
   bottom: 64px;
   left: 0; right: 0;
   overflow-y: auto;
@@ -981,7 +981,7 @@ html, body {
 }
 .product-price-main {
   font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 700;
   color: var(--amber-dark);
   font-variant-numeric: tabular-nums;
@@ -1004,13 +1004,78 @@ html, body {
   border-top: 1px solid var(--border);
   padding: 14px 0;
 }
+.spec-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-3);
+  margin-bottom: 10px;
+  margin-top: 4px;
+}
 .spec-row {
   display: flex; justify-content: space-between;
-  padding: 6px 0;
+  padding: 5px 0;
   font-size: 13px;
 }
 .spec-label { color: var(--text-3); }
 .spec-value { font-weight: 600; color: var(--text-1); }
+
+/* Quantity selector */
+.qty-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin: 16px 0;
+  padding: 14px 16px;
+  background: var(--bg-warm);
+  border-radius: 12px;
+}
+.qty-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-1);
+}
+.qty-stepper {
+  display: flex; align-items: center; gap: 16px;
+}
+.qty-btn {
+  width: 32px; height: 32px;
+  border-radius: 999px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-1);
+  transition: transform 0.15s;
+}
+.qty-btn:active { transform: scale(0.9); }
+.qty-value {
+  font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-1);
+  min-width: 24px;
+  text-align: center;
+}
+
+/* Color swatches */
+.color-row {
+  display: flex; align-items: center; gap: 10px;
+  margin: 14px 0;
+}
+.color-swatch {
+  width: 32px; height: 32px;
+  border-radius: 999px;
+  border: 2px solid var(--border);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.color-swatch.active {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 2px var(--amber-pale);
+}
+.color-swatch:active { transform: scale(0.9); }
 .product-trust {
   display: flex; gap: 8px; flex-wrap: wrap;
   margin: 16px 0;
@@ -1402,10 +1467,32 @@ html, body {
         <div class="product-price-main" id="productDetailPrice">145 000 FCFA</div>
         <div class="product-stock">En stock</div>
       </div>
+
       <div class="product-desc">
         Table basse en bois iroko massif, plateau incrusté de motifs wax traditionnels du Bénin. Pièce unique fabriquée à la main dans l'atelier de Kofi Akindélé à Cotonou. Dimensions 110×60×40 cm. Traitement naturel anti-termites.
       </div>
+
+      <!-- Variantes couleur -->
+      <div class="color-row">
+        <span style="font-size:13px;font-weight:600;color:var(--text-1);margin-right:4px;">Finition:</span>
+        <div class="color-swatch active" style="background:#8B4513;" onclick="selectColor(this)" title="Iroko naturel"></div>
+        <div class="color-swatch" style="background:#A0522D;" onclick="selectColor(this)" title="Wax terracotta"></div>
+        <div class="color-swatch" style="background:#2F2F2F;" onclick="selectColor(this)" title="Bois fumé"></div>
+      </div>
+
+      <!-- Quantité -->
+      <div class="qty-row">
+        <div class="qty-label">Quantité</div>
+        <div class="qty-stepper">
+          <div class="qty-btn" onclick="changeQty(-1)">−</div>
+          <div class="qty-value" id="qtyValue">1</div>
+          <div class="qty-btn" onclick="changeQty(1)">+</div>
+        </div>
+      </div>
+
+      <!-- Specs -->
       <div class="product-specs">
+        <div class="spec-section-title">Détails techniques</div>
         <div class="spec-row"><span class="spec-label">Matériaux</span><span class="spec-value">Bois iroko, tissu wax</span></div>
         <div class="spec-row"><span class="spec-label">Dimensions</span><span class="spec-value">110 × 60 × 40 cm</span></div>
         <div class="spec-row"><span class="spec-label">Poids</span><span class="spec-value">18 kg</span></div>
@@ -1648,6 +1735,22 @@ function selectFilter(el) {
 
 function selectMarketCat(el) {
   document.querySelectorAll('.market-cat').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Quantity
+let currentQty = 1;
+function changeQty(delta) {
+  currentQty = Math.max(1, Math.min(99, currentQty + delta));
+  const el = document.getElementById('qtyValue');
+  el.textContent = currentQty;
+  el.style.transform = 'scale(1.2)';
+  setTimeout(() => el.style.transform = '', 150);
+}
+
+// Color swatches
+function selectColor(el) {
+  document.querySelectorAll('.color-swatch').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
 }
 
