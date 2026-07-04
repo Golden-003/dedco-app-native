@@ -17,18 +17,30 @@
    ═══════════════════════════════════════════════════════════ */
 
 :root {
+  /* Palette Dedco — chaleureuse, éditoriale */
   --amber: #BF793B;
   --amber-dark: #9A5A1F;
+  --amber-light: #D4954A;
+  --amber-pale: #F5E6D3;
   --terracotta: #A6442E;
+  --terracotta-pale: #FAEAE6;
   --forest: #548C45;
-  --bg: #F8F5F2;           /* blanc cassé chaleureux */
+  --forest-pale: #E6F2E3;
+  --bg: #FAF6EE;           /* crème chaleureux, plus Dedco */
   --bg-card: #FFFFFF;
-  --text-1: #1A1A1A;
-  --text-2: #666666;
-  --text-3: #999999;
-  --border: #EAEAEA;
+  --bg-warm: #F2EBDF;
+  --text-1: #2A1F14;       /* brun chaud au lieu de noir froid */
+  --text-2: #6B5D4E;
+  --text-3: #A89882;
+  --border: #EDE2D0;
+  --border-light: #F5EEE0;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
+  /* Ombres douces premium */
+  --shadow-sm: 0 1px 3px rgba(60, 40, 20, 0.04);
+  --shadow-md: 0 4px 16px rgba(60, 40, 20, 0.06);
+  --shadow-lg: 0 12px 32px rgba(60, 40, 20, 0.10);
+  --shadow-amber: 0 6px 20px rgba(191, 121, 59, 0.25);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -101,13 +113,21 @@ html, body {
 .greeting-hello {
   font-size: 13px;
   color: var(--text-2);
-  font-weight: 400;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 .greeting-name {
-  font-size: 20px;
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
   font-weight: 600;
   color: var(--text-1);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.greeting-name em {
+  font-style: italic;
+  color: var(--amber);
+  font-weight: 500;
 }
 .header-icons {
   display: flex; gap: 12px; align-items: center;
@@ -140,15 +160,16 @@ html, body {
 .search-bar {
   display: flex; align-items: center;
   gap: 10px;
-  padding: 12px 16px;
+  padding: 13px 18px;
   background: var(--bg-card);
-  border-radius: 12px;
+  border-radius: 14px;
   border: 1px solid var(--border);
   cursor: pointer;
-  transition: border-color 0.2s, transform 0.15s;
-  margin-bottom: 12px;
+  transition: all 0.2s;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
 }
-.search-bar:active { transform: scale(0.99); border-color: var(--amber); }
+.search-bar:active { transform: scale(0.99); border-color: var(--amber); box-shadow: var(--shadow-md); }
 .search-bar svg.search-icon { width: 18px; height: 18px; color: var(--text-3); }
 .search-bar-text {
   font-size: 14px;
@@ -170,63 +191,86 @@ html, body {
 }
 .scroll::-webkit-scrollbar { display: none; }
 
-/* ═══ HERO — statique, éditorial, avec CTA ═══ */
+/* ═══ HERO — statique, éditorial, avec parallax subtil ═══ */
 .hero {
-  margin: 0 20px 16px;
+  margin: 0 20px 20px;
   position: relative;
-  border-radius: 16px;
+  border-radius: 20px;
   overflow: hidden;
-  aspect-ratio: 16/9;
+  aspect-ratio: 4/5;
   cursor: pointer;
   transition: transform 0.2s;
+  box-shadow: var(--shadow-lg);
 }
 .hero:active { transform: scale(0.98); }
 .hero img {
   width: 100%; height: 100%;
   object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
+.hero:hover img { transform: scale(1.04); }
 .hero-overlay {
   position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+  background: linear-gradient(to top, rgba(42, 31, 20, 0.85) 0%, rgba(42, 31, 20, 0.2) 45%, transparent 70%);
 }
 .hero-content {
   position: absolute;
   bottom: 0; left: 0; right: 0;
-  padding: 20px;
+  padding: 24px;
   color: white;
 }
 .hero-eyebrow {
-  font-size: 10px; font-weight: 600;
-  letter-spacing: 0.12em;
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  opacity: 0.9;
-  margin-bottom: 6px;
+  opacity: 0.95;
+  margin-bottom: 10px;
+  padding: 4px 10px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px);
+  border-radius: 999px;
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 5px; height: 5px;
+  background: var(--amber);
+  border-radius: 999px;
 }
 .hero-title {
   font-family: 'Playfair Display', serif;
-  font-size: 24px;
+  font-size: 32px;
   font-weight: 600;
-  line-height: 1.15;
-  margin-bottom: 6px;
-  letter-spacing: -0.01em;
+  line-height: 1.05;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.3);
 }
-.hero-title em { font-style: italic; font-weight: 500; }
+.hero-title em { font-style: italic; font-weight: 500; color: #F5D9B0; }
+.hero-sub {
+  font-size: 13px;
+  opacity: 0.92;
+  margin-bottom: 14px;
+  font-weight: 500;
+}
 .hero-cta {
   display: inline-flex; align-items: center; gap: 6px;
-  padding: 8px 16px;
+  padding: 11px 20px;
   background: var(--amber);
   color: white;
   border-radius: 999px;
   font-size: 13px;
   font-weight: 600;
-  margin-top: 4px;
+  box-shadow: var(--shadow-amber);
+  transition: transform 0.15s;
 }
+.hero-cta:active { transform: scale(0.96); }
 
 /* ═══ CATÉGORIES — icônes horizontales ═══ */
 .categories {
   display: flex;
-  gap: 16px;
-  padding: 0 20px 16px;
+  gap: 14px;
+  padding: 4px 20px 20px;
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -234,24 +278,27 @@ html, body {
 .cat-item {
   flex-shrink: 0;
   display: flex; flex-direction: column;
-  align-items: center; gap: 6px;
+  align-items: center; gap: 8px;
   cursor: pointer;
-  min-width: 60px;
+  min-width: 64px;
 }
 .cat-icon-wrap {
-  width: 52px; height: 52px;
-  border-radius: 14px;
+  width: 56px; height: 56px;
+  border-radius: 18px;
   background: var(--bg-card);
   border: 1px solid var(--border);
   display: flex; align-items: center; justify-content: center;
-  transition: all 0.15s;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: var(--shadow-sm);
 }
 .cat-item.active .cat-icon-wrap {
   background: var(--amber);
   border-color: var(--amber);
+  box-shadow: var(--shadow-amber);
+  transform: translateY(-2px);
 }
 .cat-item:active .cat-icon-wrap { transform: scale(0.92); }
-.cat-icon-wrap svg { width: 24px; height: 24px; color: var(--text-2); }
+.cat-icon-wrap svg { width: 24px; height: 24px; color: var(--text-2); transition: color 0.2s; }
 .cat-item.active .cat-icon-wrap svg { color: white; }
 .cat-label {
   font-size: 11px;
@@ -259,26 +306,27 @@ html, body {
   font-weight: 500;
   text-align: center;
 }
-.cat-item.active .cat-label { color: var(--amber); font-weight: 600; }
+.cat-item.active .cat-label { color: var(--amber-dark); font-weight: 600; }
 
 /* ═══ SECTION HEADER ═══ */
 .section {
-  padding: 16px 0 0;
+  padding: 24px 0 0;
 }
 .section-head {
   display: flex; align-items: baseline; justify-content: space-between;
-  padding: 0 20px 12px;
+  padding: 0 20px 14px;
 }
 .section-title {
-  font-size: 16px;
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
   font-weight: 600;
   color: var(--text-1);
   letter-spacing: -0.01em;
 }
 .section-link {
   font-size: 12px;
-  color: var(--text-2);
-  font-weight: 500;
+  color: var(--amber-dark);
+  font-weight: 600;
   cursor: pointer;
 }
 
@@ -294,15 +342,16 @@ html, body {
 .collections-scroll::-webkit-scrollbar { display: none; }
 .collection-card {
   flex-shrink: 0;
-  width: 160px;
-  border-radius: 12px;
+  width: 180px;
+  border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
   scroll-snap-align: start;
   position: relative;
-  aspect-ratio: 4/3;
+  aspect-ratio: 3/4;
   background: var(--bg-card);
   transition: transform 0.15s;
+  box-shadow: var(--shadow-sm);
 }
 .collection-card:active { transform: scale(0.98); }
 .collection-card img {
@@ -311,37 +360,52 @@ html, body {
 }
 .collection-overlay {
   position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 50%);
+  background: linear-gradient(to top, rgba(42, 31, 20, 0.8) 0%, rgba(42, 31, 20, 0.1) 45%, transparent 70%);
 }
 .collection-info {
   position: absolute;
-  bottom: 10px; left: 12px; right: 12px;
+  bottom: 14px; left: 14px; right: 14px;
   color: white;
+}
+.collection-tag {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(8px);
+  border-radius: 999px;
+  margin-bottom: 6px;
 }
 .collection-name {
   font-family: 'Playfair Display', serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   margin-bottom: 2px;
+  line-height: 1.15;
 }
 .collection-count {
-  font-size: 10px;
+  font-size: 11px;
   opacity: 0.9;
+  font-weight: 500;
 }
 
 /* ═══ PRODUITS — grille 2 colonnes ═══ */
 .products-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 14px;
   padding: 0 20px;
 }
 .product-card {
   background: var(--bg-card);
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.15s;
+  box-shadow: var(--shadow-sm);
 }
 .product-card:active { transform: scale(0.98); }
 .product-img-wrap {
@@ -349,31 +413,48 @@ html, body {
   width: 100%;
   aspect-ratio: 1;
   overflow: hidden;
-  background: #f0f0f0;
+  background: var(--bg-warm);
 }
 .product-img-wrap img {
   width: 100%; height: 100%;
   object-fit: cover;
 }
+.product-badge {
+  position: absolute;
+  top: 10px; left: 10px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: white;
+  backdrop-filter: blur(8px);
+}
+.product-badge.amber { background: rgba(191, 121, 59, 0.92); }
+.product-badge.forest { background: rgba(84, 140, 69, 0.92); }
 .product-fav {
   position: absolute;
-  top: 8px; right: 8px;
-  width: 28px; height: 28px;
+  top: 10px; right: 10px;
+  width: 30px; height: 30px;
   border-radius: 999px;
   background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(8px);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
+  transition: transform 0.2s;
 }
-.product-fav svg { width: 15px; height: 15px; color: var(--text-3); fill: none; stroke: currentColor; }
+.product-fav:active { transform: scale(0.85); }
+.product-fav svg { width: 16px; height: 16px; color: var(--text-2); fill: none; stroke: currentColor; }
 .product-fav.active svg { color: var(--terracotta); fill: var(--terracotta); }
 .product-info {
-  padding: 10px 12px;
+  padding: 12px 14px 14px;
 }
 .product-name {
   font-size: 13px;
   font-weight: 600;
   color: var(--text-1);
-  margin-bottom: 2px;
+  margin-bottom: 3px;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
@@ -381,13 +462,22 @@ html, body {
 }
 .product-artisan {
   font-size: 11px;
-  color: var(--text-2);
-  margin-bottom: 4px;
+  color: var(--text-3);
+  margin-bottom: 6px;
+  display: flex; align-items: center; gap: 3px;
+}
+.product-artisan::before {
+  content: '';
+  width: 4px; height: 4px;
+  background: var(--forest);
+  border-radius: 999px;
+  flex-shrink: 0;
 }
 .product-price {
-  font-size: 14px;
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
   font-weight: 700;
-  color: var(--amber);
+  color: var(--amber-dark);
   font-variant-numeric: tabular-nums;
 }
 
@@ -400,47 +490,75 @@ html, body {
 }
 .creator-col {
   display: flex; flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 .creator-card {
-  display: flex; align-items: center; gap: 10px;
+  display: flex; align-items: center; gap: 12px;
   cursor: pointer;
-  padding: 10px;
+  padding: 12px;
   background: var(--bg-card);
-  border-radius: 12px;
+  border-radius: 14px;
   transition: transform 0.15s;
+  box-shadow: var(--shadow-sm);
+  position: relative;
 }
 .creator-card:active { transform: scale(0.98); }
+.creator-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
 .creator-avatar {
   width: 44px; height: 44px;
   border-radius: 999px;
   object-fit: cover;
-  flex-shrink: 0;
+  border: 2px solid var(--bg-card);
+  box-shadow: 0 0 0 1px var(--border);
 }
+.creator-verified {
+  position: absolute;
+  bottom: -2px; right: -2px;
+  width: 16px; height: 16px;
+  background: var(--forest);
+  border: 2px solid var(--bg-card);
+  border-radius: 999px;
+  display: flex; align-items: center; justify-content: center;
+}
+.creator-verified svg { width: 9px; height: 9px; color: white; }
 .creator-info { flex: 1; min-width: 0; }
 .creator-name {
   font-size: 12px;
   font-weight: 600;
   color: var(--text-1);
-  margin-bottom: 1px;
+  margin-bottom: 2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .creator-specialty {
   font-size: 10px;
-  color: var(--text-2);
+  color: var(--text-3);
+  display: flex; align-items: center; gap: 3px;
+}
+.creator-level {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--amber-dark);
+  background: var(--amber-pale);
+  padding: 1px 6px;
+  border-radius: 999px;
 }
 
 /* ═══ PROJET CTA — section immersion ═══ */
 .project-cta {
-  margin: 16px 20px 0;
+  margin: 20px 20px 0;
   position: relative;
-  border-radius: 16px;
+  border-radius: 20px;
   overflow: hidden;
-  aspect-ratio: 16/9;
+  aspect-ratio: 16/10;
   cursor: pointer;
   transition: transform 0.2s;
+  box-shadow: var(--shadow-lg);
 }
 .project-cta:active { transform: scale(0.98); }
 .project-cta img {
@@ -449,47 +567,66 @@ html, body {
 }
 .project-cta-overlay {
   position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(191,121,59,0.85) 0%, rgba(166,68,46,0.7) 100%);
+  background: linear-gradient(135deg, rgba(191,121,59,0.92) 0%, rgba(166,68,46,0.82) 100%);
 }
 .project-cta-content {
   position: absolute;
   inset: 0;
-  padding: 20px;
+  padding: 24px;
   display: flex; flex-direction: column;
   justify-content: center;
   color: white;
 }
+.project-cta-eyebrow {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.95;
+  margin-bottom: 8px;
+}
+.project-cta-eyebrow::before {
+  content: '';
+  width: 16px; height: 1px;
+  background: white;
+  opacity: 0.7;
+}
 .project-cta-title {
   font-family: 'Playfair Display', serif;
-  font-size: 20px;
+  font-size: 26px;
   font-weight: 600;
-  margin-bottom: 4px;
-  line-height: 1.2;
+  margin-bottom: 6px;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
 }
+.project-cta-title em { font-style: italic; font-weight: 500; }
 .project-cta-sub {
-  font-size: 12px;
+  font-size: 13px;
   opacity: 0.95;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+  max-width: 220px;
 }
 .project-cta-btn {
   display: inline-flex; align-items: center; gap: 6px;
-  padding: 8px 16px;
+  padding: 11px 20px;
   background: white;
-  color: var(--text-1);
+  color: var(--amber-dark);
   border-radius: 999px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   align-self: flex-start;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
 }
 
 /* ═══ PROJET EN COURS — card ═══ */
 .current-project {
-  margin: 12px 20px 24px;
+  margin: 12px 20px 28px;
   background: var(--bg-card);
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.15s;
+  box-shadow: var(--shadow-sm);
 }
 .current-project:active { transform: scale(0.98); }
 .current-project-img {
@@ -502,32 +639,65 @@ html, body {
   width: 100%; height: 100%;
   object-fit: cover;
 }
+.current-project-status {
+  position: absolute;
+  top: 12px; left: 12px;
+  padding: 4px 10px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(8px);
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--amber-dark);
+  display: flex; align-items: center; gap: 4px;
+}
+.current-project-status::before {
+  content: '';
+  width: 5px; height: 5px;
+  background: var(--amber);
+  border-radius: 999px;
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
 .current-project-info {
-  padding: 12px 14px;
+  padding: 14px 16px;
 }
 .current-project-title {
-  font-size: 14px;
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text-1);
-  margin-bottom: 2px;
+  margin-bottom: 3px;
 }
 .current-project-meta {
   font-size: 11px;
-  color: var(--text-2);
-  margin-bottom: 8px;
+  color: var(--text-3);
+  margin-bottom: 10px;
+}
+.current-project-progress-row {
+  display: flex; align-items: center; gap: 10px;
 }
 .current-project-progress {
+  flex: 1;
   height: 4px;
-  background: var(--border);
+  background: var(--bg-warm);
   border-radius: 999px;
   overflow: hidden;
-  margin-bottom: 6px;
 }
 .current-project-progress-bar {
   height: 100%;
-  background: var(--amber);
+  background: linear-gradient(90deg, var(--amber) 0%, var(--amber-light) 100%);
   border-radius: 999px;
   width: 60%;
+}
+.current-project-progress-pct {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--amber-dark);
+  font-variant-numeric: tabular-nums;
 }
 
 /* ═══ TAB BAR ═══ */
@@ -621,7 +791,7 @@ html, body {
     <div class="header-row1">
       <div class="greeting-block">
         <div class="greeting-hello">Bonjour ✨</div>
-        <div class="greeting-name">Fatou</div>
+        <div class="greeting-name">Bienvenue, <em>Fatou</em></div>
       </div>
       <div class="header-icons">
         <div class="header-icon" onclick="showHint('Messages')">
@@ -654,7 +824,8 @@ html, body {
       <div class="hero-content">
         <div class="hero-eyebrow">Scène du moment</div>
         <div class="hero-title">L'art de <em>vivre</em><br>chez soi</div>
-        <div class="hero-cta">Découvrir →</div>
+        <div class="hero-sub">3 pièces · par Kofi Akindélé · Cotonou</div>
+        <div class="hero-cta">Découvrir la scène →</div>
       </div>
     </div>
 
@@ -715,6 +886,7 @@ html, body {
           <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=400&q=85" alt="">
           <div class="collection-overlay"></div>
           <div class="collection-info">
+            <div class="collection-tag">Cotonou</div>
             <div class="collection-name">Été tropical</div>
             <div class="collection-count">24 pièces</div>
           </div>
@@ -723,6 +895,7 @@ html, body {
           <img src="https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=400&q=85" alt="">
           <div class="collection-overlay"></div>
           <div class="collection-info">
+            <div class="collection-tag">Porto-Novo</div>
             <div class="collection-name">Bois & Wax</div>
             <div class="collection-count">18 pièces</div>
           </div>
@@ -731,6 +904,7 @@ html, body {
           <img src="https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=400&q=85" alt="">
           <div class="collection-overlay"></div>
           <div class="collection-info">
+            <div class="collection-tag">Parakou</div>
             <div class="collection-name">Bogolan Moderne</div>
             <div class="collection-count">12 pièces</div>
           </div>
@@ -739,6 +913,7 @@ html, body {
           <img src="https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=400&q=85" alt="">
           <div class="collection-overlay"></div>
           <div class="collection-info">
+            <div class="collection-tag">Parakou</div>
             <div class="collection-name">Rotin Tressé</div>
             <div class="collection-count">15 pièces</div>
           </div>
@@ -764,33 +939,45 @@ html, body {
       <div class="creators-section">
         <div class="creator-col">
           <div class="creator-card" onclick="showHint('Profil Kofi')">
-            <img class="creator-avatar" src="https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=100&q=85" alt="">
+            <div class="creator-avatar-wrap">
+              <img class="creator-avatar" src="https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=100&q=85" alt="">
+              <div class="creator-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            </div>
             <div class="creator-info">
               <div class="creator-name">Kofi A.</div>
-              <div class="creator-specialty">Mobilier · N3</div>
+              <div class="creator-specialty">Mobilier <span class="creator-level">N3</span></div>
             </div>
           </div>
           <div class="creator-card" onclick="showHint('Profil Amara')">
-            <img class="creator-avatar" src="https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&crop=faces&w=100&q=85" alt="">
+            <div class="creator-avatar-wrap">
+              <img class="creator-avatar" src="https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&crop=faces&w=100&q=85" alt="">
+              <div class="creator-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            </div>
             <div class="creator-info">
               <div class="creator-name">Amara D.</div>
-              <div class="creator-specialty">Rotin · N3</div>
+              <div class="creator-specialty">Rotin <span class="creator-level">N3</span></div>
             </div>
           </div>
         </div>
         <div class="creator-col">
           <div class="creator-card" onclick="showHint('Profil Ndèye')">
-            <img class="creator-avatar" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=100&q=85" alt="">
+            <div class="creator-avatar-wrap">
+              <img class="creator-avatar" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=100&q=85" alt="">
+              <div class="creator-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            </div>
             <div class="creator-info">
               <div class="creator-name">Ndèye S.</div>
-              <div class="creator-specialty">Designer · N4</div>
+              <div class="creator-specialty">Designer <span class="creator-level">N4</span></div>
             </div>
           </div>
           <div class="creator-card" onclick="showHint('Profil Sophie')">
-            <img class="creator-avatar" src="https://images.unsplash.com/photo-1614317226704-8b1f7a4c4d3e?auto=format&fit=crop&crop=faces&w=100&q=85" alt="">
+            <div class="creator-avatar-wrap">
+              <img class="creator-avatar" src="https://images.unsplash.com/photo-1614317226704-8b1f7a4c4d3e?auto=format&fit=crop&crop=faces&w=100&q=85" alt="">
+              <div class="creator-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            </div>
             <div class="creator-info">
               <div class="creator-name">Sophie K.</div>
-              <div class="creator-specialty">Déco wax · N2</div>
+              <div class="creator-specialty">Déco wax <span class="creator-level">N2</span></div>
             </div>
           </div>
         </div>
@@ -802,9 +989,10 @@ html, body {
       <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=85" alt="">
       <div class="project-cta-overlay"></div>
       <div class="project-cta-content">
-        <div class="project-cta-title">Aménagez votre<br>intérieur</div>
-        <div class="project-cta-sub">Avec un designer ou artisan Dedco</div>
-        <div class="project-cta-btn">Démarrer un projet →</div>
+        <div class="project-cta-eyebrow">Démarrer un projet</div>
+        <div class="project-cta-title">Aménagez votre<br><em>intérieur</em></div>
+        <div class="project-cta-sub">Avec un designer ou un artisan Dedco vérifié</div>
+        <div class="project-cta-btn">Démarrer →</div>
       </div>
     </div>
 
@@ -816,12 +1004,16 @@ html, body {
       <div class="current-project" onclick="showHint('Suivi projet')">
         <div class="current-project-img">
           <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=400&q=85" alt="">
+          <div class="current-project-status">En cours</div>
         </div>
         <div class="current-project-info">
           <div class="current-project-title">Salon Tropical Akpakpa</div>
-          <div class="current-project-meta">Projet design · En cours · Kofi A.</div>
-          <div class="current-project-progress">
-            <div class="current-project-progress-bar"></div>
+          <div class="current-project-meta">Projet design · Kofi Akindélé · 10 juil.</div>
+          <div class="current-project-progress-row">
+            <div class="current-project-progress">
+              <div class="current-project-progress-bar"></div>
+            </div>
+            <span class="current-project-progress-pct">60%</span>
           </div>
         </div>
       </div>
@@ -861,10 +1053,10 @@ html, body {
 
 <script>
 const PRODUCTS = [
-  { name: "Table basse Wax", artisan: "Kofi A.", price: 145000, img: "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=400&q=85" },
-  { name: "Fauteuil Sahel", artisan: "Amara D.", price: 245000, img: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=400&q=85" },
+  { name: "Table basse Wax", artisan: "Kofi A.", price: 145000, img: "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber" },
+  { name: "Fauteuil Sahel", artisan: "Amara D.", price: 245000, img: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=400&q=85", badge: "NOUVEAU", badgeColor: "forest" },
   { name: "Lampe Bogolan", artisan: "Sophie K.", price: 65000, img: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=400&q=85" },
-  { name: "Miroir Raffia", artisan: "Sophie K.", price: 95000, img: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=400&q=85" },
+  { name: "Miroir Raffia", artisan: "Sophie K.", price: 95000, img: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber" },
 ];
 
 function formatFCFA(n) { return n.toLocaleString('fr-FR') + ' FCFA'; }
@@ -874,6 +1066,7 @@ function renderProducts() {
     <div class="product-card" onclick="showHint('${p.name}')">
       <div class="product-img-wrap">
         <img src="${p.img}" alt="${p.name}">
+        ${p.badge ? `<span class="product-badge ${p.badgeColor}">${p.badge}</span>` : ''}
         <div class="product-fav" onclick="event.stopPropagation(); toggleFav(this)">
           <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </div>
