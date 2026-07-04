@@ -1180,7 +1180,7 @@ html, body {
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
           <span class="header-icon-dot amber"></span>
         </div>
-        <div class="header-icon" onclick="showHint('Panier')">
+        <div class="header-icon" onclick="navigateTo('panier')">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
         </div>
       </div>
@@ -1198,7 +1198,7 @@ html, body {
   <div class="scroll" id="scroll">
 
     <!-- HERO -->
-    <div class="hero" onclick="showHint('L\'art de vivre — scène du moment')">
+    <div class="hero" onclick="navigateTo('inspirations')">
       <img src="https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&w=800&q=85" alt="">
       <div class="hero-overlay"></div>
       <div class="hero-content">
@@ -1318,7 +1318,7 @@ html, body {
       </div>
       <div class="creators-section">
         <div class="creator-col">
-          <div class="creator-card" onclick="showHint('Profil Kofi')">
+          <div class="creator-card" onclick="navigateTo('artisan')">
             <div class="creator-avatar-wrap">
               <img class="creator-avatar" src="https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=100&q=85" alt="">
               <div class="creator-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
@@ -1328,7 +1328,7 @@ html, body {
               <div class="creator-specialty">Mobilier <span class="creator-level">N3</span></div>
             </div>
           </div>
-          <div class="creator-card" onclick="showHint('Profil Amara')">
+          <div class="creator-card" onclick="navigateTo('artisan')">
             <div class="creator-avatar-wrap">
               <img class="creator-avatar" src="https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&crop=faces&w=100&q=85" alt="">
               <div class="creator-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
@@ -1340,7 +1340,7 @@ html, body {
           </div>
         </div>
         <div class="creator-col">
-          <div class="creator-card" onclick="showHint('Profil Ndèye')">
+          <div class="creator-card" onclick="navigateTo('artisan')">
             <div class="creator-avatar-wrap">
               <img class="creator-avatar" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=100&q=85" alt="">
               <div class="creator-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
@@ -1350,7 +1350,7 @@ html, body {
               <div class="creator-specialty">Designer <span class="creator-level">N4</span></div>
             </div>
           </div>
-          <div class="creator-card" onclick="showHint('Profil Sophie')">
+          <div class="creator-card" onclick="navigateTo('artisan')">
             <div class="creator-avatar-wrap">
               <img class="creator-avatar" src="https://images.unsplash.com/photo-1614317226704-8b1f7a4c4d3e?auto=format&fit=crop&crop=faces&w=100&q=85" alt="">
               <div class="creator-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
@@ -1365,7 +1365,7 @@ html, body {
     </div>
 
     <!-- PROJET CTA -->
-    <div class="project-cta" onclick="showHint('Démarrer un projet')">
+    <div class="project-cta" onclick="navigateTo('brief')">
       <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=85" alt="">
       <div class="project-cta-overlay"></div>
       <div class="project-cta-content">
@@ -1381,7 +1381,7 @@ html, body {
       <div class="section-head">
         <div class="section-title">Votre projet en cours</div>
       </div>
-      <div class="current-project" onclick="showHint('Suivi projet')">
+      <div class="current-project" onclick="navigateTo('projets')">
         <div class="current-project-img">
           <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=400&q=85" alt="">
           <div class="current-project-status">En cours</div>
@@ -1530,6 +1530,250 @@ html, body {
   <!-- HINT -->
   <div class="app-hint" id="appHint"></div>
 
+  <!-- ═══ SCREEN: PROJETS ═══ -->
+  <div class="screen-page" id="screen-projets">
+    <div style="padding: 20px;">
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);margin-bottom:4px;">Mes projets</div>
+      <div style="font-size:12px;color:var(--text-3);margin-bottom:20px;">2 projets actifs · 1 décision en attente</div>
+
+      <!-- Projet en cours -->
+      <div style="background:var(--bg-card);border-radius:14px;overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:12px;cursor:pointer;" onclick="showHint('Détail projet')">
+        <div style="position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=400&q=85" style="width:100%;height:100%;object-fit:cover;">
+          <div style="position:absolute;top:10px;left:10px;padding:3px 8px;background:rgba(255,255,255,0.92);border-radius:999px;font-size:9px;font-weight:700;color:var(--amber-dark);">En cours</div>
+        </div>
+        <div style="padding:14px;">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:15px;font-weight:600;color:var(--text-1);margin-bottom:2px;">Salon Tropical Akpakpa</div>
+          <div style="font-size:11px;color:var(--text-3);margin-bottom:10px;">Projet design · Kofi Akindélé · 10 juil.</div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="flex:1;height:4px;background:var(--bg-warm);border-radius:999px;overflow:hidden;"><div style="height:100%;width:60%;background:linear-gradient(90deg,var(--amber),var(--amber-light));border-radius:999px;"></div></div>
+            <span style="font-size:11px;font-weight:700;color:var(--amber-dark);">60%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Projet en attente -->
+      <div style="background:var(--bg-card);border-radius:14px;overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:12px;cursor:pointer;" onclick="showHint('Détail projet')">
+        <div style="position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=85" style="width:100%;height:100%;object-fit:cover;">
+          <div style="position:absolute;top:10px;left:10px;padding:3px 8px;background:rgba(166,68,46,0.92);border-radius:999px;font-size:9px;font-weight:700;color:white;">Action requise</div>
+        </div>
+        <div style="padding:14px;">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:15px;font-weight:600;color:var(--text-1);margin-bottom:2px;">Bureau Afro-contemporain</div>
+          <div style="font-size:11px;color:var(--text-3);margin-bottom:8px;">Brief designer · 3 propositions reçues</div>
+          <div style="font-size:11px;color:var(--amber-dark);font-weight:600;">Choisir une proposition →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: COMPTE ═══ -->
+  <div class="screen-page" id="screen-compte">
+    <div style="padding: 20px;">
+      <!-- Profile header -->
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
+        <img src="https://images.unsplash.com/photo-1614317226704-8b1f7a4c4d3e?auto=format&fit=crop&crop=faces&w=120&q=85" style="width:64px;height:64px;border-radius:999px;object-fit:cover;border:2px solid var(--amber);">
+        <div>
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:20px;font-weight:600;color:var(--text-1);">Fatou Kossou</div>
+          <div style="font-size:12px;color:var(--text-3);">fatou.kossou@email.bj</div>
+          <div style="display:inline-flex;align-items:center;gap:3px;padding:2px 8px;background:var(--amber-pale);color:var(--amber-dark);border-radius:999px;font-size:10px;font-weight:700;margin-top:4px;">Client Premium</div>
+        </div>
+      </div>
+
+      <!-- Sections -->
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-3);margin-bottom:10px;">Mes activités</div>
+      <div style="background:var(--bg-card);border-radius:14px;box-shadow:var(--shadow-sm);margin-bottom:16px;overflow:hidden;">
+        <div style="display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;border-bottom:1px solid var(--border);" onclick="showHint('Mes commandes')">
+          <div style="width:36px;height:36px;border-radius:10px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/></svg></div>
+          <div style="flex:1;font-size:13px;font-weight:600;color:var(--text-1);">Mes commandes</div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;border-bottom:1px solid var(--border);" onclick="navigateTo('projets')">
+          <div style="width:36px;height:36px;border-radius:10px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg></div>
+          <div style="flex:1;font-size:13px;font-weight:600;color:var(--text-1);">Mes projets</div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;border-bottom:1px solid var(--border);" onclick="showHint('Paiements')">
+          <div style="width:36px;height:36px;border-radius:10px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+          <div style="flex:1;font-size:13px;font-weight:600;color:var(--text-1);">Paiements</div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;" onclick="showHint('Adresses')">
+          <div style="width:36px;height:36px;border-radius:10px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div style="flex:1;font-size:13px;font-weight:600;color:var(--text-1);">Adresses</div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+      </div>
+
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-3);margin-bottom:10px;">Préférences</div>
+      <div style="background:var(--bg-card);border-radius:14px;box-shadow:var(--shadow-sm);margin-bottom:16px;overflow:hidden;">
+        <div style="display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;border-bottom:1px solid var(--border);" onclick="showHint('Notifications')">
+          <div style="width:36px;height:36px;border-radius:10px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/></svg></div>
+          <div style="flex:1;font-size:13px;font-weight:600;color:var(--text-1);">Notifications</div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;" onclick="showHint('Paramètres')">
+          <div style="width:36px;height:36px;border-radius:10px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <div style="flex:1;font-size:13px;font-weight:600;color:var(--text-1);">Paramètres</div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;background:var(--terracotta-pale);border-radius:14px;" onclick="showHint('Déconnexion')">
+        <div style="width:36px;height:36px;border-radius:10px;background:rgba(166,68,46,0.1);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--terracotta)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div>
+        <div style="font-size:13px;font-weight:600;color:var(--terracotta);">Déconnexion</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: ARTISAN (plein écran) ═══ -->
+  <div class="screen-page" id="screen-artisan" style="top:0;bottom:0;background:var(--bg-cream);">
+    <div style="position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;">
+      <img src="https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&w=800&q=85" style="width:100%;height:100%;object-fit:cover;">
+      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(30,24,19,0.8) 0%,transparent 50%);"></div>
+      <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;">
+        <div class="gallery-btn" onclick="navigateTo('home')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </div>
+      </div>
+    </div>
+    <div style="padding:20px;">
+      <div style="display:flex;align-items:flex-end;gap:14px;margin-top:-40px;position:relative;z-index:2;margin-bottom:16px;">
+        <img src="https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=160&q=85" style="width:80px;height:80px;border-radius:999px;object-fit:cover;border:3px solid var(--bg-cream);box-shadow:var(--shadow-md);">
+        <div style="flex:1;padding-bottom:4px;">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);">Kofi Akindélé</div>
+          <div style="font-size:12px;color:var(--text-3);display:flex;align-items:center;gap:4px;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Cotonou · Mobilier bois · N3
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-bottom:20px;">
+        <div style="flex:1;text-align:center;padding:12px;background:var(--bg-card);border-radius:12px;box-shadow:var(--shadow-sm);">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:700;color:var(--text-1);">47</div>
+          <div style="font-size:10px;color:var(--text-3);">Produits</div>
+        </div>
+        <div style="flex:1;text-align:center;padding:12px;background:var(--bg-card);border-radius:12px;box-shadow:var(--shadow-sm);">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:700;color:var(--text-1);">4.9</div>
+          <div style="font-size:10px;color:var(--text-3);">Note</div>
+        </div>
+        <div style="flex:1;text-align:center;padding:12px;background:var(--bg-card);border-radius:12px;box-shadow:var(--shadow-sm);">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:700;color:var(--text-1);">128</div>
+          <div style="font-size:10px;color:var(--text-3);">Avis</div>
+        </div>
+      </div>
+
+      <div style="font-size:13px;line-height:1.6;color:var(--text-2);margin-bottom:20px;">
+        Artisan menuisier depuis 15 ans, spécialisé dans le mobilier en bois iroko et wax. Chaque pièce est unique, façonnée à la main dans mon atelier à Cotonou.
+      </div>
+
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:600;color:var(--text-1);margin-bottom:12px;">Réalisations</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;">
+        <img src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=300&q=85" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;">
+        <img src="https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=300&q=85" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;">
+        <img src="https://images.unsplash.com/photo-1517467139951-f5a925c9f9de?auto=format&fit=crop&w=300&q=85" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;">
+        <img src="https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=300&q=85" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;">
+      </div>
+    </div>
+    <div class="product-floating-cta">
+      <div class="float-btn-secondary" onclick="showHint('Chat artisan')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <button class="float-btn-primary" onclick="navigateTo('brief')">
+        Démarrer un projet
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: PANIER ═══ -->
+  <div class="screen-page" id="screen-panier">
+    <div style="padding:20px;">
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);margin-bottom:20px;">Mon panier</div>
+
+      <div style="background:var(--bg-card);border-radius:14px;box-shadow:var(--shadow-sm);margin-bottom:12px;padding:14px;display:flex;gap:12px;">
+        <img src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=200&q=85" style="width:72px;height:72px;border-radius:10px;object-fit:cover;flex-shrink:0;">
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;color:var(--text-1);margin-bottom:2px;">Table basse Bénin Wax</div>
+          <div style="font-size:11px;color:var(--text-3);margin-bottom:8px;">Kofi Akindélé</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="qty-btn" style="width:28px;height:28px;font-size:14px;" onclick="showHint('−')">−</div>
+              <div style="font-size:13px;font-weight:700;">1</div>
+              <div class="qty-btn" style="width:28px;height:28px;font-size:14px;" onclick="showHint('+')">+</div>
+            </div>
+            <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:15px;font-weight:700;color:var(--amber-dark);">145 000 FCFA</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg-card);border-radius:14px;box-shadow:var(--shadow-sm);margin-bottom:20px;padding:14px;display:flex;gap:12px;">
+        <img src="https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=200&q=85" style="width:72px;height:72px;border-radius:10px;object-fit:cover;flex-shrink:0;">
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;color:var(--text-1);margin-bottom:2px;">Lampe Bogolan</div>
+          <div style="font-size:11px;color:var(--text-3);margin-bottom:8px;">Sophie Kossou</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="qty-btn" style="width:28px;height:28px;font-size:14px;" onclick="showHint('−')">−</div>
+              <div style="font-size:13px;font-weight:700;">2</div>
+              <div class="qty-btn" style="width:28px;height:28px;font-size:14px;" onclick="showHint('+')">+</div>
+            </div>
+            <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:15px;font-weight:700;color:var(--amber-dark);">130 000 FCFA</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg-card);border-radius:14px;box-shadow:var(--shadow-sm);padding:16px;margin-bottom:20px;">
+        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;color:var(--text-2);"><span>Sous-total</span><span style="font-variant-numeric:tabular-nums;">275 000 FCFA</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;color:var(--text-2);"><span>Livraison estimée</span><span style="font-variant-numeric:tabular-nums;">5 000 FCFA</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;color:var(--text-2);"><span>Garantie Dedco (1.5%)</span><span style="font-variant-numeric:tabular-nums;">4 125 FCFA</span></div>
+        <div style="border-top:1px solid var(--border);margin-top:8px;padding-top:12px;display:flex;justify-content:space-between;align-items:baseline;">
+          <span style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:16px;font-weight:600;color:var(--text-1);">Total</span>
+          <span style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:20px;font-weight:700;color:var(--amber-dark);font-variant-numeric:tabular-nums;">284 125 FCFA</span>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:6px;padding:12px;background:var(--forest-pale);border-radius:12px;margin-bottom:20px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <div style="font-size:11px;color:var(--forest);font-weight:600;">Paiement 100% sécurisé · MTN Money & Moov Money</div>
+      </div>
+
+      <button class="float-btn-primary" style="width:100%;height:52px;font-size:15px;" onclick="showHint('Checkout')">Valider la commande</button>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: BRIEF (placeholder) ═══ -->
+  <div class="screen-page" id="screen-brief" style="top:0;bottom:0;background:var(--bg-cream);">
+    <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;z-index:20;">
+      <div class="gallery-btn" onclick="navigateTo('home')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      </div>
+    </div>
+    <div style="padding:80px 20px 20px;text-align:center;">
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:26px;font-weight:600;color:var(--text-1);margin-bottom:8px;">Démarrer un projet</div>
+      <div style="font-size:13px;color:var(--text-3);margin-bottom:32px;">Vous cherchez quelqu'un pour fabriquer une pièce précise, ou pour penser et coordonner l'ensemble de votre projet ?</div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="background:var(--bg-card);border-radius:16px;padding:20px;box-shadow:var(--shadow-sm);cursor:pointer;text-align:left;" onclick="showHint('Brief artisan')">
+          <div style="width:48px;height:48px;border-radius:14px;background:var(--amber-pale);display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:17px;font-weight:600;color:var(--text-1);margin-bottom:4px;">Fabriquer une pièce</div>
+          <div style="font-size:12px;color:var(--text-2);line-height:1.5;">Un meuble, un objet déco, une pièce sur-mesure façonnée par un artisan.</div>
+        </div>
+        <div style="background:var(--bg-card);border-radius:16px;padding:20px;box-shadow:var(--shadow-sm);cursor:pointer;text-align:left;" onclick="showHint('Brief designer')">
+          <div style="width:48px;height:48px;border-radius:14px;background:var(--forest-pale);display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+          </div>
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:17px;font-weight:600;color:var(--text-1);margin-bottom:4px;">Aménager mon espace</div>
+          <div style="font-size:12px;color:var(--text-2);line-height:1.5;">Un designer pense et coordonne l'ensemble de votre projet d'aménagement.</div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px;font-size:11px;color:var(--text-3);">Demande sécurisée · Artisans vérifiés · Réponse sous 48h</div>
+    </div>
+  </div>
+
   <!-- TAB BAR — 5 onglets conformes specs §2.1 -->
   <!-- Accueil, Inspirations, Marché, Projets, Compte -->
   <div class="tab-bar" id="tabBar">
@@ -1545,11 +1789,11 @@ html, body {
       <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9"/><path d="M9 22V12h6v10"/></svg>
       <span class="tab-label">Marché</span>
     </div>
-    <div class="tab-item" data-screen="projets" onclick="showHint('Projets')">
+    <div class="tab-item" data-screen="projets" onclick="navigateTo('projets')">
       <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6"/><path d="M9 16h6"/></svg>
       <span class="tab-label">Projets</span>
     </div>
-    <div class="tab-item" data-screen="compte" onclick="showHint('Compte')">
+    <div class="tab-item" data-screen="compte" onclick="navigateTo('compte')">
       <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       <span class="tab-label">Compte</span>
     </div>
@@ -1587,12 +1831,17 @@ function navigateTo(screen) {
   document.querySelectorAll('.screen-page').forEach(s => s.classList.remove('active'));
   document.getElementById('scroll').style.display = 'none';
 
-  // Cacher la fiche produit si ouverte
-  document.getElementById('screen-product').classList.remove('active');
+  // Écrans plein écran (pas de header, pas de tab bar)
+  const fullscreenScreens = ['product', 'artisan', 'brief'];
+  const isFullscreen = fullscreenScreens.includes(screen);
 
-  // Montrer header + tab bar
-  document.querySelector('.header').style.display = '';
-  document.getElementById('tabBar').style.display = '';
+  if (isFullscreen) {
+    document.querySelector('.header').style.display = 'none';
+    document.getElementById('tabBar').style.display = 'none';
+  } else {
+    document.querySelector('.header').style.display = '';
+    document.getElementById('tabBar').style.display = '';
+  }
 
   // Montrer le bon écran
   if (screen === 'home') {
@@ -1605,10 +1854,13 @@ function navigateTo(screen) {
     }
   }
 
-  // Update tab bar active
-  document.querySelectorAll('.tab-item').forEach(t => {
-    t.classList.toggle('active', t.dataset.screen === screen);
-  });
+  // Update tab bar active (seulement pour les 5 onglets principaux)
+  const tabScreens = ['home', 'inspirations', 'marketplace', 'projets', 'compte'];
+  if (tabScreens.includes(screen)) {
+    document.querySelectorAll('.tab-item').forEach(t => {
+      t.classList.toggle('active', t.dataset.screen === screen);
+    });
+  }
 
   currentScreen = screen;
 
@@ -1617,6 +1869,9 @@ function navigateTo(screen) {
     home: { hello: 'Bonjour, Fatou', name: 'Dedco<span style="color:var(--amber);">.</span>' },
     inspirations: { hello: 'Découvrez', name: 'Inspirations' },
     marketplace: { hello: 'Explorez', name: 'Le marché' },
+    projets: { hello: 'Suivez', name: 'Mes projets' },
+    compte: { hello: 'Gérez', name: 'Mon compte' },
+    panier: { hello: 'Finalisez', name: 'Mon panier' },
   };
   const g = greetings[screen] || greetings.home;
   document.querySelector('.greeting-hello').textContent = g.hello;
