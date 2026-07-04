@@ -122,34 +122,34 @@ html, body {
 .status-bar .icons { display: flex; gap: 5px; align-items: center; }
 .status-bar .icons svg { width: 16px; height: 16px; }
 
-/* ═══ HEADER — greeting + icons + search ═══ */
+/* ═══ HEADER — greeting + icons + search compact ═══ */
 .header {
   position: absolute;
   top: calc(44px + var(--safe-top));
   left: 0; right: 0;
-  padding: 12px 20px 0;
+  padding: 10px 20px 0;
   background: var(--bg-cream);
   z-index: 50;
 }
 
-/* Row 1 : greeting + icons */
+/* Row 1 : greeting + icons + search icon inline */
 .header-row1 {
   display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 .greeting-block {
   display: flex; flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 .greeting-hello {
-  font-size: 13px;
-  color: var(--text-2);
+  font-size: 12px;
+  color: var(--text-3);
   font-weight: 500;
   letter-spacing: 0.01em;
 }
 .greeting-name {
   font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 600;
   color: var(--text-1);
   letter-spacing: -0.02em;
@@ -161,7 +161,7 @@ html, body {
   font-weight: 500;
 }
 .header-icons {
-  display: flex; gap: 12px; align-items: center;
+  display: flex; gap: 6px; align-items: center;
 }
 .header-icon {
   position: relative;
@@ -170,13 +170,14 @@ html, body {
   cursor: pointer;
   color: var(--text-2);
   transition: transform 0.15s;
+  border-radius: 999px;
 }
-.header-icon:active { transform: scale(0.92); }
-.header-icon svg { width: 22px; height: 22px; }
+.header-icon:active { transform: scale(0.92); background: var(--bg-warm); }
+.header-icon svg { width: 20px; height: 20px; }
 .header-icon-badge {
   position: absolute;
-  top: 0; right: 0;
-  min-width: 16px; height: 16px;
+  top: 2px; right: 2px;
+  min-width: 15px; height: 15px;
   border-radius: 999px;
   background: var(--terracotta);
   color: white;
@@ -184,35 +185,42 @@ html, body {
   font-weight: 700;
   display: flex; align-items: center; justify-content: center;
   padding: 0 4px;
+  border: 2px solid var(--bg-cream);
 }
 .header-icon-badge.amber { background: var(--amber); }
 
-/* Row 2 : search bar */
-.search-bar {
+/* Row 2 : search pill compact (icône + texte court) */
+.search-pill {
   display: flex; align-items: center;
-  gap: 10px;
-  padding: 13px 18px;
-  background: var(--bg-card);
-  border-radius: 14px;
-  border: 1px solid var(--border);
+  gap: 8px;
+  padding: 9px 14px;
+  background: var(--bg-warm);
+  border-radius: 999px;
   cursor: pointer;
   transition: all 0.2s;
-  margin-bottom: 16px;
-  box-shadow: var(--shadow-sm);
+  margin-bottom: 12px;
 }
-.search-bar:active { transform: scale(0.99); border-color: var(--amber); box-shadow: var(--shadow-md); }
-.search-bar svg.search-icon { width: 18px; height: 18px; color: var(--text-3); }
-.search-bar-text {
-  font-size: 14px;
+.search-pill:active { transform: scale(0.99); background: var(--amber-pale); }
+.search-pill svg { width: 16px; height: 16px; color: var(--text-3); flex-shrink: 0; }
+.search-pill-text {
+  font-size: 13px;
   color: var(--text-3);
   flex: 1;
+  font-weight: 500;
 }
-.search-bar svg.filter-icon { width: 18px; height: 18px; color: var(--text-2); }
+.search-pill-badge {
+  width: 28px; height: 28px;
+  border-radius: 999px;
+  background: var(--bg-card);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--shadow-sm);
+}
+.search-pill-badge svg { width: 14px; height: 14px; color: var(--text-2); }
 
 /* ═══ SCROLL CONTENT ═══ */
 .scroll {
   position: absolute;
-  top: calc(44px + var(--safe-top) + 120px);
+  top: calc(44px + var(--safe-top) + 100px);
   bottom: calc(64px + var(--safe-bottom));
   left: 0; right: 0;
   overflow-y: auto;
@@ -222,41 +230,39 @@ html, body {
 }
 .scroll::-webkit-scrollbar { display: none; }
 
-/* ═══ HERO — statique, éditorial, avec parallax subtil ═══ */
+/* ═══ HERO — statique, éditorial ═══ */
 .hero {
-  margin: 0 20px 20px;
+  margin: 0 20px 16px;
   position: relative;
-  border-radius: 20px;
+  border-radius: 16px;
   overflow: hidden;
   aspect-ratio: 4/5;
   cursor: pointer;
   transition: transform 0.2s;
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-md);
 }
 .hero:active { transform: scale(0.98); }
 .hero img {
   width: 100%; height: 100%;
   object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
-.hero:hover img { transform: scale(1.04); }
 .hero-overlay {
   position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(42, 31, 20, 0.85) 0%, rgba(42, 31, 20, 0.2) 45%, transparent 70%);
+  background: linear-gradient(to top, rgba(30,24,19,0.8) 0%, rgba(30,24,19,0.15) 45%, transparent 70%);
 }
 .hero-content {
   position: absolute;
   bottom: 0; left: 0; right: 0;
-  padding: 24px;
+  padding: 20px;
   color: white;
 }
 .hero-eyebrow {
   display: inline-flex; align-items: center; gap: 5px;
-  font-size: 10px; font-weight: 700;
-  letter-spacing: 0.16em;
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   opacity: 0.95;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   padding: 4px 10px;
   background: rgba(255,255,255,0.15);
   backdrop-filter: blur(8px);
@@ -270,27 +276,27 @@ html, body {
 }
 .hero-title {
   font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 600;
   line-height: 1.05;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   letter-spacing: -0.02em;
   text-shadow: 0 2px 12px rgba(0,0,0,0.3);
 }
 .hero-title em { font-style: italic; font-weight: 500; color: #F5D9B0; }
 .hero-sub {
-  font-size: 13px;
-  opacity: 0.92;
-  margin-bottom: 14px;
+  font-size: 12px;
+  opacity: 0.9;
+  margin-bottom: 12px;
   font-weight: 500;
 }
 .hero-cta {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 11px 20px;
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 9px 16px;
   background: var(--amber);
   color: white;
   border-radius: 999px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   box-shadow: var(--shadow-amber);
   transition: transform 0.15s;
@@ -300,8 +306,8 @@ html, body {
 /* ═══ CATÉGORIES — icônes horizontales ═══ */
 .categories {
   display: flex;
-  gap: 14px;
-  padding: 4px 20px 20px;
+  gap: 12px;
+  padding: 4px 20px 16px;
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -309,13 +315,13 @@ html, body {
 .cat-item {
   flex-shrink: 0;
   display: flex; flex-direction: column;
-  align-items: center; gap: 8px;
+  align-items: center; gap: 6px;
   cursor: pointer;
-  min-width: 64px;
+  min-width: 56px;
 }
 .cat-icon-wrap {
-  width: 56px; height: 56px;
-  border-radius: 18px;
+  width: 48px; height: 48px;
+  border-radius: 14px;
   background: var(--bg-card);
   border: 1px solid var(--border);
   display: flex; align-items: center; justify-content: center;
@@ -329,10 +335,10 @@ html, body {
   transform: translateY(-2px);
 }
 .cat-item:active .cat-icon-wrap { transform: scale(0.92); }
-.cat-icon-wrap svg { width: 24px; height: 24px; color: var(--text-2); transition: color 0.2s; }
+.cat-icon-wrap svg { width: 22px; height: 22px; color: var(--text-2); transition: color 0.2s; }
 .cat-item.active .cat-icon-wrap svg { color: white; }
 .cat-label {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text-2);
   font-weight: 500;
   text-align: center;
@@ -341,21 +347,21 @@ html, body {
 
 /* ═══ SECTION HEADER ═══ */
 .section {
-  padding: 24px 0 0;
+  padding: 20px 0 0;
 }
 .section-head {
   display: flex; align-items: baseline; justify-content: space-between;
-  padding: 0 20px 14px;
+  padding: 0 20px 12px;
 }
 .section-title {
   font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   color: var(--text-1);
   letter-spacing: -0.01em;
 }
 .section-link {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--amber-dark);
   font-weight: 600;
   cursor: pointer;
@@ -364,7 +370,7 @@ html, body {
 /* ═══ COLLECTIONS — scroll horizontal ═══ */
 .collections-scroll {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   padding: 0 20px 4px;
   overflow-x: auto;
   scrollbar-width: none;
@@ -373,8 +379,8 @@ html, body {
 .collections-scroll::-webkit-scrollbar { display: none; }
 .collection-card {
   flex-shrink: 0;
-  width: 180px;
-  border-radius: 16px;
+  width: 160px;
+  border-radius: 14px;
   overflow: hidden;
   cursor: pointer;
   scroll-snap-align: start;
@@ -391,34 +397,34 @@ html, body {
 }
 .collection-overlay {
   position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(42, 31, 20, 0.8) 0%, rgba(42, 31, 20, 0.1) 45%, transparent 70%);
+  background: linear-gradient(to top, rgba(30,24,19,0.75) 0%, rgba(30,24,19,0.1) 45%, transparent 70%);
 }
 .collection-info {
   position: absolute;
-  bottom: 14px; left: 14px; right: 14px;
+  bottom: 12px; left: 12px; right: 12px;
   color: white;
 }
 .collection-tag {
   display: inline-block;
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: 3px 8px;
+  padding: 3px 7px;
   background: rgba(255,255,255,0.2);
   backdrop-filter: blur(8px);
   border-radius: 999px;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
 }
 .collection-name {
   font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   margin-bottom: 2px;
   line-height: 1.15;
 }
 .collection-count {
-  font-size: 11px;
+  font-size: 10px;
   opacity: 0.9;
   font-weight: 500;
 }
@@ -427,12 +433,12 @@ html, body {
 .products-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  gap: 12px;
   padding: 0 20px;
 }
 .product-card {
   background: var(--bg-card);
-  border-radius: 16px;
+  border-radius: 14px;
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.15s;
@@ -452,10 +458,10 @@ html, body {
 }
 .product-badge {
   position: absolute;
-  top: 10px; left: 10px;
-  padding: 4px 9px;
+  top: 8px; left: 8px;
+  padding: 3px 8px;
   border-radius: 999px;
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -466,8 +472,8 @@ html, body {
 .product-badge.forest { background: rgba(84, 140, 69, 0.92); }
 .product-fav {
   position: absolute;
-  top: 10px; right: 10px;
-  width: 30px; height: 30px;
+  top: 8px; right: 8px;
+  width: 28px; height: 28px;
   border-radius: 999px;
   background: rgba(255,255,255,0.85);
   backdrop-filter: blur(8px);
@@ -476,25 +482,25 @@ html, body {
   transition: transform 0.2s;
 }
 .product-fav:active { transform: scale(0.85); }
-.product-fav svg { width: 16px; height: 16px; color: var(--text-2); fill: none; stroke: currentColor; }
+.product-fav svg { width: 14px; height: 14px; color: var(--text-2); fill: none; stroke: currentColor; }
 .product-fav.active svg { color: var(--terracotta); fill: var(--terracotta); }
 .product-info {
-  padding: 12px 14px 14px;
+  padding: 10px 12px 12px;
 }
 .product-name {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--text-1);
-  margin-bottom: 3px;
+  margin-bottom: 2px;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 .product-artisan {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text-3);
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   display: flex; align-items: center; gap: 3px;
 }
 .product-artisan::before {
@@ -506,7 +512,7 @@ html, body {
 }
 .product-price {
   font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--amber-dark);
   font-variant-numeric: tabular-nums;
@@ -516,19 +522,19 @@ html, body {
 .creators-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 10px;
   padding: 0 20px;
 }
 .creator-col {
   display: flex; flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 .creator-card {
-  display: flex; align-items: center; gap: 12px;
+  display: flex; align-items: center; gap: 10px;
   cursor: pointer;
-  padding: 12px;
+  padding: 10px;
   background: var(--bg-card);
-  border-radius: 14px;
+  border-radius: 12px;
   transition: transform 0.15s;
   box-shadow: var(--shadow-sm);
   position: relative;
@@ -539,7 +545,7 @@ html, body {
   flex-shrink: 0;
 }
 .creator-avatar {
-  width: 44px; height: 44px;
+  width: 40px; height: 40px;
   border-radius: 999px;
   object-fit: cover;
   border: 2px solid var(--bg-card);
@@ -548,48 +554,48 @@ html, body {
 .creator-verified {
   position: absolute;
   bottom: -2px; right: -2px;
-  width: 16px; height: 16px;
+  width: 14px; height: 14px;
   background: var(--forest);
   border: 2px solid var(--bg-card);
   border-radius: 999px;
   display: flex; align-items: center; justify-content: center;
 }
-.creator-verified svg { width: 9px; height: 9px; color: white; }
+.creator-verified svg { width: 8px; height: 8px; color: white; }
 .creator-info { flex: 1; min-width: 0; }
 .creator-name {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--text-1);
-  margin-bottom: 2px;
+  margin-bottom: 1px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .creator-specialty {
-  font-size: 10px;
+  font-size: 9px;
   color: var(--text-3);
   display: flex; align-items: center; gap: 3px;
 }
 .creator-level {
   display: inline-block;
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 700;
   color: var(--amber-dark);
   background: var(--amber-pale);
-  padding: 1px 6px;
+  padding: 1px 5px;
   border-radius: 999px;
 }
 
 /* ═══ PROJET CTA — section immersion ═══ */
 .project-cta {
-  margin: 20px 20px 0;
+  margin: 16px 20px 0;
   position: relative;
-  border-radius: 20px;
+  border-radius: 16px;
   overflow: hidden;
   aspect-ratio: 16/10;
   cursor: pointer;
   transition: transform 0.2s;
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-md);
 }
 .project-cta:active { transform: scale(0.98); }
 .project-cta img {
@@ -603,47 +609,47 @@ html, body {
 .project-cta-content {
   position: absolute;
   inset: 0;
-  padding: 24px;
+  padding: 20px;
   display: flex; flex-direction: column;
   justify-content: center;
   color: white;
 }
 .project-cta-eyebrow {
   display: inline-flex; align-items: center; gap: 5px;
-  font-size: 10px; font-weight: 700;
+  font-size: 9px; font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   opacity: 0.95;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 .project-cta-eyebrow::before {
   content: '';
-  width: 16px; height: 1px;
+  width: 14px; height: 1px;
   background: white;
   opacity: 0.7;
 }
 .project-cta-title {
   font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 600;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   line-height: 1.1;
   letter-spacing: -0.01em;
 }
 .project-cta-title em { font-style: italic; font-weight: 500; }
 .project-cta-sub {
-  font-size: 13px;
+  font-size: 12px;
   opacity: 0.95;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   max-width: 220px;
 }
 .project-cta-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 11px 20px;
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 9px 16px;
   background: white;
   color: var(--amber-dark);
   border-radius: 999px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   align-self: flex-start;
   box-shadow: 0 4px 14px rgba(0,0,0,0.15);
@@ -651,9 +657,9 @@ html, body {
 
 /* ═══ PROJET EN COURS — card ═══ */
 .current-project {
-  margin: 12px 20px 28px;
+  margin: 10px 20px 24px;
   background: var(--bg-card);
-  border-radius: 16px;
+  border-radius: 14px;
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.15s;
@@ -672,12 +678,12 @@ html, body {
 }
 .current-project-status {
   position: absolute;
-  top: 12px; left: 12px;
-  padding: 4px 10px;
+  top: 10px; left: 10px;
+  padding: 3px 8px;
   background: rgba(255,255,255,0.92);
   backdrop-filter: blur(8px);
   border-radius: 999px;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
   color: var(--amber-dark);
   display: flex; align-items: center; gap: 4px;
@@ -694,22 +700,22 @@ html, body {
   50% { opacity: 0.4; }
 }
 .current-project-info {
-  padding: 14px 16px;
+  padding: 12px 14px;
 }
 .current-project-title {
   font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-1);
-  margin-bottom: 3px;
+  margin-bottom: 2px;
 }
 .current-project-meta {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text-3);
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 .current-project-progress-row {
-  display: flex; align-items: center; gap: 10px;
+  display: flex; align-items: center; gap: 8px;
 }
 .current-project-progress {
   flex: 1;
@@ -725,7 +731,7 @@ html, body {
   width: 60%;
 }
 .current-project-progress-pct {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   color: var(--amber-dark);
   font-variant-numeric: tabular-nums;
@@ -838,10 +844,12 @@ html, body {
         </div>
       </div>
     </div>
-    <div class="search-bar" onclick="showHint('Recherche')">
-      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <span class="search-bar-text">Cherchez une pièce, un style, un artisan…</span>
-      <svg class="filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/></svg>
+    <div class="search-pill" onclick="showHint('Recherche')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <span class="search-pill-text">Rechercher…</span>
+      <div class="search-pill-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/></svg>
+      </div>
     </div>
   </div>
 
