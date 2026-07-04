@@ -8,8 +8,37 @@
 <title>Dedco — App Mobile</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+/* ═══ Quache font (display) — unicode-range sans chiffres ═══ */
+@font-face {
+  font-family: 'Quache';
+  src: url('/fonts/Quache-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+0020-002F, U+003A-007E, U+00A0-00FF, U+0100-017F, U+2000-206F;
+}
+@font-face {
+  font-family: 'Quache';
+  src: url('/fonts/Quache-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-display: swap;
+  unicode-range: U+0020-002F, U+003A-007E, U+00A0-00FF, U+0100-017F, U+2000-206F;
+}
+@font-face {
+  font-family: 'Quache';
+  src: url('/fonts/Quache-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-display: swap;
+  unicode-range: U+0020-002F, U+003A-007E, U+00A0-00FF, U+0100-017F, U+2000-206F;
+}
+@font-face {
+  font-family: 'Quache';
+  src: url('/fonts/Quache-Black.ttf') format('truetype');
+  font-weight: 800;
+  font-display: swap;
+  unicode-range: U+0020-002F, U+003A-007E, U+00A0-00FF, U+0100-017F, U+2000-206F;
+}
 /* ═══════════════════════════════════════════════════════════
    DEDCO — APP MOBILE (référence : maquette ChatGPT)
    Structure : Header greeting + search → Hero → Catégories →
@@ -17,36 +46,38 @@
    ═══════════════════════════════════════════════════════════ */
 
 :root {
-  /* Palette Dedco — chaleureuse, éditoriale */
+  /* Palette Dedco — Design System officiel */
   --amber: #BF793B;
   --amber-dark: #9A5A1F;
   --amber-light: #D4954A;
   --amber-pale: #F5E6D3;
   --terracotta: #A6442E;
+  --terracotta-lt: #C4614A;
   --terracotta-pale: #FAEAE6;
   --forest: #548C45;
+  --forest-lt: #6BA35A;
   --forest-pale: #E6F2E3;
-  --bg: #FAF6EE;           /* crème chaleureux, plus Dedco */
+  --bg-cream: #FFFFFF;
+  --bg-warm: #FAF8F5;
   --bg-card: #FFFFFF;
-  --bg-warm: #F2EBDF;
-  --text-1: #2A1F14;       /* brun chaud au lieu de noir froid */
-  --text-2: #6B5D4E;
-  --text-3: #A89882;
-  --border: #EDE2D0;
-  --border-light: #F5EEE0;
+  --text-1: #1E1813;
+  --text-2: #5B5048;
+  --text-3: #A89E95;
+  --border: #F0EEEC;
+  --border-dark: #E0DDD8;
+  --radius: 10px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
-  /* Ombres douces premium */
-  --shadow-sm: 0 1px 3px rgba(60, 40, 20, 0.04);
-  --shadow-md: 0 4px 16px rgba(60, 40, 20, 0.06);
-  --shadow-lg: 0 12px 32px rgba(60, 40, 20, 0.10);
+  --shadow-sm: 0 1px 3px rgba(30, 24, 19, 0.04);
+  --shadow-md: 0 4px 16px rgba(30, 24, 19, 0.06);
+  --shadow-lg: 0 12px 32px rgba(30, 24, 19, 0.10);
   --shadow-amber: 0 6px 20px rgba(191, 121, 59, 0.25);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 html, body {
-  font-family: 'Inter', -apple-system, sans-serif;
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
   background: #000;
   color: var(--text-1);
   overflow: hidden;
@@ -54,7 +85,7 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
-.serif { font-family: 'Playfair Display', Georgia, serif; }
+.display { font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif; }
 
 /* ═══ APP SHELL ═══ */
 .app-shell {
@@ -62,7 +93,7 @@ html, body {
   width: 393px;
   height: 852px;
   margin: 20px auto;
-  background: var(--bg);
+  background: var(--bg-cream);
   border-radius: 55px;
   overflow: hidden;
   box-shadow: 0 0 0 12px #1a1a1a, 0 0 0 14px #2a2a2a, 0 50px 100px rgba(0,0,0,0.5);
@@ -97,7 +128,7 @@ html, body {
   top: calc(44px + var(--safe-top));
   left: 0; right: 0;
   padding: 12px 20px 0;
-  background: var(--bg);
+  background: var(--bg-cream);
   z-index: 50;
 }
 
@@ -117,7 +148,7 @@ html, body {
   letter-spacing: 0.01em;
 }
 .greeting-name {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
   font-size: 26px;
   font-weight: 600;
   color: var(--text-1);
@@ -238,7 +269,7 @@ html, body {
   border-radius: 999px;
 }
 .hero-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
   font-size: 32px;
   font-weight: 600;
   line-height: 1.05;
@@ -317,7 +348,7 @@ html, body {
   padding: 0 20px 14px;
 }
 .section-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
   font-size: 20px;
   font-weight: 600;
   color: var(--text-1);
@@ -380,7 +411,7 @@ html, body {
   margin-bottom: 6px;
 }
 .collection-name {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 2px;
@@ -474,7 +505,7 @@ html, body {
   flex-shrink: 0;
 }
 .product-price {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
   font-size: 15px;
   font-weight: 700;
   color: var(--amber-dark);
@@ -592,7 +623,7 @@ html, body {
   opacity: 0.7;
 }
 .project-cta-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
   font-size: 26px;
   font-weight: 600;
   margin-bottom: 6px;
@@ -666,7 +697,7 @@ html, body {
   padding: 14px 16px;
 }
 .current-project-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
   font-size: 16px;
   font-weight: 600;
   color: var(--text-1);
