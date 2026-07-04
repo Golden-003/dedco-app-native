@@ -90,21 +90,21 @@ html, body {
 /* ═══ APP SHELL ═══ */
 .app-shell {
   position: relative;
-  width: 393px;
-  height: 852px;
+  width: 375px;
+  height: 750px;
   margin: 20px auto;
   background: var(--bg-cream);
-  border-radius: 55px;
+  border-radius: 50px;
   overflow: hidden;
-  box-shadow: 0 0 0 12px #1a1a1a, 0 0 0 14px #2a2a2a, 0 50px 100px rgba(0,0,0,0.5);
+  box-shadow: 0 0 0 10px #1a1a1a, 0 0 0 12px #2a2a2a, 0 40px 80px rgba(0,0,0,0.5);
 }
 .notch {
   position: absolute;
   top: 0; left: 50%;
   transform: translateX(-50%);
-  width: 120px; height: 30px;
+  width: 110px; height: 26px;
   background: #1a1a1a;
-  border-radius: 0 0 18px 18px;
+  border-radius: 0 0 16px 16px;
   z-index: 100;
 }
 
@@ -825,8 +825,8 @@ html, body {
   <div class="header">
     <div class="header-row1">
       <div class="greeting-block">
+        <div class="greeting-name" style="font-size: 20px; font-weight: 700;">Dedco<span style="color: var(--amber);">.</span></div>
         <div class="greeting-hello">Bonjour, Fatou</div>
-        <div class="greeting-name">Quelle inspiration <em>aujourd'hui</em> ?</div>
       </div>
       <div class="header-icons">
         <div class="header-icon" onclick="showHint('Messages')">
