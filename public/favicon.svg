@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#A6442E"/>
-      <stop offset="100%" style="stop-color:#BF793B"/>
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="14" fill="url(#g)"/>
-  <text x="32" y="46" font-family="Georgia, serif" font-size="42" font-weight="bold" fill="white" text-anchor="middle">D</text>
-  <circle cx="48" cy="20" r="4" fill="#F5E6D3"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="14" fill="#BF793B"/>
+  <g transform="translate(9.5,51.2) scale(0.042,-0.042)">
+    <path d="M379 926Q497 926 588.5 892.0Q680 858 742.5 797.0Q805 736 837.5 651.0Q870 566 870 464Q870 355 838.0 266.0Q806 177 745.5 114.0Q685 51 597.5 16.0Q510 -19 398 -19Q342 -19 298.5 -17.0Q255 -15 216.0 -9.5Q177 -4 139.5 4.5Q102 13 59 26V886Q97 897 134.0 904.5Q171 912 209.5 917.0Q248 922 289.5 924.0Q331 926 379 926ZM396 114Q471 114 527.5 139.0Q584 164 622.0 209.5Q660 255 680.0 319.0Q700 383 700 460Q700 533 678.5 594.5Q657 656 615.5 700.0Q574 744 513.5 769.0Q453 794 374 794Q332 794 294.5 791.0Q257 788 223 783V130Q259 122 301.0 118.0Q343 114 396 114Z" fill="#FFFFFF"/>
+  </g>
+  <circle cx="49" cy="19" r="4" fill="#F5E6D3"/>
 </svg>
