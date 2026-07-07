@@ -1,0 +1,106 @@
+# DEDCO — BRAND FILM SCENE-BY-SCENE IMAGE PROMPTS
+
+> Si vous souhaitez générer les images fixes d'abord (Midjourney, Flux, DALL-E)
+> puis les animer ensuite (Runway, Kling, Luma), utilisez ces prompts par scène.
+
+---
+
+## SCENE 1 — Living Room Inspiration (0-7s)
+
+**Midjourney/Flux prompt:**
+Ultra-realistic cinematic photograph of a beautiful contemporary African living room, morning sunlight streaming through large windows, warm cream walls, amber and terracotta accent pillows on a linen sofa, wooden coffee table, brass lamp, plants, golden hour light, slow cinematic camera movement, architectural magazine quality, warm earth tones, Netflix documentary aesthetic, 4K, editorial composition --ar 16:9 --style raw --v 6
+
+**On-screen text (overlay in post-production):**
+"L'inspiration est le point de départ de chaque intérieur."
+(Font: Quache-style display serif, large, centered, cream or white color)
+
+---
+
+## SCENE 2 — Moodboard & Sketching (7-15s)
+
+**Midjourney/Flux prompt:**
+Ultra-realistic cinematic photograph of an interior designer's desk, moodboards with fabric samples in cream, amber, terracotta and forest green tones, texture swatches of linen and wood, hand sketching a room layout on paper, warm natural light, editorial flat lay composition, architectural magazine quality, warm earth tones, 4K --ar 16:9 --style raw --v 6
+
+**On-screen text:**
+"Découvrez des idées. Imaginez sans limites."
+(Font: Quache-style display serif)
+
+---
+
+## SCENE 3 — Artisans at Work (15-24s)
+
+**Midjourney/Flux prompt (3 shots to animate):**
+
+Shot 3a — Woodworker:
+Ultra-realistic cinematic close-up of an African woodworker's hands crafting a wooden furniture piece, warm workshop light, wood shavings, iroko wood, macro detail, golden hour light through workshop window, artisanal craftsmanship, architectural magazine quality, 4K --ar 16:9 --style raw --v 6
+
+Shot 3b — Ceramist:
+Ultra-realistic cinematic close-up of hands shaping clay on a pottery wheel, warm natural light, terracotta clay, water droplets, macro detail, artisanal craftsmanship, warm earth tones, 4K --ar 16:9 --style raw --v 6
+
+Shot 3c — Metal artisan:
+Ultra-realistic cinematic close-up of hands working brass metal, warm workshop light, sparks, macro detail of brass surface, artisanal craftsmanship, warm amber tones, 4K --ar 16:9 --style raw --v 6
+
+**On-screen text:**
+"Des artisans d'exception donnent vie à chaque création."
+(Font: Quache-style display serif)
+
+---
+
+## SCENE 4 — Designer Meeting (24-34s)
+
+**Midjourney/Flux prompt:**
+Ultra-realistic cinematic photograph of an African interior designer meeting with clients in a beautiful contemporary apartment, reviewing floor plans and moodboards on a large table, warm natural light, collaborative moment, premium office aesthetic, cream and amber color palette, architectural magazine quality, 4K --ar 16:9 --style raw --v 6
+
+**On-screen text:**
+"Les meilleurs designers vous accompagnent dans chaque projet."
+(Font: Quache-style display serif)
+
+---
+
+## SCENE 5 — Platform Interface (34-45s)
+
+**Midjourney/Flux prompt:**
+Ultra-realistic cinematic photograph of a premium smartphone floating naturally above a beautiful contemporary desk surface, screen showing a minimal elegant interior design marketplace interface in cream and amber tones, warm natural light, soft shadow, product browsing, editorial composition, 4K --ar 16:9 --style raw --v 6
+
+**On-screen text:**
+"Une seule plateforme. Toutes les possibilités."
+(Font: Quache-style display serif)
+
+---
+
+## SCENE 6 — Delivery & Completion (45-54s)
+
+**Midjourney/Flux prompt:**
+Ultra-realistic cinematic photograph of a beautiful contemporary African home interior, completed and styled, warm afternoon light, a family entering the living room, satisfied client, premium furniture, decorative objects, plants, warm earth tones, architectural magazine quality, 4K --ar 16:9 --style raw --v 6
+
+**On-screen text:**
+"Du premier croquis au dernier détail."
+(Font: Quache-style display serif)
+
+---
+
+## FINAL SCENE — Logo Reveal (54-60s)
+
+**Midjourney/Flux prompt:**
+Ultra-realistic cinematic wide shot of a sophisticated African contemporary interior, soft afternoon light through large windows, warm cream walls, amber accents, minimal slow push-in camera movement, architectural magazine quality, Netflix documentary aesthetic, warm earth tones, 4K --ar 16:9 --style raw --v 6
+
+**On-screen text (overlay in post-production):**
+
+Large title (Quache-style display serif, terracotta color):
+"DEDCO."
+
+Subtitle (Quache-style display serif, charcoal color):
+"Le design d'intérieur, réuni en une seule plateforme."
+
+Small signature (Plus Jakarta Sans, muted gray):
+"Mobilier • Décoration • Artisanat • Designers"
+
+---
+
+## TYPOGRAPHY NOTES FOR POST-PRODUCTION
+
+- Headlines font: Search for "Quache" font, or use "Fraunces" (Google Fonts) as the closest free alternative. Weight: Black or Bold.
+- Numbers font: "Plus Jakarta Sans" (Google Fonts). Weight: Bold.
+- The Quache font EXCLUDES digits (0-9) from its unicode-range. Any number on screen MUST render in Plus Jakarta Sans.
+- Text color: Warm cream (#F7F3ED) on dark backgrounds, charcoal (#1E1813) on light backgrounds.
+- Accent color for keywords: Amber (#B8702F) or Terracotta (#9B3D28).

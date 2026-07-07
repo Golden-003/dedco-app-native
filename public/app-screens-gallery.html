@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dedcco — App Mobile Screens</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; background: #1a1612; color: #f5e6d3; -webkit-font-smoothing: antialiased; }
+:root {
+  --amber: #BF793B; --amber-light: #D4954A; --amber-pale: #F5E6D3;
+  --terracotta: #A6442E; --forest: #548C45;
+  --cream: #FFFFFF; --warm: #FAF8F5; --ink: #1E1813;
+}
+
+/* HEADER */
+.hero { text-align: center; padding: 80px 20px 60px; background: linear-gradient(180deg, #0d0b09 0%, #1a1612 100%); position: relative; overflow: hidden; }
+.hero::before { content: ""; position: absolute; top: -100px; right: -100px; width: 300px; height: 300px; border-radius: 50%; background: var(--amber); opacity: 0.06; }
+.hero-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: var(--amber-light); margin-bottom: 16px; }
+.hero-title { font-family: 'Playfair Display', serif; font-size: clamp(36px, 6vw, 56px); font-weight: 700; line-height: 1; letter-spacing: -0.025em; color: var(--cream); margin-bottom: 12px; }
+.hero-title .accent { color: var(--amber); font-style: italic; font-weight: 400; }
+.hero-sub { font-family: 'Playfair Display', serif; font-size: 18px; font-style: italic; color: var(--amber-pale); opacity: 0.6; max-width: 500px; margin: 0 auto; }
+.dots { display: flex; gap: 10px; justify-content: center; margin-top: 24px; }
+.dots span { width: 8px; height: 8px; border-radius: 50%; }
+.dots .a { background: var(--amber); } .dots .t { background: var(--terracotta); } .dots .f { background: var(--forest); }
+
+/* GALLERY */
+.gallery { max-width: 1200px; margin: 0 auto; padding: 60px 20px 80px; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 32px; }
+.screen-card { break-inside: avoid; }
+.screen-card img { width: 100%; height: auto; border-radius: 16px; display: block; box-shadow: 0 20px 50px rgba(0,0,0,0.4); transition: transform 0.4s ease, box-shadow 0.4s ease; }
+.screen-card:hover img { transform: translateY(-4px); box-shadow: 0 30px 70px rgba(0,0,0,0.5); }
+.screen-label { margin-top: 16px; }
+.screen-num { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 500; color: var(--amber); }
+.screen-name { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--cream); margin-top: 2px; }
+.screen-desc { font-size: 12px; color: var(--amber-pale); opacity: 0.5; margin-top: 4px; line-height: 1.5; }
+
+/* FOOTER */
+.footer { text-align: center; padding: 40px 20px; background: #0d0b09; }
+.footer-brand { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: var(--cream); }
+.footer-brand .dot { color: var(--amber); }
+.footer-text { font-size: 11px; color: var(--amber-pale); opacity: 0.4; margin-top: 8px; }
+
+@media (max-width: 600px) {
+  .gallery { grid-template-columns: 1fr; gap: 24px; padding: 40px 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-eyebrow">App Mobile · Design Screens</div>
+  <h1 class="hero-title">8 écrans.<br><span class="accent">Une expérience.</span></h1>
+  <p class="hero-sub">Chaque écran de l'app mobile Dedcco, généré à partir du design system.</p>
+  <div class="dots"><span class="a"></span><span class="t"></span><span class="f"></span></div>
+</div>
+
+<div class="gallery">
+  <div class="screen-card">
+    <img src="/app-screens/01-accueil.png" alt="Accueil">
+    <div class="screen-label">
+      <div class="screen-num">01</div>
+      <div class="screen-name">Accueil</div>
+      <div class="screen-desc">Hero immersif, carrousel de coups de cœur, renouvellement à chaque ouverture</div>
+    </div>
+  </div>
+  <div class="screen-card">
+    <img src="/app-screens/02-inspirations.png" alt="Inspirations">
+    <div class="screen-label">
+      <div class="screen-num">02</div>
+      <div class="screen-name">Inspirations</div>
+      <div class="screen-desc">Masonry grid Pinterest-style, filtres par style, tap → plein écran shop the look</div>
+    </div>
+  </div>
+  <div class="screen-card">
+    <img src="/app-screens/03-marketplace.png" alt="Marketplace">
+    <div class="screen-label">
+      <div class="screen-num">03</div>
+      <div class="screen-name">Marketplace</div>
+      <div class="screen-desc">Grid 2 colonnes, filtres bottom sheet, cards produit avec artisan vérifié</div>
+    </div>
+  </div>
+  <div class="screen-card">
+    <img src="/app-screens/04-produit.png" alt="Fiche Produit">
+    <div class="screen-label">
+      <div class="screen-num">04</div>
+      <div class="screen-name">Fiche Produit</div>
+      <div class="screen-desc">Image plein écran, bottom sheet produit, swipe galerie, pinch to zoom</div>
+    </div>
+  </div>
+  <div class="screen-card">
+    <img src="/app-screens/05-brief.png" alt="Brief Projet">
+    <div class="screen-label">
+      <div class="screen-num">05</div>
+      <div class="screen-name">Brief Projet</div>
+      <div class="screen-desc">Wizard swipe, barre de progression, cartes de style, peu de texte</div>
+    </div>
+  </div>
+  <div class="screen-card">
+    <img src="/app-screens/06-panier.png" alt="Panier">
+    <div class="screen-label">
+      <div class="screen-num">06</div>
+      <div class="screen-name">Panier & Checkout</div>
+      <div class="screen-desc">Steppers, swipe to delete, Mobile Money en bottom sheet 3 étapes</div>
+    </div>
+  </div>
+  <div class="screen-card">
+    <img src="/app-screens/07-chat.png" alt="Chat">
+    <div class="screen-label">
+      <div class="screen-num">07</div>
+      <div class="screen-name">Chat de coordination</div>
+      <div class="screen-desc">Contextuel (lié au projet), actions inline, anti-contournement</div>
+    </div>
+  </div>
+  <div class="screen-card">
+    <img src="/app-screens/08-compte.png" alt="Compte">
+    <div class="screen-label">
+      <div class="screen-num">08</div>
+      <div class="screen-name">Compte</div>
+      <div class="screen-desc">Commandes, projets, paiements, paramètres, accès aux threads de chat</div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-brand">Dedco<span class="dot">.</span></div>
+  <p class="footer-text">App Mobile Design · 8 écrans · Juillet 2026</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dedco — Brand Film Storyboard</title>
+<style>
+@font-face {
+  font-family: 'Quache';
+  src: url('Quache-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-display: block;
+  unicode-range: U+0000-002F, U+003A-00FF, U+0100-017F;
+}
+@font-face {
+  font-family: 'Quache';
+  src: url('Quache-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: block;
+  unicode-range: U+0000-002F, U+003A-00FF, U+0100-017F;
+}
+@font-face {
+  font-family: 'Quache';
+  src: url('Quache-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-display: block;
+  unicode-range: U+0000-002F, U+003A-00FF, U+0100-017F;
+}
+@font-face {
+  font-family: 'Quache';
+  src: url('Quache-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-display: block;
+  unicode-range: U+0000-002F, U+003A-00FF, U+0100-017F;
+}
+@font-face {
+  font-family: 'Quache';
+  src: url('Quache-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-display: block;
+  unicode-range: U+0000-002F, U+003A-00FF, U+0100-017F;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --c-amber: #BF793B;
+  --c-amber-dark: #A05F2A;
+  --c-terracotta: #A7442D;
+  --c-forest: #548C45;
+  --c-cream: #F7F3ED;
+  --c-ink: #1E1813;
+  --c-text-2: #5A4D44;
+  --c-text-3: #8B7E73;
+  --c-border: #E5DCC8;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--c-ink);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.stage {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1920px;
+  height: 1080px;
+  transform-origin: center center;
+}
+@media (max-width: 1920px) {
+  .stage { transform: translate(-50%, -50%) scale(calc(100vw / 1920)); }
+}
+@media (max-aspect-ratio: 16/9) {
+  .stage { transform: translate(-50%, -50%) scale(calc(100vh / 1080)); }
+}
+
+.scene {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: opacity 1.2s ease-in-out;
+}
+.scene.active { opacity: 1; }
+
+/* Placeholder visual indicator */
+.visual-placeholder {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+}
+.visual-placeholder .label {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px;
+  color: rgba(255,255,255,0.2);
+  text-align: center;
+  max-width: 600px;
+  padding: 20px;
+  border: 1px dashed rgba(255,255,255,0.15);
+  border-radius: 8px;
+}
+
+/* Text overlay */
+.text-overlay {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 0 120px;
+  max-width: 1400px;
+}
+
+.headline {
+  font-family: 'Quache', serif;
+  font-weight: 700;
+  font-size: 72px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
+}
+.scene.active .headline { opacity: 1; transform: translateY(0); }
+
+.headline em {
+  font-style: normal;
+  font-weight: 900;
+}
+
+/* Scene-specific colors */
+.scene-light .headline { color: var(--c-ink); }
+.scene-light .headline em { color: var(--c-terracotta); }
+.scene-dark .headline { color: var(--c-cream); }
+.scene-dark .headline em { color: var(--c-amber); }
+
+/* Backgrounds (placeholder gradients) */
+.bg-1 { background: linear-gradient(135deg, #F7F3ED 0%, #ECDCCB 100%); }
+.bg-2 { background: linear-gradient(135deg, #F7F3ED 0%, #FEF5E9 100%); }
+.bg-3 { background: linear-gradient(135deg, #1E1813 0%, #2A2218 100%); }
+.bg-4 { background: linear-gradient(135deg, #F7F3ED 0%, #E6F2E3 100%); }
+.bg-5 { background: linear-gradient(135deg, #1E1813 0%, #3A2A1E 100%); }
+.bg-6 { background: linear-gradient(135deg, #F7F3ED 0%, #FAEAE6 100%); }
+.bg-7 { background: linear-gradient(135deg, #1E1813 0%, #1E1813 100%); }
+
+/* Scene info badge */
+.scene-info {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  z-index: 10;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.scene-light .scene-info { color: rgba(30,24,19,0.3); }
+
+/* Final scene logo */
+.final-logo {
+  font-family: 'Quache', serif;
+  font-weight: 900;
+  font-size: 180px;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  color: var(--c-terracotta);
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 1.2s ease 0.5s, transform 1.2s ease 0.5s;
+}
+.final-logo .dot { color: var(--c-amber); }
+.scene.active .final-logo { opacity: 1; transform: scale(1); }
+
+.final-subtitle {
+  font-family: 'Quache', serif;
+  font-weight: 400;
+  font-size: 40px;
+  color: var(--c-cream);
+  margin-top: 24px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease 1.4s, transform 0.8s ease 1.4s;
+}
+.scene.active .final-subtitle { opacity: 1; transform: translateY(0); }
+
+.final-signature {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  color: rgba(247,243,237,0.5);
+  margin-top: 40px;
+  letter-spacing: 0.05em;
+  opacity: 0;
+  transition: opacity 0.8s ease 2.2s;
+}
+.scene.active .final-signature { opacity: 1; }
+
+/* Progress bar */
+.progress-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background: var(--c-amber);
+  width: 0;
+  z-index: 100;
+  transition: width 0.1s linear;
+}
+
+/* Controls */
+.controls {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  gap: 12px;
+  z-index: 100;
+}
+.controls button {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(30,24,19,0.8);
+  color: var(--c-cream);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.controls button:hover { background: var(--c-amber); }
+
+/* Timeline indicator */
+.timeline-info {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  z-index: 100;
+}
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <!-- SCENE 1 -->
+  <div class="scene scene-light bg-1" id="scene1">
+    <div class="scene-info">Scene 1 — 0-7s — Living Room</div>
+    <div class="visual-placeholder"><div class="label">[Beautiful contemporary living room, morning sunlight, elegant slow camera movement]</div></div>
+    <div class="text-overlay">
+      <div class="headline">L'inspiration est le point de départ de chaque <em>intérieur</em>.</div>
+    </div>
+  </div>
+
+  <!-- SCENE 2 -->
+  <div class="scene scene-light bg-2" id="scene2">
+    <div class="scene-info">Scene 2 — 7-15s — Moodboard</div>
+    <div class="visual-placeholder"><div class="label">[Moodboards, textures, fabric samples, designer sketching, editorial compositions]</div></div>
+    <div class="text-overlay">
+      <div class="headline">Découvrez des idées. <em>Imaginez</em> sans limites.</div>
+    </div>
+  </div>
+
+  <!-- SCENE 3 -->
+  <div class="scene scene-dark bg-3" id="scene3">
+    <div class="scene-info">Scene 3 — 15-24s — Artisans</div>
+    <div class="visual-placeholder"><div class="label">[Woodworker, ceramist, metal artisan, close-up craftsmanship, hands at work]</div></div>
+    <div class="text-overlay">
+      <div class="headline">Des artisans d'<em>exception</em> donnent vie à chaque création.</div>
+    </div>
+  </div>
+
+  <!-- SCENE 4 -->
+  <div class="scene scene-light bg-4" id="scene4">
+    <div class="scene-info">Scene 4 — 24-34s — Designer Meeting</div>
+    <div class="visual-placeholder"><div class="label">[Interior designer meeting clients, discussing layouts, reviewing floor plans]</div></div>
+    <div class="text-overlay">
+      <div class="headline">Les meilleurs <em>designers</em> vous accompagnent dans chaque projet.</div>
+    </div>
+  </div>
+
+  <!-- SCENE 5 -->
+  <div class="scene scene-dark bg-5" id="scene5">
+    <div class="scene-info">Scene 5 — 34-45s — Platform</div>
+    <div class="visual-placeholder"><div class="label">[Elegant interface floating naturally above footage, browsing, messaging, secure checkout]</div></div>
+    <div class="text-overlay">
+      <div class="headline">Une seule <em>plateforme</em>. Toutes les possibilités.</div>
+    </div>
+  </div>
+
+  <!-- SCENE 6 -->
+  <div class="scene scene-light bg-6" id="scene6">
+    <div class="scene-info">Scene 6 — 45-54s — Delivery</div>
+    <div class="visual-placeholder"><div class="label">[Furniture delivery, styling, restaurant completed, office finished, family entering home]</div></div>
+    <div class="text-overlay">
+      <div class="headline">Du premier <em>croquis</em> au dernier détail.</div>
+    </div>
+  </div>
+
+  <!-- FINAL SCENE -->
+  <div class="scene scene-dark bg-7" id="scene7">
+    <div class="scene-info">Final — 54-60s — Logo Reveal</div>
+    <div class="visual-placeholder"><div class="label">[Wide cinematic shot, sophisticated African contemporary interior, soft afternoon light, slow push-in]</div></div>
+    <div class="text-overlay">
+      <div class="final-logo">Dedco<span class="dot">.</span></div>
+      <div class="final-subtitle">Le design d'intérieur, réuni en une seule plateforme.</div>
+      <div class="final-signature">Mobilier • Décoration • Artisanat • Designers</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="progress-bar" id="progress"></div>
+<div class="timeline-info" id="time">0:00 / 1:00</div>
+
+<div class="controls">
+  <button id="replay" title="Rejouer">↻</button>
+  <button id="pause" title="Pause">⏸</button>
+</div>
+
+<script>
+const SCENES = [
+  { id: 'scene1', start: 0, end: 7000 },
+  { id: 'scene2', start: 7000, end: 15000 },
+  { id: 'scene3', start: 15000, end: 24000 },
+  { id: 'scene4', start: 24000, end: 34000 },
+  { id: 'scene5', start: 34000, end: 45000 },
+  { id: 'scene6', start: 45000, end: 54000 },
+  { id: 'scene7', start: 54000, end: 60000 },
+];
+
+const TOTAL = 60000;
+let currentTime = 0;
+let isPlaying = true;
+let lastTimestamp = 0;
+let raf;
+
+function showScene(id) {
+  document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+  const scene = document.getElementById(id);
+  if (scene) scene.classList.add('active');
+}
+
+function formatTime(ms) {
+  const sec = Math.floor(ms / 1000);
+  return `0:${sec.toString().padStart(2, '0')}`;
+}
+
+function update(ts) {
+  if (!lastTimestamp) lastTimestamp = ts;
+  const delta = ts - lastTimestamp;
+  lastTimestamp = ts;
+
+  if (isPlaying) {
+    currentTime += delta;
+    const scene = SCENES.find(s => currentTime >= s.start && currentTime < s.end);
+    if (scene) showScene(scene.id);
+
+    document.getElementById('progress').style.width = (currentTime / TOTAL * 100) + '%';
+    document.getElementById('time').textContent = `${formatTime(currentTime)} / 1:00`;
+
+    if (currentTime >= TOTAL) {
+      isPlaying = false;
+      return;
+    }
+  }
+  raf = requestAnimationFrame(update);
+}
+
+function start() {
+  currentTime = 0;
+  isPlaying = true;
+  lastTimestamp = 0;
+  showScene('scene1');
+  raf = requestAnimationFrame(update);
+}
+
+document.getElementById('replay').addEventListener('click', start);
+document.getElementById('pause').addEventListener('click', function() {
+  isPlaying = !isPlaying;
+  this.textContent = isPlaying ? '⏸' : '▶';
+  if (isPlaying) { lastTimestamp = 0; raf = requestAnimationFrame(update); }
+});
+
+window.addEventListener('load', () => setTimeout(start, 500));
+</script>
+
+</body>
+</html>
