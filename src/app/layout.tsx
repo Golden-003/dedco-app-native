@@ -25,6 +25,13 @@ export const metadata: Metadata = {
     "designers africains",
   ],
   authors: [{ name: "Dedco" }],
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/favicon-48.png",
+  },
   openGraph: {
     title: "Dedco — Marché de l'Aménagement Intérieur",
     description:
