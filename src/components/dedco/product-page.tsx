@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Heart,
   ShoppingBag,
@@ -397,8 +397,32 @@ export function ProductPage({
 // ============================================================
 
 function VerifiedReviews({ productId, artisanId }: { productId: number; artisanId: number }) {
-  const reviews = useReviewStore((s) => s.getReviewsByProduct(productId));
-  const { rating, count } = useReviewStore((s) => s.getAverageRating(productId));
+  // ⚠️ On sélectionne directement le tableau `reviews` (référence stable tant
+  // que les données ne changent pas). Utiliser s.getReviewsByProduct() comme
+  // sélecteur provoquerait une boucle de rendu infinie : la méthode retourne
+  // un nouveau tableau à chaque appel, Zustand voit une référence différente
+  // → re-render → nouvel appel → re-render → ... (gel de la page).
+  const allReviews = useReviewStore((s) => s.reviews);
+
+  const reviews = useMemo(
+    () =>
+      allReviews
+        .filter((r) => r.productId === productId)
+        .sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        ),
+    [allReviews, productId],
+  );
+
+  const { rating, count } = useMemo(() => {
+    if (reviews.length === 0) return { rating: 0, count: 0 };
+    const sum = reviews.reduce((acc, r) => acc + r.rating, 0);
+    return {
+      rating: Math.round((sum / reviews.length) * 10) / 10,
+      count: reviews.length,
+    };
+  }, [reviews]);
 
   // Distribution des notes
   const distribution = [5, 4, 3, 2, 1].map(star => {
