@@ -36,6 +36,7 @@ import {
   HardHat,
 } from "lucide-react";
 import { useDedcoStore, type ProjectScope } from "@/lib/store";
+import { useReviewStore } from "@/lib/review-store";
 import { formatFCFA, DESIGNERS, ARTISANS, PRODUCTS, getProduct } from "@/lib/dedco-data";
 
 // ============================================================
@@ -832,14 +833,33 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
 
 export function AvisLivraisonPage({ orderId }: { orderId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
+  const currentUser = useDedcoStore((s) => s.currentUser);
+  const addReview = useReviewStore((s) => s.addReview);
+  const hasReviewed = useReviewStore((s) => s.hasReviewed);
   const [rating, setRating] = useState(0);
   const [subRatings, setSubRatings] = useState({ qualite: 0, delais: 0, communication: 0 });
   const [comment, setComment] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
   const product = PRODUCTS[0];
+  const alreadyReviewed = hasReviewed(orderId);
 
-  if (submitted) {
+  function handleSubmit() {
+    if (rating === 0) return;
+    addReview({
+      orderId,
+      productId: product.id,
+      artisanId: product.artisanId,
+      rating,
+      subRatings,
+      comment: comment.trim(),
+      authorName: currentUser?.name || "Client Dedco",
+      authorAvatar: currentUser?.avatar || "https://images.unsplash.com/photo-1614317226704-8b1f7a4c4d3e?auto=format&fit=crop&crop=faces&w=80&q=85",
+    });
+    setSubmitted(true);
+  }
+
+  if (submitted || alreadyReviewed) {
     return (
       <div className="p-8 max-w-xl mx-auto text-center">
         <div className="w-20 h-20 rounded-full bg-[var(--forest-pale)] mx-auto flex items-center justify-center mb-5">
@@ -926,7 +946,7 @@ export function AvisLivraisonPage({ orderId }: { orderId: string }) {
         />
 
         <button
-          onClick={() => setSubmitted(true)}
+          onClick={handleSubmit}
           disabled={rating === 0}
           className="dedco-btn dedco-btn-primary w-full mt-4"
         >

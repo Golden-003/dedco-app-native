@@ -19,6 +19,7 @@ import {
   formatFCFA,
   levelLabel,
 } from "@/lib/dedco-data";
+import { useReviewStore } from "@/lib/review-store";
 import type { Route, CartItem } from "@/lib/dedco-types";
 import { BackButton } from "./layout";
 import { ProductCard, Stars, LevelBadge } from "./cards";
@@ -384,6 +385,116 @@ export function ProductPage({
           </div>
         </section>
       )}
+
+      {/* Avis vérifiés */}
+      <VerifiedReviews productId={productId} artisanId={product.artisanId} />
     </div>
+  );
+}
+
+// ============================================================
+// VERIFIED REVIEWS — Section avis vérifiés sur fiche produit
+// ============================================================
+
+function VerifiedReviews({ productId, artisanId }: { productId: number; artisanId: number }) {
+  const reviews = useReviewStore((s) => s.getReviewsByProduct(productId));
+  const { rating, count } = useReviewStore((s) => s.getAverageRating(productId));
+
+  // Distribution des notes
+  const distribution = [5, 4, 3, 2, 1].map(star => {
+    const c = reviews.filter(r => r.rating === star).length;
+    return { star, count: c, pct: reviews.length > 0 ? (c / reviews.length) * 100 : 0 };
+  });
+
+  if (count === 0) {
+    return (
+      <section className="mt-12">
+        <h2 className="display-md mb-4">Avis vérifiés</h2>
+        <div className="dedco-card p-8 text-center">
+          <Star size={32} className="mx-auto text-[var(--border-dark)] mb-3" strokeWidth={1.5} />
+          <p className="text-sm text-[var(--text-2)] font-medium mb-1">Aucun avis pour le moment</p>
+          <p className="text-xs text-[var(--text-3)]">
+            Les avis sont collectés après livraison de la commande. Soyez le premier à partager votre expérience.
+          </p>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="mt-12">
+      <h2 className="display-md mb-4">Avis vérifiés</h2>
+
+      {/* Note globale + distribution */}
+      <div className="dedco-card p-5 mb-4 flex flex-col sm:flex-row gap-6 items-center">
+        <div className="text-center flex-shrink-0">
+          <div className="font-display font-bold text-4xl text-[var(--amber)] font-numeric">{rating.toFixed(1)}</div>
+          <Stars rating={rating} size={16} className="justify-center mb-1" />
+          <p className="text-xs text-[var(--text-3)]">{count} avis vérifié{count > 1 ? "s" : ""}</p>
+        </div>
+        <div className="flex-1 w-full space-y-1.5">
+          {distribution.map(d => (
+            <div key={d.star} className="flex items-center gap-2 text-xs">
+              <span className="font-numeric w-3 text-[var(--text-3)]">{d.star}</span>
+              <Star size={10} className="text-[var(--amber)] fill-[var(--amber)]" />
+              <div className="flex-1 h-1.5 bg-[var(--bg-warm)] rounded-full overflow-hidden">
+                <div className="h-full bg-[var(--amber)] rounded-full transition-all" style={{ width: `${d.pct}%` }} />
+              </div>
+              <span className="font-numeric text-[var(--text-3)] w-6 text-right">{d.count}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Liste des avis */}
+      <div className="space-y-3">
+        {reviews.slice(0, 5).map((review) => (
+          <div key={review.id} className="dedco-card p-4 sm:p-5">
+            <div className="flex items-start gap-3 mb-3">
+              <img src={review.authorAvatar} alt={review.authorName} className="w-9 h-9 rounded-full object-cover flex-shrink-0" />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <p className="font-semibold text-sm text-[var(--text-1)]">{review.authorName}</p>
+                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-[var(--forest)] bg-[var(--forest-pale)] px-2 py-0.5 rounded-full">
+                    <BadgeCheck size={10} /> Achat vérifié
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <Stars rating={review.rating} size={11} />
+                  <span className="text-[10px] text-[var(--text-3)] font-numeric">
+                    {new Date(review.createdAt).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
+                  </span>
+                </div>
+              </div>
+            </div>
+            {review.comment && (
+              <p className="text-sm text-[var(--text-2)] leading-relaxed">{review.comment}</p>
+            )}
+            {review.subRatings && (review.subRatings.qualite > 0 || review.subRatings.delais > 0 || review.subRatings.communication > 0) && (
+              <div className="flex gap-4 mt-3 pt-3 border-t border-[var(--border)]">
+                {review.subRatings.qualite > 0 && (
+                  <div className="text-xs">
+                    <span className="text-[var(--text-3)]">Qualité: </span>
+                    <span className="font-semibold font-numeric">{review.subRatings.qualite}/5</span>
+                  </div>
+                )}
+                {review.subRatings.delais > 0 && (
+                  <div className="text-xs">
+                    <span className="text-[var(--text-3)]">Délais: </span>
+                    <span className="font-semibold font-numeric">{review.subRatings.delais}/5</span>
+                  </div>
+                )}
+                {review.subRatings.communication > 0 && (
+                  <div className="text-xs">
+                    <span className="text-[var(--text-3)]">Communication: </span>
+                    <span className="font-semibold font-numeric">{review.subRatings.communication}/5</span>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
