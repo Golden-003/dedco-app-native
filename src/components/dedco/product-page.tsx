@@ -144,13 +144,8 @@ export function ProductPage({
           )}
           <h1 className="display-lg mb-3">{product.name}</h1>
 
-          {/* Rating */}
+          {/* Stock status */}
           <div className="flex items-center gap-2 mb-4 text-sm">
-            <Stars rating={product.rating} size={16} />
-            <span className="font-semibold font-numeric">{product.rating}</span>
-            <span className="text-ink-mute">·</span>
-            <span className="text-ink-soft font-numeric">{product.reviews} avis</span>
-            <span className="text-ink-mute">·</span>
             {product.stock > 0 ? (
               <span className="text-forest font-medium flex items-center gap-1">
                 <BadgeCheck size={14} /> En stock (<span className="font-numeric">{product.stock}</span>)
@@ -347,13 +342,6 @@ export function ProductPage({
                 {artisan.bio}
               </p>
               <div className="flex items-center gap-4 text-sm">
-                <div className="flex items-center gap-1">
-                  <Stars rating={artisan.rating} size={14} />
-                  <span className="font-semibold font-numeric">{artisan.rating}</span>
-                  <span className="text-ink-mute font-numeric">
-                    ({artisan.reviews} avis)
-                  </span>
-                </div>
                 <button
                   type="button"
                   onClick={() => onNavigate({ name: "artisan", id: artisan.id })}
