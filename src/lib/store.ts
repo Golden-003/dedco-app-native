@@ -132,7 +132,6 @@ export type AppRoute =
   // ── CLIENT (BLOC 4)
   | { page: 'client-projets' }
   | { page: 'brief-designer'; designerId: number }
-  | { page: 'avis-livraison'; orderId: string }
   | { page: 'plans-tarifs' }
   // ── DESIGNER WORKFLOW (version simplifiée)
   | { page: 'designer-projet-attente'; projectId: string }

@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { Package, ChevronRight, Clock, CheckCircle2, Truck, ShoppingBag } from "lucide-react";
 import { useDedcoStore, type OrderStatus } from "@/lib/store";
-import { useReviewStore } from "@/lib/review-store";
 import { formatFCFA } from "@/lib/dedco-data";
 
 // ============================================================
@@ -30,7 +29,6 @@ export function OrderHistoryPage() {
   const navigate = useDedcoStore((s) => s.navigate);
   const goBack = useDedcoStore((s) => s.goBack);
   const orders = useDedcoStore((s) => s.orders);
-  const hasReviewed = useReviewStore((s) => s.hasReviewed);
 
   return (
     <div className="dedco-fade-in max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
@@ -77,8 +75,6 @@ export function OrderHistoryPage() {
         <div className="space-y-3">
           {orders.map((order, i) => {
             const cfg = STATUS_MAP[order.status];
-            const isDelivered = order.status === "livré";
-            const reviewed = hasReviewed(order.id);
             const productLabel =
               order.items.length === 1
                 ? order.items[0].name
@@ -109,17 +105,9 @@ export function OrderHistoryPage() {
                       <p className="text-xs text-[var(--text-3)]">
                         {artisanLabel} · {formatDateFromISO(order.createdAt)}
                       </p>
-                      <div className="flex items-center gap-2 mt-0.5">
-                        <p className="font-numeric text-xs font-medium text-[var(--text-2)]">
-                          {order.id}
-                        </p>
-                        {isDelivered && (
-                          <span className="text-[10px] text-[var(--forest)] flex items-center gap-0.5">
-                            <CheckCircle2 size={10} />
-                            {reviewed ? "Avis publié" : "Avis en attente"}
-                          </span>
-                        )}
-                      </div>
+                      <p className="font-numeric text-xs font-medium text-[var(--text-2)] mt-0.5">
+                        {order.id}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 flex-shrink-0">

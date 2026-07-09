@@ -96,7 +96,7 @@ export function CheckoutPage() {
     // Avant : on générait juste un orderId sans rien persister.
     // Maintenant : placeOrder crée un Order complet (items, livraison,
     // paiement, timeline) qui sera lisible par order-confirmation,
-    // order-tracking, order-history et avis-livraison.
+    // order-tracking et order-history.
     const items = cart.map((c) => {
       const artisan = getArtisan(c.artisanId);
       return {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState } from "react";
 import {
   Heart,
   ShoppingBag,
@@ -19,7 +19,6 @@ import {
   formatFCFA,
   levelLabel,
 } from "@/lib/dedco-data";
-import { useReviewStore } from "@/lib/review-store";
 import type { Route, CartItem } from "@/lib/dedco-types";
 import { BackButton } from "./layout";
 import { ProductCard, Stars, LevelBadge } from "./cards";
@@ -40,6 +39,10 @@ export function ProductPage({
   onAddToCart: (item: CartItem) => void;
 }) {
   const product = getProduct(productId);
+  const [selectedImageIdx, setSelectedImageIdx] = useState(0);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [qty, setQty] = useState(1);
+  const [added, setAdded] = useState(false);
 
   if (!product) {
     return (
@@ -51,63 +54,6 @@ export function ProductPage({
       </div>
     );
   }
-
-  return (
-    <ProductPageContent
-      product={product}
-      onNavigate={onNavigate}
-      onBack={onBack}
-      favorites={favorites}
-      toggleFav={toggleFav}
-      onAddToCart={onAddToCart}
-    />
-  );
-}
-
-function ProductPageContent({
-  product,
-  onNavigate,
-  onBack,
-  favorites,
-  toggleFav,
-  onAddToCart,
-}: {
-  product: NonNullable<ReturnType<typeof getProduct>>;
-  onNavigate: (route: Route) => void;
-  onBack: () => void;
-  favorites: Set<number>;
-  toggleFav: (id: number) => void;
-  onAddToCart: (item: CartItem) => void;
-}) {
-  const [selectedImageIdx, setSelectedImageIdx] = useState(0);
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
-  const [qty, setQty] = useState(1);
-  const [added, setAdded] = useState(false);
-
-  // ── Notes & avis : lecture depuis review-store (référence stable) ──
-  // On sélectionne directement `reviews` (tableau persisté) puis on calcule
-  // les agrégats avec useMemo pour éviter toute boucle de rendu.
-  const allReviews = useReviewStore((s) => s.reviews);
-
-  const productStats = useMemo(() => {
-    const rs = allReviews.filter((r) => r.productId === product.id);
-    if (rs.length === 0) return { rating: 0, count: 0 };
-    const sum = rs.reduce((acc, r) => acc + r.rating, 0);
-    return {
-      rating: Math.round((sum / rs.length) * 10) / 10,
-      count: rs.length,
-    };
-  }, [allReviews, product.id]);
-
-  const artisanStats = useMemo(() => {
-    const rs = allReviews.filter((r) => r.artisanId === product.artisanId);
-    if (rs.length === 0) return { rating: 0, count: 0 };
-    const sum = rs.reduce((acc, r) => acc + r.rating, 0);
-    return {
-      rating: Math.round((sum / rs.length) * 10) / 10,
-      count: rs.length,
-    };
-  }, [allReviews, product.artisanId]);
 
   const artisan = getArtisan(product.artisanId);
   const isFav = favorites.has(product.id);
@@ -198,18 +144,12 @@ function ProductPageContent({
           )}
           <h1 className="display-lg mb-3">{product.name}</h1>
 
-          {/* Rating — alimenté par les avis vérifiés (review-store) */}
-          <div className="flex items-center gap-2 mb-4 text-sm flex-wrap">
-            {productStats.count > 0 ? (
-              <>
-                <Stars rating={productStats.rating} size={16} />
-                <span className="font-semibold font-numeric">{productStats.rating}</span>
-                <span className="text-ink-mute">·</span>
-                <span className="text-ink-soft font-numeric">{productStats.count} avis vérifié{productStats.count > 1 ? "s" : ""}</span>
-              </>
-            ) : (
-              <span className="text-ink-mute italic">Nouveau produit · pas encore d'avis vérifié</span>
-            )}
+          {/* Rating */}
+          <div className="flex items-center gap-2 mb-4 text-sm">
+            <Stars rating={product.rating} size={16} />
+            <span className="font-semibold font-numeric">{product.rating}</span>
+            <span className="text-ink-mute">·</span>
+            <span className="text-ink-soft font-numeric">{product.reviews} avis</span>
             <span className="text-ink-mute">·</span>
             {product.stock > 0 ? (
               <span className="text-forest font-medium flex items-center gap-1">
@@ -408,17 +348,11 @@ function ProductPageContent({
               </p>
               <div className="flex items-center gap-4 text-sm">
                 <div className="flex items-center gap-1">
-                  {artisanStats.count > 0 ? (
-                    <>
-                      <Stars rating={artisanStats.rating} size={14} />
-                      <span className="font-semibold font-numeric">{artisanStats.rating}</span>
-                      <span className="text-ink-mute font-numeric">
-                        ({artisanStats.count} avis vérifié{artisanStats.count > 1 ? "s" : ""})
-                      </span>
-                    </>
-                  ) : (
-                    <span className="text-ink-mute italic text-xs">Pas encore d'avis vérifié</span>
-                  )}
+                  <Stars rating={artisan.rating} size={14} />
+                  <span className="font-semibold font-numeric">{artisan.rating}</span>
+                  <span className="text-ink-mute font-numeric">
+                    ({artisan.reviews} avis)
+                  </span>
                 </div>
                 <button
                   type="button"
@@ -450,375 +384,6 @@ function ProductPageContent({
           </div>
         </section>
       )}
-
-      {/* Avis vérifiés */}
-      <VerifiedReviews productId={product.id} artisanId={product.artisanId} />
     </div>
-  );
-}
-
-// ============================================================
-// VERIFIED REVIEWS — Section avis vérifiés sur fiche produit
-// Structure inspirée d'Amazon / Etsy / Decathlon :
-//  1. Summary compact (note + histogramme cliquable sur 1 ligne)
-//  2. Toolbar : filtres par étoiles + tri
-//  3. Liste fluide avec séparateurs subtils (pas des cards empilées)
-//  4. "Voir plus d'avis" au lieu de tout afficher d'un coup
-// ============================================================
-
-type SortKey = "recent" | "highest" | "lowest";
-
-function VerifiedReviews({ productId, artisanId }: { productId: number; artisanId: number }) {
-  // ⚠️ On sélectionne directement le tableau `reviews` (référence stable tant
-  // que les données ne changent pas). Utiliser s.getReviewsByProduct() comme
-  // sélecteur provoquerait une boucle de rendu infinie : la méthode retourne
-  // un nouveau tableau à chaque appel, Zustand voit une référence différente
-  // → re-render → nouvel appel → re-render → ... (gel de la page).
-  const allReviews = useReviewStore((s) => s.reviews);
-
-  const productReviews = useMemo(
-    () => allReviews.filter((r) => r.productId === productId),
-    [allReviews, productId],
-  );
-
-  const { rating, count } = useMemo(() => {
-    if (productReviews.length === 0) return { rating: 0, count: 0 };
-    const sum = productReviews.reduce((acc, r) => acc + r.rating, 0);
-    return {
-      rating: Math.round((sum / productReviews.length) * 10) / 10,
-      count: productReviews.length,
-    };
-  }, [productReviews]);
-
-  // Distribution par étoile (5 → 1)
-  const distribution = useMemo(() => {
-    return [5, 4, 3, 2, 1].map((star) => {
-      const c = productReviews.filter((r) => r.rating === star).length;
-      return { star, count: c, pct: count > 0 ? (c / count) * 100 : 0 };
-    });
-  }, [productReviews, count]);
-
-  // ── Filtre + tri + pagination (état local) ──
-  const [starFilter, setStarFilter] = useState<number | null>(null);
-  const [sort, setSort] = useState<SortKey>("recent");
-  const [visibleCount, setVisibleCount] = useState(5);
-
-  const filteredReviews = useMemo(() => {
-    let list = productReviews;
-    if (starFilter !== null) list = list.filter((r) => r.rating === starFilter);
-    list = [...list];
-    if (sort === "recent") {
-      list.sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      );
-    } else if (sort === "highest") {
-      list.sort(
-        (a, b) =>
-          b.rating - a.rating ||
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      );
-    } else {
-      // lowest
-      list.sort(
-        (a, b) =>
-          a.rating - b.rating ||
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      );
-    }
-    return list;
-  }, [productReviews, starFilter, sort]);
-
-  // Reset pagination quand on change de filtre ou de tri
-  useEffect(() => {
-    setVisibleCount(5);
-  }, [starFilter, sort]);
-
-  function formatDate(iso: string) {
-    return new Date(iso).toLocaleDateString("fr-FR", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
-  }
-
-  // ── État vide ──
-  if (count === 0) {
-    return (
-      <section className="mt-12">
-        <h2 className="display-md mb-4">Avis vérifiés</h2>
-        <div className="dedco-card p-8 text-center">
-          <Star
-            size={32}
-            className="mx-auto text-[var(--border-dark)] mb-3"
-            strokeWidth={1.5}
-          />
-          <p className="text-sm text-[var(--text-2)] font-medium mb-1">
-            Aucun avis pour le moment
-          </p>
-          <p className="text-xs text-[var(--text-3)] max-w-md mx-auto">
-            Les avis sont collectés après livraison de la commande. Soyez le
-            premier à partager votre expérience.
-          </p>
-        </div>
-      </section>
-    );
-  }
-
-  return (
-    <section className="mt-12">
-      {/* ── Header : titre + compteur inline ── */}
-      <div className="flex items-baseline gap-3 mb-4 flex-wrap">
-        <h2 className="display-md">Avis vérifiés</h2>
-        <span className="text-sm text-[var(--text-3)]">
-          <span className="font-numeric font-semibold text-[var(--text-1)]">
-            {count}
-          </span>{" "}
-          avis · 100% vérifiés (liés à une commande livrée)
-        </span>
-      </div>
-
-      {/* ── Summary compact : note + histogramme cliquable ── */}
-      <div className="dedco-card p-4 sm:p-5 mb-4">
-        <div className="flex flex-col sm:flex-row gap-5 items-center sm:items-stretch">
-          {/* Note globale — taille raisonnable, alignée avec histogramme */}
-          <div className="text-center sm:text-left flex-shrink-0 sm:border-r sm:border-[var(--border)] sm:pr-5 flex sm:block items-center gap-3">
-            <div className="font-display font-bold text-3xl sm:text-4xl text-[var(--amber)] font-numeric leading-none">
-              {rating.toFixed(1)}
-            </div>
-            <div className="sm:mt-1">
-              <Stars rating={rating} size={14} className="sm:justify-center" />
-              <p className="text-xs text-[var(--text-3)] mt-0.5 hidden sm:block">
-                {count} avis
-              </p>
-            </div>
-          </div>
-
-          {/* Histogramme cliquable → filtre par étoile */}
-          <div className="flex-1 w-full space-y-1">
-            {distribution.map((d) => {
-              const active = starFilter === d.star;
-              return (
-                <button
-                  key={d.star}
-                  type="button"
-                  onClick={() =>
-                    setStarFilter(active ? null : d.star)
-                  }
-                  className={`w-full flex items-center gap-2 text-xs px-2 py-1 rounded-md transition-colors ${
-                    active
-                      ? "bg-[var(--amber-pale)]"
-                      : "hover:bg-[var(--bg-warm)]"
-                  }`}
-                  aria-pressed={active}
-                  aria-label={`Filtrer par ${d.star} étoiles`}
-                >
-                  <span className="font-numeric w-6 text-right text-[var(--text-2)]">
-                    {d.star}★
-                  </span>
-                  <div className="flex-1 h-2 bg-[var(--bg-warm)] rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-[var(--amber)] rounded-full transition-all"
-                      style={{ width: `${d.pct}%` }}
-                    />
-                  </div>
-                  <span className="font-numeric text-[var(--text-3)] w-8 text-right">
-                    {d.count}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      {/* ── Toolbar : filtres chips + tri ── */}
-      <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-xs text-[var(--text-3)] mr-1">Filtrer :</span>
-          <FilterChip
-            active={starFilter === null}
-            onClick={() => setStarFilter(null)}
-          >
-            Tous
-          </FilterChip>
-          {[5, 4, 3, 2, 1].map((s) => {
-            const hasReviews = productReviews.some((r) => r.rating === s);
-            if (!hasReviews) return null;
-            return (
-              <FilterChip
-                key={s}
-                active={starFilter === s}
-                onClick={() => setStarFilter(s)}
-              >
-                {s}★
-              </FilterChip>
-            );
-          })}
-        </div>
-
-        <label className="flex items-center gap-1.5 text-xs">
-          <span className="text-[var(--text-3)]">Trier :</span>
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value as SortKey)}
-            className="px-2.5 py-1.5 text-xs border border-[var(--border)] rounded-md bg-card focus:outline-none focus:border-[var(--amber)]"
-            aria-label="Trier les avis"
-          >
-            <option value="recent">Plus récents</option>
-            <option value="highest">Meilleures notes</option>
-            <option value="lowest">Plus critiques</option>
-          </select>
-        </label>
-      </div>
-
-      {/* ── Compteur de résultats (si filtre actif) ── */}
-      {starFilter !== null && (
-        <p className="text-xs text-[var(--text-3)] mb-3 font-numeric">
-          {filteredReviews.length} avis {starFilter}★ ·{" "}
-          <button
-            type="button"
-            onClick={() => setStarFilter(null)}
-            className="text-[var(--amber)] font-semibold hover:underline"
-          >
-            Réinitialiser le filtre
-          </button>
-        </p>
-      )}
-
-      {/* ── Liste des avis — fluide avec séparateurs (pas des cards) ── */}
-      {filteredReviews.length === 0 ? (
-        <div className="dedco-card p-6 text-center text-sm text-[var(--text-3)]">
-          Aucun avis ne correspond à ce filtre.
-        </div>
-      ) : (
-        <div className="divide-y divide-[var(--border)]">
-          {filteredReviews.slice(0, visibleCount).map((review) => (
-            <ReviewRow key={review.id} review={review} formatDate={formatDate} />
-          ))}
-        </div>
-      )}
-
-      {/* ── Bouton "Voir plus" ── */}
-      {visibleCount < filteredReviews.length && (
-        <div className="text-center mt-5">
-          <button
-            type="button"
-            onClick={() => setVisibleCount((c) => c + 5)}
-            className="dedco-btn dedco-btn-ghost"
-          >
-            Voir plus d'avis{" "}
-            <span className="font-numeric text-[var(--text-3)]">
-              ({filteredReviews.length - visibleCount} restants)
-            </span>
-          </button>
-        </div>
-      )}
-    </section>
-  );
-}
-
-// ── Sous-composants ──
-
-function FilterChip({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`px-2.5 py-1 text-xs font-medium rounded-full border transition-all ${
-        active
-          ? "bg-[var(--amber)] text-white border-[var(--amber)]"
-          : "bg-card text-[var(--text-2)] border-[var(--border)] hover:border-[var(--ink-mute)]"
-      }`}
-      aria-pressed={active}
-    >
-      {children}
-    </button>
-  );
-}
-
-function ReviewRow({
-  review,
-  formatDate,
-}: {
-  review: import("@/lib/review-store").Review;
-  formatDate: (iso: string) => string;
-}) {
-  const hasSubRatings =
-    review.subRatings.qualite > 0 ||
-    review.subRatings.delais > 0 ||
-    review.subRatings.communication > 0;
-
-  return (
-    <article className="py-4 first:pt-0 last:pb-0">
-      {/* Ligne 1 : auteur + badge vérifié + date */}
-      <header className="flex items-center gap-2 mb-2 flex-wrap">
-        <img
-          src={review.authorAvatar}
-          alt={review.authorName}
-          className="w-7 h-7 rounded-full object-cover flex-shrink-0"
-          loading="lazy"
-        />
-        <p className="font-semibold text-sm text-[var(--text-1)]">
-          {review.authorName}
-        </p>
-        <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-[var(--forest)] bg-[var(--forest-pale)] px-1.5 py-0.5 rounded-full">
-          <BadgeCheck size={10} /> Achat vérifié
-        </span>
-        <span className="text-[11px] text-[var(--text-3)] ml-auto font-numeric">
-          {formatDate(review.createdAt)}
-        </span>
-      </header>
-
-      {/* Ligne 2 : étoiles de la note globale */}
-      <div className="flex items-center gap-2 mb-2">
-        <Stars rating={review.rating} size={12} />
-      </div>
-
-      {/* Ligne 3 : commentaire */}
-      {review.comment && (
-        <p className="text-sm text-[var(--text-2)] leading-relaxed mb-2">
-          {review.comment}
-        </p>
-      )}
-
-      {/* Ligne 4 : sous-critères (inline, compacts) */}
-      {hasSubRatings && (
-        <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-[var(--text-3)]">
-          {review.subRatings.qualite > 0 && (
-            <span>
-              Qualité{" "}
-              <strong className="font-numeric text-[var(--text-1)]">
-                {review.subRatings.qualite}/5
-              </strong>
-            </span>
-          )}
-          {review.subRatings.delais > 0 && (
-            <span>
-              Délais{" "}
-              <strong className="font-numeric text-[var(--text-1)]">
-                {review.subRatings.delais}/5
-              </strong>
-            </span>
-          )}
-          {review.subRatings.communication > 0 && (
-            <span>
-              Communication{" "}
-              <strong className="font-numeric text-[var(--text-1)]">
-                {review.subRatings.communication}/5
-              </strong>
-            </span>
-          )}
-        </div>
-      )}
-    </article>
   );
 }
