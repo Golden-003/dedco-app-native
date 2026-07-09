@@ -1,9 +1,10 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import Image from "next/image";
 import { Star, BadgeCheck, MapPin, Table2, Armchair, Lightbulb, Shirt, Flower2, BookOpen, Sofa, BedDouble, Archive, Lamp, Frame } from "lucide-react";
 import { formatFCFA, getArtisan } from "@/lib/dedco-data";
+import { useReviewStore } from "@/lib/review-store";
 import type { Product } from "@/lib/dedco-types";
 
 // ============================================================
@@ -71,6 +72,18 @@ export const ProductCard = memo(function ProductCard({
   onOpen: (id: number) => void;
 }) {
   const artisan = getArtisan(product.artisanId);
+  // ── Note réelle depuis le review-store (et non product.rating mock) ──
+  const allReviews = useReviewStore((s) => s.reviews);
+  const stats = useMemo(() => {
+    const rs = allReviews.filter((r) => r.productId === product.id);
+    if (rs.length === 0) return { rating: 0, count: 0 };
+    const sum = rs.reduce((acc, r) => acc + r.rating, 0);
+    return {
+      rating: Math.round((sum / rs.length) * 10) / 10,
+      count: rs.length,
+    };
+  }, [allReviews, product.id]);
+
   return (
     <article
       className="dedco-card overflow-hidden cursor-pointer group"
@@ -144,10 +157,16 @@ export const ProductCard = memo(function ProductCard({
         </div>
         <div className="flex items-center justify-between mt-2.5">
           <div className="flex items-center gap-1 text-xs text-ink-soft">
-            <Stars rating={product.rating} size={12} />
-            <span className="font-numeric">
-              {product.rating} ({product.reviews})
-            </span>
+            {stats.count > 0 ? (
+              <>
+                <Stars rating={stats.rating} size={12} />
+                <span className="font-numeric">
+                  {stats.rating} ({stats.count})
+                </span>
+              </>
+            ) : (
+              <span className="text-ink-mute italic">Nouveau · 0 avis</span>
+            )}
           </div>
           {product.stock <= 3 && product.stock > 0 && (
             <span className="dedco-badge dedco-badge-terra text-[10px]">
@@ -277,6 +296,18 @@ export const ArtisanCard = memo(function ArtisanCard({
   artisan: import("@/lib/dedco-types").Artisan;
   onOpen: (id: number) => void;
 }) {
+  // ── Note réelle depuis le review-store (et non artisan.rating mock) ──
+  const allReviews = useReviewStore((s) => s.reviews);
+  const stats = useMemo(() => {
+    const rs = allReviews.filter((r) => r.artisanId === artisan.id);
+    if (rs.length === 0) return { rating: 0, count: 0 };
+    const sum = rs.reduce((acc, r) => acc + r.rating, 0);
+    return {
+      rating: Math.round((sum / rs.length) * 10) / 10,
+      count: rs.length,
+    };
+  }, [allReviews, artisan.id]);
+
   return (
     <article
       className="dedco-card p-4 cursor-pointer hover:shadow-lg transition-shadow"
@@ -314,8 +345,14 @@ export const ArtisanCard = memo(function ArtisanCard({
       </div>
       <div className="flex gap-4 mb-3 text-xs text-ink-soft">
         <div>
-          <span className="font-bold text-ink font-numeric">{artisan.rating}</span> ·{" "}
-          <span className="font-numeric">{artisan.reviews}</span> avis
+          {stats.count > 0 ? (
+            <>
+              <span className="font-bold text-ink font-numeric">{stats.rating}</span> ·{" "}
+              <span className="font-numeric">{stats.count}</span> avis vérifié{stats.count > 1 ? "s" : ""}
+            </>
+          ) : (
+            <span className="text-ink-mute italic">Pas encore d'avis</span>
+          )}
         </div>
         <div>
           <span className="font-bold text-ink font-numeric">{artisan.experience}</span>{" "}

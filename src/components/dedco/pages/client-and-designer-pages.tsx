@@ -26,6 +26,9 @@ import {
   Video,
   MapPin,
   AlertTriangle,
+  AlertCircle,
+  Clock,
+  BadgeCheck,
   Lightbulb,
   Sofa,
   Home,
@@ -828,33 +831,97 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
 }
 
 
-// PAGE: avis-livraison — Avis post-livraison
+// PAGE: avis-livraison — Avis post-livraison (lié à une vraie commande)
 // ============================================================
 
 export function AvisLivraisonPage({ orderId }: { orderId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
   const currentUser = useDedcoStore((s) => s.currentUser);
+  const getOrder = useDedcoStore((s) => s.getOrder);
+  const markOrderDelivered = useDedcoStore((s) => s.markOrderDelivered);
   const addReview = useReviewStore((s) => s.addReview);
   const hasReviewed = useReviewStore((s) => s.hasReviewed);
   const [rating, setRating] = useState(0);
   const [subRatings, setSubRatings] = useState({ qualite: 0, delais: 0, communication: 0 });
   const [comment, setComment] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [selectedItemIdx, setSelectedItemIdx] = useState(0);
 
-  const product = PRODUCTS[0];
+  const order = getOrder(orderId);
+
+  // ── Sécurité : si la commande n'existe pas dans le store, on affiche
+  // un message clair au lieu de planter sur PRODUCTS[0].
+  if (!order) {
+    return (
+      <div className="p-8 max-w-xl mx-auto text-center">
+        <div className="w-16 h-16 rounded-full bg-[var(--bg-warm)] mx-auto flex items-center justify-center mb-4">
+          <AlertCircle size={28} className="text-[var(--text-3)]" />
+        </div>
+        <h1 className="display-lg mb-2">Commande introuvable</h1>
+        <p className="text-sm text-[var(--text-3)] mb-6">
+          Cette commande n'existe plus ou n'a pas encore été passée.
+          Vous devez passer une commande et attendre sa livraison pour
+          laisser un avis.
+        </p>
+        <button
+          onClick={() => navigate({ page: "marketplace" })}
+          className="dedco-btn dedco-btn-primary"
+        >
+          Aller à la marketplace
+        </button>
+      </div>
+    );
+  }
+
+  // ── Sécurité : si la commande n'est pas livrée, on propose de la
+  // marquer comme livrée (démo) ou on invite à patienter.
+  if (order.status !== "livré") {
+    return (
+      <div className="p-8 max-w-xl mx-auto text-center">
+        <div className="w-16 h-16 rounded-full bg-[var(--amber-pale)] mx-auto flex items-center justify-center mb-4">
+          <Clock size={28} className="text-[var(--amber)]" />
+        </div>
+        <h1 className="display-lg mb-2">Commande pas encore livrée</h1>
+        <p className="text-sm text-[var(--text-3)] mb-6">
+          Vous ne pouvez laisser un avis que sur une commande livrée.
+          Statut actuel : <strong>{order.status}</strong>.
+        </p>
+        <div className="flex gap-3 justify-center flex-wrap">
+          <button
+            onClick={() => navigate({ page: "order-tracking", id: order.id })}
+            className="dedco-btn dedco-btn-secondary"
+          >
+            Voir le suivi
+          </button>
+          <button
+            onClick={() => markOrderDelivered(order.id)}
+            className="dedco-btn dedco-btn-ghost"
+          >
+            <CheckCircle2 size={14} /> Marquer comme livrée (démo)
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const item = order.items[selectedItemIdx] ?? order.items[0];
   const alreadyReviewed = hasReviewed(orderId);
+  // Capture les valeurs de la commande pour les utiliser dans handleSubmit
+  // (la fonction closure ne hérite pas du narrowing TypeScript sur `order`).
+  const deliveryFirstName = order.delivery.firstName;
+  const deliveryLastName = order.delivery.lastName;
 
   function handleSubmit() {
-    if (rating === 0) return;
+    if (rating === 0 || !item) return;
     addReview({
       orderId,
-      productId: product.id,
-      artisanId: product.artisanId,
+      productId: item.productId,
+      artisanId: item.artisanId,
       rating,
       subRatings,
       comment: comment.trim(),
-      authorName: currentUser?.name || "Client Dedco",
-      authorAvatar: currentUser?.avatar || "https://images.unsplash.com/photo-1614317226704-8b1f7a4c4d3e?auto=format&fit=crop&crop=faces&w=80&q=85",
+      authorName: currentUser?.name || `${deliveryFirstName} ${deliveryLastName}`.trim() || "Client Dedco",
+      authorAvatar: currentUser?.avatar || "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=80&q=80",
     });
     setSubmitted(true);
   }
@@ -866,8 +933,27 @@ export function AvisLivraisonPage({ orderId }: { orderId: string }) {
           <CheckCircle2 size={40} className="text-[var(--forest)]" />
         </div>
         <h1 className="display-xl mb-3">Merci pour votre avis !</h1>
-        <p className="text-sm text-[var(--text-2)] mb-6">Votre avis nous aide à maintenir la qualité sur Dedco.</p>
-        <button onClick={() => navigate({ page: "marketplace" })} className="dedco-btn dedco-btn-primary">Continuer mes achats</button>
+        <p className="text-sm text-[var(--text-2)] mb-2">
+          Votre avis a été publié et est visible sur la fiche du produit.
+        </p>
+        <p className="text-xs text-[var(--text-3)] mb-6 flex items-center justify-center gap-1">
+          <BadgeCheck size={12} className="text-[var(--forest)]" />
+          Avis vérifié · lié à la commande {order.id}
+        </p>
+        <div className="flex gap-3 justify-center flex-wrap">
+          <button
+            onClick={() => navigate({ page: "product", id: item.productId })}
+            className="dedco-btn dedco-btn-primary"
+          >
+            Voir mon avis sur le produit
+          </button>
+          <button
+            onClick={() => navigate({ page: "marketplace" })}
+            className="dedco-btn dedco-btn-ghost"
+          >
+            Continuer mes achats
+          </button>
+        </div>
       </div>
     );
   }
@@ -877,24 +963,72 @@ export function AvisLivraisonPage({ orderId }: { orderId: string }) {
       {/* Banner success */}
       <div className="rounded-lg p-4 mb-5 bg-[var(--forest-pale)] flex items-center gap-3">
         <CheckCircle2 size={24} className="text-[var(--forest)] flex-shrink-0" />
-        <p className="font-display font-semibold text-[var(--forest)]">Commande livrée avec succès !</p>
-      </div>
-
-      {/* Recap */}
-      <div className="dedco-card p-4 mb-5 flex items-center gap-4">
-        <img src={product.images[0]} alt={product.name} className="w-16 h-16 rounded-lg object-cover" />
-        <div className="flex-1">
-          <p className="font-display font-semibold">{product.name}</p>
-          <p className="text-xs text-[var(--text-3)] font-numeric">{orderId} · Livré le 22 juin 2026</p>
+        <div>
+          <p className="font-display font-semibold text-[var(--forest)]">
+            Commande livrée avec succès !
+          </p>
+          {order.deliveredAt && (
+            <p className="text-xs text-[var(--text-3)] font-numeric">
+              Livrée le {new Date(order.deliveredAt).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
+            </p>
+          )}
         </div>
-        <p className="font-numeric font-bold text-[var(--amber)]">{formatFCFA(product.price)}</p>
       </div>
 
-      {/* Avis obligatoire */}
+      {/* Recap commande complète (si plusieurs items, sélecteur) */}
+      {order.items.length > 1 && (
+        <div className="dedco-card p-4 mb-4">
+          <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-3">
+            Sélectionnez le produit à évaluer
+          </p>
+          <div className="space-y-2">
+            {order.items.map((it, idx) => (
+              <button
+                key={`${it.productId}-${idx}`}
+                onClick={() => setSelectedItemIdx(idx)}
+                className={`w-full flex items-center gap-3 p-2 rounded-md border-2 transition-all text-left ${
+                  selectedItemIdx === idx
+                    ? "border-[var(--amber)] bg-[var(--amber-pale)]"
+                    : "border-[var(--border)] hover:border-[var(--ink-mute)]"
+                }`}
+              >
+                <img src={it.image} alt={it.name} className="w-10 h-10 rounded object-cover" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium truncate">{it.name}</p>
+                  <p className="text-xs text-[var(--text-3)]">par {it.artisanName}</p>
+                </div>
+                {hasReviewed(`${orderId}-${it.productId}`) && (
+                  <span className="text-[10px] text-[var(--forest)] flex items-center gap-0.5">
+                    <CheckCircle2 size={10} /> déjà noté
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Recap item sélectionné */}
+      {item && (
+        <div className="dedco-card p-4 mb-5 flex items-center gap-4">
+          <img src={item.image} alt={item.name} className="w-16 h-16 rounded-lg object-cover" />
+          <div className="flex-1">
+            <p className="font-display font-semibold">{item.name}</p>
+            <p className="text-xs text-[var(--text-3)]">par {item.artisanName}</p>
+            <p className="text-xs text-[var(--text-3)] font-numeric">
+              {orderId} · {item.color ? `${item.color} · ` : ""}x{item.qty}
+            </p>
+          </div>
+          <p className="font-numeric font-bold text-[var(--amber)]">{formatFCFA(item.price * item.qty)}</p>
+        </div>
+      )}
+
+      {/* Formulaire d'avis */}
       <div className="dedco-card p-5 border-t-4" style={{ borderTopColor: "var(--amber)", borderTopWidth: "3px" }}>
-        <p className="text-sm font-semibold text-[var(--terracotta)] mb-3 flex items-center gap-2">
-          Votre avis est requis avant de continuer sur Dedco.
-        </p>
+        <div className="flex items-center gap-2 mb-3 text-xs text-[var(--forest)] bg-[var(--forest-pale)] inline-flex px-3 py-1.5 rounded-full">
+          <BadgeCheck size={12} />
+          <span className="font-semibold">Avis vérifié · commande {order.id}</span>
+        </div>
         <h2 className="display-md mb-4">Notez votre commande</h2>
         <div className="flex items-center gap-2 mb-5 justify-center">
           {[1, 2, 3, 4, 5].map((s) => (
@@ -936,12 +1070,12 @@ export function AvisLivraisonPage({ orderId }: { orderId: string }) {
           ))}
         </div>
 
-        <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2 block">Commentaire (optionnel, min 20 caractères)</label>
+        <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2 block">Commentaire (optionnel)</label>
         <textarea
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           rows={4}
-          placeholder="Racontez votre expérience..."
+          placeholder="Racontez votre expérience (qualité, délais, communication avec l'artisan)..."
           className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card resize-none focus:outline-none focus:border-[var(--amber)]"
         />
 
@@ -950,8 +1084,11 @@ export function AvisLivraisonPage({ orderId }: { orderId: string }) {
           disabled={rating === 0}
           className="dedco-btn dedco-btn-primary w-full mt-4"
         >
-          Publier mon avis
+          Publier mon avis vérifié
         </button>
+        <p className="text-xs text-[var(--text-3)] text-center mt-3">
+          Votre avis sera public, avec le badge <strong>Achat vérifié</strong>.
+        </p>
       </div>
 
       {/* Recommandations */}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Inbox,
   Clock,
@@ -31,6 +31,7 @@ import {
   Upload,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
+import { useReviewStore } from "@/lib/review-store";
 import { PhoneInput } from "@/components/dedco/phone-input";
 import { formatFCFA, ARTISANS } from "@/lib/dedco-data";
 
@@ -583,118 +584,259 @@ function KPI({ label, value, icon }: { label: string; value: string; icon: React
 }
 
 // ============================================================
-// PAGE: artisan-avis — Avis et notes
+// PAGE: artisan-avis — Avis et notes (alimenté par review-store)
 // ============================================================
-
-type Review = {
-  id: string;
-  client: string;
-  avatar: string;
-  date: string;
-  rating: number;
-  comment: string;
-  hasReply: boolean;
-  reply?: string;
-};
-
-const MOCK_REVIEWS: Review[] = [
-  { id: "1", client: "Sophie Kossou", avatar: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=80&q=80", date: "Il y a 3 jours", rating: 5, comment: "Très belle table basse, finition impeccable. Kofi a su comprendre exactement ce que je voulais. Livraison en avance !", hasReply: false },
-  { id: "2", client: "Marc Adjovi", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&crop=faces&w=80&q=80", date: "Il y a 1 semaine", rating: 5, comment: "Excellent travail, wax bleu Ankara magnifique. Je recommande vivement.", hasReply: true, reply: "Merci beaucoup Marc pour votre confiance ! À bientôt pour un prochain projet." },
-  { id: "3", client: "Aïcha Sanni", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=80&q=80", date: "Il y a 2 semaines", rating: 4, comment: "Bonne qualité, délai légèrement dépassé mais le résultat en valait la peine.", hasReply: false },
-  { id: "4", client: "Paul Hounkpatin", avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&crop=faces&w=80&q=80", date: "Il y a 3 semaines", rating: 5, comment: "Artisan talentueux et à l'écoute. Tête de lit parfaite.", hasReply: false },
-  { id: "5", client: "Lucie Bokossa", avatar: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&crop=faces&w=80&q=80", date: "Il y a 1 mois", rating: 5, comment: "Commode en teck superbe, exactement comme sur les photos du portfolio.", hasReply: true, reply: "Merci Lucie ! N'hésitez pas à nous recommander." },
-];
 
 export function ArtisanAvisPage() {
   const navigate = useDedcoStore((s) => s.navigate);
+  const currentUser = useDedcoStore((s) => s.currentUser);
 
-  const avgRating = 4.7;
-  const totalReviews = 87;
-  const histogram = [
-    { stars: 5, count: 65 },
-    { stars: 4, count: 15 },
-    { stars: 3, count: 4 },
-    { stars: 2, count: 2 },
-    { stars: 1, count: 1 },
-  ];
-  const subCriteria = [
-    { label: "Qualité", value: 4.8 },
-    { label: "Délais", value: 4.6 },
-    { label: "Communication", value: 4.9 },
-  ];
+  // ── Lecture du review-store (tableau stable) + agrégats en useMemo ──
+  const allReviews = useReviewStore((s) => s.reviews);
+
+  // L'artisan connecté : on suppose que son id correspond à l'id ARTISANS
+  // ayant le même name (ou le 1er artisan si non trouvé).
+  const currentArtisan = useMemo(() => {
+    if (!currentUser) return ARTISANS[0];
+    return ARTISANS.find((a) => a.name === currentUser.name) ?? ARTISANS[0];
+  }, [currentUser]);
+
+  const reviews = useMemo(
+    () =>
+      allReviews
+        .filter((r) => r.artisanId === currentArtisan.id)
+        .sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        ),
+    [allReviews, currentArtisan.id],
+  );
+
+  const avgRating = useMemo(() => {
+    if (reviews.length === 0) return 0;
+    return Math.round(
+      (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length) * 10,
+    ) / 10;
+  }, [reviews]);
+
+  const totalReviews = reviews.length;
+
+  const histogram = useMemo(() => {
+    return [5, 4, 3, 2, 1].map((stars) => ({
+      stars,
+      count: reviews.filter((r) => r.rating === stars).length,
+    }));
+  }, [reviews]);
+
+  const subCriteria = useMemo(() => {
+    if (reviews.length === 0)
+      return [
+        { label: "Qualité", value: 0 },
+        { label: "Délais", value: 0 },
+        { label: "Communication", value: 0 },
+      ];
+    const sum = reviews.reduce(
+      (acc, r) => ({
+        qualite: acc.qualite + r.subRatings.qualite,
+        delais: acc.delais + r.subRatings.delais,
+        communication: acc.communication + r.subRatings.communication,
+      }),
+      { qualite: 0, delais: 0, communication: 0 },
+    );
+    return [
+      {
+        label: "Qualité",
+        value: Math.round((sum.qualite / reviews.length) * 10) / 10,
+      },
+      {
+        label: "Délais",
+        value: Math.round((sum.delais / reviews.length) * 10) / 10,
+      },
+      {
+        label: "Communication",
+        value: Math.round((sum.communication / reviews.length) * 10) / 10,
+      },
+    ];
+  }, [reviews]);
+
+  function formatDate(iso: string) {
+    return new Date(iso).toLocaleDateString("fr-FR", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  }
 
   return (
     <div className="p-4 sm:p-6 max-w-5xl mx-auto space-y-5">
       <header>
         <h1 className="display-lg mb-1">Avis et notes</h1>
-        <p className="text-sm text-[var(--text-2)]">Vos clients parlent de vous</p>
+        <p className="text-sm text-[var(--text-2)]">
+          Vos clients parlent de vous ·{" "}
+          <span className="text-[var(--forest)] font-medium">
+            Avis 100% vérifiés (liés à une commande livrée)
+          </span>
+        </p>
       </header>
 
-      {/* Header note globale */}
-      <div className="dedco-card p-6">
-        <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start">
-          <div className="text-center">
-            <div className="flex items-center gap-2 justify-center mb-2">
-              <Star size={32} className="text-[var(--amber)]" fill="currentColor" />
-              <span className="font-display font-bold text-5xl font-numeric">{avgRating}</span>
-            </div>
-            <p className="text-sm text-[var(--text-2)] font-numeric">{totalReviews} avis</p>
-          </div>
-          <div className="flex-1 w-full">
-            {histogram.map((h) => (
-              <div key={h.stars} className="flex items-center gap-2 mb-1.5">
-                <span className="text-xs w-6 text-right font-numeric">{h.stars}★</span>
-                <div className="flex-1 h-2 bg-[var(--bg-warm)] rounded-full overflow-hidden">
-                  <div className="h-full bg-[var(--amber)] rounded-full" style={{ width: `${(h.count / totalReviews) * 100}%` }} />
+      {totalReviews === 0 ? (
+        <div className="dedco-card p-12 text-center">
+          <Star
+            size={36}
+            className="mx-auto text-[var(--border-dark)] mb-3"
+            strokeWidth={1.5}
+          />
+          <p className="font-display font-semibold text-base mb-2">
+            Aucun avis pour le moment
+          </p>
+          <p className="text-sm text-[var(--text-3)] max-w-md mx-auto">
+            Les avis sont collectés automatiquement après chaque livraison de
+            commande. Vos premiers clients laisseront leur avis ici.
+          </p>
+        </div>
+      ) : (
+        <>
+          {/* Header note globale */}
+          <div className="dedco-card p-6">
+            <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start">
+              <div className="text-center">
+                <div className="flex items-center gap-2 justify-center mb-2">
+                  <Star
+                    size={32}
+                    className="text-[var(--amber)]"
+                    fill="currentColor"
+                  />
+                  <span className="font-display font-bold text-5xl font-numeric">
+                    {avgRating}
+                  </span>
                 </div>
-                <span className="text-xs w-8 text-[var(--text-3)] font-numeric">{h.count}</span>
+                <p className="text-sm text-[var(--text-2)] font-numeric">
+                  {totalReviews} avis vérifié{totalReviews > 1 ? "s" : ""}
+                </p>
+              </div>
+              <div className="flex-1 w-full">
+                {histogram.map((h) => (
+                  <div
+                    key={h.stars}
+                    className="flex items-center gap-2 mb-1.5"
+                  >
+                    <span className="text-xs w-6 text-right font-numeric">
+                      {h.stars}★
+                    </span>
+                    <div className="flex-1 h-2 bg-[var(--bg-warm)] rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-[var(--amber)] rounded-full transition-all"
+                        style={{
+                          width: `${(h.count / totalReviews) * 100}%`,
+                        }}
+                      />
+                    </div>
+                    <span className="text-xs w-8 text-[var(--text-3)] font-numeric">
+                      {h.count}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-3 mt-5 pt-5 border-t border-[var(--border)]">
+              {subCriteria.map((c) => (
+                <div key={c.label} className="text-center">
+                  <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">
+                    {c.label}
+                  </p>
+                  <p className="font-display font-bold text-lg font-numeric">
+                    {c.value}
+                    <span className="text-xs text-[var(--text-3)]">/5</span>
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Reviews list */}
+          <div className="space-y-3">
+            {reviews.map((r) => (
+              <div key={r.id} className="dedco-card p-5">
+                <div className="flex items-start gap-3 mb-2">
+                  <img
+                    src={r.authorAvatar}
+                    alt={r.authorName}
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between flex-wrap gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="font-display font-semibold text-sm">
+                          {r.authorName}
+                        </p>
+                        <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-[var(--forest)] bg-[var(--forest-pale)] px-2 py-0.5 rounded-full">
+                          <CheckCircle2 size={10} /> Achat vérifié
+                        </span>
+                      </div>
+                      <span className="text-xs text-[var(--text-3)] font-numeric">
+                        {formatDate(r.createdAt)}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-0.5 mt-0.5">
+                      {[1, 2, 3, 4, 5].map((s) => (
+                        <Star
+                          key={s}
+                          size={12}
+                          className={
+                            s <= r.rating
+                              ? "text-[var(--amber)]"
+                              : "text-[var(--border-dark)]"
+                          }
+                          fill="currentColor"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <p className="text-sm text-[var(--text-2)] mb-2">{r.comment}</p>
+                {(r.subRatings.qualite > 0 ||
+                  r.subRatings.delais > 0 ||
+                  r.subRatings.communication > 0) && (
+                  <div className="flex gap-4 mt-2 pt-2 border-t border-[var(--border)] text-xs text-[var(--text-3)]">
+                    {r.subRatings.qualite > 0 && (
+                      <span>
+                        Qualité :{" "}
+                        <strong className="font-numeric text-[var(--text-1)]">
+                          {r.subRatings.qualite}/5
+                        </strong>
+                      </span>
+                    )}
+                    {r.subRatings.delais > 0 && (
+                      <span>
+                        Délais :{" "}
+                        <strong className="font-numeric text-[var(--text-1)]">
+                          {r.subRatings.delais}/5
+                        </strong>
+                      </span>
+                    )}
+                    {r.subRatings.communication > 0 && (
+                      <span>
+                        Communication :{" "}
+                        <strong className="font-numeric text-[var(--text-1)]">
+                          {r.subRatings.communication}/5
+                        </strong>
+                      </span>
+                    )}
+                  </div>
+                )}
+                <button
+                  onClick={() =>
+                    navigate({ page: "messages", conversationId: `rev-${r.id}` })
+                  }
+                  className="text-xs text-[var(--amber)] font-semibold hover:underline mt-2 ml-12"
+                >
+                  Répondre
+                </button>
               </div>
             ))}
           </div>
-        </div>
-        <div className="grid grid-cols-3 gap-3 mt-5 pt-5 border-t border-[var(--border)]">
-          {subCriteria.map((c) => (
-            <div key={c.label} className="text-center">
-              <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">{c.label}</p>
-              <p className="font-display font-bold text-lg font-numeric">{c.value}<span className="text-xs text-[var(--text-3)]">/5</span></p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Reviews list */}
-      <div className="space-y-3">
-        {MOCK_REVIEWS.map((r) => (
-          <div key={r.id} className="dedco-card p-5">
-            <div className="flex items-start gap-3 mb-2">
-              <img src={r.avatar} alt={r.client} className="w-10 h-10 rounded-full object-cover" />
-              <div className="flex-1">
-                <div className="flex items-center justify-between flex-wrap gap-2">
-                  <p className="font-display font-semibold text-sm">{r.client}</p>
-                  <span className="text-xs text-[var(--text-3)]">{r.date}</span>
-                </div>
-                <div className="flex items-center gap-0.5 mt-0.5">
-                  {[1, 2, 3, 4, 5].map((s) => (
-                    <Star key={s} size={12} className={s <= r.rating ? "text-[var(--amber)]" : "text-[var(--border-dark)]"} fill="currentColor" />
-                  ))}
-                </div>
-              </div>
-            </div>
-            <p className="text-sm text-[var(--text-2)] mb-2">{r.comment}</p>
-            {r.hasReply && r.reply && (
-              <div className="ml-12 pl-4 border-l-2 border-[var(--amber)] text-sm">
-                <p className="text-xs text-[var(--text-3)] mb-0.5">Votre réponse :</p>
-                <p className="text-[var(--text-2)]">{r.reply}</p>
-              </div>
-            )}
-            {!r.hasReply && (
-              <button onClick={() => navigate({ page: "home" })} className="text-xs text-[var(--amber)] font-semibold hover:underline mt-2 ml-12">
-                Répondre
-              </button>
-            )}
-          </div>
-        ))}
-      </div>
+        </>
+      )}
     </div>
   );
 }

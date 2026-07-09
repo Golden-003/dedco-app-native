@@ -40,10 +40,6 @@ export function ProductPage({
   onAddToCart: (item: CartItem) => void;
 }) {
   const product = getProduct(productId);
-  const [selectedImageIdx, setSelectedImageIdx] = useState(0);
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
-  const [qty, setQty] = useState(1);
-  const [added, setAdded] = useState(false);
 
   if (!product) {
     return (
@@ -55,6 +51,63 @@ export function ProductPage({
       </div>
     );
   }
+
+  return (
+    <ProductPageContent
+      product={product}
+      onNavigate={onNavigate}
+      onBack={onBack}
+      favorites={favorites}
+      toggleFav={toggleFav}
+      onAddToCart={onAddToCart}
+    />
+  );
+}
+
+function ProductPageContent({
+  product,
+  onNavigate,
+  onBack,
+  favorites,
+  toggleFav,
+  onAddToCart,
+}: {
+  product: NonNullable<ReturnType<typeof getProduct>>;
+  onNavigate: (route: Route) => void;
+  onBack: () => void;
+  favorites: Set<number>;
+  toggleFav: (id: number) => void;
+  onAddToCart: (item: CartItem) => void;
+}) {
+  const [selectedImageIdx, setSelectedImageIdx] = useState(0);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [qty, setQty] = useState(1);
+  const [added, setAdded] = useState(false);
+
+  // ── Notes & avis : lecture depuis review-store (référence stable) ──
+  // On sélectionne directement `reviews` (tableau persisté) puis on calcule
+  // les agrégats avec useMemo pour éviter toute boucle de rendu.
+  const allReviews = useReviewStore((s) => s.reviews);
+
+  const productStats = useMemo(() => {
+    const rs = allReviews.filter((r) => r.productId === product.id);
+    if (rs.length === 0) return { rating: 0, count: 0 };
+    const sum = rs.reduce((acc, r) => acc + r.rating, 0);
+    return {
+      rating: Math.round((sum / rs.length) * 10) / 10,
+      count: rs.length,
+    };
+  }, [allReviews, product.id]);
+
+  const artisanStats = useMemo(() => {
+    const rs = allReviews.filter((r) => r.artisanId === product.artisanId);
+    if (rs.length === 0) return { rating: 0, count: 0 };
+    const sum = rs.reduce((acc, r) => acc + r.rating, 0);
+    return {
+      rating: Math.round((sum / rs.length) * 10) / 10,
+      count: rs.length,
+    };
+  }, [allReviews, product.artisanId]);
 
   const artisan = getArtisan(product.artisanId);
   const isFav = favorites.has(product.id);
@@ -145,12 +198,18 @@ export function ProductPage({
           )}
           <h1 className="display-lg mb-3">{product.name}</h1>
 
-          {/* Rating */}
-          <div className="flex items-center gap-2 mb-4 text-sm">
-            <Stars rating={product.rating} size={16} />
-            <span className="font-semibold font-numeric">{product.rating}</span>
-            <span className="text-ink-mute">·</span>
-            <span className="text-ink-soft font-numeric">{product.reviews} avis</span>
+          {/* Rating — alimenté par les avis vérifiés (review-store) */}
+          <div className="flex items-center gap-2 mb-4 text-sm flex-wrap">
+            {productStats.count > 0 ? (
+              <>
+                <Stars rating={productStats.rating} size={16} />
+                <span className="font-semibold font-numeric">{productStats.rating}</span>
+                <span className="text-ink-mute">·</span>
+                <span className="text-ink-soft font-numeric">{productStats.count} avis vérifié{productStats.count > 1 ? "s" : ""}</span>
+              </>
+            ) : (
+              <span className="text-ink-mute italic">Nouveau produit · pas encore d'avis vérifié</span>
+            )}
             <span className="text-ink-mute">·</span>
             {product.stock > 0 ? (
               <span className="text-forest font-medium flex items-center gap-1">
@@ -349,11 +408,17 @@ export function ProductPage({
               </p>
               <div className="flex items-center gap-4 text-sm">
                 <div className="flex items-center gap-1">
-                  <Stars rating={artisan.rating} size={14} />
-                  <span className="font-semibold font-numeric">{artisan.rating}</span>
-                  <span className="text-ink-mute font-numeric">
-                    ({artisan.reviews} avis)
-                  </span>
+                  {artisanStats.count > 0 ? (
+                    <>
+                      <Stars rating={artisanStats.rating} size={14} />
+                      <span className="font-semibold font-numeric">{artisanStats.rating}</span>
+                      <span className="text-ink-mute font-numeric">
+                        ({artisanStats.count} avis vérifié{artisanStats.count > 1 ? "s" : ""})
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-ink-mute italic text-xs">Pas encore d'avis vérifié</span>
+                  )}
                 </div>
                 <button
                   type="button"
@@ -387,7 +452,7 @@ export function ProductPage({
       )}
 
       {/* Avis vérifiés */}
-      <VerifiedReviews productId={productId} artisanId={product.artisanId} />
+      <VerifiedReviews productId={product.id} artisanId={product.artisanId} />
     </div>
   );
 }

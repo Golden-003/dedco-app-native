@@ -6,17 +6,34 @@ import {
   ShieldCheck, ChevronRight, Camera, AlertTriangle, MessageSquare,
   MapPin, ShoppingBag,
 } from "lucide-react";
-import { useDedcoStore } from "@/lib/store";
+import { useDedcoStore, type Order, type OrderStatus } from "@/lib/store";
 import { formatFCFA } from "@/lib/dedco-data";
+import { useReviewStore } from "@/lib/review-store";
 
 function formatDate(d: Date) {
   return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" });
 }
 
+function formatDateFromISO(iso?: string) {
+  if (!iso) return "";
+  return formatDate(new Date(iso));
+}
+
 // ============================================================
-// 2 TYPES DE COMMANDES
-// - marketplace : produit en stock → expédition → livraison (pas de livraison)
-// - custom : commande sur mesure via brief → fabrication → livraison photos
+// STATUTS DE COMMANDE — badge + label
+// ============================================================
+
+const STATUS_BADGES: Record<OrderStatus, { label: string; badge: string }> = {
+  'payé':            { label: 'Payé',            badge: 'dedco-badge dedco-badge-amber' },
+  'en_fabrication':  { label: 'En fabrication',  badge: 'dedco-badge dedco-badge-terra' },
+  'expédié':         { label: 'Expédié',         badge: 'dedco-badge dedco-badge-amber' },
+  'livré':           { label: 'Livré',           badge: 'dedco-badge dedco-badge-forest' },
+  'litige':          { label: 'Litige',          badge: 'dedco-badge dedco-badge-terra-solid' },
+};
+
+// ============================================================
+// 2 TYPES DE COMMANDES (mocks fallback utilisés pour les anciens
+// orderId non trouvés dans le store — démo / liens partagés)
 // ============================================================
 
 const MOCK_MARKETPLACE_ORDER = {
@@ -24,22 +41,24 @@ const MOCK_MARKETPLACE_ORDER = {
   invoiceId: "FAC-202606-0042",
   date: new Date("2026-06-23"),
   type: "marketplace" as const,
+  status: "livré" as OrderStatus,
   items: [
-    { productId: 1, name: "Table basse Bénin Wax", artisanName: "Kofi Akindélé", price: 185000, qty: 1, color: "Naturel & Wax bleu", image: "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=400&q=80", dimensions: "120 x 60 x 45 cm" },
-    { productId: 3, name: "Lampe Abat-jour Bogolan", artisanName: "Fatou Loko", price: 68000, qty: 2, color: "Bogolan classique", image: "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?auto=format&fit=crop&w=400&q=80" },
+    { productId: 1, name: "Table basse Bénin Wax", artisanName: "Kofi Akindélé", artisanId: 1, price: 185000, qty: 1, color: "Naturel & Wax bleu", image: "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=400&q=80", dimensions: "120 x 60 x 45 cm" },
+    { productId: 3, name: "Lampe Abat-jour Bogolan", artisanName: "Fatou Loko", artisanId: 3, price: 68000, qty: 2, color: "Bogolan classique", image: "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?auto=format&fit=crop&w=400&q=80" },
   ],
   subtotal: 321000,
+  shipping: 5000,
   garantie: 4815,
-  total: 325815,
+  total: 330815,
   paymentMethod: "MTN Mobile Money",
   paymentRef: "FEDAPAY-TX-789456123",
-  delivery: { ville: "Cotonou", quartier: "Akpakpa", adresse: "12 rue des Lagunes", phone: "+229 01 97 45 23 10", livreur: "Jean-Baptiste A.", livreurPhone: "+229 01 96 78 45 12" },
+  delivery: { firstName: "Sophie", lastName: "Kossou", phone: "+229 01 97 45 23 10", ville: "Cotonou", quartier: "Akpakpa", adresse: "12 rue des Lagunes", livreur: "Jean-Baptiste A.", livreurPhone: "+229 01 96 78 45 12" },
   // Marketplace: simple shipping timeline (NO fabrication, NO livraison)
   timeline: [
-    { label: "Paiement confirmé", date: "23 juin 2026, 14:30", done: true, icon: ShieldCheck },
-    { label: "Préparation de l'expédition", date: "24 juin 2026", done: true, icon: Package },
-    { label: "Expédié", date: "25 juin 2026", done: true, icon: Truck, photo: "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=400&q=80" },
-    { label: "Livré", date: "26 juin 2026, 11:20", done: true, icon: CheckCircle2, photo: "https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?auto=format&fit=crop&w=400&q=80" },
+    { label: "Paiement confirmé", date: "23 juin 2026, 14:30", done: true },
+    { label: "Préparation de l'expédition", date: "24 juin 2026", done: true },
+    { label: "Expédié", date: "25 juin 2026", done: true },
+    { label: "Livré", date: "26 juin 2026, 11:20", done: true },
   ],
 };
 
@@ -48,26 +67,72 @@ const MOCK_CUSTOM_ORDER = {
   invoiceId: "FAC-202606-0051",
   date: new Date("2026-06-20"),
   type: "custom" as const,
-  briefId: "BRF-ART-001",
+  status: "livré" as OrderStatus,
   items: [
-    { productId: 0, name: "Table basse sur mesure (bois iroko + wax)", artisanName: "Kofi Akindélé", price: 220000, qty: 1, color: "Naturel + wax bleu Ankara", image: "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=400&q=80", dimensions: "120 x 60 x 45 cm" },
+    { productId: 0, name: "Table basse sur mesure (bois iroko + wax)", artisanName: "Kofi Akindélé", artisanId: 1, price: 220000, qty: 1, color: "Naturel + wax bleu Ankara", image: "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=400&q=80", dimensions: "120 x 60 x 45 cm" },
   ],
   subtotal: 220000,
+  shipping: 5000,
   garantie: 3300,
-  total: 223300,
+  total: 228300,
   paymentMethod: "Moov Money",
   paymentRef: "FEDAPAY-TX-789456789",
-  delivery: { ville: "Cotonou", quartier: "Akpakpa", adresse: "12 rue des Lagunes", phone: "+229 01 97 45 23 10", livreur: "Jean-Baptiste A.", livreurPhone: "+229 01 96 78 45 12" },
-  // Custom: fabrication + confirmations (T1 enlèvement, T2 transport, T3 remise)
-  fabrication: { status: "terminee", startDate: "21 juin", endDate: "10 juillet", progress: 100 },
+  delivery: { firstName: "Sophie", lastName: "Kossou", phone: "+229 01 97 45 23 10", ville: "Cotonou", quartier: "Akpakpa", adresse: "12 rue des Lagunes", livreur: "Jean-Baptiste A.", livreurPhone: "+229 01 96 78 45 12" },
   timeline: [
-    { label: "Paiement confirmé (Mobile Money)", date: "20 juin 2026, 16:00", done: true, icon: ShieldCheck },
-    { label: "Fabrication en atelier", date: "21 juin → 10 juillet", done: true, icon: Package },
-    { label: "T1 — Produit prêt (photo enlèvement)", date: "10 juillet 2026", done: true, icon: CheckCircle2, photo: "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=400&q=80" },
-    { label: "T2 — En transit (photo transport)", date: "12 juillet 2026", done: true, icon: Truck, photo: "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=400&q=80" },
-    { label: "T3 — Remis au client (photo livraison)", date: "12 juillet 2026, 16:45", done: true, icon: CheckCircle2, photo: "https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?auto=format&fit=crop&w=400&q=80" },
+    { label: "Paiement confirmé (Mobile Money)", date: "20 juin 2026, 16:00", done: true },
+    { label: "Fabrication en atelier", date: "21 juin → 10 juillet", done: true },
+    { label: "T1 — Produit prêt (photo enlèvement)", date: "10 juillet 2026", done: true },
+    { label: "T2 — En transit (photo transport)", date: "12 juillet 2026", done: true },
+    { label: "T3 — Remis au client (photo livraison)", date: "12 juillet 2026, 16:45", done: true },
   ],
 };
+
+// Normalise une commande (mock legacy OU Order du store) en objet unifié
+// utilisable par les composants ci-dessous.
+type NormalizedOrder = {
+  id: string;
+  invoiceId: string;
+  date: Date;
+  type: "marketplace" | "custom";
+  status: OrderStatus;
+  items: { productId: number; name: string; artisanName: string; artisanId?: number; price: number; qty: number; color?: string; image: string; dimensions?: string }[];
+  subtotal: number;
+  shipping: number;
+  garantie: number;
+  total: number;
+  paymentMethod: string;
+  paymentRef: string;
+  delivery: { firstName?: string; lastName?: string; phone: string; ville: string; quartier: string; adresse?: string; indication?: string; livreur?: string; livreurPhone?: string };
+  timeline: { label: string; date: string; done: boolean }[];
+  deliveredAt?: string;
+};
+
+function normalizeOrder(o: Order): NormalizedOrder {
+  return {
+    id: o.id,
+    invoiceId: o.invoiceId,
+    date: new Date(o.createdAt),
+    type: o.type,
+    status: o.status,
+    items: o.items,
+    subtotal: o.subtotal,
+    shipping: o.shipping,
+    garantie: o.garantie,
+    total: o.total,
+    paymentMethod: o.paymentMethod,
+    paymentRef: o.paymentRef,
+    delivery: {
+      firstName: o.delivery.firstName,
+      lastName: o.delivery.lastName,
+      phone: o.delivery.phone,
+      ville: o.delivery.ville,
+      quartier: o.delivery.quartier,
+      indication: o.delivery.indication,
+    },
+    timeline: o.timeline,
+    deliveredAt: o.deliveredAt,
+  };
+}
 
 // ============================================================
 // PAGE: Order Confirmation
@@ -75,7 +140,17 @@ const MOCK_CUSTOM_ORDER = {
 
 export function OrderConfirmationPage({ orderId }: { orderId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
-  const order = orderId.includes("0051") ? MOCK_CUSTOM_ORDER : MOCK_MARKETPLACE_ORDER;
+  const storeOrder = useDedcoStore((s) => s.orders.find((o) => o.id === orderId));
+
+  // Fallback sur mock si la commande n'est pas dans le store (legacy / démo)
+  let order: NormalizedOrder;
+  if (storeOrder) {
+    order = normalizeOrder(storeOrder);
+  } else if (orderId.includes("0051")) {
+    order = MOCK_CUSTOM_ORDER as NormalizedOrder;
+  } else {
+    order = MOCK_MARKETPLACE_ORDER as NormalizedOrder;
+  }
   const isCustom = order.type === "custom";
 
   return (
@@ -177,7 +252,16 @@ export function InvoicePage({ orderId }: { orderId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
   const currentUser = useDedcoStore((s) => s.currentUser);
   const isArtisan = currentUser?.role === "artisan";
-  const order = orderId.includes("0051") ? MOCK_CUSTOM_ORDER : MOCK_MARKETPLACE_ORDER;
+  const storeOrder = useDedcoStore((s) => s.orders.find((o) => o.id === orderId));
+
+  let order: NormalizedOrder;
+  if (storeOrder) {
+    order = normalizeOrder(storeOrder);
+  } else if (orderId.includes("0051")) {
+    order = MOCK_CUSTOM_ORDER as NormalizedOrder;
+  } else {
+    order = MOCK_MARKETPLACE_ORDER as NormalizedOrder;
+  }
 
   return (
     <div className="min-h-screen bg-[var(--bg-cream)] py-8">
@@ -214,8 +298,12 @@ export function InvoicePage({ orderId }: { orderId: string }) {
           <div className="grid grid-cols-2 gap-8 mb-8">
             <div>
               <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">Facturé à</p>
-              <p className="font-semibold text-sm">Sophie Kossou</p>
-              <p className="text-sm text-[var(--text-2)]">{order.delivery.adresse}</p>
+              <p className="font-semibold text-sm">
+                {order.delivery.firstName ? `${order.delivery.firstName} ${order.delivery.lastName}`.trim() : "Client Dedco"}
+              </p>
+              {order.delivery.indication && (
+                <p className="text-sm text-[var(--text-2)]">{order.delivery.indication}</p>
+              )}
               <p className="text-sm text-[var(--text-2)]">{order.delivery.quartier}, {order.delivery.ville}</p>
               <p className="text-sm text-[var(--text-2)] font-numeric">{order.delivery.phone}</p>
             </div>
@@ -295,10 +383,36 @@ export function InvoicePage({ orderId }: { orderId: string }) {
 export function OrderTrackingPage({ orderId }: { orderId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
   const currentUser = useDedcoStore((s) => s.currentUser);
+  const markOrderDelivered = useDedcoStore((s) => s.markOrderDelivered);
+  const storeOrder = useDedcoStore((s) => s.orders.find((o) => o.id === orderId));
+  const hasReviewed = useReviewStore((s) => s.hasReviewed);
   const isArtisan = currentUser?.role === "artisan";
-  const order = orderId.includes("0051") ? MOCK_CUSTOM_ORDER : MOCK_MARKETPLACE_ORDER;
+
+  // Fallback sur mock si commande non trouvée dans le store
+  let order: NormalizedOrder;
+  if (storeOrder) {
+    order = normalizeOrder(storeOrder);
+  } else if (orderId.includes("0051")) {
+    order = MOCK_CUSTOM_ORDER as NormalizedOrder;
+  } else {
+    order = MOCK_MARKETPLACE_ORDER as NormalizedOrder;
+  }
   const isCustom = order.type === "custom";
-  const [showPhoto, setShowPhoto] = useState<number | null>(null);
+  const isDelivered = order.status === "livré";
+  const alreadyReviewed = hasReviewed(order.id);
+  const [showPhoto] = useState<number | null>(null);
+
+  // Icônes Lucide pour chaque étape de timeline — déterminées par mot-clé
+  // dans le label (au lieu d'être stockées dans l'objet timeline).
+  function iconForLabel(label: string) {
+    if (/paiement/i.test(label)) return ShieldCheck;
+    if (/préparation|fabrication/i.test(label)) return Package;
+    if (/expédié|transit|t2/i.test(label)) return Truck;
+    if (/livré|remis|t3|t1.*prêt/i.test(label)) return CheckCircle2;
+    return Clock;
+  }
+
+  const statusBadge = STATUS_BADGES[order.status];
 
   return (
     <div className="p-4 sm:p-6 max-w-3xl mx-auto">
@@ -310,13 +424,20 @@ export function OrderTrackingPage({ orderId }: { orderId: string }) {
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="dedco-badge dedco-badge-forest"><CheckCircle2 size={11} /> Livré</span>
+              <span className={statusBadge.badge}>
+                <CheckCircle2 size={11} /> {statusBadge.label}
+              </span>
               <span className={`dedco-badge ${isCustom ? "dedco-badge-amber" : "dedco-badge-gray"}`}>
                 {isCustom ? "Sur mesure" : "En stock"}
               </span>
             </div>
             <h1 className="display-lg">Commande {order.id}</h1>
-            <p className="text-sm text-[var(--text-2)] font-numeric">Passée le {formatDate(order.date)}</p>
+            <p className="text-sm text-[var(--text-2)] font-numeric">
+              Passée le {formatDate(order.date)}
+              {isDelivered && order.deliveredAt && (
+                <> · Livrée le {formatDateFromISO(order.deliveredAt)}</>
+              )}
+            </p>
           </div>
           <button onClick={() => navigate({ page: "invoice", orderId: order.id })} className="dedco-btn dedco-btn-ghost dedco-btn-sm">
             <FileText size={14} /> Facture
@@ -331,7 +452,7 @@ export function OrderTrackingPage({ orderId }: { orderId: string }) {
         </h2>
         <div className="space-y-4">
           {order.timeline.map((t, i) => {
-            const Icon = t.icon;
+            const Icon = iconForLabel(t.label);
             return (
               <div key={i} className="flex gap-4">
                 <div className="flex flex-col items-center">
@@ -346,22 +467,27 @@ export function OrderTrackingPage({ orderId }: { orderId: string }) {
                       <p className={`text-sm font-semibold ${t.done ? "" : "text-[var(--text-3)]"}`}>{t.label}</p>
                       <p className="text-xs text-[var(--text-3)] font-numeric">{t.date}</p>
                     </div>
-                    {t.photo && (
-                      <button onClick={() => setShowPhoto(showPhoto === i ? null : i)} className="text-xs text-[var(--amber)] font-semibold flex items-center gap-1 hover:underline">
-                        <Camera size={12} /> Photo
-                      </button>
-                    )}
                   </div>
-                  {showPhoto === i && t.photo && (
-                    <div className="mt-2">
-                      <img src={t.photo} alt={`Photo ${i+1}`} className="w-32 h-32 rounded-lg object-cover border-2 border-[var(--amber)]" />
-                    </div>
-                  )}
                 </div>
               </div>
             );
           })}
         </div>
+
+        {/* Bouton démo : marquer comme livré (pour activer le parcours d'avis) */}
+        {!isDelivered && (
+          <div className="mt-5 pt-5 border-t border-[var(--border)]">
+            <p className="text-xs text-[var(--text-3)] mb-2 italic">
+              Démo : pour tester le parcours d'avis, simulez la livraison.
+            </p>
+            <button
+              onClick={() => markOrderDelivered(order.id)}
+              className="dedco-btn dedco-btn-secondary dedco-btn-sm"
+            >
+              <CheckCircle2 size={14} /> Marquer cette commande comme livrée
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Articles */}
@@ -388,14 +514,17 @@ export function OrderTrackingPage({ orderId }: { orderId: string }) {
         <div className="grid sm:grid-cols-2 gap-4 text-sm">
           <div>
             <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Adresse</p>
-            <p>{order.delivery.adresse}</p>
+            <p>
+              {order.delivery.firstName ? `${order.delivery.firstName} ${order.delivery.lastName}`.trim() : ""}
+            </p>
+            {order.delivery.indication && <p>{order.delivery.indication}</p>}
             <p>{order.delivery.quartier}, {order.delivery.ville}</p>
             <p className="font-numeric">{order.delivery.phone}</p>
           </div>
           <div>
             <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Livreur</p>
-            <p>{order.delivery.livreur}</p>
-            <p className="font-numeric text-[var(--text-3)]">{order.delivery.livreurPhone}</p>
+            <p>{order.delivery.livreur ?? "À assigner"}</p>
+            <p className="font-numeric text-[var(--text-3)]">{order.delivery.livreurPhone ?? "—"}</p>
           </div>
         </div>
       </div>
@@ -416,9 +545,22 @@ export function OrderTrackingPage({ orderId }: { orderId: string }) {
           </>
         ) : (
           <>
-            <button onClick={() => navigate({ page: "avis-livraison", orderId: order.id })} className="dedco-btn dedco-btn-primary">
-              <CheckCircle2 size={16} /> Laisser un avis
-            </button>
+            {/* Bouton "Laisser un avis" — visible uniquement si :
+                1. La commande est livrée
+                2. L'utilisateur n'a pas déjà laissé un avis pour cette commande */}
+            {isDelivered && !alreadyReviewed && (
+              <button
+                onClick={() => navigate({ page: "avis-livraison", orderId: order.id })}
+                className="dedco-btn dedco-btn-primary"
+              >
+                <CheckCircle2 size={16} /> Laisser un avis
+              </button>
+            )}
+            {isDelivered && alreadyReviewed && (
+              <span className="dedco-badge dedco-badge-forest px-3 py-2 text-sm">
+                <CheckCircle2 size={14} /> Avis déjà publié — merci !
+              </span>
+            )}
             <button
               onClick={() => navigate({ page: "messages", conversationId: `order-${order.id}` })}
               className="dedco-btn dedco-btn-ghost"

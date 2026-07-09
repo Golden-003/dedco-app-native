@@ -61,6 +61,7 @@ const STEPS = [
 export function CheckoutPage() {
   const cart = useDedcoStore((s) => s.cart);
   const navigate = useDedcoStore((s) => s.navigate);
+  const placeOrder = useDedcoStore((s) => s.placeOrder);
   const [step, setStep] = useState(1);
 
   // Address fields
@@ -90,7 +91,39 @@ export function CheckoutPage() {
   };
 
   const handlePay = () => {
-    const orderId = `CMD-2026-${String(Math.floor(1000 + Math.random() * 9000))}`;
+    if (cart.length === 0) return;
+    // ── Sauvegarde réelle de la commande dans le store ──
+    // Avant : on générait juste un orderId sans rien persister.
+    // Maintenant : placeOrder crée un Order complet (items, livraison,
+    // paiement, timeline) qui sera lisible par order-confirmation,
+    // order-tracking, order-history et avis-livraison.
+    const items = cart.map((c) => {
+      const artisan = getArtisan(c.artisanId);
+      return {
+        productId: c.id,
+        name: c.name,
+        artisanId: c.artisanId,
+        artisanName: artisan?.name ?? "Artisan Dedco",
+        price: c.price,
+        qty: c.qty,
+        color: c.selectedColor,
+        image: c.images[0] ?? "",
+        dimensions: c.dimensions,
+      };
+    });
+    const orderId = placeOrder({
+      items,
+      delivery: {
+        firstName,
+        lastName,
+        phone,
+        ville,
+        quartier,
+        indication,
+      },
+      paymentMethod: PAYMENT_METHODS.find((m) => m.id === paymentMethod)?.label ?? "Mobile Money",
+      type: "marketplace",
+    });
     navigate({ page: "payment", orderId });
   };
 

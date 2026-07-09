@@ -3,6 +3,53 @@ import { persist } from 'zustand/middleware';
 import type { CartItem } from './dedco-types';
 
 // ============================================================
+// Order System — vraies commandes persistées
+// ============================================================
+
+export type OrderStatus = 'payé' | 'en_fabrication' | 'expédié' | 'livré' | 'litige';
+
+export type OrderType = 'marketplace' | 'custom';
+
+export interface OrderItem {
+  productId: number;
+  name: string;
+  artisanId: number;
+  artisanName: string;
+  price: number;
+  qty: number;
+  color?: string;
+  image: string;
+  dimensions?: string;
+}
+
+export interface OrderDelivery {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  ville: string;
+  quartier: string;
+  indication?: string;
+}
+
+export interface Order {
+  id: string;
+  invoiceId: string;
+  type: OrderType;
+  status: OrderStatus;
+  items: OrderItem[];
+  subtotal: number;
+  shipping: number;
+  garantie: number;
+  total: number;
+  paymentMethod: string;
+  paymentRef: string;
+  delivery: OrderDelivery;
+  createdAt: string;       // ISO
+  deliveredAt?: string;    // ISO — set when status becomes 'livré'
+  timeline: { label: string; date: string; done: boolean }[];
+}
+
+// ============================================================
 // AppRoute — internal SPA routing (72+ pages on single / route)
 // ============================================================
 
@@ -143,6 +190,7 @@ interface DedcoState {
   cartOpen: boolean;
   searchOpen: boolean;
   currentUser: CurrentUser | null;
+  orders: Order[];
 
   // Navigation
   navigate: (route: AppRoute) => void;
@@ -168,6 +216,16 @@ interface DedcoState {
   // Overlay toggles
   setCartOpen: (open: boolean) => void;
   setSearchOpen: (open: boolean) => void;
+
+  // Orders
+  placeOrder: (input: {
+    items: OrderItem[];
+    delivery: OrderDelivery;
+    paymentMethod: string;
+    type: OrderType;
+  }) => string; // returns orderId
+  getOrder: (orderId: string) => Order | undefined;
+  markOrderDelivered: (orderId: string) => void;
 }
 
 // ============================================================
@@ -186,6 +244,7 @@ export const useDedcoStore = create<DedcoState>()(
   cartOpen: false,
   searchOpen: false,
   currentUser: null,
+  orders: [],
 
   // ── Navigation ──
   navigate: (route) => {
@@ -288,6 +347,89 @@ export const useDedcoStore = create<DedcoState>()(
   // ── Overlay Toggles ──
   setCartOpen: (open) => set({ cartOpen: open }),
   setSearchOpen: (open) => set({ searchOpen: open }),
+
+  // ── Orders ──
+  placeOrder: ({ items, delivery, paymentMethod, type }) => {
+    // Génère un ID de commande unique
+    const seq = Math.floor(1000 + Math.random() * 9000);
+    const orderId = `CMD-2026-${seq}`;
+    const invoiceId = `FAC-2026${String(new Date().getMonth() + 1).padStart(2, '0')}-${seq}`;
+    const paymentRef = `FEDAPAY-TX-${Date.now().toString().slice(-9)}`;
+    const now = new Date();
+    const subtotal = items.reduce((s, it) => s + it.price * it.qty, 0);
+    const shipping = items.length > 0 ? 5000 : 0;
+    const garantie = Math.round(subtotal * 0.015);
+    const total = subtotal + shipping + garantie;
+
+    // Pour les commandes marketplace, on simule une expédition immédiate :
+    // le statut démarre à 'payé' et la timeline s'étale sur 3 jours.
+    // (Pour custom, on démarre en 'en_fabrication'.)
+    const initialStatus: OrderStatus = type === 'custom' ? 'en_fabrication' : 'payé';
+
+    // Pour la démo, on pré-remplit une timeline complète (toutes étapes
+    // marquées done: false sauf la 1ère). Le statut « livré » ne sera
+    // déclenché que via markOrderDelivered (manuel pour l'instant).
+    const timeline = type === 'custom'
+      ? [
+          { label: 'Paiement confirmé', date: now.toLocaleString('fr-FR'), done: true },
+          { label: 'Fabrication en atelier', date: 'En cours', done: false },
+          { label: 'T1 — Produit prêt', date: 'À venir', done: false },
+          { label: 'T2 — En transit', date: 'À venir', done: false },
+          { label: 'T3 — Remis au client', date: 'À venir', done: false },
+        ]
+      : [
+          { label: 'Paiement confirmé', date: now.toLocaleString('fr-FR'), done: true },
+          { label: 'Préparation de l\'expédition', date: 'À venir', done: false },
+          { label: 'Expédié', date: 'À venir', done: false },
+          { label: 'Livré', date: 'À venir', done: false },
+        ];
+
+    const newOrder: Order = {
+      id: orderId,
+      invoiceId,
+      type,
+      status: initialStatus,
+      items,
+      subtotal,
+      shipping,
+      garantie,
+      total,
+      paymentMethod,
+      paymentRef,
+      delivery,
+      createdAt: now.toISOString(),
+      timeline,
+    };
+
+    set((state) => ({ orders: [newOrder, ...state.orders] }));
+    return orderId;
+  },
+
+  getOrder: (orderId) => {
+    return get().orders.find((o) => o.id === orderId);
+  },
+
+  markOrderDelivered: (orderId) => {
+    set((state) => ({
+      orders: state.orders.map((o) => {
+        if (o.id !== orderId) return o;
+        const deliveredAt = new Date().toISOString();
+        // Toutes les étapes de la timeline deviennent done: true
+        return {
+          ...o,
+          status: 'livré' as OrderStatus,
+          deliveredAt,
+          timeline: o.timeline.map((t) => ({
+            ...t,
+            done: true,
+            date: t.date === 'À venir' || t.date === 'En cours'
+              ? new Date().toLocaleString('fr-FR')
+              : t.date,
+          })),
+        };
+      }),
+    }));
+  },
     }),
     {
       name: 'dedco-storage',
@@ -297,6 +439,7 @@ export const useDedcoStore = create<DedcoState>()(
         favorites: state.favorites,
         savedScenes: state.savedScenes,
         currentUser: state.currentUser,
+        orders: state.orders,
       }),
     }
   )
