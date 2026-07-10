@@ -10,6 +10,7 @@ import {
   MapPin,
   Star,
   BadgeCheck,
+  ChevronLeft,
   ChevronRight,
 } from "lucide-react";
 import {
