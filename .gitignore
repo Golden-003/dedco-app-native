@@ -87,3 +87,27 @@ server.log
 # Skills directory
 /skills/
 app-prototype/
+
+# ============================================================
+# DEDCO — Fichiers de design / docs / prototypes (pas dans le repo)
+# ============================================================
+# Ces fichiers sont des livrables de design, pas du code source.
+# Ils alourdissent le repo inutilement. Les garder en local seulement.
+public/*.zip
+public/*.pdf
+public/dedcco-*.html
+public/dedco-*.html
+public/app-*.html
+public/app-screens/
+public/brand-book/
+public/dedco-storyboard/
+public/public/
+public/DEDCCO-*.md
+
+# Scripts de dev / génération de PDFs (pas du code source)
+/scripts/
+
+# Docs de travail à la racine
+AUDIT-PLAN-ACTION.md
+.vercel-trigger
+Caddyfile
