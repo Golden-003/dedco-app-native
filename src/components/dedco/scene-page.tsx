@@ -185,10 +185,11 @@ export function ScenePage({
               </div>
             )}
 
-            {/* ── Actions claires ──
-                1. Acheter les produits de la scène (ajoute tout au panier)
-                2. Demander un projet sur-mesure (contacte le designer pour
-                   recreer ce look adapté à votre espace) */}
+            {/* ── Action ──
+                La section Inspirations est dédiée aux maisons de déco.
+                On propose uniquement l'achat des produits de la scène.
+                (Pas de bouton "projet sur-mesure" — ce parcours est réservé
+                aux designers individuels, pas aux maisons de déco.) */}
             <button
               type="button"
               onClick={() => {
@@ -203,13 +204,6 @@ export function ScenePage({
               className="dedco-btn dedco-btn-primary w-full mt-2"
             >
               <ShoppingBag size={18} /> Ajouter les {scene.hotspots.length} produits au panier
-            </button>
-            <button
-              type="button"
-              onClick={() => onNavigate({ name: "brief" })}
-              className="dedco-btn dedco-btn-secondary w-full mt-2"
-            >
-              Demander un projet sur-mesure
             </button>
           </div>
         </div>
