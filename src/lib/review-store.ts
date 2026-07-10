@@ -2,6 +2,7 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { useMemo } from 'react';
 
 // ============================================================
 // REVIEW STORE — Avis vérifiés (liés à une commande livrée)
@@ -280,3 +281,36 @@ export const useReviewStore = create<ReviewState>()(
     }
   )
 );
+
+// ============================================================
+// HELPER HOOKS — pour composants qui affichent des notes
+// Évite de répéter useReviewStore + useMemo dans chaque fichier.
+// ============================================================
+
+/** Retourne { rating, count } pour un produit donné (depuis review-store) */
+export function useProductRating(productId: number) {
+  const allReviews = useReviewStore((s) => s.reviews);
+  return useMemo(() => {
+    const rs = allReviews.filter((r) => r.productId === productId);
+    if (rs.length === 0) return { rating: 0, count: 0 };
+    const sum = rs.reduce((acc, r) => acc + r.rating, 0);
+    return {
+      rating: Math.round((sum / rs.length) * 10) / 10,
+      count: rs.length,
+    };
+  }, [allReviews, productId]);
+}
+
+/** Retourne { rating, count } pour un artisan donné (depuis review-store) */
+export function useArtisanRating(artisanId: number) {
+  const allReviews = useReviewStore((s) => s.reviews);
+  return useMemo(() => {
+    const rs = allReviews.filter((r) => r.artisanId === artisanId);
+    if (rs.length === 0) return { rating: 0, count: 0 };
+    const sum = rs.reduce((acc, r) => acc + r.rating, 0);
+    return {
+      rating: Math.round((sum / rs.length) * 10) / 10,
+      count: rs.length,
+    };
+  }, [allReviews, artisanId]);
+}

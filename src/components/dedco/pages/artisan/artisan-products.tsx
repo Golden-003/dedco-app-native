@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
 import { PRODUCTS, formatFCFA } from "@/lib/dedco-data-expanded";
+import { ProductRatingBadge } from "@/components/dedco/cards";
 
 // ── Enhanced product list for Kofi (artisanId 1) with statuses ──
 type ProductStatus = "en_ligne" | "en_attente" | "epuise";
@@ -290,7 +291,7 @@ export function ArtisanProductsPage() {
                         </div>
                       </div>
                       <p className="text-xs text-[var(--text-3)] mt-1">
-                        Stock : {product.stock > 0 ? product.stock : "Rupture"} · {product.reviews} avis
+                        Stock : {product.stock > 0 ? product.stock : "Rupture"}
                       </p>
                     </div>
                   </div>
@@ -378,9 +379,7 @@ export function ArtisanProductsPage() {
                         <span className={status.badge}>{status.label}</span>
                       </td>
                       <td className="px-4 py-3">
-                        <span className="font-numeric text-sm text-[var(--text-2)]">
-                          {product.reviews}
-                        </span>
+                        <ProductRatingBadge productId={product.id} showCount={true} />
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center justify-end gap-1">

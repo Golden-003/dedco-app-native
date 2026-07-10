@@ -16,6 +16,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useDedcoStore } from "@/lib/store";
 import { ARTISANS, CATEGORIES, DESIGNERS, PRODUCTS } from "@/lib/dedco-data";
 import { ALL_SCENES } from "@/lib/dedco-data-expanded";
+import { ArtisanRatingBadge } from "@/components/dedco/cards";
 
 // ============================================================
 // Onboarding Steps
@@ -245,6 +246,12 @@ function StepExplore() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05 }}
             whileHover={{ y: -3 }}
+            onClick={() => {
+              if (typeof window !== "undefined") {
+                window.location.hash = `category=${cat.slug}`;
+              }
+              navigate({ page: "marketplace" });
+            }}
           >
             <div className="text-3xl mb-2 group-hover:scale-110 transition-transform">
               {cat.icon}
@@ -311,9 +318,8 @@ function StepArtisans() {
               <p className="text-xs text-ink-mute truncate mb-1">
                 {artisan.specialty}
               </p>
-              <div className="flex items-center justify-center gap-1 text-xs text-amber">
-                <Star size={11} fill="currentColor" />
-                <span className="font-numeric">{artisan.rating}</span>
+              <div className="flex items-center justify-center gap-1 text-xs">
+                <ArtisanRatingBadge artisanId={artisan.id} showCount={false} />
               </div>
               <span className="dedco-badge dedco-badge-terra mt-2 text-[10px]">
                 {artisan.level}
@@ -395,6 +401,7 @@ function StepPersonalize() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
             whileHover={{ y: -3 }}
+            onClick={() => navigate({ page: "scene", slug: scene.slug } as any)}
           >
             <div className="aspect-[4/3] overflow-hidden bg-warm">
               <img

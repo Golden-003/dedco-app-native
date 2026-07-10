@@ -18,6 +18,7 @@ import {
   formatFCFA,
 } from "@/lib/dedco-data";
 import { ALL_PRODUCTS } from "@/lib/dedco-data-expanded";
+import { ArtisanRatingBadge, ProductRatingBadge } from "@/components/dedco/cards";
 
 // ============================================================
 // SearchResultsPage
@@ -436,10 +437,7 @@ export function SearchResultsPage() {
                       </span>
                     </div>
                     <div className="flex items-center gap-3 text-xs text-ink-soft">
-                      <div className="flex items-center gap-1">
-                        <Star size={12} className="text-amber" fill="currentColor" />
-                        <span className="font-numeric">{artisan.rating}</span>
-                      </div>
+                      <ArtisanRatingBadge artisanId={artisan.id} showCount={false} />
                       <div className="flex items-center gap-1">
                         <MapPin size={12} />
                         {artisan.city}
@@ -497,9 +495,7 @@ export function SearchResultsPage() {
                           {formatFCFA(product.price)}
                         </p>
                         <div className="flex items-center gap-1 text-xs text-ink-mute mt-1.5">
-                          <Star size={11} className="text-amber" fill="currentColor" />
-                          <span className="font-numeric">{product.rating}</span>
-                          <span className="font-numeric">({product.reviews})</span>
+                          <ProductRatingBadge productId={product.id} />
                         </div>
                       </div>
                     </motion.article>

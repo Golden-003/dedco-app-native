@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
 import { ARTISANS, levelLabel } from "@/lib/dedco-data";
+import { ArtisanRatingBadge } from "@/components/dedco/cards";
 
 // ============================================================
 // Level badge color mapping per spec: N1→gray, N2→amber, N3→amber-solid, N4→forest
@@ -304,26 +305,9 @@ export function ArtisansListingPage() {
                   </span>
                 </div>
 
-                {/* Rating */}
+                {/* Rating — depuis review-store */}
                 <div className="flex items-center gap-2 mb-3">
-                  <div className="flex items-center gap-0.5">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star
-                        key={i}
-                        size={13}
-                        className={
-                          i < Math.round(artisan.rating)
-                            ? "star"
-                            : "star empty"
-                        }
-                        fill={i < Math.round(artisan.rating) ? "currentColor" : "none"}
-                        strokeWidth={1.5}
-                      />
-                    ))}
-                  </div>
-                  <span className="text-xs font-numeric text-[var(--text-2)]">
-                    {artisan.rating} ({artisan.reviews})
-                  </span>
+                  <ArtisanRatingBadge artisanId={artisan.id} />
                 </div>
 
                 {/* Trust score bar */}

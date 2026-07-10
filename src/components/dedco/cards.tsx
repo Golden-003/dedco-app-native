@@ -4,7 +4,7 @@ import { memo, useMemo } from "react";
 import Image from "next/image";
 import { Star, BadgeCheck, MapPin, Table2, Armchair, Lightbulb, Shirt, Flower2, BookOpen, Sofa, BedDouble, Archive, Lamp, Frame } from "lucide-react";
 import { formatFCFA, getArtisan } from "@/lib/dedco-data";
-import { useReviewStore } from "@/lib/review-store";
+import { useReviewStore, useArtisanRating, useProductRating } from "@/lib/review-store";
 import type { Product } from "@/lib/dedco-types";
 
 // ============================================================
@@ -528,3 +528,38 @@ export const CategoryCard = memo(function CategoryCard({
     </button>
   );
 });
+
+// ============================================================
+// RATING BADGES — affichent la note réelle depuis review-store
+// Utilisés dans les listes (artisans-page, search-page, etc.)
+// où on ne peut pas appeler useArtisanRating/useProductRating
+// directement dans un .map()
+// ============================================================
+
+export function ArtisanRatingBadge({ artisanId, showCount = true }: { artisanId: number; showCount?: boolean }) {
+  const stats = useArtisanRating(artisanId);
+  if (stats.count === 0) {
+    return <span className="text-ink-mute italic text-xs">Pas encore d'avis</span>;
+  }
+  return (
+    <span className="inline-flex items-center gap-1 text-xs text-ink-soft">
+      <Stars rating={stats.rating} size={11} />
+      <span className="font-numeric font-semibold">{stats.rating}</span>
+      {showCount && <span className="text-ink-mute font-numeric">({stats.count})</span>}
+    </span>
+  );
+}
+
+export function ProductRatingBadge({ productId, showCount = true }: { productId: number; showCount?: boolean }) {
+  const stats = useProductRating(productId);
+  if (stats.count === 0) {
+    return <span className="text-ink-mute italic text-xs">Nouveau · 0 avis</span>;
+  }
+  return (
+    <span className="inline-flex items-center gap-1 text-xs text-ink-soft">
+      <Stars rating={stats.rating} size={11} />
+      <span className="font-numeric font-semibold">{stats.rating}</span>
+      {showCount && <span className="text-ink-mute font-numeric">({stats.count})</span>}
+    </span>
+  );
+}

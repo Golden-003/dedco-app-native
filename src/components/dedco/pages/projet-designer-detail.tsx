@@ -4,9 +4,10 @@ import { useState } from "react";
 import {
   CheckCircle2, Clock, FileText, Download, MessageSquare, Send,
   ChevronRight, AlertTriangle, ShieldCheck, MapPin, Calendar,
-  RefreshCw, Eye, PencilLine, Image as ImageIcon, Palette, Layout,
+  RefreshCw, Eye, PencilLine, Image as ImageIcon, Palette, Layout, Star,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
+import { useReviewStore } from "@/lib/review-store";
 import { getBackToProjets } from "@/lib/back-to-projets";
 import { formatFCFA } from "@/lib/dedco-data";
 
@@ -200,6 +201,8 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
   const currentUser = useDedcoStore((s) => s.currentUser);
   const project = MOCK_PROJECTS[projectId] || MOCK_PROJECTS["PD-001"];
+  const hasReviewed = useReviewStore((s) => s.hasReviewed);
+  const projectReviewed = hasReviewed(project.id);
   const [activeTab, setActiveTab] = useState<"livrables" | "details" | "revisions" | "messages">("livrables");
 
   // États locaux pour actions inline (pas de boutons morts)
@@ -697,6 +700,23 @@ export function ProjetDesignerDetailPage({ projectId }: { projectId: string }) {
           >
             <Eye size={16} /> {isDesigner ? "Préparer le rendez-vous" : "Préparer le rendez-vous"}
           </button>
+        )}
+        {/* Bouton "Laisser un avis" — visible si le projet est COMPLETED
+            ET si l'utilisateur n'a pas encore laissé d'avis.
+            Les projets designer n'ont pas de fiche produit : l'avis s'affiche
+            sur le profil du designer uniquement. */}
+        {project.status === "COMPLETED" && !projectReviewed && !isDesigner && (
+          <button
+            onClick={() => navigate({ page: "avis-livraison", orderId: project.id, projectId: project.id })}
+            className="dedco-btn dedco-btn-primary"
+          >
+            <Star size={16} /> Laisser un avis
+          </button>
+        )}
+        {project.status === "COMPLETED" && projectReviewed && (
+          <span className="dedco-badge dedco-badge-forest px-3 py-2 text-sm">
+            <CheckCircle2 size={14} /> Avis déjà publié — merci !
+          </span>
         )}
         <button
           onClick={() => navigate({ page: "litige", id: `REC-${project.id}` })}
