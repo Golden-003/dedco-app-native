@@ -246,18 +246,30 @@ export const useDedcoStore = create<DedcoState>()(
   orders: [],
 
   // ── Navigation ──
+  // navigate : pousse la route actuelle dans l'historique AVANT de changer.
+  // Garde les 15 dernières entrées seulement (sinon la pile grossit indéfiniment
+  // et goBack peut remonter trop loin).
+  // Ignore les navigations vers la même page (ex: double-clic sur un lien).
   navigate: (route) => {
     const { route: currentRoute, history } = get();
+    // Ne rien faire si on navigue vers la page actuelle
+    if (JSON.stringify(currentRoute) === JSON.stringify(route)) return;
+    const newHistory = [...history, currentRoute].slice(-15);
     set({
-      history: [...history, currentRoute],
+      history: newHistory,
       route,
     });
   },
 
+  // goBack : remonte d'une entrée dans l'historique.
+  // Si l'historique est vide, utilise le parent logique de la page actuelle
+  // (ex: product → marketplace, brief-detail → brief-list) ou home en dernier recours.
   goBack: () => {
-    const { history } = get();
+    const { history, route } = get();
     if (history.length === 0) {
-      set({ route: { page: 'home' } });
+      // Pas d'historique → aller au parent logique
+      const parent = getLogicalBackRoute(route);
+      set({ route: parent });
       return;
     }
     const prev = history[history.length - 1];
