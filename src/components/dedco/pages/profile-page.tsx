@@ -306,21 +306,10 @@ function ProfileContent({
         </div>
       </div>
 
-      {/* Quick stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        {[
-          { label: "Commandes", value: "12", icon: <Package size={16} /> },
-          { label: "Favoris", value: "3", icon: <Heart size={16} /> },
-          { label: "Projets en cours", value: "5", icon: <Package size={16} /> },
-          { label: "Avis donnés", value: "8", icon: <Shield size={16} /> },
-        ].map((stat) => (
-          <div key={stat.label} className="dedco-card p-4 text-center">
-            <div className="text-ink-mute mb-2 flex justify-center">{stat.icon}</div>
-            <p className="font-numeric font-bold text-lg">{stat.value}</p>
-            <p className="text-xs text-ink-mute">{stat.label}</p>
-          </div>
-        ))}
-      </div>
+      {/* Quick stats — retiré : chiffres hardcodés redondants avec les
+          tabs de navigation (Commandes, Favoris, etc. sont déjà accessibles
+          via la sidebar). Les afficher en plus avec de faux compteurs
+          prêtait à confusion. */}
     </div>
   );
 }
