@@ -9,6 +9,8 @@ import {
   AlertTriangle,
   CheckCircle2,
   Clock,
+  Upload,
+  X,
   RotateCcw,
   Wrench,
   RefreshCw,
@@ -18,102 +20,102 @@ import { useDedcoStore } from "@/lib/store";
 import { formatFCFA } from "@/lib/dedco-data";
 
 // ============================================================
-// Dispute Data
+// Pistes de résolution potentielles (informatif, pas cliquable)
 // ============================================================
 
-interface TimelineEntry {
-  id: string;
-  date: string;
-  author: string;
-  role: string;
-  message: string;
-}
-
-const DISPUTE = {
-  id: "LIT-001",
-  status: "en_cours",
-  orderRef: "ORD-003",
-  productName: "Suspension Bambou Tressé",
-  productPrice: 78000,
-  artisanName: "Fatou Loko",
-  reason: "Produit arrivé endommagé",
-  description:
-    "Le bambou était fissuré à la réception. J'ai des photos qui montrent les dommages.",
-  photos: [
-    "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&w=600&q=85",
-    "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=600&q=85",
-  ],
-  reportDate: "22 Jan 2024",
-  timeline: [
-    {
-      id: "t1",
-      date: "22 Jan 2024",
-      author: "Vous",
-      role: "client",
-      message:
-        "Signalement du litige: le produit est arrivé endommagé. Photos jointes.",
-    },
-    {
-      id: "t2",
-      date: "23 Jan 2024",
-      author: "Fatou Loko",
-      role: "artisan",
-      message:
-        "Bonjour, je suis désolée pour cet incident. Je peux vérifier et proposer une réparation ou un remplacement.",
-    },
-    {
-      id: "t3",
-      date: "24 Jan 2024",
-      author: "Service Client Dedco",
-      role: "admin",
-      message:
-        "Nous examinons le litige. Merci de patienter. Nous vous tiendrons informé sous 48h.",
-    },
-  ] as TimelineEntry[],
-};
-
-const STEPPER_STEPS = [
-  { label: "Signalé", done: true },
-  { label: "En médiation", active: true },
-  { label: "Résolu", done: false },
-];
-
-const RESOLUTION_OPTIONS = [
+const RESOLUTION_PISTES = [
   {
-    id: "refund",
-    label: "Remboursement total",
-    desc: `${formatFCFA(78000)} remboursés sur votre compte`,
     icon: RotateCcw,
+    label: "Remboursement",
+    desc: "Remboursement total ou partiel selon l'analyse du litige",
   },
   {
-    id: "repair",
-    label: "Réparation",
-    desc: "L'artisan répare le produit gratuitement",
     icon: Wrench,
+    label: "Réparation",
+    desc: "L'artisan répare ou refabrique la pièce à ses frais",
   },
   {
-    id: "exchange",
-    label: "Échange",
-    desc: "Remplacement par un produit identique",
     icon: RefreshCw,
+    label: "Échange",
+    desc: "Remplacement par un produit identique ou équivalent",
   },
 ];
 
 // ============================================================
-// LitigePage
+// LitigePage — Formulaire d'ouverture de litige
 // ============================================================
 
 export function LitigePage({ litigeId }: { litigeId?: string }) {
   const goBack = useDedcoStore((s) => s.goBack);
   const navigate = useDedcoStore((s) => s.navigate);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [imageModal, setImageModal] = useState<string | null>(null);
-  const [submitted, setSubmitted] = useState(false);
-  // Utilise l'id passé par la route si disponible, sinon fallback mock
-  const disputeId = litigeId || DISPUTE.id;
 
+  const [reason, setReason] = useState("");
+  const [description, setDescription] = useState("");
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [submitted, setSubmitted] = useState(false);
+
+  const reasons = [
+    "Produit endommagé à la réception",
+    "Produit non conforme à la description",
+    "Produit non reçu",
+    "Délai de livraison non respecté",
+    "Problème de qualité",
+    "Autre",
+  ];
+
+  function handleSubmit() {
+    if (!reason || description.trim().length < 10) return;
+    setSubmitted(true);
+  }
+
+  function addPhoto() {
+    // Simule l'ajout d'une photo (en production: input file + upload)
+    const mockPhotos = [
+      "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&w=400&q=85",
+      "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=400&q=85",
+    ];
+    const next = mockPhotos[photos.length % mockPhotos.length];
+    setPhotos([...photos, next]);
+  }
+
+  function removePhoto(idx: number) {
+    setPhotos(photos.filter((_, i) => i !== idx));
+  }
+
+  // ── État : litige envoyé ──
+  if (submitted) {
+    return (
+      <div className="dedco-fade-in max-w-2xl mx-auto px-4 py-12">
+        <div className="text-center">
+          <div className="w-20 h-20 rounded-full bg-[var(--forest-pale)] mx-auto flex items-center justify-center mb-5">
+            <CheckCircle2 size={40} className="text-[var(--forest)]" />
+          </div>
+          <h1 className="display-xl mb-3">Litige ouvert</h1>
+          <p className="text-sm text-[var(--text-2)] mb-2">
+            Votre signalement a été transmis à l'équipe Dedco.
+          </p>
+          <p className="text-xs text-[var(--text-3)] mb-6">
+            Nous examinons votre demande et vous répondons sous 48h ouvrées. L'artisan a également été notifié.
+          </p>
+          <div className="flex gap-3 justify-center flex-wrap">
+            <button
+              onClick={() => navigate({ page: "client-projets" })}
+              className="dedco-btn dedco-btn-primary"
+            >
+              Retour à mes projets
+            </button>
+            <button onClick={goBack} className="dedco-btn dedco-btn-ghost">
+              Retour
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Formulaire d'ouverture ──
   return (
-    <div className="dedco-fade-in max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-20">
+    <div className="dedco-fade-in max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-20">
       <button
         type="button"
         onClick={goBack}
@@ -123,268 +125,135 @@ export function LitigePage({ litigeId }: { litigeId?: string }) {
       </button>
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
-        <div className="flex-1">
-          <div className="flex items-center gap-2 flex-wrap">
-            <h1 className="display-lg">Litige {disputeId}</h1>
-            <span className="dedco-badge dedco-badge-terra flex items-center gap-1">
-              <Clock size={12} />
-              En cours de traitement
-            </span>
-          </div>
-          <p className="text-sm text-ink-soft mt-1">
-            Signalé le {DISPUTE.reportDate}
-          </p>
-        </div>
+      <div className="mb-6">
+        <h1 className="display-lg mb-2">Ouvrir un litige</h1>
+        <p className="text-sm text-ink-soft">
+          Décrivez le problème rencontré. Notre équipe médiera entre vous et l'artisan pour trouver une solution.
+        </p>
       </div>
 
-      {/* Stepper */}
-      <motion.div
-        className="dedco-card p-5 sm:p-6 mb-6"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-      >
-        <div className="flex items-center justify-between relative">
-          {/* Line background */}
-          <div className="absolute top-5 left-[10%] right-[10%] h-0.5 bg-border hidden sm:block" />
-          <div
-            className="absolute top-5 left-[10%] h-0.5 bg-amber hidden sm:block"
-            style={{ width: "calc(40% - 10%)" }}
-          />
+      {/* Formulaire */}
+      <div className="dedco-card p-5 sm:p-6 mb-6">
+        {/* Raison du litige */}
+        <div className="mb-5">
+          <label className="text-xs text-ink-mute uppercase tracking-wide mb-2 block">
+            Raison du litige <span className="text-terracotta">*</span>
+          </label>
+          <div className="flex flex-wrap gap-2">
+            {reasons.map((r) => (
+              <button
+                key={r}
+                type="button"
+                onClick={() => setReason(r)}
+                className={`px-3 py-2 text-xs font-medium rounded-md border-2 transition-all ${
+                  reason === r
+                    ? "border-amber bg-amber-pale text-amber-dark"
+                    : "border-border text-ink-soft hover:border-ink-mute"
+                }`}
+              >
+                {r}
+              </button>
+            ))}
+          </div>
+        </div>
 
-          {STEPPER_STEPS.map((step, i) => (
-            <div key={step.label} className="flex flex-col items-center z-10">
-              <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold mb-2 transition-colors ${
-                  step.done
-                    ? "bg-forest text-white"
-                    : step.active
-                      ? "bg-amber text-white ring-4 ring-amber/20"
-                      : "bg-warm text-ink-mute"
-                }`}
-              >
-                {step.done ? (
-                  <CheckCircle2 size={18} />
-                ) : (
-                  <span className="font-numeric">{i + 1}</span>
-                )}
+        {/* Description */}
+        <div className="mb-5">
+          <label className="text-xs text-ink-mute uppercase tracking-wide mb-2 block">
+            Décrivez le problème <span className="text-terracotta">*</span>
+          </label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={5}
+            placeholder="Expliquez ce qui s'est passé, ce qui ne va pas avec le produit ou la livraison..."
+            className="w-full px-3 py-2 text-sm border border-border rounded-md bg-card resize-none focus:outline-none focus:border-amber"
+          />
+          <p className="text-xs text-ink-mute mt-1">
+            {description.trim().length < 10 && "Minimum 10 caractères"}
+          </p>
+        </div>
+
+        {/* Preuves photos */}
+        <div className="mb-5">
+          <label className="text-xs text-ink-mute uppercase tracking-wide mb-2 block">
+            Preuves photos (optionnel)
+          </label>
+          {photos.length === 0 ? (
+            <button
+              type="button"
+              onClick={addPhoto}
+              className="w-full border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-amber transition-colors"
+            >
+              <Upload size={20} className="mx-auto text-ink-mute mb-2" />
+              <p className="text-sm text-ink-soft">Ajouter des photos</p>
+              <p className="text-xs text-ink-mute mt-1">Photos du produit endommagé, non conforme, etc.</p>
+            </button>
+          ) : (
+            <div className="grid grid-cols-3 gap-3">
+              {photos.map((photo, i) => (
+                <div key={i} className="relative aspect-square rounded-lg overflow-hidden bg-warm">
+                  <img src={photo} alt={`Preuve ${i + 1}`} className="w-full h-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => removePhoto(i)}
+                    className="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-terracotta transition-colors"
+                    aria-label="Retirer la photo"
+                  >
+                    <X size={12} />
+                  </button>
+                </div>
+              ))}
+              {photos.length < 6 && (
+                <button
+                  type="button"
+                  onClick={addPhoto}
+                  className="aspect-square border-2 border-dashed border-border rounded-lg flex items-center justify-center hover:border-amber transition-colors"
+                >
+                  <Upload size={20} className="text-ink-mute" />
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Bouton soumettre */}
+        <button
+          type="button"
+          disabled={!reason || description.trim().length < 10}
+          onClick={handleSubmit}
+          className="dedco-btn dedco-btn-primary w-full"
+        >
+          <AlertTriangle size={16} /> Ouvrir le litige
+        </button>
+      </div>
+
+      {/* Pistes de résolution potentielles (informatif) */}
+      <div className="dedco-card p-5 sm:p-6">
+        <h2 className="font-display font-bold text-base mb-1">
+          Solutions possibles
+        </h2>
+        <p className="text-xs text-ink-mute mb-4">
+          Selon l'analyse de votre litige, voici les pistes de résolution que Dedco peut proposer :
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {RESOLUTION_PISTES.map((piste) => (
+            <div key={piste.label} className="p-3 rounded-lg bg-warm">
+              <div className="flex items-center gap-2 mb-1.5">
+                <piste.icon size={16} className="text-amber" />
+                <p className="text-sm font-semibold">{piste.label}</p>
               </div>
-              <span
-                className={`text-xs font-medium ${
-                  step.active
-                    ? "text-amber"
-                    : step.done
-                      ? "text-forest"
-                      : "text-ink-mute"
-                }`}
-              >
-                {step.label}
-              </span>
+              <p className="text-xs text-ink-mute">{piste.desc}</p>
             </div>
           ))}
         </div>
-      </motion.div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left — Dispute Details */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Product details */}
-          <motion.div
-            className="dedco-card p-5 sm:p-6"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-          >
-            <h2 className="font-display font-bold text-lg mb-4 flex items-center gap-2">
-              <AlertTriangle size={18} className="text-terracotta" />
-              Détails du litige
-            </h2>
-            <div className="space-y-3">
-              <DetailRow
-                icon={<Package size={16} />}
-                label="Commande"
-                value={
-                  <button
-                    type="button"
-                    onClick={() => navigate({ page: "order-tracking", id: DISPUTE.orderRef })}
-                    className="text-amber hover:underline font-medium"
-                  >
-                    {DISPUTE.orderRef}
-                  </button>
-                }
-              />
-              <DetailRow
-                icon={<Package size={16} />}
-                label="Produit"
-                value={`${DISPUTE.productName} (${formatFCFA(DISPUTE.productPrice)})`}
-              />
-              <DetailRow
-                icon={<User size={16} />}
-                label="Artisan"
-                value={DISPUTE.artisanName}
-              />
-              <DetailRow
-                icon={<AlertTriangle size={16} />}
-                label="Raison"
-                value={
-                  <span className="dedco-badge dedco-badge-terra">
-                    {DISPUTE.reason}
-                  </span>
-                }
-              />
-              <DetailRow
-                icon={<Calendar size={16} />}
-                label="Date du signalement"
-                value={DISPUTE.reportDate}
-              />
-            </div>
-            <div className="mt-4 pt-4 border-t border-border">
-              <p className="text-xs text-ink-mute uppercase tracking-wide mb-1">
-                Description
-              </p>
-              <p className="text-sm text-ink-soft leading-relaxed">
-                {DISPUTE.description}
-              </p>
-            </div>
-
-            {/* Photos */}
-            <div className="mt-4 pt-4 border-t border-border">
-              <p className="text-xs text-ink-mute uppercase tracking-wide mb-2">
-                Photos jointes
-              </p>
-              <div className="grid grid-cols-2 gap-3">
-                {DISPUTE.photos.map((photo, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => setImageModal(photo)}
-                    className="aspect-[4/3] rounded-lg overflow-hidden bg-warm border border-border hover:shadow-md transition-shadow"
-                  >
-                    <img
-                      src={photo}
-                      alt={`Preuve ${i + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Timeline retirée — l'historique de médiation n'est pas utile
-              pour le client. Il a besoin de : statut, photos, et options
-              de résolution. Pas besoin de voir chaque message échangé. */}
-        </div>
-
-        {/* Right — Resolution */}
-        <div>
-          <motion.div
-            className="dedco-card p-5 sm:p-6 sticky top-20"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25 }}
-          >
-            <h2 className="font-display font-bold text-lg mb-4">
-              Options de résolution
-            </h2>
-            <div className="space-y-3">
-              {RESOLUTION_OPTIONS.map((option) => (
-                <button
-                  key={option.id}
-                  type="button"
-                  onClick={() => setSelectedOption(option.id)}
-                  className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
-                    selectedOption === option.id
-                      ? "border-amber bg-amber-pale/50"
-                      : "border-border hover:border-amber/40 hover:bg-warm"
-                  }`}
-                >
-                  <div className="flex items-start gap-3">
-                    <div
-                      className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                        selectedOption === option.id
-                          ? "bg-amber text-white"
-                          : "bg-warm text-ink-soft"
-                      }`}
-                    >
-                      <option.icon size={18} />
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold mb-0.5">
-                        {option.label}
-                      </p>
-                      <p className="text-xs text-ink-mute">{option.desc}</p>
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
-            <button
-              type="button"
-              disabled={!selectedOption || submitted}
-              onClick={() => {
-                setSubmitted(true);
-              }}
-              className="dedco-btn dedco-btn-primary w-full mt-4"
-            >
-              {submitted ? (
-                <>
-                  <CheckCircle2 size={16} /> Demande envoyée
-                </>
-              ) : (
-                "Confirmer mon choix"
-              )}
-            </button>
-            {submitted && (
-              <p className="text-xs text-center text-[var(--forest)] mt-2">
-                Votre demande de résolution a été transmise à l'équipe Dedco. Vous serez notifié sous 48h.
-              </p>
-            )}
-          </motion.div>
+        <div className="mt-4 p-3 rounded-lg bg-amber-pale/50 border border-amber/20 flex items-start gap-2">
+          <Clock size={14} className="text-amber flex-shrink-0 mt-0.5" />
+          <p className="text-xs text-amber-dark">
+            Notre équipe traite chaque litige sous 48h ouvrées. Le paiement à l'artisan est suspendu jusqu'à résolution.
+          </p>
         </div>
       </div>
-
-      {/* Image Modal */}
-      {imageModal && (
-        <motion.div
-          className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={() => setImageModal(null)}
-        >
-          <motion.img
-            src={imageModal}
-            alt="Photo agrandie"
-            className="max-w-full max-h-[85vh] rounded-xl object-contain"
-            initial={{ scale: 0.9 }}
-            animate={{ scale: 1 }}
-          />
-        </motion.div>
-      )}
-    </div>
-  );
-}
-
-// ============================================================
-// DetailRow helper
-// ============================================================
-
-function DetailRow({
-  icon,
-  label,
-  value,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: React.ReactNode;
-}) {
-  return (
-    <div className="flex items-center gap-3 py-1">
-      <div className="text-ink-mute">{icon}</div>
-      <p className="text-xs text-ink-mute w-28 flex-shrink-0">{label}</p>
-      <div className="text-sm font-medium">{value}</div>
     </div>
   );
 }
