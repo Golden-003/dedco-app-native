@@ -272,70 +272,9 @@ export function LitigePage({ litigeId }: { litigeId?: string }) {
             </div>
           </motion.div>
 
-          {/* Timeline */}
-          <motion.div
-            className="dedco-card p-5 sm:p-6"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <h2 className="font-display font-bold text-lg mb-4">
-              Historique de médiation
-            </h2>
-            <div className="space-y-0">
-              {DISPUTE.timeline.map((entry, i) => (
-                <motion.div
-                  key={entry.id}
-                  className="flex gap-3 pb-5 last:pb-0"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.25 + i * 0.08 }}
-                >
-                  <div className="flex flex-col items-center flex-shrink-0">
-                    <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold ${
-                        entry.role === "admin"
-                          ? "bg-amber"
-                          : entry.role === "artisan"
-                            ? "bg-forest"
-                            : "bg-ink"
-                      }`}
-                    >
-                      {entry.role === "admin"
-                        ? "SC"
-                        : entry.role === "artisan"
-                          ? "FA"
-                          : "VO"}
-                    </div>
-                    {i < DISPUTE.timeline.length - 1 && (
-                      <div className="w-0.5 flex-1 bg-border mt-1" />
-                    )}
-                  </div>
-                  <div className="flex-1 -mt-0.5">
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <span className="text-sm font-semibold">{entry.author}</span>
-                      <span className="text-xs text-ink-mute">{entry.date}</span>
-                    </div>
-                    <p className="text-sm text-ink-soft leading-relaxed">
-                      {entry.message}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Admin message */}
-            <div className="mt-4 p-3 rounded-lg bg-amber-pale border border-amber/20">
-              <p className="text-xs font-semibold text-amber-dark mb-1 flex items-center gap-1">
-                <Clock size={12} />
-                Message du service client
-              </p>
-              <p className="text-sm text-ink-soft">
-                Nous examinons le litige. Merci de patienter. Vous recevrez une
-                réponse sous 48 heures ouvrées.
-              </p>
-            </div>
-          </motion.div>
+          {/* Timeline retirée — l'historique de médiation n'est pas utile
+              pour le client. Il a besoin de : statut, photos, et options
+              de résolution. Pas besoin de voir chaque message échangé. */}
         </div>
 
         {/* Right — Resolution */}
