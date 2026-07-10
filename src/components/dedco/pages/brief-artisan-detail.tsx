@@ -284,16 +284,9 @@ export function BriefArtisanDetailPage({ briefId }: { briefId: string }) {
               <span>Prix de la prestation</span>
               <span className="font-numeric font-semibold">{formatFCFA(selectedProposal.price)}</span>
             </div>
-            <div className="flex items-center justify-between text-xs text-[var(--text-2)]">
-              <span className="flex items-center gap-1">
-                <ShieldCheck size={11} className="text-[var(--forest)]" />
-                Fonds de garantie (1,5%)
-              </span>
-              <span className="font-numeric">{formatFCFA(Math.round(selectedProposal.price * 0.015))}</span>
-            </div>
             <div className="flex items-center justify-between font-display font-bold pt-2 border-t border-[var(--border)]">
               <span>Total à payer</span>
-              <span className="font-numeric text-[var(--amber-dark)] text-lg">{formatFCFA(Math.round(selectedProposal.price * 1.015))}</span>
+              <span className="font-numeric text-[var(--amber-dark)] text-lg">{formatFCFA(selectedProposal.price)}</span>
             </div>
           </div>
           <div className="p-3 rounded-lg mb-4 flex items-start gap-2" style={{ backgroundColor: "var(--forest-pale)" }}>

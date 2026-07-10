@@ -248,7 +248,7 @@ export function DesignerDetailPage({
                   { title: "Brief initial (gratuit)", desc: "Vous choisissez un niveau de projet (Prototype, Standard, Premium) et décrivez votre besoin. Aucun paiement." },
                   { title: "Réponse du designer", desc: "Le designer accepte et propose, pose des questions, ou refuse. Réponse sous 24-48h." },
                   { title: "Proposition de mission", desc: "Le designer envoie une proposition complète : objectif, livrables, étapes, délai, prix, inclusions et exclusions." },
-                  { title: "Paiement", desc: "Vous acceptez et payez (avec 1,5% de frais de garantie Dedco). Le projet démarre immédiatement." },
+                  { title: "Paiement", desc: "Vous acceptez et payez. Le projet démarre immédiatement." },
                   { title: "Projet", desc: "Exécution selon la mission validée. Messagerie, calendrier, jalons et achats recommandés." },
                   { title: "Livraison", desc: "Le designer livre les livrables définis. Vous validez ou demandez un ajustement. Le paiement est libéré." },
                 ].map((step, i) => (
@@ -305,7 +305,7 @@ export function DesignerDetailPage({
               </p>
 
               <p className="text-xs text-ink-mute leading-relaxed">
-                Le brief est gratuit. Le paiement se fait uniquement après acceptation de la proposition de mission. Paiement sécurisé via Mobile Money avec 1,5% de frais de garantie Dedco.
+                Le brief est gratuit. Le paiement se fait uniquement après acceptation de la proposition de mission. Paiement sécurisé via Mobile Money.
               </p>
             </div>
           </aside>

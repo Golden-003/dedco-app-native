@@ -242,8 +242,8 @@ export const useReviewStore = create<ReviewState>()(
       },
     }),
     {
-      name: 'dedco-reviews-v3',
-      version: 4,
+      name: 'dedco-reviews-v4',
+      version: 5,
       // Version 4 : les seeds sur-mesure utilisent des orderId fictifs
       // (PA-DEMO-XXX) au lieu de PA-001/002/003 qui sont des projets de démo
       // testables par l'utilisateur. Sinon hasReviewed('PA-002') retournait

@@ -108,9 +108,8 @@ export function ProjetPaiementArtisanPage({ proposalId }: { proposalId: string }
   const [done, setDone] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("+229 01 97 45 23 10");
 
-  // Calculs financiers
-  const garantie = Math.round(proposal.price * proposal.garantiePercent / 100);
-  const total = proposal.price + garantie;
+  // Calculs financiers (garantie retirée — info interne plateforme, pas pour le client)
+  const total = proposal.price;
   const newProjectId = `PA-${Math.floor(1000 + Math.random() * 9000)}`;
 
   // ── Bouton retour — role-aware ──
@@ -189,16 +188,6 @@ export function ProjetPaiementArtisanPage({ proposalId }: { proposalId: string }
           <div className="flex justify-between">
             <span>Prix de la prestation</span>
             <span className="font-numeric font-semibold">{formatFCFA(proposal.price)}</span>
-          </div>
-          <div className="flex justify-between text-[var(--text-2)]">
-            <span className="flex items-center gap-1">
-              <ShieldCheck size={12} className="text-[var(--forest)]" />
-              Garantie Dedco ({proposal.garantiePercent}%)
-            </span>
-            <span className="font-numeric">{formatFCFA(garantie)}</span>
-          </div>
-          <div className="flex justify-between text-[var(--text-3)] text-xs">
-            
           </div>
           <div className="flex justify-between font-display font-bold pt-2 border-t border-[var(--border)]">
             <span>Total à payer</span>

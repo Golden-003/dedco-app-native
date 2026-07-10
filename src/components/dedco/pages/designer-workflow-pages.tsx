@@ -254,8 +254,7 @@ export function DesignerPropositionMissionPage({ briefId }: { briefId: string })
     visite: false,
   });
 
-  const garantie = Math.round(form.prix * 0.015);
-  const totalClient = form.prix + garantie;
+  const totalClient = form.prix;
   const commission = Math.round(form.prix * 0.10);
   const netDesigner = form.prix - commission;
 
@@ -320,7 +319,6 @@ export function DesignerPropositionMissionPage({ briefId }: { briefId: string })
             <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">Côté client</p>
             <div className="space-y-1 text-xs">
               <div className="flex justify-between"><span>Honoraires</span><span className="font-numeric">{formatFCFA(form.prix)}</span></div>
-              <div className="flex justify-between text-[var(--text-2)]"><span>Garantie 1,5%</span><span className="font-numeric">{formatFCFA(garantie)}</span></div>
               <div className="flex justify-between font-bold pt-1 border-t border-[var(--border)]"><span>Total</span><span className="font-numeric text-[var(--amber)]">{formatFCFA(totalClient)}</span></div>
             </div>
           </div>
@@ -384,8 +382,7 @@ export function ClientPropositionRecuePage({ proposalId }: { proposalId: string 
     exclusions: "Achats produits, travaux, livraison, prestations artisans",
     visite: false,
   };
-  const garantie = Math.round(proposal.prix * 0.015);
-  const total = proposal.prix + garantie;
+  const total = proposal.prix;
 
   return (
     <div className="p-4 sm:p-6 max-w-2xl mx-auto">
@@ -420,7 +417,6 @@ export function ClientPropositionRecuePage({ proposalId }: { proposalId: string 
       <div className="dedco-card p-5 mb-4">
         <div className="space-y-2 text-sm">
           <div className="flex justify-between"><span>Honoraires designer</span><span className="font-numeric font-semibold">{formatFCFA(proposal.prix)}</span></div>
-          <div className="flex justify-between text-[var(--text-2)]"><span className="flex items-center gap-1">Frais de garantie Dedco (1,5%)<ShieldCheck size={12} className="text-[var(--forest)]" /></span><span className="font-numeric">{formatFCFA(garantie)}</span></div>
           <div className="flex justify-between font-display font-bold pt-2 border-t border-[var(--border)]"><span>Total</span><span className="font-numeric text-[var(--amber)] text-lg">{formatFCFA(total)}</span></div>
         </div>
       </div>
@@ -466,7 +462,6 @@ export function ProjetPaiementPage({ proposalId }: { proposalId: string }) {
       <div className="dedco-card p-5 mb-4">
         <div className="space-y-2 text-sm">
           <div className="flex justify-between"><span>Honoraires</span><span className="font-numeric font-semibold">{formatFCFA(300000)}</span></div>
-          <div className="flex justify-between text-[var(--text-2)]"><span className="flex items-center gap-1">Garantie 1,5%<ShieldCheck size={12} className="text-[var(--forest)]" /></span><span className="font-numeric">{formatFCFA(4500)}</span></div>
           <div className="flex justify-between font-display font-bold pt-2 border-t border-[var(--border)]"><span>Total</span><span className="font-numeric text-[var(--amber)] text-lg">{formatFCFA(total)}</span></div>
         </div>
       </div>

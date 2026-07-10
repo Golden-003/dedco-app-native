@@ -200,7 +200,6 @@ export function OrderConfirmationPage({ orderId }: { orderId: string }) {
         <div className="space-y-1 text-sm pt-3 border-t border-[var(--border)]">
           <div className="flex justify-between"><span className="text-[var(--text-2)]">Sous-total</span><span className="font-numeric">{formatFCFA(order.subtotal)}</span></div>
           <div className="flex justify-between"><span className="text-[var(--text-2)]">Livraison</span><span className="font-numeric text-[var(--forest)]">Gratuite</span></div>
-          <div className="flex justify-between"><span className="text-[var(--text-2)] flex items-center gap-1">Fonds de garantie (1,5%)<ShieldCheck size={12} className="text-[var(--forest)]" /></span><span className="font-numeric">{formatFCFA(order.garantie)}</span></div>
           <div className="flex justify-between font-display font-bold pt-1 border-t border-[var(--border)]"><span>Total payé</span><span className="font-numeric text-[var(--amber)]">{formatFCFA(order.total)}</span></div>
         </div>
 
@@ -691,7 +690,6 @@ function MarketplaceInvoice({ order, isArtisan }: { order: NormalizedOrder; isAr
         <div className="w-full sm:w-72 space-y-2 text-sm">
           <div className="flex justify-between"><span className="text-[var(--text-2)]">Sous-total</span><span className="font-numeric">{formatFCFA(order.subtotal)}</span></div>
           <div className="flex justify-between"><span className="text-[var(--text-2)]">Livraison</span><span className="font-numeric text-[var(--forest)]">Gratuite</span></div>
-          <div className="flex justify-between"><span className="text-[var(--text-2)] flex items-center gap-1">Garantie (1,5%)<ShieldCheck size={12} className="text-[var(--forest)]" /></span><span className="font-numeric">{formatFCFA(order.garantie)}</span></div>
           <div className="flex justify-between font-display font-bold text-base pt-2 border-t-2 border-[var(--amber)]"><span>Total TTC</span><span className="font-numeric text-[var(--amber)]">{formatFCFA(order.total)}</span></div>
         </div>
       </div>
@@ -705,7 +703,7 @@ function MarketplaceInvoice({ order, isArtisan }: { order: NormalizedOrder; isAr
         ) : (
           <>
             <p><strong>Produit en stock :</strong> Expédition sous 24-48h.</p>
-            {!isArtisan && <p><strong>Garantie :</strong> 7 jours pour ouvrir un litige après livraison.</p>}
+            {!isArtisan && <p><strong>Litige :</strong> 7 jours pour ouvrir un litige après livraison.</p>}
           </>
         )}
         <p className="pt-2 text-center">Dedco SARL · Cotonou, Bénin · RCCM BJ-2026-0456</p>

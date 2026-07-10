@@ -257,8 +257,7 @@ export function BriefDesignerDetailPage({ briefId }: { briefId: string }) {
 function PrestationCard({ brief, onPay }: { brief: DesignerBrief; onPay: () => void }) {
   if (!brief.prestation) return null;
   const p = brief.prestation;
-  const garantie = Math.round(p.price * 0.015);
-  const total = p.price + garantie;
+  const total = p.price;
   const isAwaitingPayment = brief.status === 'AWAITING_PAYMENT';
 
   return (
@@ -297,10 +296,6 @@ function PrestationCard({ brief, onPay }: { brief: DesignerBrief; onPay: () => v
             <div className="flex items-center justify-between text-sm">
               <span>Prix de la prestation</span>
               <span className="font-numeric font-semibold">{formatFCFA(p.price)}</span>
-            </div>
-            <div className="flex items-center justify-between text-xs text-[var(--text-2)]">
-              <span className="flex items-center gap-1"><ShieldCheck size={11} className="text-[var(--forest)]" /> Fonds de garantie (1,5%)</span>
-              <span className="font-numeric">{formatFCFA(garantie)}</span>
             </div>
             <div className="flex items-center justify-between font-display font-bold pt-2 border-t border-[var(--border)]">
               <span>Total à payer</span>
