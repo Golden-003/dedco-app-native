@@ -300,7 +300,7 @@ function ProductPageContent({
                 onChange={(e) =>
                   setQty(Math.max(1, Number(e.target.value) || 1))
                 }
-                className="w-12 text-center text-sm bg-transparent focus:outline-none"
+                className="w-12 text-center text-sm bg-transparent focus:outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 aria-label="Quantité"
                 min={1}
               />

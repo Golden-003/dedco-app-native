@@ -346,10 +346,6 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
               <p className="font-numeric font-bold text-[var(--text-1)]">{formatFCFA(project.prixFinal)}</p>
             </div>
             <div>
-              <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)]">Payé</p>
-              <p className="font-numeric font-semibold text-[var(--forest)]">{formatFCFA(project.montantPaye)}</p>
-            </div>
-            <div>
               <p className="text-[10px] uppercase tracking-wider text-[var(--text-3)]">Échéance</p>
               <p className="font-numeric text-[var(--text-2)]">{project.delaiFinal}</p>
             </div>
@@ -436,7 +432,7 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
             <div className="grid sm:grid-cols-2 gap-3">
               <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Prix initial</dt><dd className="font-numeric font-semibold">{formatFCFA(project.prixInitial)}</dd></div>
               <div><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Prix final</dt><dd className="font-numeric font-semibold text-[var(--amber)]">{formatFCFA(project.prixFinal)}</dd></div>
-              <div className="sm:col-span-2"><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Paiement sécurisé</dt><dd className="font-numeric text-[var(--forest)]">{formatFCFA(project.montantPaye)} — réglé via Mobile Money</dd></div>
+              <div className="sm:col-span-2"><dt className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1">Paiement</dt><dd className="text-[var(--forest)] flex items-center gap-1"><ShieldCheck size={12} /> Sécurisé via Mobile Money</dd></div>
               
             </div>
             <div className="pt-3 border-t border-[var(--border)]">
