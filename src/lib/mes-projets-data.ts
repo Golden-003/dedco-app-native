@@ -211,6 +211,7 @@ export const MOCK_BRIEF_WITH_PROPOSALS: ArtisanBriefWithProposals = {
     {
       id: "PROP-A1",
       briefId: "BA-001",
+      artisanId: 1,
       artisanName: "Kofi Akindélé",
       artisanAvatar: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&w=80&q=80",
       artisanLevel: "N3",
@@ -224,6 +225,7 @@ export const MOCK_BRIEF_WITH_PROPOSALS: ArtisanBriefWithProposals = {
     {
       id: "PROP-A2",
       briefId: "BA-001",
+      artisanId: 4,
       artisanName: "Brice Gogan",
       artisanAvatar: "https://images.unsplash.com/photo-1620932934088-fbdb2920e484?auto=format&fit=crop&w=80&q=80",
       artisanLevel: "N2",
@@ -237,6 +239,7 @@ export const MOCK_BRIEF_WITH_PROPOSALS: ArtisanBriefWithProposals = {
     {
       id: "PROP-A3",
       briefId: "BA-001",
+      artisanId: 5,
       artisanName: "Emile Agossou",
       artisanAvatar: "https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&w=80&q=80",
       artisanLevel: "N1",

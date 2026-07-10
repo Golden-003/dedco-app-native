@@ -326,13 +326,18 @@ function BriefProposalsCard({ brief }: { brief: ArtisanBriefWithProposals }) {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {brief.proposals.map((prop: ArtisanProposal) => (
                 <div key={prop.id} className="p-4 rounded-lg border border-[var(--border)] bg-[var(--bg-card)] flex flex-col">
-                  {/* En-tête artisan */}
-                  <div className="flex items-start gap-3 mb-3">
+                  {/* En-tête artisan — cliquable vers le profil */}
+                  <button
+                    onClick={() => navigateTo({ page: "artisan", id: prop.artisanId } as any)}
+                    className="flex items-start gap-3 mb-3 text-left hover:opacity-80 transition-opacity w-full cursor-pointer"
+                    aria-label={`Voir le profil de ${prop.artisanName}`}
+                  >
                     <img src={prop.artisanAvatar} alt={prop.artisanName} className="w-12 h-12 rounded-full object-cover flex-shrink-0" />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-1.5 mb-0.5">
                         <h4 className="font-display font-semibold text-sm truncate">{prop.artisanName}</h4>
                         {prop.artisanVerified && <ShieldCheck size={12} style={{ color: "var(--forest)", flexShrink: 0 }} />}
+                        <ChevronRight size={12} className="text-[var(--text-3)] ml-auto flex-shrink-0" />
                       </div>
                       <div className="flex items-center gap-1.5">
                         <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "var(--amber-pale)", color: "var(--amber-dark)" }}>
@@ -343,7 +348,7 @@ function BriefProposalsCard({ brief }: { brief: ArtisanBriefWithProposals }) {
                         )}
                       </div>
                     </div>
-                  </div>
+                  </button>
 
                   {/* Prix + délai */}
                   <div className="grid grid-cols-2 gap-2 mb-3 pb-3 border-b border-[var(--border)]">

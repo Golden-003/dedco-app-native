@@ -95,6 +95,7 @@ export type MesProjetsItem = {
 export type ArtisanProposal = {
   id: string;
   briefId: string;
+  artisanId: number;
   artisanName: string;
   artisanAvatar: string;
   artisanLevel: string;
