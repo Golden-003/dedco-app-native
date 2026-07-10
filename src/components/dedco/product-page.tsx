@@ -143,12 +143,45 @@ function ProductPageContent({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
         {/* Gallery */}
         <div>
-          <div className="dedco-card overflow-hidden mb-3 bg-warm aspect-square">
+          <div className="dedco-card overflow-hidden mb-3 bg-warm aspect-square relative group">
             <img
               src={product.images[selectedImageIdx]}
               alt={`${product.name} — vue ${selectedImageIdx + 1}`}
               className="w-full h-full object-cover"
             loading="lazy" />
+            {/* Flèches de navigation */}
+            {product.images.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setSelectedImageIdx((prev) =>
+                      prev === 0 ? product.images.length - 1 : prev - 1
+                    )
+                  }
+                  className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/70 backdrop-blur-sm flex items-center justify-center text-ink-soft hover:bg-white hover:scale-110 transition-all shadow-md opacity-0 group-hover:opacity-100"
+                  aria-label="Image précédente"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setSelectedImageIdx((prev) =>
+                      prev === product.images.length - 1 ? 0 : prev + 1
+                    )
+                  }
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/70 backdrop-blur-sm flex items-center justify-center text-ink-soft hover:bg-white hover:scale-110 transition-all shadow-md opacity-0 group-hover:opacity-100"
+                  aria-label="Image suivante"
+                >
+                  <ChevronRight size={20} />
+                </button>
+                {/* Compteur de photos */}
+                <span className="absolute bottom-2 right-2 px-2.5 py-1 rounded-full bg-black/50 text-white text-xs font-numeric backdrop-blur-sm">
+                  {selectedImageIdx + 1} / {product.images.length}
+                </span>
+              </>
+            )}
           </div>
           {product.images.length > 1 && (
             <div className="flex gap-2 overflow-x-auto dedco-hide-scroll">

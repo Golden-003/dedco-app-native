@@ -217,6 +217,8 @@ export const PRODUCTS: Product[] = [
       "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?auto=format&fit=crop&crop=entropy&w=800&q=85",
       "https://images.unsplash.com/photo-1579656592043-a20e25a4aa4b?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=85",
     ],
     desc: "Table basse artisanale en bois iroko massif avec plateau décoré de tissu wax authentique. Chaque pièce est unique, fabriquée à la main dans l'atelier Akindélé à Cotonou.",
     tags: ["artisanat", "wax", "bois", "iroko"],
@@ -237,6 +239,8 @@ export const PRODUCTS: Product[] = [
     images: [
       "https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=85",
     ],
     desc: "Fauteuil iconique en rotin tressé à la main, conçu par l'atelier Dossou. Structure solide et coussin en coton naturel. Idéal pour salon ou véranda tropicale.",
     tags: ["rotin", "fauteuil", "artisanat"],
@@ -257,6 +261,8 @@ export const PRODUCTS: Product[] = [
     images: [
       "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?auto=format&fit=crop&crop=entropy&w=800&q=85",
       "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=85",
     ],
     desc: "Lampe de table avec abat-jour en tissu bogolan authentique du Mali, structure en laiton brossé. Lumière tamisée et chaleureuse.",
     tags: ["luminaire", "bogolan", "laiton"],
@@ -275,6 +281,8 @@ export const PRODUCTS: Product[] = [
     images: [
       "https://images.unsplash.com/photo-1510828561531-05a3388f6d3d?auto=format&fit=crop&crop=entropy&w=800&q=85",
       "https://images.unsplash.com/photo-1468531390554-9f62f9767a87?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=85",
     ],
     desc: "Grand miroir rond (80cm) avec cadre en raffia tressé artisanalement. Pièce décorative unique pour entrée ou salon.",
     tags: ["miroir", "raffia", "décoration"],
@@ -295,6 +303,8 @@ export const PRODUCTS: Product[] = [
     images: [
       "https://images.unsplash.com/photo-1517467139951-f5a925c9f9de?auto=format&fit=crop&w=1200&q=85",
       "https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=85",
     ],
     desc: "Commode 4 tiroirs en teck massif avec poignées en laiton gravé. Design épuré inspiré de l'architecture coloniale réinterprétée.",
     tags: ["commode", "teck", "rangement"],
@@ -312,6 +322,8 @@ export const PRODUCTS: Product[] = [
     stock: 12,
     images: [
       "https://images.unsplash.com/photo-1579656592043-a20e25a4aa4b?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=85",
     ],
     desc: "Set de 4 coussins en tissu kente authentique, rembourrage en fibres naturelles. Apportent une touche colorée et ethnique à votre canapé.",
     tags: ["coussins", "kente", "textile"],
@@ -330,6 +342,8 @@ export const PRODUCTS: Product[] = [
     badge: "Sur commande",
     images: [
       "https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=85",
     ],
     desc: "Table à manger 6 à 8 personnes en acajou du Bénin. Plateau 220×100cm, pieds tournés. Délai de fabrication : 3 semaines.",
     tags: ["table", "acajou", "salle à manger"],
@@ -348,6 +362,8 @@ export const PRODUCTS: Product[] = [
     stock: 6,
     images: [
       "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=1200&q=85",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=85",
     ],
     desc: "Tapis berbère revisité (200×300cm) en laine naturelle, tissé à la main. Motifs géométriques sahéliens contemporains.",
     tags: ["tapis", "laine", "géométrique"],
@@ -366,6 +382,8 @@ export const PRODUCTS: Product[] = [
     stock: 3,
     images: [
       "https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?auto=format&fit=crop&w=1200&q=85",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=85",
     ],
     desc: "Bibliothèque modulaire 5 niveaux, laquée en couleurs signature Dedco. S'assemble sans outils. Hauteur 180cm.",
     tags: ["bibliothèque", "modulaire", "rangement"],
@@ -386,6 +404,8 @@ export const PRODUCTS: Product[] = [
     badge: "Promo",
     images: [
       "https://images.unsplash.com/photo-1648809895588-c0bd7e06a61c?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=85",
     ],
     desc: "Suspension en bambou tressé artisanalement, douille E27. Création lumineuse et organique pour salon ou salle à manger. Diamètre 45cm.",
     tags: ["suspension", "bambou", "luminaire"],
@@ -405,6 +425,8 @@ export const PRODUCTS: Product[] = [
     badge: "Coup de cœur",
     images: [
       "https://images.unsplash.com/photo-1693578616322-c8abe6c7393d?auto=format&fit=crop&w=1200&q=85",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=85",
     ],
     desc: "Canapé 3 places structure bois, pieds tournés, garnissage mousse haute résilience. Housse amovible lavable. Fabrication sur commande 4 semaines.",
     tags: ["canapé", "coton", "salon"],
@@ -422,6 +444,8 @@ export const PRODUCTS: Product[] = [
     stock: 15,
     images: [
       "https://images.unsplash.com/photo-1611078295948-10b3961e1e40?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=85",
     ],
     desc: "Vase en terre cuite de Cotonou, tourné et peint à la main. Chaque pièce est unique. Plusieurs tailles disponibles.",
     tags: ["vase", "terre cuite", "poterie"],
@@ -439,6 +463,8 @@ export const PRODUCTS: Product[] = [
     stock: 20,
     images: [
       "https://images.unsplash.com/photo-1528789386055-75c4b717bad1?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=85",
     ],
     desc: "Grand panier en osier tressé (Ø50cm×60cm). Rangement décoratif, plante pot de cache, ou simple décoration.",
     tags: ["panier", "osier", "décoration"],
@@ -459,6 +485,8 @@ export const PRODUCTS: Product[] = [
     badge: "Promo -13%",
     images: [
       "https://images.unsplash.com/photo-1655276602527-ca7c0c44d6de?auto=format&fit=crop&w=1200&q=85",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=85",
     ],
     desc: "Lit plateforme 160×200cm en bois iroko massif. Tête de lit habillée en wax géométrique. Idéal pour chambre contemporaine africaine.",
     tags: ["lit", "chambre", "iroko", "wax"],
@@ -477,6 +505,8 @@ export const PRODUCTS: Product[] = [
     stock: 9,
     images: [
       "https://images.unsplash.com/photo-1568146687696-427782f92379?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=85",
     ],
     desc: "Paire d'appliques murales orientables, diffuseur en tissu naturel. Idéal pour éclairage d'ambiance en chambre ou salon.",
     tags: ["applique", "éclairage", "métal"],
@@ -494,6 +524,8 @@ export const PRODUCTS: Product[] = [
     stock: 10,
     images: [
       "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=85",
     ],
     desc: "Tabouret sculpté à la main en forme de tamtam traditionnel. Polyvalent : tabouret, table d'appoint ou décoration.",
     tags: ["tabouret", "sculpté", "artisanat"],
@@ -511,6 +543,8 @@ export const PRODUCTS: Product[] = [
     stock: 8,
     images: [
       "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=85",
     ],
     desc: "Paire de rideaux (2×250cm) en wax imprimé authentique. Doublure légère incluse. Grandes fenêtres et portes-fenêtres.",
     tags: ["rideaux", "wax", "textile"],
@@ -529,6 +563,8 @@ export const PRODUCTS: Product[] = [
     stock: 6,
     images: [
       "https://images.unsplash.com/photo-1618722060945-b87f7326995b?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=85",
     ],
     desc: "Grand plateau en laiton martelé artisanalement (Ø60cm). Utilisation décorative ou fonctionnelle, plié sur trépied ou sur table.",
     tags: ["plateau", "laiton", "décoration"],
@@ -548,6 +584,8 @@ export const PRODUCTS: Product[] = [
     badge: "Nouveauté",
     images: [
       "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=85",
     ],
     desc: "Bibliothèque design à structure métal avec façades en rotin tressé. 3 niveaux, 150×40×180cm. Esprit tropical chic.",
     tags: ["bibliothèque", "rotin", "métal"],
@@ -567,6 +605,8 @@ export const PRODUCTS: Product[] = [
     badge: "Coup de cœur",
     images: [
       "https://images.unsplash.com/photo-1604264726154-26480e76f4e1?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=85",
     ],
     desc: "Porte-manteau mural en forme de branches de baobab, sculpté dans un seul morceau de bois. 6 crochets naturels. Œuvre d'art fonctionnelle.",
     tags: ["porte-manteau", "sculpté", "bois"],
@@ -584,6 +624,8 @@ export const PRODUCTS: Product[] = [
     stock: 4,
     images: [
       "https://images.unsplash.com/photo-1567016376408-0226e4d0c1ea?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=85",
     ],
     desc: "Chaise design en bois massif avec assise et dossier en cuir végétal tannage végétal. Empilable. Idéal salle à manger.",
     tags: ["chaise", "cuir", "salle à manger"],
@@ -601,6 +643,8 @@ export const PRODUCTS: Product[] = [
     stock: 7,
     images: [
       "https://images.unsplash.com/photo-1611078295948-10b3961e1e40?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=85",
+      "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=85",
     ],
     desc: "Set de décoration chambre : porte-bougie, vide-poche, vase en bambou et céramique. Esprit zen et naturel.",
     tags: ["chambre", "bambou", "zen"],
