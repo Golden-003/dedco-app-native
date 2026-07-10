@@ -29,7 +29,7 @@ const RELATED_ARTICLES = [
     date: "15 Jan 2024",
     readTime: "4 min",
     image:
-      "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=800&q=85",
   },
   {
     id: 3,
@@ -47,7 +47,7 @@ const RELATED_ARTICLES = [
     date: "02 Jan 2024",
     readTime: "7 min",
     image:
-      "https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?auto=format&fit=crop&w=800&q=85",
   },
 ];
 
@@ -290,19 +290,19 @@ export function ArticlePage() {
                 name: "Aminata Z.",
                 date: "22 Jan 2024",
                 text: "Super article ! J'ai commandé la table basse Bénin Wax et elle est magnifique. Exactement comme sur les photos.",
-                avatar: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=80&q=85",
+                avatar: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=400&q=85",
               },
               {
                 name: "Paul D.",
                 date: "20 Jan 2024",
                 text: "Le conseil numéro 4 m'a beaucoup aidé. J'ai ajouté un miroir en raffia dans mon entrée et ça change tout.",
-                avatar: "https://images.unsplash.com/photo-1616805765352-beedbad46b2a?auto=format&fit=crop&crop=faces&w=80&q=85",
+                avatar: "https://images.unsplash.com/photo-1616805765352-beedbad46b2a?auto=format&fit=crop&crop=faces&w=400&q=85",
               },
               {
                 name: "Karine A.",
                 date: "19 Jan 2024",
                 text: "En tant que décoratrice, je recommande toujours Dedco à mes clients. Les artisans sont talentueux et fiables.",
-                avatar: "https://images.unsplash.com/photo-1533674689012-136b487b7736?auto=format&fit=crop&crop=faces&w=80&q=85",
+                avatar: "https://images.unsplash.com/photo-1533674689012-136b487b7736?auto=format&fit=crop&crop=faces&w=400&q=85",
               },
             ].map((comment, i) => (
               <div key={i} className="flex gap-3">

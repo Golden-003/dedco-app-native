@@ -165,36 +165,36 @@ type PortfolioProject = {
 const MOCK_PROJECTS: PortfolioProject[] = [
   {
     id: "P1", title: "Salon Afro-contemporain Cotonou", type: "Aménagement complet",
-    before: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80",
-    after: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=800&q=80",
+    before: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=85",
+    after: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=800&q=85",
     desc: "Rénovation totale d'un salon 30m² avec mobilier local et wax.",
     tags: ["Afro-contemporain", "Wax", "Bois"], duration: "6 semaines", year: "2025",
   },
   {
     id: "P2", title: "Chambre Zen tropicale", type: "Décoration",
-    before: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80",
-    after: "https://images.unsplash.com/photo-1655276602527-ca7c0c44d6de?auto=format&fit=crop&w=800&q=80",
+    before: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=85",
+    after: "https://images.unsplash.com/photo-1655276602527-ca7c0c44d6de?auto=format&fit=crop&w=800&q=85",
     desc: "Chambre épurée en bambou et linge naturel.",
     tags: ["Zen", "Bambou", "Tropical"], duration: "3 semaines", year: "2025",
   },
   {
     id: "P3", title: "Bureau Laiton & Bois", type: "Aménagement complet",
-    before: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80",
-    after: "https://images.unsplash.com/photo-1656403002413-2ac6137237d6?auto=format&fit=crop&w=800&q=80",
+    before: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=85",
+    after: "https://images.unsplash.com/photo-1656403002413-2ac6137237d6?auto=format&fit=crop&w=800&q=85",
     desc: "Bureau professionnel avec touches de laiton et bois massif.",
     tags: ["Luxe", "Bois", "Laiton"], duration: "8 semaines", year: "2024",
   },
   {
     id: "P4", title: "Entrée sculpturale Abomey", type: "Décoration",
-    before: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=800&q=80",
-    after: "https://images.unsplash.com/photo-1604264726154-26480e76f4e1?auto=format&fit=crop&w=800&q=80",
+    before: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=800&q=85",
+    after: "https://images.unsplash.com/photo-1604264726154-26480e76f4e1?auto=format&fit=crop&w=800&q=85",
     desc: "Entrée avec sculptures locales et miroir en raffia.",
     tags: ["Sculpture", "Raffia", "Art"], duration: "2 semaines", year: "2024",
   },
   {
     id: "P5", title: "Cuisine Terre Cuite", type: "Aménagement complet",
-    before: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80",
-    after: "https://images.unsplash.com/photo-1656402887556-e727ffe1f6d7?auto=format&fit=crop&w=800&q=80",
+    before: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=85",
+    after: "https://images.unsplash.com/photo-1656402887556-e727ffe1f6d7?auto=format&fit=crop&w=800&q=85",
     desc: "Cuisine méditerranéenne avec céramiques locales.",
     tags: ["Méditerranée", "Céramique", "Bois"], duration: "10 semaines", year: "2024",
   },
@@ -434,11 +434,11 @@ type ClientProject = {
 };
 
 const MOCK_CLIENT_PROJECTS: ClientProject[] = [
-  { id: "CMD-001", name: "Table basse Bénin Wax", artisanName: "Kofi Akindélé", artisanAvatar: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&w=80&q=80", thumb: "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=200&q=80", amount: 185000, status: "production", progress: 60 },
-  { id: "CMD-002", name: "Fauteuil Sahel Tressé", artisanName: "Amara Dossou", artisanAvatar: "https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&w=80&q=80", thumb: "https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&w=200&q=80", amount: 245000, status: "expedie", progress: 85 },
-  { id: "CMD-003", name: "Lampe Abat-jour Bogolan", artisanName: "Fatou Loko", artisanAvatar: "https://images.unsplash.com/photo-1507152927179-bc4ebfef7103?auto=format&fit=crop&w=80&q=80", thumb: "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?auto=format&fit=crop&w=200&q=80", amount: 68000, status: "livre", progress: 100 },
-  { id: "CMD-004", name: "Miroir Encadré Raffia", artisanName: "Brice Gogan", artisanAvatar: "https://images.unsplash.com/photo-1620932934088-fbdb2920e484?auto=format&fit=crop&w=80&q=80", thumb: "https://images.unsplash.com/photo-1510828561531-05a3388f6d3d?auto=format&fit=crop&w=200&q=80", amount: 95000, status: "livre", progress: 100 },
-  { id: "CMD-005", name: "Tabouret Tamtam ×2", artisanName: "Brice Gogan", artisanAvatar: "https://images.unsplash.com/photo-1620932934088-fbdb2920e484?auto=format&fit=crop&w=80&q=80", thumb: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=200&q=80", amount: 76000, status: "en_attente", progress: 0 },
+  { id: "CMD-001", name: "Table basse Bénin Wax", artisanName: "Kofi Akindélé", artisanAvatar: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&w=400&q=85", thumb: "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=200&q=80", amount: 185000, status: "production", progress: 60 },
+  { id: "CMD-002", name: "Fauteuil Sahel Tressé", artisanName: "Amara Dossou", artisanAvatar: "https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&w=400&q=85", thumb: "https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&w=200&q=80", amount: 245000, status: "expedie", progress: 85 },
+  { id: "CMD-003", name: "Lampe Abat-jour Bogolan", artisanName: "Fatou Loko", artisanAvatar: "https://images.unsplash.com/photo-1507152927179-bc4ebfef7103?auto=format&fit=crop&w=400&q=85", thumb: "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?auto=format&fit=crop&w=200&q=80", amount: 68000, status: "livre", progress: 100 },
+  { id: "CMD-004", name: "Miroir Encadré Raffia", artisanName: "Brice Gogan", artisanAvatar: "https://images.unsplash.com/photo-1620932934088-fbdb2920e484?auto=format&fit=crop&w=400&q=85", thumb: "https://images.unsplash.com/photo-1510828561531-05a3388f6d3d?auto=format&fit=crop&w=200&q=80", amount: 95000, status: "livre", progress: 100 },
+  { id: "CMD-005", name: "Tabouret Tamtam ×2", artisanName: "Brice Gogan", artisanAvatar: "https://images.unsplash.com/photo-1620932934088-fbdb2920e484?auto=format&fit=crop&w=400&q=85", thumb: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=200&q=80", amount: 76000, status: "en_attente", progress: 0 },
 ];
 
 const STATUS_LABELS: Record<ClientProject["status"], { label: string; color: string }> = {

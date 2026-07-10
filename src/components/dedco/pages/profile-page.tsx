@@ -30,7 +30,7 @@ const PROFILE = {
   email: "marie.houenou@email.bj",
   phone: "+229 97 45 32 10",
   avatar:
-    "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=240&q=85",
+    "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=400&q=85",
   role: "Client",
   memberSince: "Janvier 2024",
 };
@@ -86,7 +86,7 @@ export function ProfilePage() {
     name: currentUser?.name || "Utilisateur",
     email: currentUser?.email || "user@dedco.bj",
     phone: "+229 97 45 32 10",
-    avatar: currentUser?.avatar || "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=240&q=85",
+    avatar: currentUser?.avatar || "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=400&q=85",
     role: currentUser?.role || "client",
     memberSince: "Janvier 2024",
   };

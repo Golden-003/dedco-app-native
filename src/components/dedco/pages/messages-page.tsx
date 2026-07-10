@@ -42,7 +42,7 @@ const CONVERSATIONS: Conversation[] = [
     id: "conv-1",
     name: "Kofi Akindélé",
     avatar:
-      "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=240&q=85",
+      "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=400&q=85",
     role: "artisan",
     lastMessage: "Votre table est prête!",
     time: "14:30",
@@ -67,7 +67,7 @@ const CONVERSATIONS: Conversation[] = [
     id: "conv-2",
     name: "Ndèye Sarr",
     avatar:
-      "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=240&q=85",
+      "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=400&q=85",
     role: "designer",
     lastMessage: "J'ai envoyé la maquette",
     time: "Hier",
@@ -83,7 +83,7 @@ const CONVERSATIONS: Conversation[] = [
     id: "conv-3",
     name: "Amara Dossou",
     avatar:
-      "https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&crop=faces&w=240&q=85",
+      "https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&crop=faces&w=400&q=85",
     role: "artisan",
     lastMessage: "Merci pour la commande",
     time: "Lun",
@@ -112,7 +112,7 @@ const CONVERSATIONS: Conversation[] = [
     id: "conv-5",
     name: "Chidi Okonkwo",
     avatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&crop=faces&w=240&q=85",
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&crop=faces&w=400&q=85",
     role: "designer",
     lastMessage: "Brief mis à jour",
     time: "12 Jan",

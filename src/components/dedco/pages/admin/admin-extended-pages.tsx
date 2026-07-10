@@ -233,7 +233,7 @@ type FlaggedMsg = {
 
 const MOCK_MSGS: FlaggedMsg[] = [
   {
-    id: "MSG-001", date: "Il y a 1h", sender: "Kofi Akindélé", senderAvatar: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&w=80&q=80",
+    id: "MSG-001", date: "Il y a 1h", sender: "Kofi Akindélé", senderAvatar: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&w=400&q=85",
     recipient: "Sophie Kossou", reason: "phone",
     preview: "Appelez-moi au +229 97 45 23 10 pour discuter",
     full: "Bonjour Sophie, merci pour votre intérêt. Appelez-moi au +229 97 45 23 10 pour discuter directement du projet, ce sera plus simple.",
@@ -241,7 +241,7 @@ const MOCK_MSGS: FlaggedMsg[] = [
     status: "pending",
   },
   {
-    id: "MSG-002", date: "Il y a 3h", sender: "Brice Gogan", senderAvatar: "https://images.unsplash.com/photo-1620932934088-fbdb2920e484?auto=format&fit=crop&w=80&q=80",
+    id: "MSG-002", date: "Il y a 3h", sender: "Brice Gogan", senderAvatar: "https://images.unsplash.com/photo-1620932934088-fbdb2920e484?auto=format&fit=crop&w=400&q=85",
     recipient: "Marc Adjovi", reason: "whatsapp",
     preview: "Mon WhatsApp : +229 96 12 34 56",
     full: "Pour aller plus vite, voici mon WhatsApp : +229 96 12 34 56. On peut s'appeler en vidéo.",
@@ -249,7 +249,7 @@ const MOCK_MSGS: FlaggedMsg[] = [
     status: "pending",
   },
   {
-    id: "MSG-003", date: "Hier", sender: "Aïcha Monteiro", senderAvatar: "https://images.unsplash.com/photo-1743871698163-a2e470d8eac7?auto=format&fit=crop&w=80&q=80",
+    id: "MSG-003", date: "Hier", sender: "Aïcha Monteiro", senderAvatar: "https://images.unsplash.com/photo-1743871698163-a2e470d8eac7?auto=format&fit=crop&w=400&q=85",
     recipient: "Lucie Bokossa", reason: "url",
     preview: "Voir mon site : https://aicha-textiles.bj",
     full: "Vous pouvez voir plus de mes créations sur mon site externe : https://aicha-textiles.bj",
@@ -257,7 +257,7 @@ const MOCK_MSGS: FlaggedMsg[] = [
     status: "pending",
   },
   {
-    id: "MSG-004", date: "Il y a 2j", sender: "Fatou Loko", senderAvatar: "https://images.unsplash.com/photo-1507152927179-bc4ebfef7103?auto=format&fit=crop&w=80&q=80",
+    id: "MSG-004", date: "Il y a 2j", sender: "Fatou Loko", senderAvatar: "https://images.unsplash.com/photo-1507152927179-bc4ebfef7103?auto=format&fit=crop&w=400&q=85",
     recipient: "Paul Hounkpatin", reason: "phone",
     preview: "Tel: 229 97 45 23 10",
     full: "Tel: 229 97 45 23 10 — appel direct sans frais",
@@ -385,8 +385,8 @@ type Litige = {
 
 const MOCK_LITIGES: Litige[] = [
   {
-    id: "LIT-001", cmdRef: "CMD-001", client: "Sophie Kossou", clientAvatar: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&w=80&q=80",
-    artisan: "Kofi Akindélé", artisanAvatar: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&w=80&q=80",
+    id: "LIT-001", cmdRef: "CMD-001", client: "Sophie Kossou", clientAvatar: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&w=400&q=85",
+    artisan: "Kofi Akindélé", artisanAvatar: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&w=400&q=85",
     type: "non_conforme", amount: 185000, openedAt: "15 jan", echeance: "22 jan", status: "arbitrage",
     desc: "La table basse reçue ne correspond pas aux dimensions commandées. 110cm au lieu de 120cm.",
     photos: {
@@ -395,8 +395,8 @@ const MOCK_LITIGES: Litige[] = [
     },
   },
   {
-    id: "LIT-002", cmdRef: "CMD-003", client: "Marc Adjovi", clientAvatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=80&q=80",
-    artisan: "Brice Gogan", artisanAvatar: "https://images.unsplash.com/photo-1620932934088-fbdb2920e484?auto=format&fit=crop&w=80&q=80",
+    id: "LIT-002", cmdRef: "CMD-003", client: "Marc Adjovi", clientAvatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=85",
+    artisan: "Brice Gogan", artisanAvatar: "https://images.unsplash.com/photo-1620932934088-fbdb2920e484?auto=format&fit=crop&w=400&q=85",
     type: "endommage", amount: 95000, openedAt: "12 jan", echeance: "19 jan", status: "ouvert",
     desc: "Miroir reçu fissuré pendant le transport.",
     photos: {
@@ -405,8 +405,8 @@ const MOCK_LITIGES: Litige[] = [
     },
   },
   {
-    id: "LIT-003", cmdRef: "CMD-005", client: "Lucie Bokossa", clientAvatar: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=80&q=80",
-    artisan: "Amara Dossou", artisanAvatar: "https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&w=80&q=80",
+    id: "LIT-003", cmdRef: "CMD-005", client: "Lucie Bokossa", clientAvatar: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=400&q=85",
+    artisan: "Amara Dossou", artisanAvatar: "https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&w=400&q=85",
     type: "defaut", amount: 76000, openedAt: "10 jan", echeance: "17 jan", status: "negociation",
     desc: "Tabouret avec assemblage bancal, нестабильный.",
     photos: {

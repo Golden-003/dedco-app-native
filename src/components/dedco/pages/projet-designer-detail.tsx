@@ -122,10 +122,10 @@ const MOCK_PROJECTS: Record<string, DesignerProjectMock> = {
     dateDemarrage: "10 juin 2026",
     dateLivraison: "25 juin 2026",
     livrables: [
-      { id: "L1", name: "Moodboard bureau.pdf", type: "moodboard", date: "15 juin", status: "available", preview: "https://images.unsplash.com/photo-1488972685288-c3fd157d7c7a?auto=format&fit=crop&w=300&q=80" },
-      { id: "L2", name: "Plan d'aménagement 2D.pdf", type: "plan", date: "18 juin", status: "available", preview: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=300&q=80" },
-      { id: "L3", name: "Palette couleurs.pdf", type: "palette", date: "20 juin", status: "available", preview: "https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=300&q=80" },
-      { id: "L4", name: "Sélection mobilier.pdf", type: "sourcing", date: "23 juin", status: "available", preview: "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=300&q=80" },
+      { id: "L1", name: "Moodboard bureau.pdf", type: "moodboard", date: "15 juin", status: "available", preview: "https://images.unsplash.com/photo-1488972685288-c3fd157d7c7a?auto=format&fit=crop&w=800&q=85" },
+      { id: "L2", name: "Plan d'aménagement 2D.pdf", type: "plan", date: "18 juin", status: "available", preview: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=85" },
+      { id: "L3", name: "Palette couleurs.pdf", type: "palette", date: "20 juin", status: "available", preview: "https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=800&q=85" },
+      { id: "L4", name: "Sélection mobilier.pdf", type: "sourcing", date: "23 juin", status: "available", preview: "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=800&q=85" },
     ],
     revisions: [
       { id: "R1", round: 1, requestedAt: "20 juin", motif: "Palette trop froide, ajouter touches terracotta", status: "done", deliveredAt: "22 juin" },
@@ -156,9 +156,9 @@ const MOCK_PROJECTS: Record<string, DesignerProjectMock> = {
     dateDemarrage: "5 mai 2026",
     dateLivraison: "1 juin 2026",
     livrables: [
-      { id: "L1", name: "Moodboard salon.pdf", type: "moodboard", date: "10 mai", status: "available", preview: "https://images.unsplash.com/photo-1488972685288-c3fd157d7c7a?auto=format&fit=crop&w=300&q=80" },
-      { id: "L2", name: "Plan 2D salon.pdf", type: "plan", date: "15 mai", status: "available", preview: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=300&q=80" },
-      { id: "L3", name: "Palette salon.pdf", type: "palette", date: "20 mai", status: "available", preview: "https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=300&q=80" },
+      { id: "L1", name: "Moodboard salon.pdf", type: "moodboard", date: "10 mai", status: "available", preview: "https://images.unsplash.com/photo-1488972685288-c3fd157d7c7a?auto=format&fit=crop&w=800&q=85" },
+      { id: "L2", name: "Plan 2D salon.pdf", type: "plan", date: "15 mai", status: "available", preview: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=85" },
+      { id: "L3", name: "Palette salon.pdf", type: "palette", date: "20 mai", status: "available", preview: "https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=800&q=85" },
     ],
     revisions: [
       { id: "R1", round: 1, requestedAt: "22 mai", motif: "Préférer un canapé d'angle", status: "done", deliveredAt: "25 mai" },

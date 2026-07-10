@@ -19,7 +19,7 @@ export const ARTISANS: Artisan[] = [
     specialty: "Ébénisterie & Menuiserie",
     city: "Cotonou",
     avatar:
-      "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=240&q=85",
+      "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=400&q=85",
     rating: 4.9,
     reviews: 87,
     level: "N3",
@@ -28,8 +28,8 @@ export const ARTISANS: Artisan[] = [
     bio: "Maître ébéniste formé à Cotonou et Accra, Kofi crée des meubles qui marient les essences locales et les techniques traditionnelles avec un design contemporain. Son atelier Akindélé Wood emploie 8 artisans.",
     portfolio: [
       "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=1200&q=85",
-      "https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?auto=format&fit=crop&crop=entropy&w=300&q=80",
-      "https://images.unsplash.com/photo-1566921895456-1cee64031c33?w=300&q=80",
+      "https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1566921895456-1cee64031c33?w=800&q=85",
     ],
     trust: 90,
     wallet_solde: 245000,
@@ -42,7 +42,7 @@ export const ARTISANS: Artisan[] = [
     specialty: "Rotin & Osier",
     city: "Porto-Novo",
     avatar:
-      "https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&crop=faces&w=240&q=85",
+      "https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&crop=faces&w=400&q=85",
     rating: 4.8,
     reviews: 64,
     level: "N2",
@@ -51,8 +51,8 @@ export const ARTISANS: Artisan[] = [
     bio: "Artisan spécialisée dans la vannerie et le mobilier en rotin, Amara perpétue un savoir-faire familial transmis sur 3 générations. Ses créations sont exportées en France et au Sénégal.",
     portfolio: [
       "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=1200&q=85",
-      "https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&crop=entropy&w=300&q=80",
-      "https://images.unsplash.com/photo-1528789386055-75c4b717bad1?auto=format&fit=crop&crop=entropy&w=300&q=80",
+      "https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1528789386055-75c4b717bad1?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     trust: 85,
     wallet_solde: 178000,
@@ -65,7 +65,7 @@ export const ARTISANS: Artisan[] = [
     specialty: "Luminaires & Textile",
     city: "Cotonou",
     avatar:
-      "https://images.unsplash.com/photo-1507152927179-bc4ebfef7103?auto=format&fit=crop&crop=faces&w=240&q=85",
+      "https://images.unsplash.com/photo-1507152927179-bc4ebfef7103?auto=format&fit=crop&crop=faces&w=400&q=85",
     rating: 4.7,
     reviews: 52,
     level: "N1",
@@ -73,9 +73,9 @@ export const ARTISANS: Artisan[] = [
     experience: "5 ans",
     bio: "Créatrice lumineuse qui associe les textiles traditionnels bogolan et wax à des luminaires contemporains. Ses pièces apportent une ambiance chaleureuse unique.",
     portfolio: [
-      "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?auto=format&fit=crop&crop=entropy&w=300&q=80",
-      "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&crop=entropy&w=300&q=80",
-      "https://images.unsplash.com/photo-1648809895588-c0bd7e06a61c?auto=format&fit=crop&crop=entropy&w=300&q=80",
+      "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1648809895588-c0bd7e06a61c?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     trust: 72,
     wallet_solde: 56000,
@@ -88,7 +88,7 @@ export const ARTISANS: Artisan[] = [
     specialty: "Sculpture & Art Déco",
     city: "Abomey",
     avatar:
-      "https://images.unsplash.com/photo-1620932934088-fbdb2920e484?auto=format&fit=crop&crop=faces&w=240&q=85",
+      "https://images.unsplash.com/photo-1620932934088-fbdb2920e484?auto=format&fit=crop&crop=faces&w=400&q=85",
     rating: 4.7,
     reviews: 39,
     level: "N2",
@@ -96,9 +96,9 @@ export const ARTISANS: Artisan[] = [
     experience: "9 ans",
     bio: "Sculpteur d'Abomey, ville royale du Bénin, Brice travaille le bois, le métal et la terre pour créer des pièces décoratives uniques d'inspiration vodou et contemporaine.",
     portfolio: [
-      "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&crop=entropy&w=300&q=80",
-      "https://images.unsplash.com/photo-1604264726154-26480e76f4e1?auto=format&fit=crop&crop=entropy&w=300&q=80",
-      "https://images.unsplash.com/photo-1611078295948-10b3961e1e40?auto=format&fit=crop&crop=entropy&w=300&q=80",
+      "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1604264726154-26480e76f4e1?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1611078295948-10b3961e1e40?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     trust: 65,
     wallet_solde: 92000,
@@ -111,7 +111,7 @@ export const ARTISANS: Artisan[] = [
     specialty: "Tissus & Couture",
     city: "Cotonou",
     avatar:
-      "https://images.unsplash.com/photo-1743871698163-a2e470d8eac7?auto=format&fit=crop&crop=faces&w=240&q=85",
+      "https://images.unsplash.com/photo-1743871698163-a2e470d8eac7?auto=format&fit=crop&crop=faces&w=400&q=85",
     rating: 4.5,
     reviews: 28,
     level: "N1",
@@ -119,9 +119,9 @@ export const ARTISANS: Artisan[] = [
     experience: "3 ans",
     bio: "Couturière et créatrice textile, Aïcha travaille les wax, kente et bogolan pour créer coussins, rideaux et textiles d'intérieur hauts de gamme.",
     portfolio: [
-      "https://images.unsplash.com/photo-1579656592043-a20e25a4aa4b?auto=format&fit=crop&crop=entropy&w=300&q=80",
-      "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&crop=entropy&w=300&q=80",
-      "https://images.unsplash.com/photo-1618722060945-b87f7326995b?auto=format&fit=crop&crop=entropy&w=300&q=80",
+      "https://images.unsplash.com/photo-1579656592043-a20e25a4aa4b?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1618722060945-b87f7326995b?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     trust: 45,
     wallet_solde: 18000,
@@ -134,7 +134,7 @@ export const ARTISANS: Artisan[] = [
     specialty: "Bois Sculpté",
     city: "Parakou",
     avatar:
-      "https://images.unsplash.com/photo-1612214070442-3c806a722f0b?auto=format&fit=crop&crop=faces&w=240&q=85",
+      "https://images.unsplash.com/photo-1612214070442-3c806a722f0b?auto=format&fit=crop&crop=faces&w=400&q=85",
     rating: 4.8,
     reviews: 35,
     level: "N4",
@@ -142,9 +142,9 @@ export const ARTISANS: Artisan[] = [
     experience: "15 ans",
     bio: "Maître sculpteur de Parakou, Théodore transforme le bois local en sculptures fonctionnelles et décoratives. Son atelier forme les jeunes artisans du nord Bénin.",
     portfolio: [
-      "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&crop=entropy&w=300&q=80",
+      "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&crop=entropy&w=800&q=85",
       "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=1200&q=85",
-      "https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?auto=format&fit=crop&crop=entropy&w=300&q=80",
+      "https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     trust: 95,
     wallet_solde: 412000,
@@ -157,7 +157,7 @@ export const ARTISANS: Artisan[] = [
     specialty: "Tapisserie & Mobilier",
     city: "Cotonou",
     avatar:
-      "https://images.unsplash.com/photo-1533108344127-a586d2b02479?auto=format&fit=crop&crop=faces&w=240&q=85",
+      "https://images.unsplash.com/photo-1533108344127-a586d2b02479?auto=format&fit=crop&crop=faces&w=400&q=85",
     rating: 4.9,
     reviews: 47,
     level: "N3",
@@ -166,7 +166,7 @@ export const ARTISANS: Artisan[] = [
     bio: "Tapissier de haut vol, Romuald redonne vie aux meubles et crée des canapés et fauteuils sur mesure alliant confort européen et esthétique africaine.",
     portfolio: [
       "https://images.unsplash.com/photo-1693578616322-c8abe6c7393d?auto=format&fit=crop&w=1200&q=85",
-      "https://images.unsplash.com/photo-1567016376408-0226e4d0c1ea?auto=format&fit=crop&crop=entropy&w=300&q=80",
+      "https://images.unsplash.com/photo-1567016376408-0226e4d0c1ea?auto=format&fit=crop&crop=entropy&w=800&q=85",
       "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&w=1200&q=85",
     ],
     trust: 88,
@@ -180,7 +180,7 @@ export const ARTISANS: Artisan[] = [
     specialty: "Poterie & Céramique",
     city: "Porto-Novo",
     avatar:
-      "https://images.unsplash.com/photo-1533674689012-136b487b7736?auto=format&fit=crop&crop=faces&w=240&q=85",
+      "https://images.unsplash.com/photo-1533674689012-136b487b7736?auto=format&fit=crop&crop=faces&w=400&q=85",
     rating: 4.6,
     reviews: 31,
     level: "N2",
@@ -188,9 +188,9 @@ export const ARTISANS: Artisan[] = [
     experience: "7 ans",
     bio: "Céramiste et potière, Céleste perpétue l'art de la poterie béninoise en créant vases, bols et objets décoratifs contemporains inspirés des motifs vodou et egun.",
     portfolio: [
-      "https://images.unsplash.com/photo-1611078295948-10b3961e1e40?auto=format&fit=crop&crop=entropy&w=300&q=80",
-      "https://images.unsplash.com/photo-1528789386055-75c4b717bad1?auto=format&fit=crop&crop=entropy&w=300&q=80",
-      "https://images.unsplash.com/photo-1510828561531-05a3388f6d3d?auto=format&fit=crop&crop=entropy&w=300&q=80",
+      "https://images.unsplash.com/photo-1611078295948-10b3961e1e40?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1528789386055-75c4b717bad1?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1510828561531-05a3388f6d3d?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     trust: 70,
     wallet_solde: 84000,
@@ -215,8 +215,8 @@ export const PRODUCTS: Product[] = [
     badge: "Coup de cœur",
     images: [
       "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=1200&q=85",
-      "https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?auto=format&fit=crop&crop=entropy&w=800&q=80",
-      "https://images.unsplash.com/photo-1579656592043-a20e25a4aa4b?auto=format&fit=crop&crop=entropy&w=800&q=80",
+      "https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1579656592043-a20e25a4aa4b?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     desc: "Table basse artisanale en bois iroko massif avec plateau décoré de tissu wax authentique. Chaque pièce est unique, fabriquée à la main dans l'atelier Akindélé à Cotonou.",
     tags: ["artisanat", "wax", "bois", "iroko"],
@@ -236,7 +236,7 @@ export const PRODUCTS: Product[] = [
     badge: "Best-seller",
     images: [
       "https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&w=1200&q=85",
-      "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&crop=entropy&w=800&q=80",
+      "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     desc: "Fauteuil iconique en rotin tressé à la main, conçu par l'atelier Dossou. Structure solide et coussin en coton naturel. Idéal pour salon ou véranda tropicale.",
     tags: ["rotin", "fauteuil", "artisanat"],
@@ -255,8 +255,8 @@ export const PRODUCTS: Product[] = [
     stock: 8,
     badge: "Promo -20%",
     images: [
-      "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?auto=format&fit=crop&crop=entropy&w=800&q=80",
-      "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&crop=entropy&w=800&q=80",
+      "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     desc: "Lampe de table avec abat-jour en tissu bogolan authentique du Mali, structure en laiton brossé. Lumière tamisée et chaleureuse.",
     tags: ["luminaire", "bogolan", "laiton"],
@@ -273,8 +273,8 @@ export const PRODUCTS: Product[] = [
     reviews: 12,
     stock: 4,
     images: [
-      "https://images.unsplash.com/photo-1510828561531-05a3388f6d3d?auto=format&fit=crop&crop=entropy&w=800&q=80",
-      "https://images.unsplash.com/photo-1468531390554-9f62f9767a87?auto=format&fit=crop&crop=entropy&w=800&q=80",
+      "https://images.unsplash.com/photo-1510828561531-05a3388f6d3d?auto=format&fit=crop&crop=entropy&w=800&q=85",
+      "https://images.unsplash.com/photo-1468531390554-9f62f9767a87?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     desc: "Grand miroir rond (80cm) avec cadre en raffia tressé artisanalement. Pièce décorative unique pour entrée ou salon.",
     tags: ["miroir", "raffia", "décoration"],
@@ -294,7 +294,7 @@ export const PRODUCTS: Product[] = [
     badge: "Exclusif",
     images: [
       "https://images.unsplash.com/photo-1517467139951-f5a925c9f9de?auto=format&fit=crop&w=1200&q=85",
-      "https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?auto=format&fit=crop&crop=entropy&w=800&q=80",
+      "https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     desc: "Commode 4 tiroirs en teck massif avec poignées en laiton gravé. Design épuré inspiré de l'architecture coloniale réinterprétée.",
     tags: ["commode", "teck", "rangement"],
@@ -311,7 +311,7 @@ export const PRODUCTS: Product[] = [
     reviews: 34,
     stock: 12,
     images: [
-      "https://images.unsplash.com/photo-1579656592043-a20e25a4aa4b?auto=format&fit=crop&crop=entropy&w=800&q=80",
+      "https://images.unsplash.com/photo-1579656592043-a20e25a4aa4b?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     desc: "Set de 4 coussins en tissu kente authentique, rembourrage en fibres naturelles. Apportent une touche colorée et ethnique à votre canapé.",
     tags: ["coussins", "kente", "textile"],
@@ -329,7 +329,7 @@ export const PRODUCTS: Product[] = [
     stock: 1,
     badge: "Sur commande",
     images: [
-      "https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?auto=format&fit=crop&crop=entropy&w=800&q=80",
+      "https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     desc: "Table à manger 6 à 8 personnes en acajou du Bénin. Plateau 220×100cm, pieds tournés. Délai de fabrication : 3 semaines.",
     tags: ["table", "acajou", "salle à manger"],
@@ -385,7 +385,7 @@ export const PRODUCTS: Product[] = [
     stock: 7,
     badge: "Promo",
     images: [
-      "https://images.unsplash.com/photo-1648809895588-c0bd7e06a61c?auto=format&fit=crop&crop=entropy&w=800&q=80",
+      "https://images.unsplash.com/photo-1648809895588-c0bd7e06a61c?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     desc: "Suspension en bambou tressé artisanalement, douille E27. Création lumineuse et organique pour salon ou salle à manger. Diamètre 45cm.",
     tags: ["suspension", "bambou", "luminaire"],
@@ -421,7 +421,7 @@ export const PRODUCTS: Product[] = [
     reviews: 38,
     stock: 15,
     images: [
-      "https://images.unsplash.com/photo-1611078295948-10b3961e1e40?auto=format&fit=crop&crop=entropy&w=800&q=80",
+      "https://images.unsplash.com/photo-1611078295948-10b3961e1e40?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     desc: "Vase en terre cuite de Cotonou, tourné et peint à la main. Chaque pièce est unique. Plusieurs tailles disponibles.",
     tags: ["vase", "terre cuite", "poterie"],
@@ -438,7 +438,7 @@ export const PRODUCTS: Product[] = [
     reviews: 22,
     stock: 20,
     images: [
-      "https://images.unsplash.com/photo-1528789386055-75c4b717bad1?auto=format&fit=crop&crop=entropy&w=800&q=80",
+      "https://images.unsplash.com/photo-1528789386055-75c4b717bad1?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     desc: "Grand panier en osier tressé (Ø50cm×60cm). Rangement décoratif, plante pot de cache, ou simple décoration.",
     tags: ["panier", "osier", "décoration"],
@@ -476,7 +476,7 @@ export const PRODUCTS: Product[] = [
     reviews: 15,
     stock: 9,
     images: [
-      "https://images.unsplash.com/photo-1568146687696-427782f92379?auto=format&fit=crop&crop=entropy&w=800&q=80",
+      "https://images.unsplash.com/photo-1568146687696-427782f92379?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     desc: "Paire d'appliques murales orientables, diffuseur en tissu naturel. Idéal pour éclairage d'ambiance en chambre ou salon.",
     tags: ["applique", "éclairage", "métal"],
@@ -493,7 +493,7 @@ export const PRODUCTS: Product[] = [
     reviews: 31,
     stock: 10,
     images: [
-      "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&crop=entropy&w=800&q=80",
+      "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     desc: "Tabouret sculpté à la main en forme de tamtam traditionnel. Polyvalent : tabouret, table d'appoint ou décoration.",
     tags: ["tabouret", "sculpté", "artisanat"],
@@ -510,7 +510,7 @@ export const PRODUCTS: Product[] = [
     reviews: 26,
     stock: 8,
     images: [
-      "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&crop=entropy&w=800&q=80",
+      "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     desc: "Paire de rideaux (2×250cm) en wax imprimé authentique. Doublure légère incluse. Grandes fenêtres et portes-fenêtres.",
     tags: ["rideaux", "wax", "textile"],
@@ -528,7 +528,7 @@ export const PRODUCTS: Product[] = [
     reviews: 19,
     stock: 6,
     images: [
-      "https://images.unsplash.com/photo-1618722060945-b87f7326995b?auto=format&fit=crop&crop=entropy&w=800&q=80",
+      "https://images.unsplash.com/photo-1618722060945-b87f7326995b?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     desc: "Grand plateau en laiton martelé artisanalement (Ø60cm). Utilisation décorative ou fonctionnelle, plié sur trépied ou sur table.",
     tags: ["plateau", "laiton", "décoration"],
@@ -547,7 +547,7 @@ export const PRODUCTS: Product[] = [
     stock: 2,
     badge: "Nouveauté",
     images: [
-      "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&crop=entropy&w=800&q=80",
+      "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     desc: "Bibliothèque design à structure métal avec façades en rotin tressé. 3 niveaux, 150×40×180cm. Esprit tropical chic.",
     tags: ["bibliothèque", "rotin", "métal"],
@@ -566,7 +566,7 @@ export const PRODUCTS: Product[] = [
     stock: 5,
     badge: "Coup de cœur",
     images: [
-      "https://images.unsplash.com/photo-1604264726154-26480e76f4e1?auto=format&fit=crop&crop=entropy&w=800&q=80",
+      "https://images.unsplash.com/photo-1604264726154-26480e76f4e1?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     desc: "Porte-manteau mural en forme de branches de baobab, sculpté dans un seul morceau de bois. 6 crochets naturels. Œuvre d'art fonctionnelle.",
     tags: ["porte-manteau", "sculpté", "bois"],
@@ -583,7 +583,7 @@ export const PRODUCTS: Product[] = [
     reviews: 16,
     stock: 4,
     images: [
-      "https://images.unsplash.com/photo-1567016376408-0226e4d0c1ea?auto=format&fit=crop&crop=entropy&w=800&q=80",
+      "https://images.unsplash.com/photo-1567016376408-0226e4d0c1ea?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     desc: "Chaise design en bois massif avec assise et dossier en cuir végétal tannage végétal. Empilable. Idéal salle à manger.",
     tags: ["chaise", "cuir", "salle à manger"],
@@ -600,7 +600,7 @@ export const PRODUCTS: Product[] = [
     reviews: 13,
     stock: 7,
     images: [
-      "https://images.unsplash.com/photo-1611078295948-10b3961e1e40?auto=format&fit=crop&crop=entropy&w=800&q=80",
+      "https://images.unsplash.com/photo-1611078295948-10b3961e1e40?auto=format&fit=crop&crop=entropy&w=800&q=85",
     ],
     desc: "Set de décoration chambre : porte-bougie, vide-poche, vase en bambou et céramique. Esprit zen et naturel.",
     tags: ["chambre", "bambou", "zen"],
@@ -614,7 +614,7 @@ export const DESIGNERS: Designer[] = [
     specialty: "Design d'intérieur contemporain-africain",
     city: "Cotonou",
     avatar:
-      "https://images.unsplash.com/photo-1729355796906-10a9809e0864?auto=format&fit=crop&crop=faces&w=240&q=85",
+      "https://images.unsplash.com/photo-1729355796906-10a9809e0864?auto=format&fit=crop&crop=faces&w=400&q=85",
     rating: 4.9,
     reviews: 34,
     hourlyRate: 25000,
@@ -630,7 +630,7 @@ export const DESIGNERS: Designer[] = [
     specialty: "Architecture d'intérieur & Scénographie",
     city: "Cotonou",
     avatar:
-      "https://images.unsplash.com/photo-1616805765352-beedbad46b2a?auto=format&fit=crop&crop=faces&w=240&q=85",
+      "https://images.unsplash.com/photo-1616805765352-beedbad46b2a?auto=format&fit=crop&crop=faces&w=400&q=85",
     rating: 4.8,
     reviews: 22,
     hourlyRate: 35000,
@@ -646,7 +646,7 @@ export const DESIGNERS: Designer[] = [
     specialty: "Décoration & Styling",
     city: "Porto-Novo",
     avatar:
-      "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=240&q=85",
+      "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=400&q=85",
     rating: 4.7,
     reviews: 41,
     hourlyRate: 18000,
@@ -662,7 +662,7 @@ export const DESIGNERS: Designer[] = [
     specialty: "Design biophilique",
     city: "Abomey-Calavi",
     avatar:
-      "https://images.unsplash.com/photo-1570158268183-d296b2892211?auto=format&fit=crop&crop=faces&w=240&q=85",
+      "https://images.unsplash.com/photo-1570158268183-d296b2892211?auto=format&fit=crop&crop=faces&w=400&q=85",
     rating: 4.8,
     reviews: 18,
     hourlyRate: 22000,
@@ -733,7 +733,7 @@ export const SCENES: Scene[] = [
     style: "Méditerranée africaine",
     room: "Cuisine",
     image:
-      "https://images.unsplash.com/photo-1656402887556-e727ffe1f6d7?auto=format&fit=crop&crop=entropy&w=1200&q=80",
+      "https://images.unsplash.com/photo-1656402887556-e727ffe1f6d7?auto=format&fit=crop&crop=entropy&w=1200&q=85",
     hotspots: [
       { x: 35, y: 55, productId: 12 },
       { x: 60, y: 40, productId: 16 },
@@ -750,7 +750,7 @@ export const SCENES: Scene[] = [
     style: "Art & Artisanat",
     room: "Entrée",
     image:
-      "https://images.unsplash.com/photo-1604264726154-26480e76f4e1?auto=format&fit=crop&crop=entropy&w=1200&q=80",
+      "https://images.unsplash.com/photo-1604264726154-26480e76f4e1?auto=format&fit=crop&crop=entropy&w=1200&q=85",
     hotspots: [
       { x: 50, y: 50, productId: 20 },
       { x: 30, y: 70, productId: 4 },
@@ -795,7 +795,7 @@ export const MAGAZINE: Magazine[] = [
     date: "15 Jan 2024",
     readTime: "4 min",
     image:
-      "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&crop=entropy&w=800&q=80",
+      "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&crop=entropy&w=800&q=85",
     featured: false,
     excerpt:
       "De Cotonou à Parakou, nous avons sélectionné les créateurs qui redéfinissent l'artisanat béninois contemporain.",
@@ -821,7 +821,7 @@ export const MAGAZINE: Magazine[] = [
     date: "02 Jan 2024",
     readTime: "7 min",
     image:
-      "https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?auto=format&fit=crop&crop=entropy&w=800&q=80",
+      "https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?auto=format&fit=crop&crop=entropy&w=800&q=85",
     featured: false,
     excerpt:
       "Niveaux de confiance, avis vérifiés, portfolio : tout ce qu'il faut regarder avant de passer commande.",
@@ -872,9 +872,9 @@ export const levelBadgeStyle = (level: string): { bg: string; text: string; labe
 };
 
 export const heroAvatars = [
-  "https://images.unsplash.com/photo-1659422440915-d516c6dc932e?auto=format&fit=crop&crop=faces&w=80&q=85",
-  "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=80&q=85",
-  "https://images.unsplash.com/photo-1616805765352-beedbad46b2a?auto=format&fit=crop&crop=faces&w=80&q=85",
-  "https://images.unsplash.com/photo-1570158268183-d296b2892211?auto=format&fit=crop&crop=faces&w=80&q=85",
-  "https://images.unsplash.com/photo-1533674689012-136b487b7736?auto=format&fit=crop&crop=faces&w=80&q=85",
+  "https://images.unsplash.com/photo-1659422440915-d516c6dc932e?auto=format&fit=crop&crop=faces&w=400&q=85",
+  "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=400&q=85",
+  "https://images.unsplash.com/photo-1616805765352-beedbad46b2a?auto=format&fit=crop&crop=faces&w=400&q=85",
+  "https://images.unsplash.com/photo-1570158268183-d296b2892211?auto=format&fit=crop&crop=faces&w=400&q=85",
+  "https://images.unsplash.com/photo-1533674689012-136b487b7736?auto=format&fit=crop&crop=faces&w=400&q=85",
 ];

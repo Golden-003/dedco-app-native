@@ -57,7 +57,7 @@ const MOCK_BRIEFS: Brief[] = [
   {
     id: "BRF-001",
     client: "Sophie Kossou",
-    avatar: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=80&q=80",
+    avatar: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=400&q=85",
     type: "mobilier",
     room: "Salon",
     budgetMin: 200000,
@@ -71,7 +71,7 @@ const MOCK_BRIEFS: Brief[] = [
   {
     id: "BRF-002",
     client: "Marc Adjovi",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&crop=faces&w=80&q=80",
+    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&crop=faces&w=400&q=85",
     type: "decoration",
     room: "Entrée",
     budgetMin: 50000,
@@ -85,7 +85,7 @@ const MOCK_BRIEFS: Brief[] = [
   {
     id: "BRF-003",
     client: "Aïcha Sanni",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=80&q=80",
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=400&q=85",
     type: "amenagement",
     room: "Bureau",
     budgetMin: 150000,
@@ -98,7 +98,7 @@ const MOCK_BRIEFS: Brief[] = [
   {
     id: "BRF-004",
     client: "Paul Hounkpatin",
-    avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&crop=faces&w=80&q=80",
+    avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&crop=faces&w=400&q=85",
     type: "mobilier",
     room: "Chambre",
     budgetMin: 80000,
@@ -598,11 +598,11 @@ type Review = {
 };
 
 const MOCK_REVIEWS: Review[] = [
-  { id: "1", client: "Sophie Kossou", avatar: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=80&q=80", date: "Il y a 3 jours", rating: 5, comment: "Très belle table basse, finition impeccable. Kofi a su comprendre exactement ce que je voulais. Livraison en avance !", hasReply: false },
-  { id: "2", client: "Marc Adjovi", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&crop=faces&w=80&q=80", date: "Il y a 1 semaine", rating: 5, comment: "Excellent travail, wax bleu Ankara magnifique. Je recommande vivement.", hasReply: true, reply: "Merci beaucoup Marc pour votre confiance ! À bientôt pour un prochain projet." },
-  { id: "3", client: "Aïcha Sanni", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=80&q=80", date: "Il y a 2 semaines", rating: 4, comment: "Bonne qualité, délai légèrement dépassé mais le résultat en valait la peine.", hasReply: false },
-  { id: "4", client: "Paul Hounkpatin", avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&crop=faces&w=80&q=80", date: "Il y a 3 semaines", rating: 5, comment: "Artisan talentueux et à l'écoute. Tête de lit parfaite.", hasReply: false },
-  { id: "5", client: "Lucie Bokossa", avatar: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&crop=faces&w=80&q=80", date: "Il y a 1 mois", rating: 5, comment: "Commode en teck superbe, exactement comme sur les photos du portfolio.", hasReply: true, reply: "Merci Lucie ! N'hésitez pas à nous recommander." },
+  { id: "1", client: "Sophie Kossou", avatar: "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=400&q=85", date: "Il y a 3 jours", rating: 5, comment: "Très belle table basse, finition impeccable. Kofi a su comprendre exactement ce que je voulais. Livraison en avance !", hasReply: false },
+  { id: "2", client: "Marc Adjovi", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&crop=faces&w=400&q=85", date: "Il y a 1 semaine", rating: 5, comment: "Excellent travail, wax bleu Ankara magnifique. Je recommande vivement.", hasReply: true, reply: "Merci beaucoup Marc pour votre confiance ! À bientôt pour un prochain projet." },
+  { id: "3", client: "Aïcha Sanni", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=400&q=85", date: "Il y a 2 semaines", rating: 4, comment: "Bonne qualité, délai légèrement dépassé mais le résultat en valait la peine.", hasReply: false },
+  { id: "4", client: "Paul Hounkpatin", avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&crop=faces&w=400&q=85", date: "Il y a 3 semaines", rating: 5, comment: "Artisan talentueux et à l'écoute. Tête de lit parfaite.", hasReply: false },
+  { id: "5", client: "Lucie Bokossa", avatar: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&crop=faces&w=400&q=85", date: "Il y a 1 mois", rating: 5, comment: "Commode en teck superbe, exactement comme sur les photos du portfolio.", hasReply: true, reply: "Merci Lucie ! N'hésitez pas à nous recommander." },
 ];
 
 export function ArtisanAvisPage() {

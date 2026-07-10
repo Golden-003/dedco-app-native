@@ -112,7 +112,7 @@ const DESIGNERS = [
     name: "Aminata Zannou",
     role: "Directrice artistique",
     avatar:
-      "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=240&q=85",
+      "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=400&q=85",
     projects: 12,
   },
   {
@@ -120,7 +120,7 @@ const DESIGNERS = [
     name: "Kofi Mensah",
     role: "Designer produit",
     avatar:
-      "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=240&q=85",
+      "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=400&q=85",
     projects: 18,
   },
   {
@@ -128,7 +128,7 @@ const DESIGNERS = [
     name: "Fatou Loko",
     role: "Designer textile",
     avatar:
-      "https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&crop=faces&w=240&q=85",
+      "https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&crop=faces&w=400&q=85",
     projects: 15,
   },
 ];

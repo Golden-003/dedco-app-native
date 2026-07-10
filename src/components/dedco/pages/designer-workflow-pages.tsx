@@ -540,7 +540,7 @@ export function ProjetDetailPage({ projectId }: { projectId: string }) {
         <div className="dedco-card p-5">
           <div className="space-y-3 mb-4 min-h-[120px]">
             <div className="flex gap-2">
-              <img src="https://images.unsplash.com/photo-1729355796906-10a9809e0864?auto=format&fit=crop&crop=faces&w=80&q=80" alt="" className="w-8 h-8 rounded-full" />
+              <img src="https://images.unsplash.com/photo-1729355796906-10a9809e0864?auto=format&fit=crop&crop=faces&w=400&q=85" alt="" className="w-8 h-8 rounded-full" />
               <div className="flex-1 p-3 bg-[var(--bg-warm)] rounded-md"><p className="text-xs text-[var(--text-3)] mb-1">Ndèye · il y a 2h</p><p className="text-sm">Je démarre le moodboard. Palette terracotta + cream ?</p></div>
             </div>
           </div>
