@@ -41,6 +41,7 @@ import {
 import { useDedcoStore, type ProjectScope } from "@/lib/store";
 import { useReviewStore } from "@/lib/review-store";
 import { formatFCFA, DESIGNERS, ARTISANS, PRODUCTS, getProduct, getArtisan } from "@/lib/dedco-data";
+import { MOCK_DESIGNER_PROJECTS, MOCK_ARTISAN_PROJECTS } from "@/lib/mock/project-mocks";
 
 // ============================================================
 // PAGE: designer-wallet — Wallet Designer
@@ -832,13 +833,15 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
 
 // ============================================================
 // PAGE: avis-livraison — Avis post-livraison
-// Gère 2 cas :
-// - orderId (marketplace) : avis lié à un productId → s'affiche sur la fiche produit
-// - projectId (sur-mesure, PA-XXX) : avis lié à l'artisan seulement → s'affiche sur le profil artisan
+// Gère 3 cas :
+// - orderId sans projectId (marketplace, CMD-XXX) : avis lié à un productId → s'affiche sur la fiche produit + profil artisan
+// - projectId PA-XXX (projet artisan sur-mesure) : avis lié à l'artisan → s'affiche sur le profil artisan
+// - projectId PD-XXX (prestation designer) : avis lié au designer → s'affiche sur le profil designer
 // ============================================================
 
 export function AvisLivraisonPage({ orderId, projectId }: { orderId: string; projectId?: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
+  const goBack = useDedcoStore((s) => s.goBack);
   const currentUser = useDedcoStore((s) => s.currentUser);
   const getOrder = useDedcoStore((s) => s.getOrder);
   const addReview = useReviewStore((s) => s.addReview);
@@ -850,37 +853,62 @@ export function AvisLivraisonPage({ orderId, projectId }: { orderId: string; pro
   const [submitted, setSubmitted] = useState(false);
   const [selectedItemIdx, setSelectedItemIdx] = useState(0);
 
-  // ── Détermine le contexte : marketplace (order) ou sur-mesure (project) ──
-  const order = projectId ? undefined : getOrder(orderId);
+  // ── Détermine le type de projet ──
+  const isDesignerProject = projectId?.startsWith("PD-");
+  const isArtisanProject = projectId?.startsWith("PA-");
+  const isMarketplaceOrder = !projectId;
 
-  // Pour les projets sur-mesure, on récupère les infos depuis projet-artisan-detail
-  // (qui a un mock PROJETS_ARTISAN). On importe juste les champs nécessaires.
-  const isCustomProject = !!projectId;
-  const reviewId = projectId || orderId; // ID utilisé pour vérifier hasReviewed
+  const order = isMarketplaceOrder ? getOrder(orderId) : undefined;
+  const reviewId = projectId || orderId;
 
-  // Pour marketplace : on prend l'item sélectionné dans la commande
+  // Récupère les infos du projet depuis les mocks partagés
+  const designerProject = isDesignerProject ? MOCK_DESIGNER_PROJECTS[projectId!] : undefined;
+  const artisanProject = isArtisanProject ? MOCK_ARTISAN_PROJECTS[projectId!] : undefined;
+
   const items = order?.items ?? [];
   const selectedItem = items[selectedItemIdx] ?? items[0];
-
-  // Pour sur-mesure : on n'a pas d'item, juste un projectId
-  // Les infos (artisan, titre) seront affichées différemment
-
   const alreadyReviewed = hasReviewed(reviewId);
+
+  // ── Libellés selon le type ──
+  const typeLabel = isDesignerProject
+    ? "Prestation designer"
+    : isArtisanProject
+    ? "Projet sur-mesure"
+    : "Commande marketplace";
+
+  const typeLabelLower = isDesignerProject
+    ? "prestation designer"
+    : isArtisanProject
+    ? "projet sur-mesure"
+    : "commande marketplace";
+
+  const projectTitle = isDesignerProject
+    ? designerProject?.title
+    : isArtisanProject
+    ? artisanProject?.title
+    : undefined;
 
   function handleSubmit() {
     if (rating === 0) return;
 
     let reviewData: Parameters<typeof addReview>[0];
 
-    if (isCustomProject) {
-      // Avis sur-mesure : pas de productId, on note l'artisan
-      // On récupère l'artisan depuis les mocks de projet-artisan-detail
-      // Pour la démo, on suppose que projectId commence par "PA-"
-      // et on mappinge vers un artisan (à défaut, artisan 1)
+    if (isDesignerProject && designerProject) {
       reviewData = {
-        orderId: projectId,
-        artisanId: 1, // TODO: récupérer depuis les mocks projet-artisan
-        projectTitle: "Projet sur mesure",
+        orderId: projectId!,
+        artisanId: 0, // TODO: les designers n'ont pas encore de review-store dédié
+        projectTitle: designerProject.title,
+        rating,
+        subRatings,
+        comment: comment.trim(),
+        authorName: currentUser?.name || "Client Dedco",
+        authorAvatar: currentUser?.avatar || "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=400&q=85",
+      };
+    } else if (isArtisanProject && artisanProject) {
+      reviewData = {
+        orderId: projectId!,
+        artisanId: 1, // TODO: récupérer depuis les mocks
+        projectTitle: artisanProject.title,
         rating,
         subRatings,
         comment: comment.trim(),
@@ -888,7 +916,6 @@ export function AvisLivraisonPage({ orderId, projectId }: { orderId: string; pro
         authorAvatar: currentUser?.avatar || "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=400&q=85",
       };
     } else if (selectedItem) {
-      // Avis marketplace : lié au productId
       reviewData = {
         orderId,
         productId: selectedItem.productId,
@@ -920,10 +947,10 @@ export function AvisLivraisonPage({ orderId, projectId }: { orderId: string; pro
         </p>
         <p className="text-xs text-[var(--text-3)] mb-6 flex items-center justify-center gap-1">
           <BadgeCheck size={12} className="text-[var(--forest)]" />
-          Avis vérifié · {isCustomProject ? "commande sur-mesure" : `commande ${orderId}`}
+          Avis vérifié · {typeLabelLower} {projectId || orderId}
         </p>
         <div className="flex gap-3 justify-center flex-wrap">
-          {!isCustomProject && selectedItem && (
+          {isMarketplaceOrder && selectedItem && (
             <button
               onClick={() => navigate({ page: "product", id: selectedItem.productId })}
               className="dedco-btn dedco-btn-primary"
@@ -932,10 +959,10 @@ export function AvisLivraisonPage({ orderId, projectId }: { orderId: string; pro
             </button>
           )}
           <button
-            onClick={() => navigate({ page: "marketplace" })}
+            onClick={() => navigate({ page: "client-projets" })}
             className="dedco-btn dedco-btn-ghost"
           >
-            Continuer mes achats
+            Retour à mes projets
           </button>
         </div>
       </div>
@@ -943,7 +970,7 @@ export function AvisLivraisonPage({ orderId, projectId }: { orderId: string; pro
   }
 
   // ── État : commande marketplace introuvable ──
-  if (!isCustomProject && !order) {
+  if (isMarketplaceOrder && !order) {
     return (
       <div className="p-8 max-w-xl mx-auto text-center">
         <div className="w-16 h-16 rounded-full bg-[var(--bg-warm)] mx-auto flex items-center justify-center mb-4">
@@ -965,28 +992,51 @@ export function AvisLivraisonPage({ orderId, projectId }: { orderId: string; pro
 
   return (
     <div className="p-4 sm:p-6 max-w-2xl mx-auto">
-      {/* Banner success */}
+      {/* Bouton retour */}
+      <button
+        type="button"
+        onClick={goBack}
+        className="inline-flex items-center gap-1 text-sm text-[var(--text-3)] hover:text-[var(--amber)] transition-colors mb-4 font-medium"
+      >
+        <ChevronLeft size={16} /> Retour
+      </button>
+
+      {/* Banner success — label adapté au type */}
       <div className="rounded-lg p-4 mb-5 bg-[var(--forest-pale)] flex items-center gap-3">
         <CheckCircle2 size={24} className="text-[var(--forest)] flex-shrink-0" />
         <div>
           <p className="font-display font-semibold text-[var(--forest)]">
-            {isCustomProject ? "Projet sur-mesure livré !" : "Commande livrée avec succès !"}
+            {isDesignerProject
+              ? "Prestation designer livrée !"
+              : isArtisanProject
+              ? "Projet sur-mesure livré !"
+              : "Commande livrée avec succès !"}
           </p>
           <p className="text-xs text-[var(--text-3)] font-numeric">
-            {isCustomProject ? `Projet ${projectId}` : `Commande ${orderId}`}
+            {projectId || orderId}
           </p>
         </div>
       </div>
 
       {/* Recap — différent selon le type */}
-      {isCustomProject ? (
+      {isDesignerProject ? (
         <div className="dedco-card p-4 mb-5 flex items-center gap-4">
-          <div className="w-16 h-16 rounded-lg bg-[var(--bg-warm)] flex items-center justify-center flex-shrink-0">
-            <Sofa size={24} className="text-[var(--amber)]" />
+          <div className="w-16 h-16 rounded-lg bg-[var(--amber-pale)] flex items-center justify-center flex-shrink-0">
+            <Palette size={24} className="text-[var(--amber)]" />
           </div>
           <div className="flex-1">
-            <p className="font-display font-semibold">Projet sur-mesure</p>
-            <p className="text-xs text-[var(--text-3)] font-numeric">{projectId}</p>
+            <p className="font-display font-semibold">{projectTitle || "Prestation designer"}</p>
+            <p className="text-xs text-[var(--text-3)]">Prestation designer · {projectId}</p>
+          </div>
+        </div>
+      ) : isArtisanProject ? (
+        <div className="dedco-card p-4 mb-5 flex items-center gap-4">
+          <div className="w-16 h-16 rounded-lg bg-[var(--bg-warm)] flex items-center justify-center flex-shrink-0">
+            <HardHat size={24} className="text-[var(--amber)]" />
+          </div>
+          <div className="flex-1">
+            <p className="font-display font-semibold">{projectTitle || "Projet sur-mesure"}</p>
+            <p className="text-xs text-[var(--text-3)]">Projet sur-mesure · {projectId}</p>
           </div>
         </div>
       ) : (
@@ -1040,10 +1090,14 @@ export function AvisLivraisonPage({ orderId, projectId }: { orderId: string; pro
       <div className="dedco-card p-5 border-t-4" style={{ borderTopColor: "var(--amber)", borderTopWidth: "3px" }}>
         <div className="flex items-center gap-2 mb-3 text-xs text-[var(--forest)] bg-[var(--forest-pale)] inline-flex px-3 py-1.5 rounded-full">
           <BadgeCheck size={12} />
-          <span className="font-semibold">Avis vérifié · {isCustomProject ? projectId : orderId}</span>
+          <span className="font-semibold">Avis vérifié · {typeLabel} · {projectId || orderId}</span>
         </div>
         <h2 className="display-md mb-4">
-          {isCustomProject ? "Notez votre projet sur-mesure" : "Notez votre commande"}
+          {isDesignerProject
+            ? "Notez votre prestation designer"
+            : isArtisanProject
+            ? "Notez votre projet sur-mesure"
+            : "Notez votre commande"}
         </h2>
         <div className="flex items-center gap-2 mb-5 justify-center">
           {[1, 2, 3, 4, 5].map((s) => (
@@ -1103,11 +1157,14 @@ export function AvisLivraisonPage({ orderId, projectId }: { orderId: string; pro
         </button>
         <p className="text-xs text-[var(--text-3)] text-center mt-3">
           Votre avis sera public, avec le badge <strong>Achat vérifié</strong>.
-          {!isCustomProject && selectedItem && (
+          {isMarketplaceOrder && selectedItem && (
             <> Il apparaîtra sur la fiche du produit et le profil de l'artisan.</>
           )}
-          {isCustomProject && (
+          {isArtisanProject && (
             <> Il apparaîtra sur le profil de l'artisan (les projets sur-mesure n'ont pas de fiche produit).</>
+          )}
+          {isDesignerProject && (
+            <> Il apparaîtra sur le profil du designer (les prestations designer n'ont pas de fiche produit).</>
           )}
         </p>
       </div>
