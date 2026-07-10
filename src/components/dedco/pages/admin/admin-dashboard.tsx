@@ -69,6 +69,7 @@ const ACTIVITIES = [
     iconBg: "var(--forest-pale)",
     text: "Nouvel utilisateur : Aminata Zannou",
     time: "Il y a 5 min",
+    link: "admin-users" as const,
   },
   {
     id: 2,
@@ -77,6 +78,7 @@ const ACTIVITIES = [
     iconBg: "var(--amber-pale)",
     text: "Commande #CMD-0472 créée — 285 000 FCFA",
     time: "Il y a 12 min",
+    link: "admin-orders" as const,
   },
   {
     id: 3,
@@ -85,6 +87,7 @@ const ACTIVITIES = [
     iconBg: "var(--forest-pale)",
     text: "KYC soumis par Kossi Mensah",
     time: "Il y a 34 min",
+    link: "admin-kyc" as const,
   },
   {
     id: 4,
@@ -93,6 +96,7 @@ const ACTIVITIES = [
     iconBg: "var(--amber-pale)",
     text: "Produit « Table Basse Adja » approuvé",
     time: "Il y a 1h",
+    link: "admin-products" as const,
   },
   {
     id: 5,
@@ -101,6 +105,7 @@ const ACTIVITIES = [
     iconBg: "var(--terracotta-pale)",
     text: "Litige #L-023 signalé — Commande #CMD-0451",
     time: "Il y a 2h",
+    link: "admin-litiges" as const,
   },
 ];
 
@@ -272,7 +277,7 @@ export function AdminDashboardPage() {
                     {item.detail}
                   </p>
                 </div>
-                <button onClick={() => navigate({ page: "admin-users" })} className="shrink-0 text-[var(--text-3)] hover:text-[var(--amber)] transition-colors cursor-pointer">
+                <button onClick={() => navigate({ page: act.link })} className="shrink-0 text-[var(--text-3)] hover:text-[var(--amber)] transition-colors cursor-pointer">
                   <ArrowUpRight size={16} />
                 </button>
               </div>

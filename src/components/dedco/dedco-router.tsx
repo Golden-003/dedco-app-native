@@ -191,8 +191,7 @@ const AUTH_REQUIRED_PAGES = new Set([
   "projet-livraison",      // livraison projet
   "projet-artisan-detail", // détail projet artisan — partagé client/artisan
   "projet-designer-detail", // détail projet designer — partagé client/designer
-  "client-projets",        // liste projets client
-  "mes-projets",           // page mes projets
+  "client-projets",        // liste projets client (anciennement "mes-projets" — supprimé car redondant)
   "order-history",         // historique commandes
   "profile",               // profil utilisateur
   "wallet",                // portefeuille
@@ -365,7 +364,7 @@ export function DedcoRouter() {
         return <MagazinePage />;
 
       case "article":
-        return <ArticlePage />;
+        return <ArticlePage articleId={route.id} />;
 
       case "favorites":
         return <FavoritesPage />;
@@ -440,7 +439,7 @@ export function DedcoRouter() {
         return <MessagesPage />;
 
       case "litige":
-        return <LitigePage />;
+        return <LitigePage litigeId={route.id} />;
 
       case "moodboard":
         return <MoodboardPage />;

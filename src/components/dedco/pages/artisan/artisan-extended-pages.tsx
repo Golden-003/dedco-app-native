@@ -931,6 +931,8 @@ export function ArtisanCertificationPage() {
 
 export function ArtisanAbonnementPage() {
   const navigate = useDedcoStore((s) => s.navigate);
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 4000); }
 
   const plans = [
     {
@@ -999,7 +1001,7 @@ export function ArtisanAbonnementPage() {
                 </li>
               ))}
             </ul>
-            <button onClick={() => navigate({ page: "home" })}
+            <button onClick={() => showToast(`Demande de changement d'abonnement envoyée : ${plan.name}. Vous serez notifié de la confirmation.`)}
               className={`dedco-btn w-full ${plan.current ? "dedco-btn-ghost" : plan.highlighted ? "dedco-btn-primary" : "dedco-btn-secondary"}`}
               disabled={plan.current}
             >
@@ -1041,6 +1043,14 @@ export function ArtisanAbonnementPage() {
           </table>
         </div>
       </div>
+
+      {/* Toast inline */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 dedco-card px-4 py-3 shadow-lg flex items-center gap-2" style={{ backgroundColor: "var(--forest-pale)", borderColor: "var(--forest)" }}>
+          <CheckCircle2 size={16} className="text-[var(--forest)] flex-shrink-0" />
+          <p className="text-sm text-[var(--text-1)]">{toast}</p>
+        </div>
+      )}
     </div>
   );
 }

@@ -615,10 +615,10 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
           Le designer va répondre sous 24-48h. Aucun paiement à cette étape.
         </p>
         <button
-          onClick={() => navigate({ page: "designer-projet-attente", projectId: "BRF-2026-001" })}
+          onClick={() => navigate({ page: "client-projets" })}
           className="dedco-btn dedco-btn-primary"
         >
-          Voir mon projet <ChevronRight size={16} />
+          Voir mes projets <ChevronRight size={16} />
         </button>
       </div>
     );

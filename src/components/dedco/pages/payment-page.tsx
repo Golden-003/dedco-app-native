@@ -116,7 +116,7 @@ export function PaymentPage() {
                       Numéro Mobile Money
                     </label>
                     <div className="relative">
-                      <PhoneInput value="" onChange={() => {}} className="w-full" />
+                      <PhoneInput value={phoneNumber} onChange={setPhoneNumber} className="w-full" />
                     </div>
                   </div>
 

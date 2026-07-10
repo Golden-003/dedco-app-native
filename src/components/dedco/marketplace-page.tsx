@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   SlidersHorizontal,
   X,
@@ -44,6 +44,21 @@ export function MarketplacePage({
   const [sort, setSort] = useState<SortKey>("pertinence");
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [showFiltersMobile, setShowFiltersMobile] = useState(false);
+
+  // ── Pré-filtrage par catégorie via URL hash ──
+  // Permet à la home page de linker vers une catégorie spécifique :
+  // onNavigate({ name: "marketplace" }) + window.location.hash = "category=tables"
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const hash = window.location.hash;
+    const match = hash.match(/category=([^&]+)/);
+    if (match && match[1]) {
+      const slug = decodeURIComponent(match[1]);
+      setSelectedCats(new Set([slug]));
+      // Nettoie l'hash pour éviter de re-filtrer au prochain mount
+      window.location.hash = "";
+    }
+  }, []);
 
   const filtered = useMemo(() => {
     let list = PRODUCTS.slice();

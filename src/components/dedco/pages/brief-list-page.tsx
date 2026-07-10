@@ -184,7 +184,15 @@ function BriefCard({ brief, index }: { brief: Brief; index: number }) {
         </div>
         <button
           type="button"
-          onClick={() => navigate({ page: "brief-detail", id: brief.id })}
+          onClick={() => {
+            // Aiguillage rôle-aware (comme dans mes-projets-page.tsx ROUTE_MAP)
+            // — sinon le route guard renvoie un client vers home.
+            const role = useDedcoStore.getState().currentUser?.role;
+            const page = role === "artisan" ? "artisan-brief-recu"
+              : role === "designer" ? "designer-brief-recu"
+              : "brief-artisan-detail";
+            navigate({ page, briefId: brief.id } as any);
+          }}
           className="dedco-btn dedco-btn-primary dedco-btn-sm"
         >
           Voir

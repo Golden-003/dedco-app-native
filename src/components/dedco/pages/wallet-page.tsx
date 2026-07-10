@@ -111,6 +111,11 @@ export function WalletPage() {
   const goBack = useDedcoStore((s) => s.goBack);
   const [withdrawOpen, setWithdrawOpen] = useState(false);
   const [withdrawAmount, setWithdrawAmount] = useState("");
+  const [toast, setToast] = useState<string | null>(null);
+  function showToast(msg: string) {
+    setToast(msg);
+    setTimeout(() => setToast(null), 4000);
+  }
 
   const totalCredits = TRANSACTIONS
     .filter((t) => t.type === "credit")
@@ -276,11 +281,20 @@ export function WalletPage() {
           balance={BALANCE}
           amount={withdrawAmount}
           setAmount={setWithdrawAmount}
-          onClose={() => {
+          onClose={(successMessage) => {
             setWithdrawOpen(false);
             setWithdrawAmount("");
+            if (successMessage) showToast(successMessage);
           }}
         />
+      )}
+
+      {/* Toast */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 dedco-card px-4 py-3 shadow-lg flex items-center gap-2" style={{ backgroundColor: "var(--forest-pale)", borderColor: "var(--forest)" }}>
+          <CheckCircle2 size={16} className="text-[var(--forest)] flex-shrink-0" />
+          <p className="text-sm text-[var(--text-1)]">{toast}</p>
+        </div>
       )}
     </div>
   );
@@ -299,7 +313,7 @@ function WithdrawModal({
   balance: number;
   amount: string;
   setAmount: (v: string) => void;
-  onClose: () => void;
+  onClose: (successMessage?: string) => void;
 }) {
   const numAmount = parseInt(amount, 10) || 0;
   const isValid = numAmount > 0 && numAmount <= balance;
@@ -394,6 +408,9 @@ function WithdrawModal({
         <button
           type="button"
           disabled={!isValid}
+          onClick={() => {
+            onClose("Demande de retrait envoyée. Vous recevrez les fonds sous 24-48h sur votre compte Mobile Money.");
+          }}
           className="dedco-btn dedco-btn-primary w-full"
         >
           Confirmer le retrait

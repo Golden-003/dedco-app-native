@@ -454,7 +454,7 @@ export function ProjetPaiementPage({ proposalId }: { proposalId: string }) {
         </div>
         <h1 className="display-xl mb-3">Projet confirmé !</h1>
         <p className="text-sm text-[var(--text-2)] mb-6">Le projet démarre maintenant.</p>
-        <button onClick={() => navigate({ page: "projet-detail", projectId: proposalId })} className="dedco-btn dedco-btn-primary">Suivre le projet <ChevronRight size={16} /></button>
+        <button onClick={() => navigate({ page: "projet-designer-detail", projectId: `PD-${proposalId.replace(/\D/g, "")}` } as any)} className="dedco-btn dedco-btn-primary">Suivre le projet <ChevronRight size={16} /></button>
       </div>
     );
   }

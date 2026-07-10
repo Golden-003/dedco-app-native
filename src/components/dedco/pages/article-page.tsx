@@ -51,7 +51,7 @@ const RELATED_ARTICLES = [
   },
 ];
 
-export function ArticlePage() {
+export function ArticlePage({ articleId }: { articleId?: number }) {
   const navigate = useDedcoStore((s) => s.navigate);
   const [toast, setToast] = useState<string | null>(null);
   function showToast(msg: string) {
@@ -61,10 +61,18 @@ export function ArticlePage() {
   const goBack = useDedcoStore((s) => s.goBack);
   const toggleFavorite = useDedcoStore((s) => s.toggleFavorite);
   const favorites = useDedcoStore((s) => s.favorites);
+
+  // ── Sélection de l'article ──
+  // Si articleId est fourni via la route, on cherche l'article correspondant.
+  // Sinon, fallback sur le 1er article (comportement historique).
+  const article = articleId
+    ? MAGAZINE.find((a) => a.id === articleId) || MAGAZINE[0]
+    : MAGAZINE[0];
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [commentText, setCommentText] = useState("");
 
-  const article = MAGAZINE[0]; // Featured article
+  const relatedArticles = MAGAZINE.filter((a) => a.id !== article.id).slice(0, 3);
 
   const featuredProduct = PRODUCTS[0]; // Table basse Bénin Wax
 
@@ -328,9 +336,19 @@ export function ArticlePage() {
               placeholder="Écrire un commentaire..."
               className="w-full bg-transparent border border-[var(--border)] rounded-lg p-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[var(--amber)] min-h-[80px]"
               rows={3}
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
             />
             <div className="flex justify-end mt-2">
-              <button onClick={() => navigate({ page: "home" })} className="dedco-btn dedco-btn-primary dedco-btn-sm">
+              <button
+                type="button"
+                disabled={!commentText.trim()}
+                onClick={() => {
+                  showToast("Commentaire publié ! Merci pour votre participation.");
+                  setCommentText("");
+                }}
+                className="dedco-btn dedco-btn-primary dedco-btn-sm"
+              >
                 Publier
               </button>
             </div>

@@ -103,11 +103,14 @@ const RESOLUTION_OPTIONS = [
 // LitigePage
 // ============================================================
 
-export function LitigePage() {
+export function LitigePage({ litigeId }: { litigeId?: string }) {
   const goBack = useDedcoStore((s) => s.goBack);
   const navigate = useDedcoStore((s) => s.navigate);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [imageModal, setImageModal] = useState<string | null>(null);
+  const [submitted, setSubmitted] = useState(false);
+  // Utilise l'id passé par la route si disponible, sinon fallback mock
+  const disputeId = litigeId || DISPUTE.id;
 
   return (
     <div className="dedco-fade-in max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-20">
@@ -123,7 +126,7 @@ export function LitigePage() {
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
         <div className="flex-1">
           <div className="flex items-center gap-2 flex-wrap">
-            <h1 className="display-lg">Litige {DISPUTE.id}</h1>
+            <h1 className="display-lg">Litige {disputeId}</h1>
             <span className="dedco-badge dedco-badge-terra flex items-center gap-1">
               <Clock size={12} />
               En cours de traitement
@@ -380,11 +383,25 @@ export function LitigePage() {
             </div>
             <button
               type="button"
-              disabled={!selectedOption}
+              disabled={!selectedOption || submitted}
+              onClick={() => {
+                setSubmitted(true);
+              }}
               className="dedco-btn dedco-btn-primary w-full mt-4"
             >
-              Confirmer mon choix
+              {submitted ? (
+                <>
+                  <CheckCircle2 size={16} /> Demande envoyée
+                </>
+              ) : (
+                "Confirmer mon choix"
+              )}
             </button>
+            {submitted && (
+              <p className="text-xs text-center text-[var(--forest)] mt-2">
+                Votre demande de résolution a été transmise à l'équipe Dedco. Vous serez notifié sous 48h.
+              </p>
+            )}
           </motion.div>
         </div>
       </div>

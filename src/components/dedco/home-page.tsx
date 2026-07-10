@@ -325,7 +325,14 @@ export function HomePage({
               <CategoryCard
                 key={cat.slug}
                 category={cat}
-                onOpen={() => onNavigate({ name: "marketplace" })}
+                onOpen={() => {
+                  // Navigue vers la marketplace avec un flag catégorie dans l'URL hash
+                  // (la marketplace lit l'hash pour pré-filtrer)
+                  if (typeof window !== "undefined") {
+                    window.location.hash = `category=${cat.slug}`;
+                  }
+                  onNavigate({ name: "marketplace" });
+                }}
               />
             ))}
           </div>

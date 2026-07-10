@@ -4,19 +4,30 @@ import {
   LayoutDashboard,
   Package,
   ShoppingCart,
-  Users,
-  TrendingUp,
+  MessageSquare,
+  Bell,
   Settings,
+  FileText,
 } from "lucide-react";
 import { DashboardSidebar, type NavItem } from "../shared-sidebar";
 import type { ReactNode } from "react";
 
+// ── Navigation maison ──
+// IMPORTANT : un user maison est isPrestataireLocked → il ne peut PAS accéder
+// au site public (marketplace, designers, etc.) ni aux pages réservées aux
+// autres rôles (artisan-stats). On ne propose donc QUE des pages accessibles :
+// - maison-dashboard (sa home)
+// - order-history (ses commandes)
+// - messages / notifications / settings (pages AUTH_REQUIRED, accessibles à tous les rôles authentifiés)
+// On remplace "Produits" / "Designers" / "Statistiques" (cassés) par des
+// pages cohérentes pour une maison de déco.
 const MAISON_NAV: NavItem[] = [
   { label: "Vue d'ensemble", page: "maison-dashboard", icon: LayoutDashboard },
-  { label: "Produits", page: "marketplace", icon: Package },
   { label: "Commandes", page: "order-history", icon: ShoppingCart, badge: 5, badgeColor: "var(--amber)" },
-  { label: "Designers", page: "designers", icon: Users },
-  { label: "Statistiques", page: "artisan-stats", icon: TrendingUp },
+  { label: "Catalogue", page: "moodboard", icon: Package },
+  { label: "Factures", page: "wallet", icon: FileText },
+  { label: "Messages", page: "messages", icon: MessageSquare },
+  { label: "Notifications", page: "notifications", icon: Bell },
   { label: "Paramètres", page: "settings", icon: Settings },
 ];
 
