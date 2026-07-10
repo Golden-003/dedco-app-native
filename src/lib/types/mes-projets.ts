@@ -44,6 +44,7 @@ export type MesProjetsRoute = {
   proposalId?: string;
   orderId?: string;
   designerId?: number;
+  artisanId?: number;
 };
 
 export type MesProjetsItem = {

@@ -89,6 +89,7 @@ const ROUTE_MAP: Record<string, (route: MesProjetsRoute, store: ReturnType<typeo
   "marketplace": (_, store) => store.navigate({ page: "marketplace" }),
   "brief": (_, store) => store.navigate({ page: "brief" }),
   "brief-designer": (r, store) => r.designerId && store.navigate({ page: "brief-designer", designerId: r.designerId }),
+  "artisan": (r, store) => r.artisanId && store.navigate({ page: "artisan", id: r.artisanId }),
   "home": (_, store) => store.navigate({ page: "home" }),
 };
 
@@ -328,7 +329,7 @@ function BriefProposalsCard({ brief }: { brief: ArtisanBriefWithProposals }) {
                 <div key={prop.id} className="p-4 rounded-lg border border-[var(--border)] bg-[var(--bg-card)] flex flex-col">
                   {/* En-tête artisan — cliquable vers le profil */}
                   <button
-                    onClick={() => navigateTo({ page: "artisan", id: prop.artisanId } as any)}
+                    onClick={() => navigateTo({ page: "artisan", artisanId: prop.artisanId })}
                     className="flex items-start gap-3 mb-3 text-left hover:opacity-80 transition-opacity w-full cursor-pointer"
                     aria-label={`Voir le profil de ${prop.artisanName}`}
                   >
