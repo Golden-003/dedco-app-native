@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { Search, MapPin } from "lucide-react";
+import { useState, useMemo } from "react";
+import { Search, MapPin, Star, BadgeCheck } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
+import { useReviewStore } from "@/lib/review-store";
 import {
   SCENES,
   DESIGNERS,
@@ -17,6 +18,7 @@ import {
   MagazineCard,
   ProductCard,
   ArtisanCard,
+  Stars,
 } from "./cards";
 import { BackButton } from "./layout";
 
@@ -331,6 +333,24 @@ export function ArtisanDetailPage({
   toggleFav: (id: number) => void;
 }) {
   const artisan = ARTISANS.find((a) => a.id === artisanId);
+
+  // ── Avis depuis review-store (tous les avis de cet artisan,
+  // marketplace + sur-mesure confondus) ──
+  const allReviews = useReviewStore((s) => s.reviews);
+  const artisanReviews = useMemo(
+    () => allReviews.filter((r) => r.artisanId === artisanId)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
+    [allReviews, artisanId],
+  );
+  const artisanStats = useMemo(() => {
+    if (artisanReviews.length === 0) return { rating: 0, count: 0 };
+    const sum = artisanReviews.reduce((acc, r) => acc + r.rating, 0);
+    return {
+      rating: Math.round((sum / artisanReviews.length) * 10) / 10,
+      count: artisanReviews.length,
+    };
+  }, [artisanReviews]);
+
   if (!artisan) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-12 text-center">
@@ -371,10 +391,14 @@ export function ArtisanDetailPage({
               <MapPin size={12} className="inline" />{artisan.city} · {artisan.experience} d'expérience
             </p>
             <div className="flex flex-wrap gap-4 text-sm">
-              <div>
-                <span className="font-bold text-amber font-numeric">{artisan.rating}</span>{" "}
-                <span className="text-ink-mute">/ 5 · <span className="font-numeric">{artisan.reviews}</span> avis</span>
-              </div>
+              {artisanStats.count > 0 ? (
+                <div>
+                  <span className="font-bold text-amber font-numeric">{artisanStats.rating}</span>{" "}
+                  <span className="text-ink-mute">/ 5 · <span className="font-numeric">{artisanStats.count}</span> avis vérifié{artisanStats.count > 1 ? "s" : ""}</span>
+                </div>
+              ) : (
+                <div className="text-ink-mute italic">Pas encore d'avis vérifié</div>
+              )}
               <div>
                 <span className="font-bold font-numeric">{artisan.trust}%</span>{" "}
                 <span className="text-ink-mute">de confiance</span>
@@ -425,6 +449,58 @@ export function ArtisanDetailPage({
           </div>
         </div>
       )}
+
+      {/* ── Section avis vérifiés ──
+          Affiche TOUS les avis de cet artisan (marketplace + sur-mesure).
+          Pour les avis sur-mesure (sans productId), on affiche le titre du projet. */}
+      <section className="mt-8">
+        <div className="flex items-baseline gap-3 mb-4 flex-wrap">
+          <h2 className="display-md">Avis vérifiés</h2>
+          {artisanStats.count > 0 && (
+            <span className="text-sm text-ink-soft">
+              <span className="font-numeric font-semibold text-ink">{artisanStats.rating}</span>/5 ·{" "}
+              <span className="font-numeric">{artisanStats.count}</span> avis vérifié{artisanStats.count > 1 ? "s" : ""}
+            </span>
+          )}
+        </div>
+
+        {artisanReviews.length === 0 ? (
+          <div className="dedco-card p-8 text-center">
+            <Star size={32} className="mx-auto text-[var(--border-dark)] mb-3" strokeWidth={1.5} />
+            <p className="text-sm text-ink-soft font-medium mb-1">Aucun avis pour le moment</p>
+            <p className="text-xs text-ink-mute">
+              Les avis sont collectés après livraison. Les premiers clients de {artisan.name} partageront leur expérience ici.
+            </p>
+          </div>
+        ) : (
+          <div className="divide-y divide-[var(--border)]">
+            {artisanReviews.slice(0, 10).map((review) => (
+              <article key={review.id} className="py-4 first:pt-0 last:pb-0">
+                <header className="flex items-center gap-2 mb-2 flex-wrap">
+                  <img src={review.authorAvatar} alt={review.authorName} className="w-7 h-7 rounded-full object-cover" loading="lazy" />
+                  <p className="font-semibold text-sm text-ink">{review.authorName}</p>
+                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-[var(--forest)] bg-[var(--forest-pale)] px-1.5 py-0.5 rounded-full">
+                    <BadgeCheck size={10} /> Achat vérifié
+                  </span>
+                  <span className="text-[11px] text-ink-mute ml-auto font-numeric">
+                    {new Date(review.createdAt).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
+                  </span>
+                </header>
+                <div className="flex items-center gap-2 mb-2">
+                  <Stars rating={review.rating} size={12} />
+                  {/* Pour les avis sur-mesure (pas de productId), on affiche le titre du projet */}
+                  {!review.productId && review.projectTitle && (
+                    <span className="text-[10px] text-ink-mute italic">· {review.projectTitle}</span>
+                  )}
+                </div>
+                {review.comment && (
+                  <p className="text-sm text-ink-soft leading-relaxed mb-2">{review.comment}</p>
+                )}
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
     </div>
   );
 }

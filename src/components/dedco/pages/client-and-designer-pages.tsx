@@ -26,6 +26,9 @@ import {
   Video,
   MapPin,
   AlertTriangle,
+  AlertCircle,
+  Clock,
+  BadgeCheck,
   Lightbulb,
   Sofa,
   Home,
@@ -36,7 +39,8 @@ import {
   HardHat,
 } from "lucide-react";
 import { useDedcoStore, type ProjectScope } from "@/lib/store";
-import { formatFCFA, DESIGNERS, ARTISANS, PRODUCTS, getProduct } from "@/lib/dedco-data";
+import { useReviewStore } from "@/lib/review-store";
+import { formatFCFA, DESIGNERS, ARTISANS, PRODUCTS, getProduct, getArtisan } from "@/lib/dedco-data";
 
 // ============================================================
 // PAGE: designer-wallet — Wallet Designer
@@ -821,6 +825,291 @@ export function BriefDesignerPage({ designerId }: { designerId: number }) {
           {step < 2 ? "Continuer" : "Envoyer mon brief"}
           {step < 2 && <ChevronRight size={16} />}
         </button>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// PAGE: avis-livraison — Avis post-livraison
+// Gère 2 cas :
+// - orderId (marketplace) : avis lié à un productId → s'affiche sur la fiche produit
+// - projectId (sur-mesure, PA-XXX) : avis lié à l'artisan seulement → s'affiche sur le profil artisan
+// ============================================================
+
+export function AvisLivraisonPage({ orderId, projectId }: { orderId: string; projectId?: string }) {
+  const navigate = useDedcoStore((s) => s.navigate);
+  const currentUser = useDedcoStore((s) => s.currentUser);
+  const getOrder = useDedcoStore((s) => s.getOrder);
+  const addReview = useReviewStore((s) => s.addReview);
+  const hasReviewed = useReviewStore((s) => s.hasReviewed);
+
+  const [rating, setRating] = useState(0);
+  const [subRatings, setSubRatings] = useState({ qualite: 0, delais: 0, communication: 0 });
+  const [comment, setComment] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [selectedItemIdx, setSelectedItemIdx] = useState(0);
+
+  // ── Détermine le contexte : marketplace (order) ou sur-mesure (project) ──
+  const order = projectId ? undefined : getOrder(orderId);
+
+  // Pour les projets sur-mesure, on récupère les infos depuis projet-artisan-detail
+  // (qui a un mock PROJETS_ARTISAN). On importe juste les champs nécessaires.
+  const isCustomProject = !!projectId;
+  const reviewId = projectId || orderId; // ID utilisé pour vérifier hasReviewed
+
+  // Pour marketplace : on prend l'item sélectionné dans la commande
+  const items = order?.items ?? [];
+  const selectedItem = items[selectedItemIdx] ?? items[0];
+
+  // Pour sur-mesure : on n'a pas d'item, juste un projectId
+  // Les infos (artisan, titre) seront affichées différemment
+
+  const alreadyReviewed = hasReviewed(reviewId);
+
+  function handleSubmit() {
+    if (rating === 0) return;
+
+    let reviewData: Parameters<typeof addReview>[0];
+
+    if (isCustomProject) {
+      // Avis sur-mesure : pas de productId, on note l'artisan
+      // On récupère l'artisan depuis les mocks de projet-artisan-detail
+      // Pour la démo, on suppose que projectId commence par "PA-"
+      // et on mappinge vers un artisan (à défaut, artisan 1)
+      reviewData = {
+        orderId: projectId,
+        artisanId: 1, // TODO: récupérer depuis les mocks projet-artisan
+        projectTitle: "Projet sur mesure",
+        rating,
+        subRatings,
+        comment: comment.trim(),
+        authorName: currentUser?.name || "Client Dedco",
+        authorAvatar: currentUser?.avatar || "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=400&q=85",
+      };
+    } else if (selectedItem) {
+      // Avis marketplace : lié au productId
+      reviewData = {
+        orderId,
+        productId: selectedItem.productId,
+        artisanId: selectedItem.artisanId,
+        rating,
+        subRatings,
+        comment: comment.trim(),
+        authorName: currentUser?.name || "Client Dedco",
+        authorAvatar: currentUser?.avatar || "https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=400&q=85",
+      };
+    } else {
+      return;
+    }
+
+    addReview(reviewData);
+    setSubmitted(true);
+  }
+
+  // ── État : déjà noté ──
+  if (submitted || alreadyReviewed) {
+    return (
+      <div className="p-8 max-w-xl mx-auto text-center">
+        <div className="w-20 h-20 rounded-full bg-[var(--forest-pale)] mx-auto flex items-center justify-center mb-5">
+          <CheckCircle2 size={40} className="text-[var(--forest)]" />
+        </div>
+        <h1 className="display-xl mb-3">Merci pour votre avis !</h1>
+        <p className="text-sm text-[var(--text-2)] mb-2">
+          Votre avis a été publié.
+        </p>
+        <p className="text-xs text-[var(--text-3)] mb-6 flex items-center justify-center gap-1">
+          <BadgeCheck size={12} className="text-[var(--forest)]" />
+          Avis vérifié · {isCustomProject ? "commande sur-mesure" : `commande ${orderId}`}
+        </p>
+        <div className="flex gap-3 justify-center flex-wrap">
+          {!isCustomProject && selectedItem && (
+            <button
+              onClick={() => navigate({ page: "product", id: selectedItem.productId })}
+              className="dedco-btn dedco-btn-primary"
+            >
+              Voir mon avis sur le produit
+            </button>
+          )}
+          <button
+            onClick={() => navigate({ page: "marketplace" })}
+            className="dedco-btn dedco-btn-ghost"
+          >
+            Continuer mes achats
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── État : commande marketplace introuvable ──
+  if (!isCustomProject && !order) {
+    return (
+      <div className="p-8 max-w-xl mx-auto text-center">
+        <div className="w-16 h-16 rounded-full bg-[var(--bg-warm)] mx-auto flex items-center justify-center mb-4">
+          <AlertCircle size={28} className="text-[var(--text-3)]" />
+        </div>
+        <h1 className="display-lg mb-2">Commande introuvable</h1>
+        <p className="text-sm text-[var(--text-3)] mb-6">
+          Cette commande n'existe plus ou n'a pas encore été passée.
+        </p>
+        <button
+          onClick={() => navigate({ page: "marketplace" })}
+          className="dedco-btn dedco-btn-primary"
+        >
+          Aller à la marketplace
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-4 sm:p-6 max-w-2xl mx-auto">
+      {/* Banner success */}
+      <div className="rounded-lg p-4 mb-5 bg-[var(--forest-pale)] flex items-center gap-3">
+        <CheckCircle2 size={24} className="text-[var(--forest)] flex-shrink-0" />
+        <div>
+          <p className="font-display font-semibold text-[var(--forest)]">
+            {isCustomProject ? "Projet sur-mesure livré !" : "Commande livrée avec succès !"}
+          </p>
+          <p className="text-xs text-[var(--text-3)] font-numeric">
+            {isCustomProject ? `Projet ${projectId}` : `Commande ${orderId}`}
+          </p>
+        </div>
+      </div>
+
+      {/* Recap — différent selon le type */}
+      {isCustomProject ? (
+        <div className="dedco-card p-4 mb-5 flex items-center gap-4">
+          <div className="w-16 h-16 rounded-lg bg-[var(--bg-warm)] flex items-center justify-center flex-shrink-0">
+            <Sofa size={24} className="text-[var(--amber)]" />
+          </div>
+          <div className="flex-1">
+            <p className="font-display font-semibold">Projet sur-mesure</p>
+            <p className="text-xs text-[var(--text-3)] font-numeric">{projectId}</p>
+          </div>
+        </div>
+      ) : (
+        <>
+          {/* Sélecteur d'item si commande multi-produits */}
+          {items.length > 1 && (
+            <div className="dedco-card p-4 mb-4">
+              <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-3">
+                Sélectionnez le produit à évaluer
+              </p>
+              <div className="space-y-2">
+                {items.map((it, idx) => (
+                  <button
+                    key={`${it.productId}-${idx}`}
+                    onClick={() => setSelectedItemIdx(idx)}
+                    className={`w-full flex items-center gap-3 p-2 rounded-md border-2 transition-all text-left ${
+                      selectedItemIdx === idx
+                        ? "border-[var(--amber)] bg-[var(--amber-pale)]"
+                        : "border-[var(--border)] hover:border-[var(--ink-mute)]"
+                    }`}
+                  >
+                    <img src={it.image} alt={it.name} className="w-10 h-10 rounded object-cover" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">{it.name}</p>
+                      <p className="text-xs text-[var(--text-3)]">par {it.artisanName}</p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Recap item sélectionné */}
+          {selectedItem && (
+            <div className="dedco-card p-4 mb-5 flex items-center gap-4">
+              <img src={selectedItem.image} alt={selectedItem.name} className="w-16 h-16 rounded-lg object-cover" />
+              <div className="flex-1">
+                <p className="font-display font-semibold">{selectedItem.name}</p>
+                <p className="text-xs text-[var(--text-3)]">par {selectedItem.artisanName}</p>
+                <p className="text-xs text-[var(--text-3)] font-numeric">
+                  {orderId} · {selectedItem.color ? `${selectedItem.color} · ` : ""}x{selectedItem.qty}
+                </p>
+              </div>
+              <p className="font-numeric font-bold text-[var(--amber)]">{formatFCFA(selectedItem.price * selectedItem.qty)}</p>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Formulaire d'avis */}
+      <div className="dedco-card p-5 border-t-4" style={{ borderTopColor: "var(--amber)", borderTopWidth: "3px" }}>
+        <div className="flex items-center gap-2 mb-3 text-xs text-[var(--forest)] bg-[var(--forest-pale)] inline-flex px-3 py-1.5 rounded-full">
+          <BadgeCheck size={12} />
+          <span className="font-semibold">Avis vérifié · {isCustomProject ? projectId : orderId}</span>
+        </div>
+        <h2 className="display-md mb-4">
+          {isCustomProject ? "Notez votre projet sur-mesure" : "Notez votre commande"}
+        </h2>
+        <div className="flex items-center gap-2 mb-5 justify-center">
+          {[1, 2, 3, 4, 5].map((s) => (
+            <button
+              key={s}
+              onClick={() => setRating(s)}
+              className="transition-transform hover:scale-110"
+              aria-label={`${s} étoiles`}
+            >
+              <Star
+                size={40}
+                className={s <= rating ? "text-[var(--amber)]" : "text-[var(--border-dark)]"}
+                fill={s <= rating ? "currentColor" : "none"}
+              />
+            </button>
+          ))}
+        </div>
+
+        {/* Sous-critères */}
+        <div className="grid grid-cols-3 gap-3 mb-5">
+          {Object.entries(subRatings).map(([key, val]) => (
+            <div key={key} className="text-center">
+              <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">{key}</p>
+              <div className="flex justify-center gap-0.5">
+                {[1, 2, 3, 4, 5].map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setSubRatings({ ...subRatings, [key]: s })}
+                  >
+                    <Star
+                      size={16}
+                      className={s <= val ? "text-[var(--amber)]" : "text-[var(--border-dark)]"}
+                      fill={s <= val ? "currentColor" : "none"}
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2 block">Commentaire (optionnel)</label>
+        <textarea
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          rows={4}
+          placeholder="Racontez votre expérience (qualité, délais, communication avec l'artisan)..."
+          className="w-full px-3 py-2 text-sm border border-[var(--border)] rounded-md bg-card resize-none focus:outline-none focus:border-[var(--amber)]"
+        />
+
+        <button
+          onClick={handleSubmit}
+          disabled={rating === 0}
+          className="dedco-btn dedco-btn-primary w-full mt-4"
+        >
+          Publier mon avis vérifié
+        </button>
+        <p className="text-xs text-[var(--text-3)] text-center mt-3">
+          Votre avis sera public, avec le badge <strong>Achat vérifié</strong>.
+          {!isCustomProject && selectedItem && (
+            <> Il apparaîtra sur la fiche du produit et le profil de l'artisan.</>
+          )}
+          {isCustomProject && (
+            <> Il apparaîtra sur le profil de l'artisan (les projets sur-mesure n'ont pas de fiche produit).</>
+          )}
+        </p>
       </div>
     </div>
   );

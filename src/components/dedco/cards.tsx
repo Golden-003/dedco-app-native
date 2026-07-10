@@ -1,9 +1,10 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import Image from "next/image";
 import { Star, BadgeCheck, MapPin, Table2, Armchair, Lightbulb, Shirt, Flower2, BookOpen, Sofa, BedDouble, Archive, Lamp, Frame } from "lucide-react";
 import { formatFCFA, getArtisan } from "@/lib/dedco-data";
+import { useReviewStore } from "@/lib/review-store";
 import type { Product } from "@/lib/dedco-types";
 
 // ============================================================
@@ -71,6 +72,18 @@ export const ProductCard = memo(function ProductCard({
   onOpen: (id: number) => void;
 }) {
   const artisan = getArtisan(product.artisanId);
+  // ── Note depuis review-store (pas le mock product.rating) ──
+  const allReviews = useReviewStore((s) => s.reviews);
+  const stats = useMemo(() => {
+    const rs = allReviews.filter((r) => r.productId === product.id);
+    if (rs.length === 0) return { rating: 0, count: 0 };
+    const sum = rs.reduce((acc, r) => acc + r.rating, 0);
+    return {
+      rating: Math.round((sum / rs.length) * 10) / 10,
+      count: rs.length,
+    };
+  }, [allReviews, product.id]);
+
   return (
     <article
       className="dedco-card overflow-hidden cursor-pointer group"
@@ -144,10 +157,16 @@ export const ProductCard = memo(function ProductCard({
         </div>
         <div className="flex items-center justify-between mt-2.5">
           <div className="flex items-center gap-1 text-xs text-ink-soft">
-            <Stars rating={product.rating} size={12} />
-            <span className="font-numeric">
-              {product.rating} ({product.reviews})
-            </span>
+            {stats.count > 0 ? (
+              <>
+                <Stars rating={stats.rating} size={12} />
+                <span className="font-numeric">
+                  {stats.rating} ({stats.count})
+                </span>
+              </>
+            ) : (
+              <span className="text-ink-mute italic">Nouveau · 0 avis</span>
+            )}
           </div>
           {product.stock <= 3 && product.stock > 0 && (
             <span className="dedco-badge dedco-badge-terra text-[10px]">

@@ -4,10 +4,11 @@ import { useState } from "react";
 import {
   CheckCircle2, Clock, Package, Truck, MapPin, Camera, AlertTriangle,
   ShieldCheck, FileText, Download, MessageSquare, Send, X, Check,
-  ChevronRight, Hammer, Ruler, Calendar, Edit3,
+  ChevronRight, Hammer, Ruler, Calendar, Edit3, Star,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
 import { useNotificationStore } from "@/lib/notification-store";
+import { useReviewStore } from "@/lib/review-store";
 import { getBackToProjets } from "@/lib/back-to-projets";
 import { formatFCFA } from "@/lib/dedco-data";
 import { PROJET_ARTISAN_STATUS, JALON_LABELS, type ProjetArtisanStatus, type JalonType } from "@/lib/dedco-status";
@@ -257,6 +258,8 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
     Object.fromEntries(project.modifications.map(m => [m.id, m.status]))
   );
   const [deliveryConfirmed, setDeliveryConfirmed] = useState(false);
+  const hasReviewed = useReviewStore((s) => s.hasReviewed);
+  const projectReviewed = hasReviewed(project.id);
   const [messages, setMessages] = useState<{ from: "artisan" | "me"; text: string; time: string }[]>([
     { from: "artisan", text: "Bonjour ! J'ai commencé le travail. Voici une photo d'avancement.", time: "il y a 2h" },
   ]);
@@ -598,6 +601,23 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
           >
             <CheckCircle2 size={16} /> Confirmer la réception
           </button>
+        )}
+        {/* Bouton "Laisser un avis" — visible après confirmation de livraison
+            ET si l'utilisateur n'a pas encore laissé d'avis sur ce projet.
+            Les projets sur-mesure n'ont pas de fiche produit : l'avis s'affiche
+            sur le profil de l'artisan uniquement. */}
+        {(deliveryConfirmed || project.status === "DELIVERED_CONFIRMED") && !projectReviewed && (
+          <button
+            onClick={() => navigate({ page: "avis-livraison", orderId: project.id, projectId: project.id })}
+            className="dedco-btn dedco-btn-primary"
+          >
+            <Star size={16} /> Laisser un avis
+          </button>
+        )}
+        {(deliveryConfirmed || project.status === "DELIVERED_CONFIRMED") && projectReviewed && (
+          <span className="dedco-badge dedco-badge-forest px-3 py-2 text-sm">
+            <CheckCircle2 size={14} /> Avis déjà publié — merci !
+          </span>
         )}
         {project.status === "AWAITING_DEPOSIT" && project.proposalId && (
           <button

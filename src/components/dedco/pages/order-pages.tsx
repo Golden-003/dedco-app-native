@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { useDedcoStore, type Order, type OrderStatus } from "@/lib/store";
 import { formatFCFA } from "@/lib/dedco-data";
+import { useReviewStore } from "@/lib/review-store";
 
 function formatDate(d: Date) {
   return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" });
@@ -384,6 +385,7 @@ export function OrderTrackingPage({ orderId }: { orderId: string }) {
   const currentUser = useDedcoStore((s) => s.currentUser);
   const markOrderDelivered = useDedcoStore((s) => s.markOrderDelivered);
   const storeOrder = useDedcoStore((s) => s.orders.find((o) => o.id === orderId));
+  const hasReviewed = useReviewStore((s) => s.hasReviewed);
   const isArtisan = currentUser?.role === "artisan";
 
   // Fallback sur mock si commande non trouvée dans le store
@@ -397,6 +399,7 @@ export function OrderTrackingPage({ orderId }: { orderId: string }) {
   }
   const isCustom = order.type === "custom";
   const isDelivered = order.status === "livré";
+  const alreadyReviewed = hasReviewed(order.id);
   const [showPhoto] = useState<number | null>(null);
 
   // Icônes Lucide pour chaque étape de timeline — déterminées par mot-clé
@@ -542,6 +545,19 @@ export function OrderTrackingPage({ orderId }: { orderId: string }) {
           </>
         ) : (
           <>
+            {isDelivered && !alreadyReviewed && (
+              <button
+                onClick={() => navigate({ page: "avis-livraison", orderId: order.id })}
+                className="dedco-btn dedco-btn-primary"
+              >
+                <CheckCircle2 size={16} /> Laisser un avis
+              </button>
+            )}
+            {isDelivered && alreadyReviewed && (
+              <span className="dedco-badge dedco-badge-forest px-3 py-2 text-sm">
+                <CheckCircle2 size={14} /> Avis déjà publié — merci !
+              </span>
+            )}
             <button
               onClick={() => navigate({ page: "messages", conversationId: `order-${order.id}` })}
               className="dedco-btn dedco-btn-ghost"

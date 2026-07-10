@@ -95,6 +95,7 @@ const DesignerWalletPage = dynamic(() => import("@/components/dedco/pages/client
 const DesignerPortfolioPage = dynamic(() => import("@/components/dedco/pages/client-and-designer-pages").then(m => ({ default: m.DesignerPortfolioPage })));
 const DesignerAbonnementPage = dynamic(() => import("@/components/dedco/pages/client-and-designer-pages").then(m => ({ default: m.DesignerAbonnementPage })));
 const BriefDesignerPage = dynamic(() => import("@/components/dedco/pages/client-and-designer-pages").then(m => ({ default: m.BriefDesignerPage })));
+const AvisLivraisonPage = dynamic(() => import("@/components/dedco/pages/client-and-designer-pages").then(m => ({ default: m.AvisLivraisonPage })));
 const PlansTarifsPage = dynamic(() => import("@/components/dedco/pages/client-and-designer-pages").then(m => ({ default: m.PlansTarifsPage })));
 const MesProjetsPage = dynamic(() => import("@/components/dedco/pages/mes-projets-page").then(m => ({ default: m.MesProjetsPage })));
 // Workflow designer (lazy)
@@ -586,6 +587,9 @@ export function DedcoRouter() {
 
       case "brief-designer":
         return <BriefDesignerPage designerId={route.designerId} />;
+
+      case "avis-livraison":
+        return <AvisLivraisonPage orderId={route.orderId} projectId={route.projectId} />;
 
       case "plans-tarifs":
         return <PlansTarifsPage />;
