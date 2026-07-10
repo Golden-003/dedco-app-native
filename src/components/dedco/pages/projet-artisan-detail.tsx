@@ -583,12 +583,14 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
           <button
             onClick={() => {
               setDeliveryConfirmed(true);
-              showToast("Réception confirmée. Le solde sera libéré sous 48 h.");
-              // Ajoute une notification de paiement au client
+              showToast("Réception confirmée. Merci pour votre confiance !");
+              // Notification côté CLIENT — parle de SON expérience, pas des
+              // internals plateforme (montant que l'artisan reçoit, délais
+              // de libération, etc. — ça c'est pour l'artisan/admin).
               useNotificationStore.getState().addNotification({
-                type: "payment",
-                title: `Paiement libéré — ${project.title}`,
-                desc: `${project.artisanName} recevra le solde de ${formatFCFA(project.prixFinal - project.montantPaye)} sous 48 h.`,
+                type: "delivery",
+                title: `Commande livrée — ${project.title}`,
+                desc: `Votre commande a bien été livrée par ${project.artisanName}. Merci pour votre confiance !`,
                 route: { page: "order-history" },
               });
             }}

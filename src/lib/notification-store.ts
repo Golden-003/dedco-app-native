@@ -161,13 +161,15 @@ const ADMIN_NOTIFICATIONS: DedcoNotification[] = [
   },
 ];
 
-// Notifications spécifiques au CLIENT (commandes, livraison, messages artisan…)
+// Notifications spécifiques au CLIENT — parlent de SON expérience à lui,
+// pas des internals plateforme (compte séquestre, libération de fonds,
+// montant que l'artisan reçoit… → ça c'est pour l'artisan/admin).
 const CLIENT_NOTIFICATIONS: DedcoNotification[] = [
   {
     id: 'CLI-NOT-001',
     type: 'delivery',
     title: 'Livraison en cours — Lampe Bogolan',
-    desc: 'Votre commande PA-002 est en livraison. Photos disponibles sur le suivi.',
+    desc: 'Votre commande est en route. Photos disponibles sur le suivi.',
     time: 'Il y a 1h',
     read: false,
     route: { page: 'projet-detail', projectId: 'PA-002' },
@@ -177,7 +179,7 @@ const CLIENT_NOTIFICATIONS: DedcoNotification[] = [
     id: 'CLI-NOT-002',
     type: 'delivery',
     title: 'Réception à confirmer — Lampe Bogolan',
-    desc: 'Fatou Loko a livré votre commande. Confirmez la réception pour libérer le paiement.',
+    desc: 'Fatou Loko a livré votre commande. Confirmez la réception pour finaliser.',
     time: 'Il y a 3h',
     read: false,
     route: { page: 'projet-detail', projectId: 'PA-002' },
@@ -205,8 +207,8 @@ const CLIENT_NOTIFICATIONS: DedcoNotification[] = [
   {
     id: 'CLI-NOT-005',
     type: 'payment',
-    title: 'Paiement sécurisé — Acompte Table basse',
-    desc: '75 000 FCFA bloqués sur compte séquestre. Libérés après confirmation livraison.',
+    title: 'Acompte payé — Table basse Wax',
+    desc: 'Votre acompte de 75 000 FCFA a bien été reçu. Le solde sera à payer à la livraison.',
     time: 'Il y a 3j',
     read: true,
     route: { page: 'order-history' },
