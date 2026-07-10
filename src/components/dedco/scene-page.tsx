@@ -185,12 +185,31 @@ export function ScenePage({
               </div>
             )}
 
+            {/* ── Actions claires ──
+                1. Acheter les produits de la scène (ajoute tout au panier)
+                2. Demander un projet sur-mesure (contacte le designer pour
+                   recreer ce look adapté à votre espace) */}
+            <button
+              type="button"
+              onClick={() => {
+                // Ajoute tous les produits de la scène au panier
+                scene.hotspots.forEach((h) => {
+                  const product = getProduct(h.productId);
+                  if (product) {
+                    onAddToCart({ ...product, qty: 1 });
+                  }
+                });
+              }}
+              className="dedco-btn dedco-btn-primary w-full mt-2"
+            >
+              <ShoppingBag size={18} /> Ajouter les {scene.hotspots.length} produits au panier
+            </button>
             <button
               type="button"
               onClick={() => onNavigate({ name: "brief" })}
-              className="dedco-btn dedco-btn-primary w-full mt-2"
+              className="dedco-btn dedco-btn-secondary w-full mt-2"
             >
-              <ShoppingBag size={18} /> Commander cette scène
+              Demander un projet sur-mesure
             </button>
           </div>
         </div>
