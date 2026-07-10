@@ -210,6 +210,7 @@ function ProfileContent({
   editMode: boolean;
   setEditMode: (v: boolean) => void;
 }) {
+  const navigate = useDedcoStore((s) => s.navigate);
   return (
     <div className="space-y-5">
       {/* User info card */}
