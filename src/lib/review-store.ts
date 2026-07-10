@@ -167,8 +167,13 @@ const SEED_REVIEWS: Review[] = [
   },
 
   // ── Sur-mesure : avis sans productId (s'affichent sur profil artisan) ──
+  // IMPORTANT : ces avis utilisent des orderId fictifs (PA-DEMO-XXX) qui ne
+  // correspondent PAS aux projets de démo PA-001/PA-002/PA-003 du fichier
+  // projet-artisan-detail.tsx. Sinon, hasReviewed('PA-002') retournerait true
+  // dès le départ et le bouton "Laisser un avis" ne s'afficherait jamais
+  // sur ces projets (qui sont conçus pour être testés par l'utilisateur).
   {
-    id: 'SEED-SM-1', orderId: 'PA-001', artisanId: 1,
+    id: 'SEED-SM-1', orderId: 'PA-DEMO-101', artisanId: 1,
     projectTitle: 'Table basse sur mesure (bois iroko + wax)',
     rating: 5, subRatings: { qualite: 5, delais: 5, communication: 5 },
     comment: 'Kofi a créé une table basse exactement comme je l\'imaginais. Sur-mesure parfait, communication exemplaire du brief à la livraison.',
@@ -177,21 +182,21 @@ const SEED_REVIEWS: Review[] = [
     createdAt: '2026-06-20T15:00:00.000Z', verified: true,
   },
   {
-    id: 'SEED-SM-2', orderId: 'PA-002', artisanId: 3,
+    id: 'SEED-SM-2', orderId: 'PA-DEMO-102', artisanId: 3,
     projectTitle: 'Lampe Abat-jour Bogolan (sur-mesure)',
     rating: 5, subRatings: { qualite: 5, delais: 4, communication: 5 },
     comment: 'Fatou a compris exactement ce que je voulais. Abat-jour unique, livraison soignée avec photos à chaque étape.',
-    authorName: 'Sophie Kossou',
-    authorAvatar: 'https://images.unsplash.com/photo-1614317226704-aba58b1ce153?auto=format&fit=crop&crop=faces&w=400&q=85',
+    authorName: 'Marc Adjovi',
+    authorAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&crop=faces&w=400&q=85',
     createdAt: '2026-06-22T11:00:00.000Z', verified: true,
   },
   {
-    id: 'SEED-SM-3', orderId: 'PA-003', artisanId: 2,
+    id: 'SEED-SM-3', orderId: 'PA-DEMO-103', artisanId: 2,
     projectTitle: 'Fauteuil rotin design exclusif',
     rating: 4, subRatings: { qualite: 5, delais: 3, communication: 4 },
     comment: 'Très belle réalisation sur-mesure. Amara a su adapter le design à mes contraintes. Délai un peu long mais le résultat en valait la peine.',
-    authorName: 'Marc Adjovi',
-    authorAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&crop=faces&w=400&q=85',
+    authorName: 'Aïcha Sanni',
+    authorAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=400&q=85',
     createdAt: '2026-05-25T10:30:00.000Z', verified: true,
   },
 ];
@@ -236,9 +241,12 @@ export const useReviewStore = create<ReviewState>()(
       },
     }),
     {
-      name: 'dedco-reviews-v2',
-      version: 3,
-      // Si l'utilisateur a l'ancien store vide (v1 sans seed), on charge les seeds
+      name: 'dedco-reviews-v3',
+      version: 4,
+      // Version 4 : les seeds sur-mesure utilisent des orderId fictifs
+      // (PA-DEMO-XXX) au lieu de PA-001/002/003 qui sont des projets de démo
+      // testables par l'utilisateur. Sinon hasReviewed('PA-002') retournait
+      // true et le bouton "Laisser un avis" ne s'affichait jamais.
       merge: (persistedState: any, currentState) => {
         const persisted = persistedState as Partial<ReviewState> | undefined;
         if (!persisted || !Array.isArray(persisted.reviews)) {
@@ -247,6 +255,25 @@ export const useReviewStore = create<ReviewState>()(
         // Si reviews persistés vides → on charge les seeds
         if (persisted.reviews.length === 0) {
           return { ...currentState, ...persisted, reviews: SEED_REVIEWS };
+        }
+        // Version 4 : on force le rechargement des seeds si on détecte
+        // d'anciens seeds avec orderId PA-001/002/003 (qui ne doivent plus
+        // exister). On garde les avis réellement créés par l'utilisateur
+        // (ceux dont l'id commence par 'REV-').
+        const oldSeedOrderIds = ['PA-001', 'PA-002', 'PA-003'];
+        const hasOldSeeds = persisted.reviews.some(
+          (r: any) => oldSeedOrderIds.includes(r.orderId) && typeof r.id === 'string' && r.id.startsWith('SEED-'),
+        );
+        if (hasOldSeeds) {
+          // On garde les avis utilisateur (REV-*) + on recharge les seeds frais
+          const userReviews = persisted.reviews.filter(
+            (r: any) => typeof r.id === 'string' && r.id.startsWith('REV-'),
+          );
+          return {
+            ...currentState,
+            ...persisted,
+            reviews: [...userReviews, ...SEED_REVIEWS],
+          };
         }
         return { ...currentState, ...persisted };
       },
