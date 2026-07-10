@@ -7,6 +7,7 @@ import {
   ChevronRight, Hammer, Ruler, Calendar, Edit3,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
+import { useNotificationStore } from "@/lib/notification-store";
 import { getBackToProjets } from "@/lib/back-to-projets";
 import { formatFCFA } from "@/lib/dedco-data";
 import { PROJET_ARTISAN_STATUS, JALON_LABELS, type ProjetArtisanStatus, type JalonType } from "@/lib/dedco-status";
@@ -583,6 +584,13 @@ export function ProjetArtisanDetailPage({ projectId }: { projectId: string }) {
             onClick={() => {
               setDeliveryConfirmed(true);
               showToast("Réception confirmée. Le solde sera libéré sous 48 h.");
+              // Ajoute une notification de paiement au client
+              useNotificationStore.getState().addNotification({
+                type: "payment",
+                title: `Paiement libéré — ${project.title}`,
+                desc: `${project.artisanName} recevra le solde de ${formatFCFA(project.prixFinal - project.montantPaye)} sous 48 h.`,
+                route: { page: "order-history" },
+              });
             }}
             className="dedco-btn dedco-btn-primary"
           >

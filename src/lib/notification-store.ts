@@ -15,7 +15,8 @@ export type NotificationType =
   | 'delivery'           // Livraison, réception à confirmer
   | 'review'             // Avis demandé
   | 'system'             // Système, promo, admin
-  | 'litige';            // Litige ouvert, résolu
+  | 'litige'             // Litige ouvert, résolu
+  | 'order';             // Commande passée, confirmée, expédiée
 
 export interface DedcoNotification {
   id: string;
@@ -160,6 +161,58 @@ const ADMIN_NOTIFICATIONS: DedcoNotification[] = [
   },
 ];
 
+// Notifications spécifiques au CLIENT (commandes, livraison, messages artisan…)
+const CLIENT_NOTIFICATIONS: DedcoNotification[] = [
+  {
+    id: 'CLI-NOT-001',
+    type: 'delivery',
+    title: 'Livraison en cours — Lampe Bogolan',
+    desc: 'Votre commande PA-002 est en livraison. Photos disponibles sur le suivi.',
+    time: 'Il y a 1h',
+    read: false,
+    route: { page: 'projet-detail', projectId: 'PA-002' },
+    linkedId: 'PA-002',
+  },
+  {
+    id: 'CLI-NOT-002',
+    type: 'delivery',
+    title: 'Réception à confirmer — Lampe Bogolan',
+    desc: 'Fatou Loko a livré votre commande. Confirmez la réception pour libérer le paiement.',
+    time: 'Il y a 3h',
+    read: false,
+    route: { page: 'projet-detail', projectId: 'PA-002' },
+    linkedId: 'PA-002',
+  },
+  {
+    id: 'CLI-NOT-003',
+    type: 'message',
+    title: 'Message de Fatou Loko',
+    desc: '« Votre lampe est prête, je l\'apporte demain matin. »',
+    time: 'Hier',
+    read: false,
+    route: { page: 'messages' },
+  },
+  {
+    id: 'CLI-NOT-004',
+    type: 'project',
+    title: 'Mise à jour projet — Table basse Wax',
+    desc: 'Kofi Akindélé a ajouté une photo de fabrication. Étape 2/4 complétée.',
+    time: 'Hier',
+    read: true,
+    route: { page: 'projet-detail', projectId: 'PA-001' },
+    linkedId: 'PA-001',
+  },
+  {
+    id: 'CLI-NOT-005',
+    type: 'payment',
+    title: 'Paiement sécurisé — Acompte Table basse',
+    desc: '75 000 FCFA bloqués sur compte séquestre. Libérés après confirmation livraison.',
+    time: 'Il y a 3j',
+    read: true,
+    route: { page: 'order-history' },
+  },
+];
+
 // ── Store ──
 
 interface NotificationState {
@@ -192,14 +245,15 @@ export const useNotificationStore = create<NotificationState>()(
   getNotifications: () => get().notifications,
 
   // Initialiser les notifications selon le rôle
+  // IMPORTANT : on REMPLACE les notifs existantes à chaque appel, pas de guard.
+  // Sinon : si l'utilisateur se connecte en artisan (démo) puis en client,
+  // les notifs artisan restent affichées (persistées en localStorage).
   initForRole: (role: string) => {
-    const existing = get().notifications;
-    if (existing.length > 0) return; // déjà peuplé
     let notifs: DedcoNotification[] = [];
     if (role === 'artisan') notifs = ARTISAN_NOTIFICATIONS;
     else if (role === 'designer') notifs = DESIGNER_NOTIFICATIONS;
     else if (role === 'admin') notifs = ADMIN_NOTIFICATIONS;
-    else notifs = []; // client: pas de mock pour l'instant
+    else if (role === 'client') notifs = CLIENT_NOTIFICATIONS;
     set({ notifications: notifs, unreadCount: notifs.filter(n => !n.read).length });
   },
 

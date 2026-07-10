@@ -21,6 +21,7 @@ const TYPE_CONFIG: Record<NotificationType, { icon: typeof Bell; accent: string;
   review: { icon: Star, accent: "#A7442D", bg: "#FAEAE6" },
   system: { icon: ShieldCheck, accent: "#8B7E73", bg: "#F2EDE4" },
   litige: { icon: AlertTriangle, accent: "#A7442D", bg: "#FAEAE6" },
+  order: { icon: Package, accent: "#BF793B", bg: "#FEF5E9" },
 };
 
 // Notifications qui méritent un fond coloré (pas toutes identiques)
