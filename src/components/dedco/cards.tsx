@@ -514,12 +514,12 @@ export const CategoryCard = memo(function CategoryCard({
     <button
       type="button"
       onClick={() => onOpen(category.slug)}
-      className="dedco-card p-5 sm:p-6 text-center hover:shadow-lg hover:border-amber transition-all cursor-pointer group flex flex-col items-center justify-center gap-2"
+      className="dedco-card p-4 sm:p-5 text-center hover:shadow-lg hover:border-amber transition-all cursor-pointer group flex flex-col items-center justify-center gap-2 h-full min-h-[120px]"
     >
-      <div className="w-12 h-12 rounded-full bg-[var(--amber-pale)] flex items-center justify-center group-hover:scale-110 transition-transform">
-        <CatIcon size={24} className="text-[var(--amber)]" strokeWidth={1.5} />
+      <div className="w-11 h-11 rounded-full bg-[var(--amber-pale)] flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0">
+        <CatIcon size={22} className="text-[var(--amber)]" strokeWidth={1.5} />
       </div>
-      <h3 className="font-display font-semibold text-sm leading-tight">
+      <h3 className="font-display font-semibold text-sm leading-tight line-clamp-2">
         {category.name}
       </h3>
       <p className="text-xs text-[var(--text-3)] font-numeric">
