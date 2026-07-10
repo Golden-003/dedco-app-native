@@ -519,7 +519,7 @@ export const CategoryCard = memo(function CategoryCard({
       <div className="w-11 h-11 rounded-full bg-[var(--amber-pale)] flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0">
         <CatIcon size={22} className="text-[var(--amber)]" strokeWidth={1.5} />
       </div>
-      <h3 className="font-display font-semibold text-xs sm:text-sm leading-tight truncate w-full">
+      <h3 className="font-display font-semibold text-xs sm:text-sm leading-tight text-center break-words w-full">
         {category.name}
       </h3>
       <p className="text-xs text-[var(--text-3)] font-numeric">
