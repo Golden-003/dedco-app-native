@@ -250,9 +250,17 @@ export function OrderConfirmationPage({ orderId }: { orderId: string }) {
 
 export function InvoicePage({ orderId }: { orderId: string }) {
   const navigate = useDedcoStore((s) => s.navigate);
+  const goBack = useDedcoStore((s) => s.goBack);
   const currentUser = useDedcoStore((s) => s.currentUser);
   const isArtisan = currentUser?.role === "artisan";
   const storeOrder = useDedcoStore((s) => s.orders.find((o) => o.id === orderId));
+
+  // ── Détermine le type de facture ──
+  // PD-XXX → projet designer (facture de prestation designer)
+  // PA-XXX → projet artisan sur-mesure (facture de projet artisan)
+  // CMD-XXX → commande marketplace (facture de produits)
+  const isDesignerProject = orderId.startsWith("PD-");
+  const isArtisanProject = orderId.startsWith("PA-");
 
   let order: NormalizedOrder;
   if (storeOrder) {
@@ -263,11 +271,19 @@ export function InvoicePage({ orderId }: { orderId: string }) {
     order = MOCK_MARKETPLACE_ORDER as NormalizedOrder;
   }
 
+  // ── Bouton "Retour" intelligent ──
+  // On utilise goBack() qui remonte l'historique (le projet designer,
+  // la commande marketplace, etc.). Si l'historique est vide, getLogicalBackRoute
+  // renvoie vers order-history (défini dans store.ts).
+  function handleBack() {
+    goBack();
+  }
+
   return (
     <div className="min-h-screen bg-[var(--bg-cream)] py-8">
       <div className="max-w-3xl mx-auto px-4">
         <div className="flex items-center justify-between mb-6">
-          <button onClick={() => navigate({ page: "order-tracking", id: order.id })} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] flex items-center gap-1">
+          <button onClick={handleBack} className="text-sm text-[var(--text-3)] hover:text-[var(--amber)] flex items-center gap-1">
             <ChevronRight size={16} className="rotate-180" /> Retour
           </button>
           <button onClick={() => window.print()} className="dedco-btn dedco-btn-ghost dedco-btn-sm">
@@ -289,8 +305,14 @@ export function InvoicePage({ orderId }: { orderId: string }) {
               <p className="text-sm font-numeric font-semibold text-[var(--amber)]">{order.invoiceId}</p>
               <p className="text-xs text-[var(--text-3)] mt-2 font-numeric">Commande : {order.id}</p>
               <p className="text-xs text-[var(--text-3)]">{formatDate(order.date)}</p>
-              <span className={`dedco-badge mt-2 ${order.type === "custom" ? "dedco-badge-amber" : "dedco-badge-forest"}`}>
-                {order.type === "custom" ? "Sur mesure" : "En stock"}
+              <span className={`dedco-badge mt-2 ${
+                isDesignerProject ? "dedco-badge-amber" :
+                isArtisanProject ? "dedco-badge-terra" :
+                order.type === "custom" ? "dedco-badge-amber" : "dedco-badge-forest"
+              }`}>
+                {isDesignerProject ? "Prestation designer" :
+                 isArtisanProject ? "Projet sur-mesure" :
+                 order.type === "custom" ? "Sur mesure" : "En stock"}
               </span>
             </div>
           </div>
