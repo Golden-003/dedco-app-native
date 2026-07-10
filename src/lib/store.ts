@@ -267,6 +267,13 @@ interface DedcoState {
   currentUser: CurrentUser | null;
   orders: Order[];
 
+  // ── UI state persisté (survit aux navigations) ──
+  // Mes Projets : onglet actif + briefs dépliés
+  mesProjetsActiveTab: string;
+  mesProjetsExpandedBriefs: string[];  // briefIds
+  setMesProjetsActiveTab: (tab: string) => void;
+  toggleMesProjetsBrief: (briefId: string) => void;
+
   // Navigation
   navigate: (route: AppRoute) => void;
   goBack: () => void;
@@ -320,6 +327,19 @@ export const useDedcoStore = create<DedcoState>()(
   searchOpen: false,
   currentUser: null,
   orders: [],
+
+  // ── UI state persisté ──
+  mesProjetsActiveTab: "en_cours",
+  mesProjetsExpandedBriefs: [],
+  setMesProjetsActiveTab: (tab) => set({ mesProjetsActiveTab: tab }),
+  toggleMesProjetsBrief: (briefId) => set((state) => {
+    const expanded = state.mesProjetsExpandedBriefs.includes(briefId);
+    return {
+      mesProjetsExpandedBriefs: expanded
+        ? state.mesProjetsExpandedBriefs.filter(id => id !== briefId)
+        : [...state.mesProjetsExpandedBriefs, briefId],
+    };
+  }),
 
   // ── Navigation ──
   // navigate : pousse la route actuelle dans l'historique AVANT de changer.

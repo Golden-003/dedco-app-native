@@ -279,7 +279,11 @@ function EnCoursCard({ item }: { item: MesProjetsItem }) {
 // ============================================================
 
 function BriefProposalsCard({ brief }: { brief: ArtisanBriefWithProposals }) {
-  const [expanded, setExpanded] = useState(false);
+  // ── État déplié persisté dans le store (survit aux navigations) ──
+  // Avant : useState(false) → le brief se repliait quand on revenait
+  // d'une page profil artisan.
+  const expanded = useDedcoStore((s) => s.mesProjetsExpandedBriefs.includes(brief.briefId));
+  const toggleBrief = useDedcoStore((s) => s.toggleMesProjetsBrief);
 
   return (
     <div className="dedco-card overflow-hidden hover:shadow-md transition-shadow">
@@ -312,7 +316,7 @@ function BriefProposalsCard({ brief }: { brief: ArtisanBriefWithProposals }) {
             </span>
           </div>
           <button
-            onClick={() => setExpanded(!expanded)}
+            onClick={() => toggleBrief(brief.briefId)}
             className="dedco-btn dedco-btn-primary dedco-btn-sm flex items-center gap-1 flex-shrink-0"
           >
             <GitCompareArrows size={14} />
@@ -1060,7 +1064,11 @@ function getTabCount(key: TabKey): number {
 }
 
 export function MesProjetsPage() {
-  const [activeTab, setActiveTab] = useState<TabKey>("en_cours");
+  // ── Onglet actif persisté dans le store (survit aux navigations) ──
+  // Avant : useState("en_cours") → l'onglet était perdu à chaque navigation
+  // (aller voir un profil artisan + revenir remettait sur "En cours").
+  const activeTab = useDedcoStore((s) => s.mesProjetsActiveTab) as TabKey;
+  const setActiveTab = useDedcoStore((s) => s.setMesProjetsActiveTab);
   const navigate = useDedcoStore((s) => s.navigate);
 
   return (
