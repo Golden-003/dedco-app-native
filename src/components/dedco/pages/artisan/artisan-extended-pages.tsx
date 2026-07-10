@@ -1062,6 +1062,7 @@ export function ArtisanAbonnementPage() {
 export function ArtisanParametresPage() {
   const [toast, setToast] = useState<string | null>(null);
   function showToast(msg: string) { setToast(msg); setTimeout(() => setToast(null), 3000); }
+  const [phone, setPhone] = useState("+229 01 97 45 23 10");
 
   const [notifEmail, setNotifEmail] = useState({
     brief: true,
@@ -1105,7 +1106,7 @@ export function ArtisanParametresPage() {
           </div>
           <div>
             <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Téléphone</label>
-            <PhoneInput value="+229 01 97 45 23 10" onChange={() => {}} className="w-full" />
+            <PhoneInput value={phone} onChange={setPhone} className="w-full" />
           </div>
           <div>
             <label className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-1.5 block">Spécialités (max 3)</label>

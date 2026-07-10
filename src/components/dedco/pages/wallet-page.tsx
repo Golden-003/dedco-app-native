@@ -317,6 +317,7 @@ function WithdrawModal({
 }) {
   const numAmount = parseInt(amount, 10) || 0;
   const isValid = numAmount > 0 && numAmount <= balance;
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -353,7 +354,7 @@ function WithdrawModal({
           <p className="text-xs text-ink-mute uppercase tracking-wide mb-1.5">
             Numéro Mobile Money
           </p>
-          <PhoneInput value="" onChange={() => {}} className="w-full" />
+          <PhoneInput value={phoneNumber} onChange={setPhoneNumber} className="w-full" />
         </div>
 
         <div className="mb-4">

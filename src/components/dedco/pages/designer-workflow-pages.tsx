@@ -444,6 +444,7 @@ export function ProjetPaiementPage({ proposalId }: { proposalId: string }) {
   const { route: backRoute, label: backLabel } = getBackToProjets(currentUser?.role);
   const [operator, setOperator] = useState<"mtn" | "moov">("mtn");
   const [done, setDone] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("+229 01 97 45 23 10");
   const total = 304500;
 
   if (done) {
@@ -475,7 +476,7 @@ export function ProjetPaiementPage({ proposalId }: { proposalId: string }) {
             <button key={op.id} onClick={() => setOperator(op.id as "mtn" | "moov")} className={`px-3 py-3 rounded-md text-sm font-semibold border-2 ${operator === op.id ? "border-[var(--amber)]" : "border-[var(--border)]"}`} style={{ backgroundColor: op.color, color: op.text }}>{op.label}</button>
           ))}
         </div>
-        <PhoneInput value="+229 01 97 45 23 10" onChange={() => {}} className="w-full" />
+        <PhoneInput value={phoneNumber} onChange={setPhoneNumber} className="w-full" />
       </div>
       <button onClick={() => setDone(true)} className="dedco-btn dedco-btn-primary w-full dedco-btn-lg">Payer {formatFCFA(total)}</button>
     </div>

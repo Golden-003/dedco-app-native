@@ -15,6 +15,7 @@ import {
   Briefcase,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
+import { useArtisanRating } from "@/lib/review-store";
 import { ARTISANS } from "@/lib/dedco-data-expanded";
 
 const container = {
@@ -28,6 +29,7 @@ const fadeUp = {
 export function ArtisanProfilePage() {
   const navigate = useDedcoStore((s) => s.navigate);
   const artisan = ARTISANS.find((a) => a.id === 1)!;
+  const ratingStats = useArtisanRating(1);
 
   const [form, setForm] = useState({
     name: artisan.name,
@@ -267,19 +269,19 @@ export function ArtisanProfilePage() {
                 Excellent
               </p>
               <p className="text-xs text-[var(--text-3)] mt-0.5">
-                Basé sur {artisan.reviews} avis clients et 12 ans d'expérience
+                Basé sur {ratingStats.count} avis vérifié{ratingStats.count > 1 ? "s" : ""} et {artisan.experience} d'expérience
               </p>
               <div className="flex items-center gap-1 mt-1.5">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <span
                     key={i}
-                    className={`star ${i < Math.round(artisan.rating) ? "" : "empty"}`}
+                    className={`star ${i < Math.round(ratingStats.rating) ? "" : "empty"}`}
                   >
                     ★
                   </span>
                 ))}
                 <span className="font-numeric text-xs text-[var(--text-2)] ml-1">
-                  {artisan.rating}
+                  {ratingStats.rating}
                 </span>
               </div>
             </div>

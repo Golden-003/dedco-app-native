@@ -13,6 +13,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
+import { useArtisanRating } from "@/lib/review-store";
 import { ARTISANS, ALL_PRODUCTS, formatFCFA } from "@/lib/dedco-data-expanded";
 
 // ── Mock orders for Kofi (artisanId 1) ──
@@ -72,6 +73,7 @@ const fadeUp = {
 export function ArtisanDashboardPage() {
   const navigate = useDedcoStore((s) => s.navigate);
   const artisan = ARTISANS.find((a) => a.id === 1)!;
+  const ratingStats = useArtisanRating(1);
   const myProducts = ALL_PRODUCTS.filter((p) => p.artisanId === 1);
   const onlineProducts = myProducts.filter((p) => p.stock > 0);
 
@@ -99,7 +101,7 @@ export function ArtisanDashboardPage() {
     },
     {
       label: "Note moyenne",
-      value: `${artisan.rating}/5`,
+      value: `${ratingStats.rating}/5`,
       icon: Star,
       color: "var(--amber)",
       bg: "var(--amber-pale)",

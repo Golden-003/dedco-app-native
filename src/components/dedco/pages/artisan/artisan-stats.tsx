@@ -5,6 +5,7 @@ import {
   TrendingUp, ShoppingBag, Star, Users, ArrowUpRight, Package, Clock, CheckCircle2,
 } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
+import { useArtisanRating } from "@/lib/review-store";
 import { ARTISANS, formatFCFA } from "@/lib/dedco-data";
 
 type Period = "7j" | "30j" | "3mo" | "1an";
@@ -56,6 +57,7 @@ const ACTIVE_PROJECTS = [
 export function ArtisanStatsPage() {
   const navigate = useDedcoStore((s) => s.navigate);
   const [period, setPeriod] = useState<Period>("30j");
+  const ratingStats = useArtisanRating(1);
   const stats = STATS_DATA[period];
   const chartData = CHART_DATA[period];
   const maxValue = Math.max(...chartData.map((d) => d.value), 1);
@@ -63,7 +65,7 @@ export function ArtisanStatsPage() {
   const statCards = [
     { label: "Revenus", value: formatFCFA(stats.revenue), icon: TrendingUp, change: "+18%", color: "var(--forest)", bg: "var(--forest-pale)" },
     { label: "Commandes", value: stats.orders.toString(), icon: ShoppingBag, change: "+12%", color: "var(--amber)", bg: "var(--amber-pale)" },
-    { label: "Note moyenne", value: stats.rating.toString(), icon: Star, change: "+0.2", color: "var(--terracotta)", bg: "var(--terracotta-pale)" },
+    { label: "Note moyenne", value: ratingStats.rating > 0 ? ratingStats.rating.toString() : "—", icon: Star, change: ratingStats.count > 0 ? `${ratingStats.count} avis` : "Nouveau", color: "var(--terracotta)", bg: "var(--terracotta-pale)" },
     { label: "Nouveaux clients", value: stats.clients.toString(), icon: Users, change: "+30%", color: "var(--amber)", bg: "var(--amber-pale)" },
   ];
 

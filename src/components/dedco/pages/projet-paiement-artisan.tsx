@@ -106,6 +106,7 @@ export function ProjetPaiementArtisanPage({ proposalId }: { proposalId: string }
   const proposal = MOCK_PROPOSALS[proposalId] || MOCK_PROPOSALS["PROP-K1"];
   const [operator, setOperator] = useState<"mtn" | "moov">("mtn");
   const [done, setDone] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("+229 01 97 45 23 10");
 
   // Calculs financiers
   const garantie = Math.round(proposal.price * proposal.garantiePercent / 100);
@@ -232,8 +233,8 @@ export function ProjetPaiementArtisanPage({ proposalId }: { proposalId: string }
           ))}
         </div>
         <PhoneInput
-          value="+229 01 97 45 23 10"
-          onChange={() => {}}
+          value={phoneNumber}
+          onChange={setPhoneNumber}
           className="w-full"
         />
       </div>
