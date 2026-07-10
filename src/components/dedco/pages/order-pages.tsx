@@ -870,7 +870,7 @@ export function OrderTrackingPage({ orderId }: { orderId: string }) {
         {isArtisan ? (
           <>
             <button
-              onClick={() => navigate({ page: "messages", conversationId: `order-${order.id}` })}
+              onClick={() => navigate({ page: "messages", conversationId: `order-${order.id}` } as any)}
               className="dedco-btn dedco-btn-primary"
             >
               <MessageSquare size={16} /> Contacter le client
@@ -895,7 +895,7 @@ export function OrderTrackingPage({ orderId }: { orderId: string }) {
               </span>
             )}
             <button
-              onClick={() => navigate({ page: "messages", conversationId: `order-${order.id}` })}
+              onClick={() => navigate({ page: "messages", conversationId: `order-${order.id}` } as any)}
               className="dedco-btn dedco-btn-ghost"
             >
               <MessageSquare size={16} /> Contacter l'artisan

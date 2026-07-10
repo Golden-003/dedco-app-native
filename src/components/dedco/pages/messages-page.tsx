@@ -137,10 +137,26 @@ export function MessagesPage() {
   const [messageText, setMessageText] = useState("");
   const [conversations, setConversations] = useState<Conversation[]>(CONVERSATIONS);
 
+  // ── Détermine la conversation active ──
+  // La route peut passer un conversationId comme "order-CMD-XXX", "proj-PA-XXX",
+  // ou "artisan-Kofi". On essaie de matcher avec les mocks par ID, puis par nom.
   const activeConvId =
     route.page === "messages" ? route.conversationId : undefined;
+
   const [selectedConvId, setSelectedConvId] = useState<string | undefined>(
-    activeConvId
+    () => {
+      if (!activeConvId) return undefined;
+      // 1. Match direct par ID
+      const direct = CONVERSATIONS.find((c) => c.id === activeConvId);
+      if (direct) return direct.id;
+      // 2. Match par nom (si l'ID contient un nom d'artisan/designer)
+      const byName = CONVERSATIONS.find((c) =>
+        activeConvId.toLowerCase().includes(c.name.toLowerCase().split(" ")[0])
+      );
+      if (byName) return byName.id;
+      // 3. Pas de match — on reste sur la liste
+      return undefined;
+    }
   );
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -202,20 +218,25 @@ export function MessagesPage() {
           : "Client";
 
   return (
-    // Conteneur plein écran — s'inscrit dans le <main> du DashboardSidebar.
-    // h-full : le parent <main> a flex-1 dans un h-screen, donc la hauteur
-    // est déterminée automatiquement (header mobile 64px déjà déduit par flex).
-    <div className="h-full flex flex-col bg-[var(--bg-cream)]">
-      {/* ── Bandeau de titre (desktop) ──
-          Sur desktop, on garde un titre "Messagerie" pour la lisibilité,
-          aligné avec les autres pages du dashboard. Sur mobile, le header
-          du DashboardSidebar suffit. */}
-      <div className="hidden lg:flex items-center justify-between px-6 py-4 border-b border-[var(--border)] bg-[var(--bg-card)] flex-shrink-0">
-        <div>
-          <h1 className="font-display text-xl font-semibold text-[var(--text-1)]">
+    // Conteneur — utilise min-h-[calc(100vh-64px)] pour s'adapter au contexte
+    // dashboard (où le parent a déjà une hauteur fixe) ET au contexte public
+    // (où il faut calculer la hauteur disponible sous la navbar).
+    <div className="flex flex-col bg-[var(--bg-cream)] h-[calc(100vh-64px)] lg:h-[calc(100vh-0px)]">
+      {/* ── Barre supérieure avec bouton retour ── */}
+      <div className="flex items-center gap-3 px-4 sm:px-6 py-3 border-b border-[var(--border)] bg-[var(--bg-card)] flex-shrink-0">
+        <button
+          type="button"
+          onClick={goBack}
+          className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-[var(--bg-warm)] transition-colors text-[var(--text-1)] flex-shrink-0"
+          aria-label="Retour"
+        >
+          <ChevronLeft size={20} />
+        </button>
+        <div className="flex-1 min-w-0">
+          <h1 className="font-display text-lg font-semibold text-[var(--text-1)]">
             Messagerie
           </h1>
-          <p className="text-xs text-[var(--text-3)] mt-0.5">
+          <p className="text-xs text-[var(--text-3)] truncate hidden sm:block">
             Échangez avec vos clients, designers et artisans en toute sécurité.
           </p>
         </div>

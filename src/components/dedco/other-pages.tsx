@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, MapPin, Star, BadgeCheck } from "lucide-react";
+import { Search, MapPin, Star, BadgeCheck, MessageSquare } from "lucide-react";
 import { useDedcoStore } from "@/lib/store";
 import { useReviewStore } from "@/lib/review-store";
 import {
@@ -404,6 +404,14 @@ export function ArtisanDetailPage({
                 <span className="text-ink-mute">de confiance</span>
               </div>
             </div>
+            {/* Bouton contacter l'artisan */}
+            <button
+              type="button"
+              onClick={() => useDedcoStore.getState().navigate({ page: "messages", conversationId: `artisan-${artisan.name.split(" ")[0]}` } as any)}
+              className="dedco-btn dedco-btn-secondary w-full mt-4"
+            >
+              <MessageSquare size={16} /> Contacter {artisan.name.split(" ")[0]}
+            </button>
           </div>
         </div>
       </div>
