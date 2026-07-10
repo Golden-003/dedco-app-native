@@ -4,11 +4,12 @@ import { useState } from "react";
 import {
   CheckCircle2, Clock, Truck, Package, FileText, Printer,
   ShieldCheck, ChevronRight, Camera, AlertTriangle, MessageSquare,
-  MapPin, ShoppingBag,
+  MapPin, ShoppingBag, Palette, Hammer,
 } from "lucide-react";
 import { useDedcoStore, type Order, type OrderStatus } from "@/lib/store";
 import { formatFCFA } from "@/lib/dedco-data";
 import { useReviewStore } from "@/lib/review-store";
+import { MOCK_DESIGNER_PROJECTS, MOCK_ARTISAN_PROJECTS } from "@/lib/mock/project-mocks";
 
 function formatDate(d: Date) {
   return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" });
@@ -291,108 +292,423 @@ export function InvoicePage({ orderId }: { orderId: string }) {
           </button>
         </div>
 
-        <div className="bg-card rounded-xl shadow-lg p-8 sm:p-12">
-          <div className="flex items-start justify-between mb-8 pb-8 border-b-2 border-[var(--amber)]">
-            <div>
-              <div className="font-display text-3xl font-bold mb-1">
-                <span className="text-[var(--terracotta)]">Dedco</span><span className="text-[var(--amber)]">.</span>
-              </div>
-              <p className="text-xs text-[var(--text-3)]">Marketplace aménagement intérieur</p>
-              <p className="text-xs text-[var(--text-3)]">Cotonou, Bénin · contact@dedco.bj</p>
-            </div>
-            <div className="text-right">
-              <h1 className="font-display text-2xl font-bold mb-1">FACTURE</h1>
-              <p className="text-sm font-numeric font-semibold text-[var(--amber)]">{order.invoiceId}</p>
-              <p className="text-xs text-[var(--text-3)] mt-2 font-numeric">Commande : {order.id}</p>
-              <p className="text-xs text-[var(--text-3)]">{formatDate(order.date)}</p>
-              <span className={`dedco-badge mt-2 ${
-                isDesignerProject ? "dedco-badge-amber" :
-                isArtisanProject ? "dedco-badge-terra" :
-                order.type === "custom" ? "dedco-badge-amber" : "dedco-badge-forest"
-              }`}>
-                {isDesignerProject ? "Prestation designer" :
-                 isArtisanProject ? "Projet sur-mesure" :
-                 order.type === "custom" ? "Sur mesure" : "En stock"}
-              </span>
-            </div>
+        {/* ── Contenu de la facture selon le type ── */}
+        {isDesignerProject ? (
+          <DesignerInvoice projectId={orderId} />
+        ) : isArtisanProject ? (
+          <ArtisanProjectInvoice projectId={orderId} />
+        ) : (
+          <MarketplaceInvoice order={order} isArtisan={isArtisan} />
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// FACTURE PRESTATION DESIGNER (PD-XXX)
+// ============================================================
+// Affiche une prestation de design d'aménagement — PAS de produits.
+// Contenu : nom du designer, périmètre de la prestation, livrables promis,
+// montant de la prestation (acompte + solde).
+
+function DesignerInvoice({ projectId }: { projectId: string }) {
+  const project = MOCK_DESIGNER_PROJECTS[projectId];
+  const currentUser = useDedcoStore((s) => s.currentUser);
+
+  if (!project) {
+    return (
+      <div className="bg-card rounded-xl shadow-lg p-12 text-center">
+        <p className="text-sm text-[var(--text-3)]">Projet designer introuvable.</p>
+      </div>
+    );
+  }
+
+  const invoiceId = `FAC-DES-${project.id.replace("PD-", "")}`;
+  const today = new Date().toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" });
+  const scopeLabel = project.scope === "premium" ? "Premium" : project.scope === "standard" ? "Standard" : "Prototype";
+
+  return (
+    <div className="bg-card rounded-xl shadow-lg p-8 sm:p-12">
+      {/* En-tête */}
+      <div className="flex items-start justify-between mb-8 pb-8 border-b-2 border-[var(--amber)]">
+        <div>
+          <div className="font-display text-3xl font-bold mb-1">
+            <span className="text-[var(--terracotta)]">Dedco</span><span className="text-[var(--amber)]">.</span>
           </div>
+          <p className="text-xs text-[var(--text-3)]">Marketplace aménagement intérieur</p>
+          <p className="text-xs text-[var(--text-3)]">Cotonou, Bénin · contact@dedco.bj</p>
+        </div>
+        <div className="text-right">
+          <h1 className="font-display text-2xl font-bold mb-1">FACTURE</h1>
+          <p className="text-sm font-numeric font-semibold text-[var(--amber)]">{invoiceId}</p>
+          <p className="text-xs text-[var(--text-3)] mt-2 font-numeric">Projet : {project.id}</p>
+          <p className="text-xs text-[var(--text-3)]">{today}</p>
+          <span className="dedco-badge mt-2 dedco-badge-amber">Prestation designer</span>
+        </div>
+      </div>
 
-          <div className="grid grid-cols-2 gap-8 mb-8">
+      {/* Facturé à / Prestataire */}
+      <div className="grid grid-cols-2 gap-8 mb-8">
+        <div>
+          <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">Facturé à</p>
+          <p className="font-semibold text-sm">{project.clientName}</p>
+          <p className="text-xs text-[var(--text-3)]">Client Dedco</p>
+        </div>
+        <div>
+          <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">Prestataire</p>
+          <div className="flex items-center gap-2">
+            <img src={project.designerAvatar} alt={project.designerName} className="w-8 h-8 rounded-full object-cover" />
             <div>
-              <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">Facturé à</p>
-              <p className="font-semibold text-sm">
-                {order.delivery.firstName ? `${order.delivery.firstName} ${order.delivery.lastName}`.trim() : "Client Dedco"}
-              </p>
-              {order.delivery.indication && (
-                <p className="text-sm text-[var(--text-2)]">{order.delivery.indication}</p>
-              )}
-              <p className="text-sm text-[var(--text-2)]">{order.delivery.quartier}, {order.delivery.ville}</p>
-              <p className="text-sm text-[var(--text-2)] font-numeric">{order.delivery.phone}</p>
+              <p className="font-semibold text-sm">{project.designerName}</p>
+              <p className="text-xs text-[var(--text-3)]">{project.designerCity}</p>
             </div>
-            <div>
-              <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">Paiement</p>
-              <p className="text-sm font-medium">{order.paymentMethod}</p>
-              <p className="text-xs text-[var(--text-3)] font-numeric">Réf : {order.paymentRef}</p>
-              <p className="text-xs text-[var(--forest)] mt-1">{order.type === "custom" ? "Sécurisé via Mobile Money" : "Payé via Mobile Money"}</p>
-            </div>
-          </div>
-
-          <table className="w-full text-sm mb-8">
-            <thead>
-              <tr className="border-b-2 border-[var(--border)]">
-                <th className="text-left py-3 px-2 text-xs text-[var(--text-3)] uppercase">Produit</th>
-                <th className="text-center py-3 px-2 text-xs text-[var(--text-3)] uppercase">Artisan</th>
-                <th className="text-center py-3 px-2 text-xs text-[var(--text-3)] uppercase">Qté</th>
-                <th className="text-right py-3 px-2 text-xs text-[var(--text-3)] uppercase">Prix</th>
-                <th className="text-right py-3 px-2 text-xs text-[var(--text-3)] uppercase">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {order.items.map((item, i) => (
-                <tr key={i} className="border-b border-[var(--border)]">
-                  <td className="py-3 px-2">
-                    <div className="flex items-center gap-2">
-                      <img src={item.image} alt="" className="w-10 h-10 rounded object-cover" />
-                      <div>
-                        <p className="font-medium">{item.name}</p>
-                        {item.color && <p className="text-xs text-[var(--text-3)]">{item.color}</p>}
-                        {item.dimensions && <p className="text-xs text-[var(--text-3)] font-numeric">{item.dimensions}</p>}
-                      </div>
-                    </div>
-                  </td>
-                  <td className="py-3 px-2 text-center text-[var(--text-2)]">{item.artisanName}</td>
-                  <td className="py-3 px-2 text-center font-numeric">{item.qty}</td>
-                  <td className="py-3 px-2 text-right font-numeric">{formatFCFA(item.price)}</td>
-                  <td className="py-3 px-2 text-right font-numeric font-semibold">{formatFCFA(item.price * item.qty)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          <div className="flex justify-end mb-8">
-            <div className="w-full sm:w-72 space-y-2 text-sm">
-              <div className="flex justify-between"><span className="text-[var(--text-2)]">Sous-total</span><span className="font-numeric">{formatFCFA(order.subtotal)}</span></div>
-              <div className="flex justify-between"><span className="text-[var(--text-2)]">Livraison</span><span className="font-numeric text-[var(--forest)]">Gratuite</span></div>
-              <div className="flex justify-between"><span className="text-[var(--text-2)] flex items-center gap-1">Garantie (1,5%)<ShieldCheck size={12} className="text-[var(--forest)]" /></span><span className="font-numeric">{formatFCFA(order.garantie)}</span></div>
-              <div className="flex justify-between font-display font-bold text-base pt-2 border-t-2 border-[var(--amber)]"><span>Total TTC</span><span className="font-numeric text-[var(--amber)]">{formatFCFA(order.total)}</span></div>
-            </div>
-          </div>
-
-          <div className="pt-6 border-t border-[var(--border)] text-xs text-[var(--text-3)] space-y-1">
-            {order.type === "custom" ? (
-              <>
-                <p><strong>Commande sur mesure :</strong> Paiement sécurisé. Artisan payé après validation T3.</p>
-                <p><strong>Livraison sécurisée :</strong> T1 (produit prêt), T2 (transit), T3 (remise client).</p>
-              </>
-            ) : (
-              <>
-                <p><strong>Produit en stock :</strong> Expédition sous 24-48h.</p>
-                {!isArtisan && <p><strong>Garantie :</strong> 7 jours pour ouvrir un litige après livraison.</p>}
-              </>
-            )}
-            <p className="pt-2 text-center">Dedco SARL · Cotonou, Bénin · RCCM BJ-2026-0456</p>
           </div>
         </div>
+      </div>
+
+      {/* Détails de la prestation */}
+      <div className="mb-8 p-4 rounded-lg bg-[var(--bg-warm)]">
+        <div className="flex items-center gap-2 mb-3">
+          <Palette size={16} className="text-[var(--amber)]" />
+          <h2 className="font-display font-bold text-sm">{project.title}</h2>
+        </div>
+        <div className="grid grid-cols-2 gap-3 text-xs">
+          <div>
+            <p className="text-[var(--text-3)] uppercase tracking-wide mb-1">Périmètre</p>
+            <p className="font-medium">{scopeLabel} — {project.piece} ({project.superficie})</p>
+          </div>
+          <div>
+            <p className="text-[var(--text-3)] uppercase tracking-wide mb-1">Style recherché</p>
+            <p className="font-medium">{project.style}</p>
+          </div>
+          <div>
+            <p className="text-[var(--text-3)] uppercase tracking-wide mb-1">Démarrage</p>
+            <p className="font-medium font-numeric">{project.dateDemarrage}</p>
+          </div>
+          <div>
+            <p className="text-[var(--text-3)] uppercase tracking-wide mb-1">Livraison prevue</p>
+            <p className="font-medium font-numeric">{project.dateLivraison}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Livrables inclus dans la prestation */}
+      <div className="mb-8">
+        <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">Livrables inclus</p>
+        <ul className="space-y-1">
+          {project.livrablesPromis.map((livrable, i) => (
+            <li key={i} className="flex items-center gap-2 text-sm text-[var(--text-2)]">
+              <CheckCircle2 size={12} className="text-[var(--forest)] flex-shrink-0" />
+              {livrable}
+            </li>
+          ))}
+          <li className="flex items-center gap-2 text-sm text-[var(--text-2)]">
+            <CheckCircle2 size={12} className="text-[var(--forest)] flex-shrink-0" />
+            {project.revisionsIncluses} révisions incluses
+          </li>
+        </ul>
+      </div>
+
+      {/* Tableau prestation */}
+      <table className="w-full text-sm mb-8">
+        <thead>
+          <tr className="border-b-2 border-[var(--border)]">
+            <th className="text-left py-3 px-2 text-xs text-[var(--text-3)] uppercase">Désignation</th>
+            <th className="text-right py-3 px-2 text-xs text-[var(--text-3)] uppercase">Montant</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="border-b border-[var(--border)]">
+            <td className="py-3 px-2">
+              <p className="font-medium">Prestation de design d'aménagement</p>
+              <p className="text-xs text-[var(--text-3)]">{project.prestationLabel}</p>
+            </td>
+            <td className="py-3 px-2 text-right font-numeric font-semibold">{formatFCFA(project.prix)}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      {/* Totaux */}
+      <div className="flex justify-end mb-8">
+        <div className="w-full sm:w-72 space-y-2 text-sm">
+          <div className="flex justify-between">
+            <span className="text-[var(--text-2)]">Sous-total</span>
+            <span className="font-numeric">{formatFCFA(project.prix)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-[var(--text-2)]">Acompte versé (50%)</span>
+            <span className="font-numeric text-[var(--forest)]">{formatFCFA(project.montantPaye)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-[var(--text-2)]">Solde à la livraison</span>
+            <span className="font-numeric text-[var(--terracotta)]">{formatFCFA(project.solde)}</span>
+          </div>
+          <div className="flex justify-between font-display font-bold text-base pt-2 border-t-2 border-[var(--amber)]">
+            <span>Total TTC</span>
+            <span className="font-numeric text-[var(--amber)]">{formatFCFA(project.prix)}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Notes */}
+      <div className="pt-6 border-t border-[var(--border)] text-xs text-[var(--text-3)] space-y-1">
+        <p><strong>Prestation designer :</strong> Acompte de 50% versé au démarrage, solde à la livraison des livrables.</p>
+        <p><strong>Paiement sécurisé :</strong> Le solde est bloqué jusqu'à validation des livrables par le client.</p>
+        <p className="pt-2 text-center">Dedco SARL · Cotonou, Bénin · RCCM BJ-2026-0456</p>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// FACTURE PROJET ARTISAN SUR-MESURE (PA-XXX)
+// ============================================================
+// Affiche une commande sur-mesure d'artisan — PAS de produits marketplace.
+// Contenu : nom de l'artisan, titre du projet, matériaux, dimensions,
+// acompte + solde.
+
+function ArtisanProjectInvoice({ projectId }: { projectId: string }) {
+  const project = MOCK_ARTISAN_PROJECTS[projectId];
+
+  if (!project) {
+    return (
+      <div className="bg-card rounded-xl shadow-lg p-12 text-center">
+        <p className="text-sm text-[var(--text-3)]">Projet artisan introuvable.</p>
+      </div>
+    );
+  }
+
+  const invoiceId = `FAC-ART-${project.id.replace("PA-", "")}`;
+  const today = new Date().toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" });
+
+  return (
+    <div className="bg-card rounded-xl shadow-lg p-8 sm:p-12">
+      {/* En-tête */}
+      <div className="flex items-start justify-between mb-8 pb-8 border-b-2 border-[var(--amber)]">
+        <div>
+          <div className="font-display text-3xl font-bold mb-1">
+            <span className="text-[var(--terracotta)]">Dedco</span><span className="text-[var(--amber)]">.</span>
+          </div>
+          <p className="text-xs text-[var(--text-3)]">Marketplace aménagement intérieur</p>
+          <p className="text-xs text-[var(--text-3)]">Cotonou, Bénin · contact@dedco.bj</p>
+        </div>
+        <div className="text-right">
+          <h1 className="font-display text-2xl font-bold mb-1">FACTURE</h1>
+          <p className="text-sm font-numeric font-semibold text-[var(--amber)]">{invoiceId}</p>
+          <p className="text-xs text-[var(--text-3)] mt-2 font-numeric">Projet : {project.id}</p>
+          <p className="text-xs text-[var(--text-3)]">{today}</p>
+          <span className="dedco-badge mt-2 dedco-badge-terra">Projet sur-mesure</span>
+        </div>
+      </div>
+
+      {/* Facturé à / Artisan */}
+      <div className="grid grid-cols-2 gap-8 mb-8">
+        <div>
+          <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">Facturé à</p>
+          <p className="font-semibold text-sm">{project.clientName}</p>
+          <p className="text-xs text-[var(--text-3)]">{project.livraisonAdresse}</p>
+          <p className="text-xs text-[var(--text-3)] font-numeric">{project.livraisonPhone}</p>
+        </div>
+        <div>
+          <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">Artisan</p>
+          <div className="flex items-center gap-2">
+            <img src={project.artisanAvatar} alt={project.artisanName} className="w-8 h-8 rounded-full object-cover" />
+            <div>
+              <p className="font-semibold text-sm">{project.artisanName}</p>
+              <p className="text-xs text-[var(--text-3)]">{project.artisanCity}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Détails du projet */}
+      <div className="mb-8 p-4 rounded-lg bg-[var(--bg-warm)]">
+        <div className="flex items-center gap-2 mb-3">
+          <Hammer size={16} className="text-[var(--amber)]" />
+          <h2 className="font-display font-bold text-sm">{project.title}</h2>
+        </div>
+        <div className="grid grid-cols-2 gap-3 text-xs">
+          <div>
+            <p className="text-[var(--text-3)] uppercase tracking-wide mb-1">Matériaux</p>
+            <p className="font-medium">{project.materiaux}</p>
+          </div>
+          <div>
+            <p className="text-[var(--text-3)] uppercase tracking-wide mb-1">Dimensions</p>
+            <p className="font-medium font-numeric">{project.dimensions}</p>
+          </div>
+          <div>
+            <p className="text-[var(--text-3)] uppercase tracking-wide mb-1">Délai fabric.</p>
+            <p className="font-medium font-numeric">{project.delaiFinal}</p>
+          </div>
+          <div>
+            <p className="text-[var(--text-3)] uppercase tracking-wide mb-1">Quantité</p>
+            <p className="font-medium font-numeric">{project.quantite}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Tableau prestation */}
+      <table className="w-full text-sm mb-8">
+        <thead>
+          <tr className="border-b-2 border-[var(--border)]">
+            <th className="text-left py-3 px-2 text-xs text-[var(--text-3)] uppercase">Désignation</th>
+            <th className="text-center py-3 px-2 text-xs text-[var(--text-3)] uppercase">Qté</th>
+            <th className="text-right py-3 px-2 text-xs text-[var(--text-3)] uppercase">Prix unitaire</th>
+            <th className="text-right py-3 px-2 text-xs text-[var(--text-3)] uppercase">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="border-b border-[var(--border)]">
+            <td className="py-3 px-2">
+              <div className="flex items-center gap-2">
+                <img src={project.image} alt={project.title} className="w-10 h-10 rounded object-cover" />
+                <div>
+                  <p className="font-medium">{project.title}</p>
+                  <p className="text-xs text-[var(--text-3)]">Fabrication artisanale sur-mesure</p>
+                </div>
+              </div>
+            </td>
+            <td className="py-3 px-2 text-center font-numeric">{project.quantite}</td>
+            <td className="py-3 px-2 text-right font-numeric">{formatFCFA(project.prixFinal)}</td>
+            <td className="py-3 px-2 text-right font-numeric font-semibold">{formatFCFA(project.prixFinal * project.quantite)}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      {/* Totaux */}
+      <div className="flex justify-end mb-8">
+        <div className="w-full sm:w-72 space-y-2 text-sm">
+          <div className="flex justify-between">
+            <span className="text-[var(--text-2)]">Sous-total</span>
+            <span className="font-numeric">{formatFCFA(project.prixFinal)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-[var(--text-2)]">Acompte versé (50%)</span>
+            <span className="font-numeric text-[var(--forest)]">{formatFCFA(project.montantPaye)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-[var(--text-2)]">Solde à la livraison</span>
+            <span className="font-numeric text-[var(--terracotta)]">{formatFCFA(project.prixFinal - project.montantPaye)}</span>
+          </div>
+          <div className="flex justify-between font-display font-bold text-base pt-2 border-t-2 border-[var(--amber)]">
+            <span>Total TTC</span>
+            <span className="font-numeric text-[var(--amber)]">{formatFCFA(project.prixFinal)}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Notes */}
+      <div className="pt-6 border-t border-[var(--border)] text-xs text-[var(--text-3)] space-y-1">
+        <p><strong>Projet sur-mesure :</strong> Acompte de 50% versé au démarrage de la fabrication, solde à la livraison.</p>
+        <p><strong>Paiement sécurisé :</strong> Le solde est bloqué jusqu'à confirmation de la réception par le client.</p>
+        <p><strong>Livraison sécurisée :</strong> Photos à chaque étape (T1 prêt, T2 transit, T3 remise).</p>
+        <p className="pt-2 text-center">Dedco SARL · Cotonou, Bénin · RCCM BJ-2026-0456</p>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// FACTURE MARKETPLACE (CMD-XXX) — comportement original conservé
+// ============================================================
+
+function MarketplaceInvoice({ order, isArtisan }: { order: NormalizedOrder; isArtisan: boolean }) {
+  return (
+    <div className="bg-card rounded-xl shadow-lg p-8 sm:p-12">
+      <div className="flex items-start justify-between mb-8 pb-8 border-b-2 border-[var(--amber)]">
+        <div>
+          <div className="font-display text-3xl font-bold mb-1">
+            <span className="text-[var(--terracotta)]">Dedco</span><span className="text-[var(--amber)]">.</span>
+          </div>
+          <p className="text-xs text-[var(--text-3)]">Marketplace aménagement intérieur</p>
+          <p className="text-xs text-[var(--text-3)]">Cotonou, Bénin · contact@dedco.bj</p>
+        </div>
+        <div className="text-right">
+          <h1 className="font-display text-2xl font-bold mb-1">FACTURE</h1>
+          <p className="text-sm font-numeric font-semibold text-[var(--amber)]">{order.invoiceId}</p>
+          <p className="text-xs text-[var(--text-3)] mt-2 font-numeric">Commande : {order.id}</p>
+          <p className="text-xs text-[var(--text-3)]">{formatDate(order.date)}</p>
+          <span className={`dedco-badge mt-2 ${order.type === "custom" ? "dedco-badge-amber" : "dedco-badge-forest"}`}>
+            {order.type === "custom" ? "Sur mesure" : "En stock"}
+          </span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-8 mb-8">
+        <div>
+          <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">Facturé à</p>
+          <p className="font-semibold text-sm">
+            {order.delivery.firstName ? `${order.delivery.firstName} ${order.delivery.lastName}`.trim() : "Client Dedco"}
+          </p>
+          {order.delivery.indication && (
+            <p className="text-sm text-[var(--text-2)]">{order.delivery.indication}</p>
+          )}
+          <p className="text-sm text-[var(--text-2)]">{order.delivery.quartier}, {order.delivery.ville}</p>
+          <p className="text-sm text-[var(--text-2)] font-numeric">{order.delivery.phone}</p>
+        </div>
+        <div>
+          <p className="text-xs text-[var(--text-3)] uppercase tracking-wide mb-2">Paiement</p>
+          <p className="text-sm font-medium">{order.paymentMethod}</p>
+          <p className="text-xs text-[var(--text-3)] font-numeric">Réf : {order.paymentRef}</p>
+          <p className="text-xs text-[var(--forest)] mt-1">{order.type === "custom" ? "Sécurisé via Mobile Money" : "Payé via Mobile Money"}</p>
+        </div>
+      </div>
+
+      <table className="w-full text-sm mb-8">
+        <thead>
+          <tr className="border-b-2 border-[var(--border)]">
+            <th className="text-left py-3 px-2 text-xs text-[var(--text-3)] uppercase">Produit</th>
+            <th className="text-center py-3 px-2 text-xs text-[var(--text-3)] uppercase">Artisan</th>
+            <th className="text-center py-3 px-2 text-xs text-[var(--text-3)] uppercase">Qté</th>
+            <th className="text-right py-3 px-2 text-xs text-[var(--text-3)] uppercase">Prix</th>
+            <th className="text-right py-3 px-2 text-xs text-[var(--text-3)] uppercase">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {order.items.map((item, i) => (
+            <tr key={i} className="border-b border-[var(--border)]">
+              <td className="py-3 px-2">
+                <div className="flex items-center gap-2">
+                  <img src={item.image} alt="" className="w-10 h-10 rounded object-cover" />
+                  <div>
+                    <p className="font-medium">{item.name}</p>
+                    {item.color && <p className="text-xs text-[var(--text-3)]">{item.color}</p>}
+                    {item.dimensions && <p className="text-xs text-[var(--text-3)] font-numeric">{item.dimensions}</p>}
+                  </div>
+                </div>
+              </td>
+              <td className="py-3 px-2 text-center text-[var(--text-2)]">{item.artisanName}</td>
+              <td className="py-3 px-2 text-center font-numeric">{item.qty}</td>
+              <td className="py-3 px-2 text-right font-numeric">{formatFCFA(item.price)}</td>
+              <td className="py-3 px-2 text-right font-numeric font-semibold">{formatFCFA(item.price * item.qty)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <div className="flex justify-end mb-8">
+        <div className="w-full sm:w-72 space-y-2 text-sm">
+          <div className="flex justify-between"><span className="text-[var(--text-2)]">Sous-total</span><span className="font-numeric">{formatFCFA(order.subtotal)}</span></div>
+          <div className="flex justify-between"><span className="text-[var(--text-2)]">Livraison</span><span className="font-numeric text-[var(--forest)]">Gratuite</span></div>
+          <div className="flex justify-between"><span className="text-[var(--text-2)] flex items-center gap-1">Garantie (1,5%)<ShieldCheck size={12} className="text-[var(--forest)]" /></span><span className="font-numeric">{formatFCFA(order.garantie)}</span></div>
+          <div className="flex justify-between font-display font-bold text-base pt-2 border-t-2 border-[var(--amber)]"><span>Total TTC</span><span className="font-numeric text-[var(--amber)]">{formatFCFA(order.total)}</span></div>
+        </div>
+      </div>
+
+      <div className="pt-6 border-t border-[var(--border)] text-xs text-[var(--text-3)] space-y-1">
+        {order.type === "custom" ? (
+          <>
+            <p><strong>Commande sur mesure :</strong> Paiement sécurisé. Artisan payé après validation T3.</p>
+            <p><strong>Livraison sécurisée :</strong> T1 (produit prêt), T2 (transit), T3 (remise client).</p>
+          </>
+        ) : (
+          <>
+            <p><strong>Produit en stock :</strong> Expédition sous 24-48h.</p>
+            {!isArtisan && <p><strong>Garantie :</strong> 7 jours pour ouvrir un litige après livraison.</p>}
+          </>
+        )}
+        <p className="pt-2 text-center">Dedco SARL · Cotonou, Bénin · RCCM BJ-2026-0456</p>
       </div>
     </div>
   );
