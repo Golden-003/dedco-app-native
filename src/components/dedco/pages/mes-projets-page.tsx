@@ -384,53 +384,9 @@ function BriefProposalsCard({ brief }: { brief: ArtisanBriefWithProposals }) {
               ))}
             </div>
 
-            {/* Tableau comparatif synthétique */}
-            <div className="overflow-x-auto dedco-hide-scroll rounded-lg border border-[var(--border)]">
-              <table className="w-full text-xs min-w-[600px]">
-                <thead>
-                  <tr className="bg-[var(--bg-warm)] text-[var(--text-3)]">
-                    <th className="text-left px-3 py-2 font-semibold">Artisan</th>
-                    <th className="text-right px-3 py-2 font-semibold">Prix</th>
-                    <th className="text-right px-3 py-2 font-semibold">Délai</th>
-                    <th className="text-left px-3 py-2 font-semibold">Paiement</th>
-                    <th className="text-left px-3 py-2 font-semibold">Vérifié</th>
-                    <th className="text-right px-3 py-2 font-semibold">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {brief.proposals.map((prop: ArtisanProposal) => {
-                    return (
-                      <tr key={prop.id} className="border-t border-[var(--border)]">
-                        <td className="px-3 py-2.5 font-medium text-[var(--text-1)]">
-                          <div className="flex items-center gap-2">
-                            <span className="truncate">{prop.artisanName}</span>
-                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "var(--amber-pale)", color: "var(--amber-dark)" }}>
-                              {prop.artisanLevel}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="px-3 py-2.5 text-right font-numeric font-bold" style={{ color: "var(--amber-dark)" }}>{formatFCFA(prop.price)}</td>
-                        <td className="px-3 py-2.5 text-right font-numeric text-[var(--text-2)]">{prop.deliveryTime}</td>
-                        <td className="px-3 py-2.5 text-[var(--text-2)] text-[11px]">{prop.paymentConditions}</td>
-                        <td className="px-3 py-2.5">
-                          {prop.artisanVerified
-                            ? <ShieldCheck size={14} className="text-[var(--forest)]" />
-                            : <span className="text-[var(--text-3)] text-[11px]">Non</span>}
-                        </td>
-                        <td className="px-3 py-2.5 text-right">
-                          <button
-                            onClick={() => navigateTo({ page: "projet-paiement-artisan", proposalId: prop.id })}
-                            className="dedco-btn dedco-btn-primary dedco-btn-sm"
-                          >
-                            Choisir
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+            {/* Tableau comparatif supprimé — les cartes ci-dessus affichent
+                déjà toutes les infos utiles (prix, délai, matériaux, paiement,
+                bouton Choisir). Le tableau était redondant. */}
           </div>
         )}
 
