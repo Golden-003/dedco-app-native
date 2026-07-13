@@ -130,27 +130,29 @@ html, body {
 
 /* ═══ SPLASH SCREEN — animation d'ouverture ═══ */
 .splash-screen {
-  position: fixed;
+  position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(135deg, #BF793B 0%, #A6442E 50%, #548C45 100%);
+  background: #BF793B;
   z-index: 9999;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 24px;
+  gap: 32px;
+  border-radius: 44px;
+  overflow: hidden;
 }
 
-/* Logo complet Dedco */
+/* Logo complet Dedco (couleur) */
 .splash-logo {
-  width: 160px;
+  width: 180px;
   height: auto;
   opacity: 0;
-  animation: splashLogoIn 0.6s ease 0.2s forwards;
+  animation: splashLogoIn 0.8s ease 0.3s forwards;
 }
 @keyframes splashLogoIn {
-  0% { opacity: 0; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* Conteneur du point qui rebondit */
@@ -161,86 +163,85 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 8px;
 }
 
-/* Le point amber qui rebondit et se transforme */
+/* Le point amber qui rebondit */
 .splash-bounce {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 999px;
-  background: #BF793B;
-  border: 3px solid #fff;
-  box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
+  background: #fff;
   position: absolute;
-  animation: bounceTransform 2.4s cubic-bezier(0.4, 0, 0.2, 1) 0.8s forwards;
+  z-index: 2;
+  animation: bouncePoint 4.5s ease-in-out 1.2s forwards;
 }
 
-@keyframes bounceTransform {
-  /* Rebond 1 : point → fauteuil */
-  0% { transform: translateY(0) scale(1); width: 20px; height: 20px; border-radius: 999px; background: #BF793B; border: 3px solid #fff; }
-  8% { transform: translateY(-40px) scale(0.8); }
-  16% { transform: translateY(0) scale(1); }
-
-  /* Transition → fauteuil */
-  20% { transform: translateY(0) scale(1); width: 48px; height: 48px; border-radius: 14px; background: transparent; border: none; box-shadow: none; content: ''; }
-
-  /* Rebond 2 : fauteuil → chaise */
-  28% { transform: translateY(-35px) scale(0.85); }
-  36% { transform: translateY(0) scale(1); }
-
-  40% { transform: translateY(0) scale(1); width: 48px; height: 48px; }
-
-  /* Rebond 3 : chaise → vase */
-  48% { transform: translateY(-30px) scale(0.85); }
-  56% { transform: translateY(0) scale(1); }
-
-  60% { transform: translateY(0) scale(1); width: 48px; height: 48px; border-radius: 50% 50% 14px 14px; }
-
-  /* Rebond final → point */
-  68% { transform: translateY(-20px) scale(0.8); }
-  76% { transform: translateY(0) scale(1); }
-
-  82% { transform: translateY(0) scale(1); width: 20px; height: 20px; border-radius: 999px; background: #BF793B; border: 3px solid #fff; box-shadow: 0 0 0 3px rgba(255,255,255,0.3); }
-
-  100% { transform: translateY(0) scale(1); width: 20px; height: 20px; border-radius: 999px; background: #BF793B; border: 3px solid #fff; box-shadow: 0 0 0 3px rgba(255,255,255,0.3); }
+@keyframes bouncePoint {
+  0%, 100% { transform: translateY(0); }
+  /* Rebond 1 */
+  4% { transform: translateY(-50px); }
+  8% { transform: translateY(0); }
+  10% { transform: translateY(-15px); }
+  12% { transform: translateY(0); opacity: 1; }
+  13% { opacity: 0; }
+  /* Pendant les icônes, le point est caché */
+  13.1%, 78% { opacity: 0; }
+  /* Rebond final : le point revient */
+  79% { opacity: 1; transform: translateY(-30px); }
+  81% { transform: translateY(0); }
+  83% { transform: translateY(-10px); }
+  85% { transform: translateY(0); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 /* Icônes qui apparaissent pendant les rebonds */
 .splash-icon {
   position: absolute;
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   opacity: 0;
   pointer-events: none;
+  z-index: 1;
 }
 .splash-icon svg { width: 100%; height: 100%; }
 
-.splash-icon-1 { /* fauteuil */
-  animation: iconShow1 0.4s ease 0.96s forwards;
+/* Fauteuil : apparaît à 1.7s, disparaît à 2.6s */
+.splash-icon-1 {
+  animation: iconSeq1 0.9s ease 1.5s forwards;
 }
-.splash-icon-2 { /* chaise */
-  animation: iconShow2 0.4s ease 1.44s forwards;
-}
-.splash-icon-3 { /* vase */
-  animation: iconShow3 0.4s ease 1.92s forwards;
+@keyframes iconSeq1 {
+  0% { opacity: 0; transform: scale(0.3) translateY(20px); }
+  30% { opacity: 1; transform: scale(1) translateY(0); }
+  70% { opacity: 1; transform: scale(1) translateY(0); }
+  100% { opacity: 0; transform: scale(0.5) translateY(-15px); }
 }
 
-@keyframes iconShow1 {
-  0% { opacity: 0; transform: scale(0.5); }
-  100% { opacity: 1; transform: scale(1); }
+/* Chaise : apparaît à 2.6s, disparaît à 3.5s */
+.splash-icon-2 {
+  animation: iconSeq2 0.9s ease 2.4s forwards;
 }
-@keyframes iconShow2 {
-  0% { opacity: 0; transform: scale(0.5); }
-  100% { opacity: 1; transform: scale(1); }
+@keyframes iconSeq2 {
+  0% { opacity: 0; transform: scale(0.3) translateY(20px); }
+  30% { opacity: 1; transform: scale(1) translateY(0); }
+  70% { opacity: 1; transform: scale(1) translateY(0); }
+  100% { opacity: 0; transform: scale(0.5) translateY(-15px); }
 }
-@keyframes iconShow3 {
-  0% { opacity: 0; transform: scale(0.5); }
-  100% { opacity: 1; transform: scale(1); }
+
+/* Vase : apparaît à 3.5s, disparaît à 4.4s */
+.splash-icon-3 {
+  animation: iconSeq3 0.9s ease 3.3s forwards;
+}
+@keyframes iconSeq3 {
+  0% { opacity: 0; transform: scale(0.3) translateY(20px); }
+  30% { opacity: 1; transform: scale(1) translateY(0); }
+  70% { opacity: 1; transform: scale(1) translateY(0); }
+  100% { opacity: 0; transform: scale(0.5) translateY(-15px); }
 }
 
 /* Fade out du splash */
 .splash-fade-out {
-  animation: splashFadeOut 0.5s ease 3.2s forwards;
+  animation: splashFadeOut 0.6s ease 5s forwards;
 }
 @keyframes splashFadeOut {
   0% { opacity: 1; }
@@ -249,13 +250,13 @@ html, body {
 
 /* Tagline */
 .splash-tagline {
-  color: white;
+  color: rgba(255,255,255,0.85);
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 13px;
   font-weight: 500;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   opacity: 0;
-  animation: splashLogoIn 0.6s ease 1s forwards;
+  animation: splashLogoIn 0.8s ease 1s forwards;
 }
 
 /* ═══ STATUS BAR ═══ */
@@ -1383,79 +1384,32 @@ html, body {
 </head>
 <body>
 
-<!-- ═══ SPLASH SCREEN ═══ -->
-<div class="splash-screen splash-fade-out" id="splashScreen">
-  <!-- Logo Dedco centré -->
-  <img src="/dedco-logos/logo-mono-blanc.svg" alt="Dedco" class="splash-logo">
-  <!-- Conteneur du point qui rebondit -->
-  <div class="splash-bounce-container">
-    <!-- Le point amber -->
-    <div class="splash-bounce" id="splashBounce"></div>
-    <!-- Icônes qui apparaissent aux rebonds -->
-    <div class="splash-icon splash-icon-1" id="splashIcon1">
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3"/><path d="M3 16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V11a2 2 0 0 0-4 0z"/><path d="M5 18v2"/><path d="M19 18v2"/></svg>
-    </div>
-    <div class="splash-icon splash-icon-2" id="splashIcon2" style="opacity:0;">
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3"/><path d="M3 16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V11a2 2 0 0 0-4 0z"/><path d="M5 18v2"/><path d="M19 18v2"/></svg>
-    </div>
-    <div class="splash-icon splash-icon-3" id="splashIcon3" style="opacity:0;">
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V8"/><path d="M5 12V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v5"/><path d="M5 12h14"/><path d="M7 19h10"/></svg>
-    </div>
-  </div>
-  <div class="splash-tagline">L'art de vivre chez soi</div>
-</div>
-
-<!-- JS pour gérer la séquence d'icônes -->
-<script>
-(function() {
-  var bounce = document.getElementById('splashBounce');
-  var icon1 = document.getElementById('splashIcon1');
-  var icon2 = document.getElementById('splashIcon2');
-  var icon3 = document.getElementById('splashIcon3');
-  var splash = document.getElementById('splashScreen');
-
-  // Séquence :
-  // 0.8s : point commence à rebondir
-  // 1.0s : rebond 1 atterri → montre fauteuil, cache point
-  // 1.4s : rebond 2 → montre chaise, cache fauteuil
-  // 1.9s : rebond 3 → montre vase, cache chaise
-  // 2.4s : rebond final → cache vase, montre point
-  // 3.2s : fade out
-  // 3.7s : retire le splash du DOM
-
-  setTimeout(function() {
-    bounce.style.opacity = '0';
-    icon1.style.opacity = '1';
-    icon1.style.transform = 'scale(1)';
-  }, 1000);
-
-  setTimeout(function() {
-    icon1.style.opacity = '0';
-    icon2.style.opacity = '1';
-    icon2.style.transform = 'scale(1)';
-  }, 1480);
-
-  setTimeout(function() {
-    icon2.style.opacity = '0';
-    icon3.style.opacity = '1';
-    icon3.style.transform = 'scale(1)';
-  }, 1960);
-
-  setTimeout(function() {
-    icon3.style.opacity = '0';
-    bounce.style.opacity = '1';
-  }, 2440);
-
-  setTimeout(function() {
-    splash.style.display = 'none';
-  }, 3700);
-})();
-</script>
-
 <div class="version-tag">v5 Référence · <a href="/app-simulator-v1-web.html">v1</a></div>
 
 <div class="app-shell" id="appShell">
   <div class="notch"></div>
+
+  <!-- ═══ SPLASH SCREEN (dans le téléphone) ═══ -->
+  <div class="splash-screen splash-fade-out" id="splashScreen">
+    <!-- Logo Dedco couleur centré -->
+    <img src="/dedco-logos/logo-couleur.svg" alt="Dedco" class="splash-logo">
+    <!-- Conteneur du point qui rebondit -->
+    <div class="splash-bounce-container">
+      <!-- Le point blanc -->
+      <div class="splash-bounce" id="splashBounce"></div>
+      <!-- Icônes qui apparaissent aux rebonds -->
+      <div class="splash-icon splash-icon-1" id="splashIcon1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3"/><path d="M3 16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V11a2 2 0 0 0-4 0z"/><path d="M5 18v2"/><path d="M19 18v2"/></svg>
+      </div>
+      <div class="splash-icon splash-icon-2" id="splashIcon2" style="opacity:0;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+      </div>
+      <div class="splash-icon splash-icon-3" id="splashIcon3" style="opacity:0;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V8"/><path d="M5 12V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v5"/><path d="M5 12h14"/><path d="M7 19h10"/></svg>
+      </div>
+    </div>
+    <div class="splash-tagline">L'art de vivre chez soi</div>
+  </div>
 
   <!-- STATUS BAR -->
   <div class="status-bar">
