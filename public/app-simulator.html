@@ -2405,109 +2405,205 @@ html, body {
   </div>
 
   <!-- ═══ SCREEN: CHECKOUT (3 étapes) ═══ -->
-  <div class="screen-page" id="screen-checkout" style="top:0;bottom:0;background:var(--bg-warm);">
-    <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;right:16px;z-index:20;display:flex;align-items:center;justify-content:space-between;">
-      <div class="gallery-btn" onclick="navigateTo('panier')" style="background:var(--bg-card);box-shadow:var(--shadow-sm);">
+  <div class="screen-page" id="screen-checkout" style="top:0;bottom:0;background:var(--bg-cream);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;">
+    <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;right:16px;z-index:20;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.92);backdrop-filter:blur(12px);padding:8px 12px;border-radius:14px;box-shadow:0 1px 4px rgba(30,24,19,0.04);">
+      <div class="gallery-btn" onclick="navigateTo('panier')" style="width:36px;height:36px;border-radius:12px;background:var(--bg-warm);">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
       </div>
-      <div style="font-size:13px;font-weight:700;color:var(--text-1);letter-spacing:-0.01em;">Validation</div>
-      <div style="width:38px;"></div>
+      <div style="font-size:13px;font-weight:700;color:var(--text-1);letter-spacing:-0.01em;">Commande</div>
+      <div style="width:36px;"></div>
     </div>
-    <div style="padding:calc(44px + var(--safe-top) + 60px) 16px 24px;">
-      <!-- Stepper moderne — avec progress bar amber -->
-      <div style="display:flex;align-items:center;gap:6px;margin-bottom:24px;padding:14px 16px;background:var(--bg-card);border-radius:16px;box-shadow:var(--shadow-sm);">
-        <div style="display:flex;align-items:center;gap:6px;flex:1;">
-          <div style="width:26px;height:26px;border-radius:999px;background:linear-gradient(135deg,var(--amber) 0%,var(--amber-dark) 100%);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(191,121,59,0.3);">1</div>
-          <div style="font-size:11px;font-weight:700;color:var(--text-1);letter-spacing:-0.01em;">Adresse</div>
+
+    <div style="padding:calc(44px + var(--safe-top) + 56px) 16px 24px;">
+      <!-- Stepper -->
+      <div style="display:flex;align-items:center;gap:4px;margin-bottom:24px;">
+        <div id="step1Dot" style="display:flex;align-items:center;gap:5px;flex:1;">
+          <div style="width:24px;height:24px;border-radius:999px;background:linear-gradient(135deg,var(--amber) 0%,var(--amber-dark) 100%);color:white;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+          <span id="step1Label" style="font-size:10px;font-weight:700;color:var(--text-1);white-space:nowrap;">Infos</span>
         </div>
-        <div style="width:16px;height:2px;background:var(--amber);border-radius:1px;"></div>
-        <div style="display:flex;align-items:center;gap:6px;flex:1;">
-          <div style="width:26px;height:26px;border-radius:999px;background:var(--bg-warm);color:var(--text-3);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);">2</div>
-          <div style="font-size:11px;color:var(--text-3);font-weight:600;">Livraison</div>
+        <div id="step1Bar" style="flex:0 0 20px;height:2px;background:var(--amber);border-radius:1px;"></div>
+        <div id="step2Dot" style="display:flex;align-items:center;gap:5px;flex:1;">
+          <div style="width:24px;height:24px;border-radius:999px;background:var(--bg-warm);color:var(--text-3);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);flex-shrink:0;">2</div>
+          <span id="step2Label" style="font-size:10px;font-weight:600;color:var(--text-3);white-space:nowrap;">Livraison</span>
         </div>
-        <div style="width:16px;height:2px;background:var(--border);border-radius:1px;"></div>
-        <div style="display:flex;align-items:center;gap:6px;flex:1;">
-          <div style="width:26px;height:26px;border-radius:999px;background:var(--bg-warm);color:var(--text-3);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);">3</div>
-          <div style="font-size:11px;color:var(--text-3);font-weight:600;">Paiement</div>
+        <div id="step2Bar" style="flex:0 0 20px;height:2px;background:var(--border);border-radius:1px;"></div>
+        <div id="step3Dot" style="display:flex;align-items:center;gap:5px;flex:1;">
+          <div style="width:24px;height:24px;border-radius:999px;background:var(--bg-warm);color:var(--text-3);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);flex-shrink:0;">3</div>
+          <span id="step3Label" style="font-size:10px;font-weight:600;color:var(--text-3);white-space:nowrap;">Paiement</span>
         </div>
       </div>
 
-      <!-- Adresse -->
-      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:20px;font-weight:600;color:var(--text-1);margin-bottom:14px;letter-spacing:-0.01em;">Adresse de livraison</div>
+      <!-- ===== ÉTAPE 1 : INFOS ===== -->
+      <div id="checkoutStep1">
+        <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);letter-spacing:-0.02em;margin-bottom:4px;">Vos informations</div>
+        <div style="font-size:12px;color:var(--text-3);margin-bottom:20px;">Renseignez vos coordonnées pour la livraison</div>
 
-      <div style="background:var(--bg-card);border-radius:16px;box-shadow:0 2px 8px rgba(30,24,19,0.05);padding:16px;margin-bottom:10px;border:2px solid var(--amber);cursor:pointer;position:relative;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-          <div style="width:36px;height:36px;border-radius:10px;background:var(--amber-pale);display:flex;align-items:center;justify-content:center;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <!-- Nom + Prénom -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+          <div>
+            <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Prénom</div>
+            <input type="text" value="Fatou" placeholder="Prénom" style="width:100%;padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;">
           </div>
-          <div style="font-size:14px;font-weight:700;color:var(--text-1);letter-spacing:-0.01em;">Domicile</div>
-          <div style="margin-left:auto;width:22px;height:22px;border-radius:999px;background:linear-gradient(135deg,var(--amber) 0%,var(--amber-dark) 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 4px rgba(191,121,59,0.3);">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <div>
+            <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Nom</div>
+            <input type="text" value="Kossou" placeholder="Nom" style="width:100%;padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;">
           </div>
         </div>
-        <div style="font-size:12.5px;color:var(--text-2);line-height:1.55;">Fatou Kossou<br>Quartier Akpakpa, Rue 12<br>Cotonou, Bénin<br>+229 97 45 23 10</div>
-      </div>
 
-      <div style="background:var(--bg-card);border-radius:14px;box-shadow:var(--shadow-xs);padding:14px 16px;margin-bottom:24px;cursor:pointer;border:1px dashed var(--border-dark);transition:all 0.2s;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:28px;height:28px;border-radius:8px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+        <!-- Téléphone -->
+        <div style="margin-bottom:12px;">
+          <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Téléphone</div>
+          <div style="display:flex;align-items:center;gap:10px;padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;">
+            <span style="font-size:14px;color:var(--text-2);font-weight:600;">🇧🇯 +229</span>
+            <div style="width:1px;height:18px;background:var(--border);"></div>
+            <input type="tel" value="97 45 23 10" placeholder="XX XX XX XX" style="flex:1;border:none;outline:none;font-size:14px;font-weight:600;color:var(--text-1);background:transparent;font-family:inherit;" data-phone-format="XX XX XX XX">
           </div>
-          <div style="font-size:13px;color:var(--text-3);font-weight:500;">Ajouter une nouvelle adresse</div>
         </div>
-      </div>
 
-      <!-- Récap -->
-      <div style="background:var(--bg-card);border-radius:16px;box-shadow:0 2px 8px rgba(30,24,19,0.05);padding:18px;margin-bottom:24px;">
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-3);margin-bottom:12px;">Résumé</div>
-        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;color:var(--text-2);"><span>2 articles</span><span style="font-variant-numeric:tabular-nums;font-weight:600;">275 000 FCFA</span></div>
-        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;color:var(--text-2);"><span>Livraison</span><span style="font-variant-numeric:tabular-nums;font-weight:600;">5 000 FCFA</span></div>
-        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;color:var(--text-2);"><span>Garantie (1.5%)</span><span style="font-variant-numeric:tabular-nums;font-weight:600;">4 125 FCFA</span></div>
-        <div style="border-top:1px dashed var(--border-dark);margin-top:10px;padding-top:12px;display:flex;justify-content:space-between;align-items:baseline;">
-          <span style="font-size:14px;font-weight:700;color:var(--text-1);letter-spacing:-0.01em;">Total</span>
-          <span style="font-size:20px;font-weight:800;color:var(--amber-dark);font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">284 125 <span style="font-size:13px;font-weight:700;">FCFA</span></span>
-        </div>
-      </div>
-
-      <!-- Paiement -->
-      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:20px;font-weight:600;color:var(--text-1);margin-bottom:14px;letter-spacing:-0.01em;">Mode de paiement</div>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
-        <div style="background:var(--bg-card);border-radius:16px;padding:16px;box-shadow:0 4px 12px rgba(30,24,19,0.06);border:2px solid var(--amber);cursor:pointer;text-align:center;position:relative;">
-          <div style="position:absolute;top:8px;right:8px;width:18px;height:18px;border-radius:999px;background:linear-gradient(135deg,var(--amber) 0%,var(--amber-dark) 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 4px rgba(191,121,59,0.3);">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <!-- Adresse -->
+        <div style="margin-bottom:12px;">
+          <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Adresse</div>
+          <input type="text" value="Quartier Akpakpa, Rue 12" placeholder="Quartier, rue, repère..." style="width:100%;padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;margin-bottom:10px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <input type="text" value="Cotonou" placeholder="Ville" style="padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;">
+            <select style="padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;-webkit-appearance:none;">
+              <option>Littoral</option><option>Atlantique</option><option>Ouémé</option><option>Zou</option><option>Plateau</option><option>Borgou</option>
+            </select>
           </div>
-          <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#FFCC00 0%,#FFB800 100%);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;box-shadow:0 4px 8px rgba(255,204,0,0.25);">
-            <span style="font-size:13px;font-weight:900;color:#000;letter-spacing:-0.02em;">MTN</span>
+        </div>
+
+        <!-- Email (optionnel) -->
+        <div style="margin-bottom:24px;">
+          <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Email (optionnel)</div>
+          <input type="email" value="fatou.kossou@email.bj" placeholder="votre@email.bj" style="width:100%;padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;">
+        </div>
+
+        <button class="float-btn-primary" style="width:100%;height:50px;font-size:14px;border-radius:14px;" onclick="checkoutNext(2)">Continuer →</button>
+      </div>
+
+      <!-- ===== ÉTAPE 2 : LIVRAISON ===== -->
+      <div id="checkoutStep2" style="display:none;">
+        <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);letter-spacing:-0.02em;margin-bottom:4px;">Livraison</div>
+        <div style="font-size:12px;color:var(--text-3);margin-bottom:20px;">Choisissez votre mode de livraison</div>
+
+        <!-- Produit résumé -->
+        <div style="display:flex;align-items:center;gap:10px;background:var(--bg-card);border-radius:14px;padding:12px;margin-bottom:20px;border:1px solid var(--border);">
+          <img src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=200&q=85" style="width:44px;height:44px;border-radius:10px;object-fit:cover;flex-shrink:0;">
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:12.5px;font-weight:700;color:var(--text-1);letter-spacing:-0.01em;">Table basse Bénin Wax</div>
+            <div style="font-size:10px;color:var(--text-3);">Kofi Akindélé · Quantité: 1</div>
           </div>
-          <div style="font-size:12px;font-weight:700;color:var(--text-1);letter-spacing:-0.01em;">MTN Money</div>
+          <div style="font-size:13px;font-weight:800;color:var(--amber-dark);font-variant-numeric:tabular-nums;flex-shrink:0;">145 000 F</div>
         </div>
-        <div style="background:var(--bg-card);border-radius:16px;padding:16px;box-shadow:var(--shadow-sm);border:1px solid var(--border);cursor:pointer;text-align:center;">
-          <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#0066CC 0%,#0052A3 100%);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;box-shadow:0 4px 8px rgba(0,102,204,0.2);">
-            <span style="font-size:13px;font-weight:900;color:white;letter-spacing:-0.02em;">Moov</span>
+
+        <!-- Options livraison -->
+        <div onclick="selectDelivery(this)" style="display:flex;align-items:flex-start;gap:12px;background:var(--bg-card);border:2px solid var(--amber);border-radius:16px;padding:14px;margin-bottom:10px;cursor:pointer;">
+          <div style="width:22px;height:22px;border-radius:999px;background:var(--amber);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+              <span style="font-size:13px;font-weight:700;color:var(--text-1);">Livraison standard</span>
+              <span style="font-size:13px;font-weight:800;color:var(--forest);">Gratuite</span>
+            </div>
+            <div style="font-size:11px;color:var(--text-3);line-height:1.4;">Cotonou et environs · 3 à 5 jours ouvrés</div>
+            <div style="font-size:11px;color:var(--amber-dark);font-weight:600;margin-top:4px;">Réception estimée : 17-19 juillet</div>
           </div>
-          <div style="font-size:12px;font-weight:700;color:var(--text-1);letter-spacing:-0.01em;">Moov Money</div>
+        </div>
+
+        <div onclick="selectDelivery(this)" style="display:flex;align-items:flex-start;gap:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:10px;cursor:pointer;">
+          <div style="width:22px;height:22px;border-radius:999px;border:2px solid var(--border-dark);flex-shrink:0;margin-top:2px;"></div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+              <span style="font-size:13px;font-weight:700;color:var(--text-1);">Livraison express</span>
+              <span style="font-size:13px;font-weight:800;color:var(--text-1);">5 000 F</span>
+            </div>
+            <div style="font-size:11px;color:var(--text-3);line-height:1.4;">Cotonou · 24 à 48h</div>
+            <div style="font-size:11px;color:var(--amber-dark);font-weight:600;margin-top:4px;">Réception estimée : 15-16 juillet</div>
+          </div>
+        </div>
+
+        <div onclick="selectDelivery(this)" style="display:flex;align-items:flex-start;gap:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:24px;cursor:pointer;">
+          <div style="width:22px;height:22px;border-radius:999px;border:2px solid var(--border-dark);flex-shrink:0;margin-top:2px;"></div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+              <span style="font-size:13px;font-weight:700;color:var(--text-1);">Retrait à l'atelier</span>
+              <span style="font-size:13px;font-weight:800;color:var(--forest);">Gratuit</span>
+            </div>
+            <div style="font-size:11px;color:var(--text-3);line-height:1.4;">Akpakpa, Cotonou · Dès fabrication terminée</div>
+            <div style="font-size:11px;color:var(--amber-dark);font-weight:600;margin-top:4px;">Disponible : 14 juillet</div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;">
+          <button onclick="checkoutNext(1)" style="flex:0 0 auto;padding:0 20px;height:50px;border-radius:14px;border:1px solid var(--border);background:var(--bg-card);font-size:14px;font-weight:600;color:var(--text-2);font-family:inherit;cursor:pointer;">← Retour</button>
+          <button class="float-btn-primary" style="flex:1;height:50px;font-size:14px;border-radius:14px;" onclick="checkoutNext(3)">Continuer →</button>
         </div>
       </div>
 
-      <div style="margin-bottom:18px;">
-        <div style="font-size:11px;color:var(--text-3);margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;">Numéro de téléphone</div>
-        <div style="display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--bg-card);border-radius:14px;border:1px solid var(--border);box-shadow:var(--shadow-xs);">
-          <span style="font-size:14px;color:var(--text-2);font-weight:600;">+229</span>
-          <div style="width:1px;height:18px;background:var(--border);"></div>
-          <input type="tel" value="97 45 23 10" style="flex:1;border:none;outline:none;font-size:15px;font-weight:700;color:var(--text-1);background:transparent;font-family:inherit;letter-spacing:-0.01em;">
-        </div>
-        <div style="font-size:11px;color:var(--text-3);margin-top:8px;line-height:1.45;">Vous recevrez une demande de confirmation sur ce numéro.</div>
-      </div>
+      <!-- ===== ÉTAPE 3 : PAIEMENT ===== -->
+      <div id="checkoutStep3" style="display:none;">
+        <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);letter-spacing:-0.02em;margin-bottom:4px;">Paiement</div>
+        <div style="font-size:12px;color:var(--text-3);margin-bottom:20px;">Payez en toute sécurité via FedaPay</div>
 
-      <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--forest-pale);border-radius:12px;margin-bottom:20px;border:1px solid var(--forest-pale);">
-        <div style="width:28px;height:28px;border-radius:8px;background:var(--forest);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <!-- FedaPay -->
+        <div style="background:var(--bg-card);border-radius:16px;padding:20px;border:1px solid var(--border);margin-bottom:16px;text-align:center;">
+          <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px;">
+            <div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);display:flex;align-items:center;justify-content:center;">
+              <span style="font-size:14px;font-weight:900;color:#fff;letter-spacing:-0.02em;">F</span>
+            </div>
+            <div style="text-align:left;">
+              <div style="font-size:15px;font-weight:800;color:var(--text-1);letter-spacing:-0.01em;">FedaPay</div>
+              <div style="font-size:10px;color:var(--text-3);">Paiement sécurisé Mobile Money & Carte</div>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:center;gap:8px;margin-bottom:14px;">
+            <div style="padding:5px 10px;background:linear-gradient(135deg,#FFCC00 0%,#FFB800 100%);border-radius:8px;font-size:10px;font-weight:900;color:#000;">MTN</div>
+            <div style="padding:5px 10px;background:linear-gradient(135deg,#0066CC 0%,#0052A3 100%);border-radius:8px;font-size:10px;font-weight:900;color:#fff;">Moov</div>
+            <div style="padding:5px 10px;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);border-radius:8px;font-size:10px;font-weight:900;color:#fff;">Visa</div>
+            <div style="padding:5px 10px;background:linear-gradient(135deg,#EB001B 0%,#F79E1B 100%);border-radius:8px;font-size:10px;font-weight:900;color:#fff;">MC</div>
+          </div>
+          <div style="font-size:11px;color:var(--text-3);line-height:1.5;">Vous serez redirigé vers FedaPay pour finaliser le paiement. MTN Money, Moov Money et carte bancaire acceptés.</div>
         </div>
-        <div style="font-size:12px;color:var(--forest);font-weight:600;line-height:1.4;">Paiement sécurisé · Garantie Dedco</div>
-      </div>
 
-      <button class="float-btn-primary" style="width:100%;height:54px;font-size:15px;border-radius:14px;" onclick="navigateTo('confirmation')">Payer 284 125 FCFA</button>
+        <!-- Notification livraison -->
+        <div onclick="this.querySelector('div').style.background = this.querySelector('div').style.background === 'var(--amber)' ? 'var(--border-dark)' : 'var(--amber)'; this.querySelector('svg').style.opacity = this.querySelector('svg').style.opacity === '1' ? '0' : '1';" style="display:flex;align-items:center;gap:12px;background:var(--bg-card);border-radius:14px;padding:14px;margin-bottom:20px;border:1px solid var(--border);cursor:pointer;">
+          <div style="width:24px;height:24px;border-radius:8px;background:var(--amber);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.2s;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" style="opacity:1;transition:opacity 0.2s;"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:700;color:var(--text-1);">Notifications de livraison</div>
+            <div style="font-size:11px;color:var(--text-3);line-height:1.4;">Recevoir des SMS à chaque étape (fabrication, expédition, livraison)</div>
+          </div>
+        </div>
+
+        <!-- Sommaire -->
+        <div style="background:var(--bg-warm);border-radius:16px;padding:16px;margin-bottom:20px;">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-3);margin-bottom:12px;">Sommaire</div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px;color:var(--text-2);"><span>Table basse Bénin Wax ×1</span><span style="font-variant-numeric:tabular-nums;font-weight:600;">145 000 F</span></div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px;color:var(--text-2);"><span>Livraison standard</span><span style="font-variant-numeric:tabular-nums;font-weight:600;color:var(--forest);">Gratuit</span></div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px;color:var(--text-2);"><span>Garantie Dedco (1.5%)</span><span style="font-variant-numeric:tabular-nums;font-weight:600;">2 175 F</span></div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px;color:var(--text-2);"><span>Destinataire</span><span style="font-weight:600;">Fatou Kossou</span></div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px;color:var(--text-2);"><span>Téléphone</span><span style="font-weight:600;font-variant-numeric:tabular-nums;">+229 97 45 23 10</span></div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px;color:var(--text-2);"><span>Adresse</span><span style="font-weight:600;text-align:right;">Akpakpa, Cotonou</span></div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px;color:var(--text-2);"><span>Livraison estimée</span><span style="font-weight:600;">17-19 juillet</span></div>
+          <div style="border-top:1px dashed var(--border-dark);margin-top:10px;padding-top:12px;display:flex;justify-content:space-between;align-items:baseline;">
+            <span style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:15px;font-weight:600;color:var(--text-1);">Total</span>
+            <span style="font-size:22px;font-weight:800;color:var(--amber-dark);font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">147 175 <span style="font-size:13px;font-weight:700;">FCFA</span></span>
+          </div>
+        </div>
+
+        <!-- Trust -->
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--forest-pale);border-radius:12px;margin-bottom:16px;">
+          <div style="width:24px;height:24px;border-radius:8px;background:var(--forest);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <div style="font-size:11px;color:var(--forest);font-weight:600;">Paiement sécurisé · Garantie Dedco · FedaPay</div>
+        </div>
+
+        <div style="display:flex;gap:10px;">
+          <button onclick="checkoutNext(2)" style="flex:0 0 auto;padding:0 20px;height:50px;border-radius:14px;border:1px solid var(--border);background:var(--bg-card);font-size:14px;font-weight:600;color:var(--text-2);font-family:inherit;cursor:pointer;">← Retour</button>
+          <button class="float-btn-primary" style="flex:1;height:50px;font-size:14px;border-radius:14px;" onclick="navigateTo('confirmation')">Payer 147 175 FCFA</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -3237,6 +3333,59 @@ function toggleReviews() {
     section.style.display = 'none';
     chevron.style.transform = '';
   }
+}
+
+// Checkout multi-étapes
+function checkoutNext(step) {
+  document.getElementById('checkoutStep1').style.display = step === 1 ? 'block' : 'none';
+  document.getElementById('checkoutStep2').style.display = step === 2 ? 'block' : 'none';
+  document.getElementById('checkoutStep3').style.display = step === 3 ? 'block' : 'none';
+
+  // Update stepper
+  const steps = [
+    { dot: 'step1Dot', label: 'step1Label', bar: 'step1Bar' },
+    { dot: 'step2Dot', label: 'step2Label', bar: 'step2Bar' },
+    { dot: 'step3Dot', label: 'step3Label', bar: null }
+  ];
+
+  steps.forEach((s, i) => {
+    const dot = document.getElementById(s.dot);
+    const label = document.getElementById(s.label);
+    const num = dot.querySelector('div');
+    if (i + 1 <= step) {
+      num.style.background = 'linear-gradient(135deg,var(--amber) 0%,var(--amber-dark) 100%)';
+      num.style.color = 'white';
+      num.style.border = 'none';
+      label.style.color = 'var(--text-1)';
+      label.style.fontWeight = '700';
+      if (s.bar) document.getElementById(s.bar).style.background = i + 1 < step ? 'var(--amber)' : 'var(--border)';
+    } else {
+      num.style.background = 'var(--bg-warm)';
+      num.style.color = 'var(--text-3)';
+      num.style.border = '1px solid var(--border)';
+      label.style.color = 'var(--text-3)';
+      label.style.fontWeight = '600';
+      if (s.bar) document.getElementById(s.bar).style.background = 'var(--border)';
+    }
+  });
+
+  // Scroll to top
+  document.getElementById('screen-checkout').scrollTop = 0;
+}
+
+function selectDelivery(el) {
+  document.querySelectorAll('[onclick*="selectDelivery"]').forEach(item => {
+    item.style.border = '1px solid var(--border)';
+    const radio = item.querySelector('div');
+    radio.style.background = 'transparent';
+    radio.style.border = '2px solid var(--border-dark)';
+    radio.innerHTML = '';
+  });
+  el.style.border = '2px solid var(--amber)';
+  const radio = el.querySelector('div');
+  radio.style.background = 'var(--amber)';
+  radio.style.border = 'none';
+  radio.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
 }
 
 function selectStar(el, rating) {
