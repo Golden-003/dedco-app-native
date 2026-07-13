@@ -146,7 +146,7 @@ html, body {
 /* Logo Dedco. (texte CSS) */
 .splash-logo {
   font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
-  font-size: 52px;
+  font-size: 56px;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: #fff;
@@ -157,29 +157,29 @@ html, body {
 }
 .splash-logo .dot {
   color: #BF793B;
-  font-size: 60px;
+  font-size: 64px;
   line-height: 0.5;
-  margin-left: 2px;
+  margin-left: 3px;
   display: inline-block;
-  animation: dotBounce 5s ease-in-out 1.2s forwards;
+  animation: dotBounce 7s ease-in-out 1.2s forwards;
 }
 
 /* Le point fait l'animation de rebond + transformation */
 @keyframes dotBounce {
   0% { transform: translateY(0) scale(1); color: #BF793B; }
   /* Rebond 1 */
-  4% { transform: translateY(-40px) scale(0.8); }
+  3% { transform: translateY(-40px) scale(0.8); }
+  6% { transform: translateY(0) scale(1); }
+  7% { transform: translateY(-12px) scale(0.9); }
   8% { transform: translateY(0) scale(1); }
-  10% { transform: translateY(-12px) scale(0.9); }
-  12% { transform: translateY(0) scale(1); }
-  /* Le point disparaît, l'icône fauteuil apparaît */
-  13% { opacity: 0; }
-  13.1%, 77% { opacity: 0; }
-  /* Le point revient */
-  78% { opacity: 1; transform: translateY(-25px) scale(0.8); }
-  80% { transform: translateY(0) scale(1); }
-  82% { transform: translateY(-8px) scale(0.9); }
-  84% { transform: translateY(0) scale(1); }
+  /* Point disparaît */
+  9% { opacity: 0; }
+  9.1%, 90% { opacity: 0; }
+  /* Point revient */
+  91% { opacity: 1; transform: translateY(-25px) scale(0.8); }
+  93% { transform: translateY(0) scale(1); }
+  94% { transform: translateY(-8px) scale(0.9); }
+  95% { transform: translateY(0) scale(1); }
   100% { opacity: 1; transform: translateY(0) scale(1); color: #BF793B; }
 }
 @keyframes splashLogoIn {
@@ -227,53 +227,40 @@ html, body {
   100% { opacity: 1; transform: translateY(0); }
 }
 
-/* Icônes qui apparaissent pendant les rebonds */
+/* Icônes qui apparaissent pendant les rebonds — 6 icônes */
 .splash-icon {
   position: absolute;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   opacity: 0;
   pointer-events: none;
   z-index: 1;
 }
 .splash-icon svg { width: 100%; height: 100%; }
 
-/* Fauteuil : apparaît à 1.7s, disparaît à 2.6s */
-.splash-icon-1 {
-  animation: iconSeq1 0.9s ease 1.5s forwards;
-}
-@keyframes iconSeq1 {
-  0% { opacity: 0; transform: scale(0.3) translateY(20px); }
-  30% { opacity: 1; transform: scale(1) translateY(0); }
-  70% { opacity: 1; transform: scale(1) translateY(0); }
-  100% { opacity: 0; transform: scale(0.5) translateY(-15px); }
-}
+/* 1. Table — 1.5s à 2.3s */
+.splash-icon-1 { animation: iconSeq 0.8s ease 1.5s forwards; }
+/* 2. Fauteuil — 2.3s à 3.1s */
+.splash-icon-2 { animation: iconSeq 0.8s ease 2.3s forwards; }
+/* 3. Lampe — 3.1s à 3.9s */
+.splash-icon-3 { animation: iconSeq 0.8s ease 3.1s forwards; }
+/* 4. Textiles — 3.9s à 4.7s */
+.splash-icon-4 { animation: iconSeq 0.8s ease 3.9s forwards; }
+/* 5. Canapé — 4.7s à 5.5s */
+.splash-icon-5 { animation: iconSeq 0.8s ease 4.7s forwards; }
+/* 6. Déco — 5.5s à 6.3s */
+.splash-icon-6 { animation: iconSeq 0.8s ease 5.5s forwards; }
 
-/* Chaise : apparaît à 2.6s, disparaît à 3.5s */
-.splash-icon-2 {
-  animation: iconSeq2 0.9s ease 2.4s forwards;
-}
-@keyframes iconSeq2 {
-  0% { opacity: 0; transform: scale(0.3) translateY(20px); }
-  30% { opacity: 1; transform: scale(1) translateY(0); }
-  70% { opacity: 1; transform: scale(1) translateY(0); }
-  100% { opacity: 0; transform: scale(0.5) translateY(-15px); }
-}
-
-/* Vase : apparaît à 3.5s, disparaît à 4.4s */
-.splash-icon-3 {
-  animation: iconSeq3 0.9s ease 3.3s forwards;
-}
-@keyframes iconSeq3 {
-  0% { opacity: 0; transform: scale(0.3) translateY(20px); }
-  30% { opacity: 1; transform: scale(1) translateY(0); }
-  70% { opacity: 1; transform: scale(1) translateY(0); }
-  100% { opacity: 0; transform: scale(0.5) translateY(-15px); }
+@keyframes iconSeq {
+  0% { opacity: 0; transform: scale(0.3) translateY(15px); }
+  25% { opacity: 1; transform: scale(1) translateY(0); }
+  75% { opacity: 1; transform: scale(1) translateY(0); }
+  100% { opacity: 0; transform: scale(0.5) translateY(-12px); }
 }
 
 /* Fade out du splash */
 .splash-fade-out {
-  animation: splashFadeOut 0.6s ease 5s forwards;
+  animation: splashFadeOut 0.6s ease 7.5s forwards;
 }
 @keyframes splashFadeOut {
   0% { opacity: 1; }
@@ -1426,16 +1413,31 @@ html, body {
     <!-- Logo Dedco couleur centré -->
     <!-- Logo Dedco. centré (texte CSS) — le point fait l'animation -->
     <div class="splash-logo">Dedco<span class="dot" id="splashDot">.</span></div>
-    <!-- Icônes qui apparaissent quand le point disparaît -->
+    <!-- Icônes qui apparaissent quand le point disparaît — 6 icônes du site -->
     <div class="splash-bounce-container">
+      <!-- 1. Table -->
       <div class="splash-icon splash-icon-1" id="splashIcon1">
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3"/><path d="M3 16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V11a2 2 0 0 0-4 0z"/><path d="M5 18v2"/><path d="M19 18v2"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
       </div>
+      <!-- 2. Fauteuil -->
       <div class="splash-icon splash-icon-2" id="splashIcon2" style="opacity:0;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3"/><path d="M3 16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V11a2 2 0 0 0-4 0z"/><path d="M5 18v2"/><path d="M19 18v2"/></svg>
       </div>
+      <!-- 3. Lampe -->
       <div class="splash-icon splash-icon-3" id="splashIcon3" style="opacity:0;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V8"/><path d="M5 12V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v5"/><path d="M5 12h14"/><path d="M7 19h10"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12v6"/><path d="M4.077 10.615A1 1 0 0 0 5 12h14a1 1 0 0 0 .923-1.385l-3.077-7.384A2 2 0 0 0 15 2H9a2 2 0 0 0-1.846 1.23Z"/><path d="M8 20a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1z"/></svg>
+      </div>
+      <!-- 4. Textiles (Layers) -->
+      <div class="splash-icon splash-icon-4" id="splashIcon4" style="opacity:0;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></svg>
+      </div>
+      <!-- 5. Canapé -->
+      <div class="splash-icon splash-icon-5" id="splashIcon5" style="opacity:0;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3"/><path d="M2 16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v1.5a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5V11a2 2 0 0 0-4 0z"/><path d="M4 18v2"/><path d="M20 18v2"/><path d="M12 4v9"/></svg>
+      </div>
+      <!-- 6. Déco (Frame) -->
+      <div class="splash-icon splash-icon-6" id="splashIcon6" style="opacity:0;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="22" x2="2" y1="6" y2="6"/><line x1="22" x2="2" y1="18" y2="18"/><line x1="6" x2="6" y1="2" y2="22"/><line x1="18" x2="18" y1="2" y2="22"/></svg>
       </div>
     </div>
     <div class="splash-tagline">L'art de vivre chez soi</div>
