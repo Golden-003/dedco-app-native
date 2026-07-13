@@ -1629,8 +1629,25 @@ html, body {
 
   <!-- ═══ SCREEN: FICHE PRODUIT (plein écran) ═══ -->
   <div class="screen-page" id="screen-product">
-    <div class="product-gallery">
-      <img id="productGalleryImg" src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=800&q=85" alt="">
+    <!-- Galerie plein écran avec swipe horizontal -->
+    <div class="product-gallery" style="aspect-ratio:1/1;">
+      <div id="productGalleryScroll" style="display:flex;width:100%;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;">
+        <div style="flex-shrink:0;width:100%;height:100%;scroll-snap-align:start;position:relative;">
+          <img id="productGalleryImg" src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=800&q=85" style="width:100%;height:100%;object-fit:cover;" alt="">
+        </div>
+        <div style="flex-shrink:0;width:100%;height:100%;scroll-snap-align:start;position:relative;background:var(--bg-warm);">
+          <img src="https://images.unsplash.com/photo-1615875605825-5eb9bb5d52ac?auto=format&fit=crop&w=800&q=85" style="width:100%;height:100%;object-fit:cover;" alt="">
+        </div>
+        <div style="flex-shrink:0;width:100%;height:100%;scroll-snap-align:start;position:relative;background:var(--bg-warm);">
+          <img src="https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=800&q=85" style="width:100%;height:100%;object-fit:cover;" alt="">
+        </div>
+        <div style="flex-shrink:0;width:100%;height:100%;scroll-snap-align:start;position:relative;background:#1a1612;display:flex;align-items:center;justify-content:center;cursor:pointer;" onclick="showHint('Vidéo de présentation')">
+          <div style="width:64px;height:64px;border-radius:999px;background:rgba(255,255,255,0.2);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,0.4);">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+          </div>
+          <div style="position:absolute;bottom:16px;left:50%;transform:translateX(-50%);color:white;font-size:11px;font-weight:600;opacity:0.8;">Vidéo de l'atelier</div>
+        </div>
+      </div>
       <div class="product-gallery-top">
         <div class="gallery-btn" onclick="closeProduct()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
@@ -1644,13 +1661,10 @@ html, body {
           </div>
         </div>
       </div>
-      <div class="gallery-dots">
-        <div class="gallery-dot active"></div>
-        <div class="gallery-dot"></div>
-        <div class="gallery-dot"></div>
-        <div class="gallery-dot"></div>
-      </div>
+      <!-- Compteur de position -->
+      <div id="galleryCounter" style="position:absolute;bottom:12px;right:12px;padding:4px 10px;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);border-radius:999px;color:white;font-size:10px;font-weight:700;font-variant-numeric:tabular-nums;z-index:10;">1/4</div>
     </div>
+
     <div class="product-detail">
       <!-- Header : catégorie + nom + artisan -->
       <div style="font-size:10px;font-weight:800;color:var(--amber);text-transform:uppercase;letter-spacing:0.14em;margin-bottom:6px;">Mobilier · Tables</div>
@@ -1664,7 +1678,7 @@ html, body {
         </span>
       </div>
 
-      <!-- Prix + stock dans une card -->
+      <!-- Prix + stock -->
       <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--bg-card);border-radius:14px;border:1px solid var(--border);box-shadow:var(--shadow-xs);margin-bottom:20px;">
         <div>
           <div style="font-size:10px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:2px;">Prix</div>
@@ -1676,23 +1690,46 @@ html, body {
         </div>
       </div>
 
-      <!-- Description -->
+      <!-- Description enrichie -->
       <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">Description</div>
-      <div class="product-desc">
+      <div class="product-desc" style="margin-bottom:16px;">
         Table basse en bois iroko massif, plateau incrusté de motifs wax traditionnels du Bénin. Pièce unique fabriquée à la main dans l'atelier de Kofi Akindélé à Cotonou.
       </div>
-
-      <!-- Variantes couleur — card -->
-      <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">Finition</div>
-      <div class="color-row">
-        <div class="color-swatch active" style="background:#8B4513;" onclick="selectColor(this)" title="Iroko naturel"></div>
-        <div class="color-swatch" style="background:#A0522D;" onclick="selectColor(this)" title="Wax terracotta"></div>
-        <div class="color-swatch" style="background:#2F2F2F;" onclick="selectColor(this)" title="Bois fumé"></div>
-        <div style="flex:1;text-align:right;font-size:12px;color:var(--text-2);font-weight:600;align-self:center;">Iroko naturel</div>
+      <!-- Points forts -->
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-2);">
+          <div style="width:20px;height:20px;border-radius:6px;background:var(--amber-pale);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--amber-dark)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          Bois iroko massif — essence durable et noble
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-2);">
+          <div style="width:20px;height:20px;border-radius:6px;background:var(--amber-pale);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--amber-dark)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          Motifs wax faits main — chaque pièce est unique
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-2);">
+          <div style="width:20px;height:20px;border-radius:6px;background:var(--amber-pale);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--amber-dark)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          Traitement naturel anti-termites garanti
+        </div>
       </div>
 
-      <!-- Quantité — card -->
-      <div class="qty-row">
+      <!-- Finition — swatches compacts -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;">
+        <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.12em;flex-shrink:0;">Finition</div>
+        <div style="display:flex;gap:6px;">
+          <div class="color-swatch active" style="background:#8B4513;width:28px;height:28px;border-radius:8px;" onclick="selectColor(this)" title="Iroko naturel"></div>
+          <div class="color-swatch" style="background:#A0522D;width:28px;height:28px;border-radius:8px;" onclick="selectColor(this)" title="Wax terracotta"></div>
+          <div class="color-swatch" style="background:#2F2F2F;width:28px;height:28px;border-radius:8px;" onclick="selectColor(this)" title="Bois fumé"></div>
+        </div>
+        <div style="flex:1;text-align:right;font-size:11px;color:var(--text-3);font-weight:600;">Iroko naturel</div>
+      </div>
+
+      <!-- Quantité -->
+      <div class="qty-row" style="margin-bottom:20px;">
         <div class="qty-label">Quantité</div>
         <div class="qty-stepper">
           <div class="qty-btn" onclick="changeQty(-1)">−</div>
@@ -1701,9 +1738,9 @@ html, body {
         </div>
       </div>
 
-      <!-- Specs — card warm -->
+      <!-- Specs -->
       <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">Détails</div>
-      <div class="product-specs">
+      <div class="product-specs" style="margin-bottom:20px;">
         <div class="spec-row"><span class="spec-label">Matériaux</span><span class="spec-value">Bois iroko, wax</span></div>
         <div class="spec-row"><span class="spec-label">Dimensions</span><span class="spec-value">110 × 60 × 40 cm</span></div>
         <div class="spec-row"><span class="spec-label">Poids</span><span class="spec-value">18 kg</span></div>
@@ -1711,7 +1748,7 @@ html, body {
       </div>
 
       <!-- Trust — 3 chips inline -->
-      <div class="product-trust">
+      <div class="product-trust" style="margin-bottom:20px;">
         <div style="display:inline-flex;align-items:center;gap:6px;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;font-size:11px;font-weight:700;color:var(--text-1);">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           Garantie
@@ -2753,6 +2790,10 @@ function openProduct(productId) {
   document.getElementById('productDetailPrice').textContent = formatFCFA(p.price);
   document.getElementById('productGalleryImg').src = p.img.replace('w=400', 'w=800');
 
+  // Reset gallery scroll position
+  const galleryScroll = document.getElementById('productGalleryScroll');
+  if (galleryScroll) galleryScroll.scrollLeft = 0;
+
   // Cacher header + tab bar
   document.querySelector('.header').style.display = 'none';
   document.getElementById('tabBar').style.display = 'none';
@@ -2764,6 +2805,23 @@ function openProduct(productId) {
   el.classList.add('active');
   el.scrollTop = 0;
   previousScreen = currentScreen;
+
+  // Compteur de galerie
+  updateGalleryCounter();
+}
+
+// Met à jour le compteur quand on swipe
+function updateGalleryCounter() {
+  const scroll = document.getElementById('productGalleryScroll');
+  const counter = document.getElementById('galleryCounter');
+  if (!scroll || !counter) return;
+  const totalSlides = scroll.children.length;
+  const update = () => {
+    const idx = Math.round(scroll.scrollLeft / scroll.offsetWidth) + 1;
+    counter.textContent = idx + '/' + totalSlides;
+  };
+  scroll.addEventListener('scroll', update);
+  update();
 }
 
 function closeProduct() {
