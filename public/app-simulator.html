@@ -143,12 +143,44 @@ html, body {
   overflow: hidden;
 }
 
-/* Logo complet Dedco (couleur) */
+/* Logo Dedco. (texte CSS) */
 .splash-logo {
-  width: 180px;
-  height: auto;
+  font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
+  font-size: 52px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
   opacity: 0;
   animation: splashLogoIn 0.8s ease 0.3s forwards;
+  display: flex;
+  align-items: baseline;
+}
+.splash-logo .dot {
+  color: #BF793B;
+  font-size: 60px;
+  line-height: 0.5;
+  margin-left: 2px;
+  display: inline-block;
+  animation: dotBounce 5s ease-in-out 1.2s forwards;
+}
+
+/* Le point fait l'animation de rebond + transformation */
+@keyframes dotBounce {
+  0% { transform: translateY(0) scale(1); color: #BF793B; }
+  /* Rebond 1 */
+  4% { transform: translateY(-40px) scale(0.8); }
+  8% { transform: translateY(0) scale(1); }
+  10% { transform: translateY(-12px) scale(0.9); }
+  12% { transform: translateY(0) scale(1); }
+  /* Le point disparaît, l'icône fauteuil apparaît */
+  13% { opacity: 0; }
+  13.1%, 77% { opacity: 0; }
+  /* Le point revient */
+  78% { opacity: 1; transform: translateY(-25px) scale(0.8); }
+  80% { transform: translateY(0) scale(1); }
+  82% { transform: translateY(-8px) scale(0.9); }
+  84% { transform: translateY(0) scale(1); }
+  100% { opacity: 1; transform: translateY(0) scale(1); color: #BF793B; }
 }
 @keyframes splashLogoIn {
   0% { opacity: 0; transform: translateY(20px) scale(0.95); }
@@ -1392,12 +1424,10 @@ html, body {
   <!-- ═══ SPLASH SCREEN (dans le téléphone) ═══ -->
   <div class="splash-screen splash-fade-out" id="splashScreen">
     <!-- Logo Dedco couleur centré -->
-    <img src="/dedco-logos/logo-sur-amber.png" alt="Dedco" class="splash-logo">
-    <!-- Conteneur du point qui rebondit -->
+    <!-- Logo Dedco. centré (texte CSS) — le point fait l'animation -->
+    <div class="splash-logo">Dedco<span class="dot" id="splashDot">.</span></div>
+    <!-- Icônes qui apparaissent quand le point disparaît -->
     <div class="splash-bounce-container">
-      <!-- Le point blanc -->
-      <div class="splash-bounce" id="splashBounce"></div>
-      <!-- Icônes qui apparaissent aux rebonds -->
       <div class="splash-icon splash-icon-1" id="splashIcon1">
         <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3"/><path d="M3 16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V11a2 2 0 0 0-4 0z"/><path d="M5 18v2"/><path d="M19 18v2"/></svg>
       </div>
