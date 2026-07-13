@@ -1680,11 +1680,12 @@ html, body {
       <!-- Header : catégorie + nom + note + artisan -->
       <div style="font-size:10px;font-weight:800;color:var(--amber);text-transform:uppercase;letter-spacing:0.14em;margin-bottom:6px;">Mobilier · Tables</div>
       <div class="product-detail-name" id="productDetailName">Table basse Bénin Wax</div>
-      <!-- Note + avis -->
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+      <!-- Note + avis (cliquable pour déplier) -->
+      <div onclick="toggleReviews()" style="display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;">
         <div style="display:flex;gap:1px;color:var(--amber);font-size:14px;">★★★★★</div>
         <span style="font-size:12px;font-weight:700;color:var(--text-2);">4.9</span>
         <span style="font-size:11px;color:var(--text-3);">· 23 avis</span>
+        <svg id="reviewsChevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;"><path d="m6 9 6 6 6-6"/></svg>
       </div>
       <div class="product-detail-artisan" onclick="navigateTo('artisan')">
         <img src="https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=60&q=85" style="width:20px;height:20px;border-radius:999px;object-fit:cover;">
@@ -1788,27 +1789,29 @@ html, body {
         </div>
       </div>
 
-      <!-- Avis clients -->
-      <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:10px;">Avis vérifiés</div>
-      <div style="background:var(--bg-warm);border-radius:14px;padding:14px;margin-bottom:10px;">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-          <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=40&q=85" style="width:24px;height:24px;border-radius:999px;object-fit:cover;">
-          <span style="font-size:12px;font-weight:700;color:var(--text-1);">Aïcha B.</span>
-          <span style="display:inline-flex;align-items:center;gap:2px;padding:2px 6px;background:var(--forest-pale);color:var(--forest);border-radius:6px;font-size:8px;font-weight:800;"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Achat vérifié</span>
-          <span style="font-size:10px;color:var(--text-3);margin-left:auto;">12 juin</span>
+      <!-- Avis clients (cachés par défaut, dépliables) -->
+      <div id="reviewsSection" style="display:none;margin-bottom:20px;">
+        <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:10px;">Avis vérifiés</div>
+        <div style="background:var(--bg-warm);border-radius:14px;padding:14px;margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=40&q=85" style="width:24px;height:24px;border-radius:999px;object-fit:cover;">
+            <span style="font-size:12px;font-weight:700;color:var(--text-1);">Aïcha B.</span>
+            <span style="display:inline-flex;align-items:center;gap:2px;padding:2px 6px;background:var(--forest-pale);color:var(--forest);border-radius:6px;font-size:8px;font-weight:800;"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Achat vérifié</span>
+            <span style="font-size:10px;color:var(--text-3);margin-left:auto;">12 juin</span>
+          </div>
+          <div style="color:var(--amber);font-size:12px;margin-bottom:4px;">★★★★★</div>
+          <p style="font-size:12px;color:var(--text-2);line-height:1.5;">Table magnifique, le bois iroko est superbe. Kofi a respecté les délais et tenu au courant à chaque étape. Je recommande !</p>
         </div>
-        <div style="color:var(--amber);font-size:12px;margin-bottom:4px;">★★★★★</div>
-        <p style="font-size:12px;color:var(--text-2);line-height:1.5;">Table magnifique, le bois iroko est superbe. Kofi a respecté les délais et tenu au courant à chaque étape. Je recommande !</p>
-      </div>
-      <div style="background:var(--bg-warm);border-radius:14px;padding:14px;margin-bottom:20px;">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-          <img src="https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&crop=faces&w=40&q=85" style="width:24px;height:24px;border-radius:999px;object-fit:cover;">
-          <span style="font-size:12px;font-weight:700;color:var(--text-1);">Mariam D.</span>
-          <span style="display:inline-flex;align-items:center;gap:2px;padding:2px 6px;background:var(--forest-pale);color:var(--forest);border-radius:6px;font-size:8px;font-weight:800;"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Achat vérifié</span>
-          <span style="font-size:10px;color:var(--text-3);margin-left:auto;">5 juin</span>
+        <div style="background:var(--bg-warm);border-radius:14px;padding:14px;margin-bottom:0;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <img src="https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&crop=faces&w=40&q=85" style="width:24px;height:24px;border-radius:999px;object-fit:cover;">
+            <span style="font-size:12px;font-weight:700;color:var(--text-1);">Mariam D.</span>
+            <span style="display:inline-flex;align-items:center;gap:2px;padding:2px 6px;background:var(--forest-pale);color:var(--forest);border-radius:6px;font-size:8px;font-weight:800;"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Achat vérifié</span>
+            <span style="font-size:10px;color:var(--text-3);margin-left:auto;">5 juin</span>
+          </div>
+          <div style="color:var(--amber);font-size:12px;margin-bottom:4px;">★★★★★</div>
+          <p style="font-size:12px;color:var(--text-2);line-height:1.5;">Les motifs wax sont encore plus beaux en vrai. Pièce unique, on sent le savoir-faire. Merci Dedco !</p>
         </div>
-        <div style="color:var(--amber);font-size:12px;margin-bottom:4px;">★★★★★</div>
-        <p style="font-size:12px;color:var(--text-2);line-height:1.5;">Les motifs wax sont encore plus beaux en vrai. Pièce unique, on sent le savoir-faire. Merci Dedco !</p>
       </div>
 
       <!-- Produits similaires -->
@@ -3222,6 +3225,18 @@ function changeCartQty(btn, delta) {
 function selectColor(el) {
   document.querySelectorAll('.color-swatch').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
+}
+
+function toggleReviews() {
+  const section = document.getElementById('reviewsSection');
+  const chevron = document.getElementById('reviewsChevron');
+  if (section.style.display === 'none') {
+    section.style.display = 'block';
+    chevron.style.transform = 'rotate(180deg)';
+  } else {
+    section.style.display = 'none';
+    chevron.style.transform = '';
+  }
 }
 
 function selectStar(el, rating) {
