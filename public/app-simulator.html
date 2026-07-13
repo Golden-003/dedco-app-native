@@ -1,0 +1,2871 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Dedco — App Mobile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ═══ Quache font (display) — unicode-range sans chiffres ═══ */
+@font-face {
+  font-family: 'Quache';
+  src: url('/fonts/Quache-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+0020-002F, U+003A-007E, U+00A0-00FF, U+0100-017F, U+2000-206F;
+}
+@font-face {
+  font-family: 'Quache';
+  src: url('/fonts/Quache-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-display: swap;
+  unicode-range: U+0020-002F, U+003A-007E, U+00A0-00FF, U+0100-017F, U+2000-206F;
+}
+@font-face {
+  font-family: 'Quache';
+  src: url('/fonts/Quache-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-display: swap;
+  unicode-range: U+0020-002F, U+003A-007E, U+00A0-00FF, U+0100-017F, U+2000-206F;
+}
+@font-face {
+  font-family: 'Quache';
+  src: url('/fonts/Quache-Black.ttf') format('truetype');
+  font-weight: 800;
+  font-display: swap;
+  unicode-range: U+0020-002F, U+003A-007E, U+00A0-00FF, U+0100-017F, U+2000-206F;
+}
+/* ═══════════════════════════════════════════════════════════
+   DEDCO — APP MOBILE (référence : maquette ChatGPT)
+   Structure : Header greeting + search → Hero → Catégories →
+   Collections → Produits → Créateurs → Projet CTA → Tab bar
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  /* Palette Dedco — Design System officiel */
+  --amber: #BF793B;
+  --amber-dark: #9A5A1F;
+  --amber-light: #D4954A;
+  --amber-pale: #FBF3E8;
+  --terracotta: #A6442E;
+  --terracotta-lt: #C4614A;
+  --terracotta-pale: #FAEAE6;
+  --forest: #548C45;
+  --forest-lt: #6BA35A;
+  --forest-pale: #EDF5EB;
+  --bg-cream: #FBF9F5;
+  --bg-warm: #F4F0E9;
+  --bg-card: #FFFFFF;
+  --bg-elevated: #FFFFFF;
+  --text-1: #1A1612;
+  --text-2: #5C5249;
+  --text-3: #A89E95;
+  --border: #EDE8DF;
+  --border-dark: #DDD5C8;
+  --radius: 12px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  /* Ombres modernes — plus profondes et douces */
+  --shadow-xs: 0 1px 2px rgba(30, 24, 19, 0.04);
+  --shadow-sm: 0 1px 3px rgba(30, 24, 19, 0.05), 0 1px 2px rgba(30, 24, 19, 0.03);
+  --shadow-md: 0 4px 12px rgba(30, 24, 19, 0.07), 0 2px 4px rgba(30, 24, 19, 0.04);
+  --shadow-lg: 0 12px 28px rgba(30, 24, 19, 0.10), 0 4px 10px rgba(30, 24, 19, 0.05);
+  --shadow-xl: 0 20px 48px rgba(30, 24, 19, 0.14), 0 8px 16px rgba(30, 24, 19, 0.06);
+  --shadow-amber: 0 6px 18px rgba(191, 121, 59, 0.25), 0 2px 6px rgba(191, 121, 59, 0.15);
+  --shadow-card: 0 2px 6px rgba(30, 24, 19, 0.04);
+  --shadow-float: 0 8px 24px rgba(30, 24, 19, 0.10);
+  /* Gradients */
+  --grad-amber: linear-gradient(135deg, var(--amber) 0%, var(--amber-dark) 100%);
+  --grad-cream: linear-gradient(180deg, var(--bg-cream) 0%, var(--bg-warm) 100%);
+  --grad-warm-card: linear-gradient(180deg, #FFFFFF 0%, #FDFBF6 100%);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #2a2520;
+  color: var(--text-1);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'cv11', 'ss01';
+  letter-spacing: -0.005em;
+}
+
+html, body {
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  background: #000;
+  color: var(--text-1);
+  overflow: hidden;
+  height: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+.display { font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif; }
+
+/* ═══ APP SHELL ═══ */
+.app-shell {
+  position: relative;
+  width: 360px;
+  height: 680px;
+  margin: 8px auto;
+  background: var(--bg-cream);
+  border-radius: 44px;
+  overflow: hidden;
+  box-shadow: 0 0 0 8px #1a1a1a, 0 0 0 10px #2a2a2a, 0 25px 50px rgba(0,0,0,0.5);
+}
+.notch {
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 110px; height: 26px;
+  background: #1a1a1a;
+  border-radius: 0 0 16px 16px;
+  z-index: 100;
+}
+
+/* ═══ STATUS BAR ═══ */
+.status-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: calc(44px + var(--safe-top));
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; padding-top: var(--safe-top);
+  font-size: 15px; font-weight: 600;
+  z-index: 90; pointer-events: none;
+  color: var(--text-1);
+}
+.status-bar .icons { display: flex; gap: 5px; align-items: center; }
+.status-bar .icons svg { width: 16px; height: 16px; }
+
+/* ═══ HEADER — greeting + icons + search compact ═══ */
+.header {
+  position: absolute;
+  top: calc(44px + var(--safe-top));
+  left: 0; right: 0;
+  padding: 8px 18px 8px;
+  background: var(--bg-cream);
+  z-index: 50;
+  transition: padding 0.25s ease;
+}
+/* Quand la search est masquée, header plus court */
+.header.no-search { padding-bottom: 8px; }
+.header.no-search .search-pill { display: none; }
+
+/* Row 1 : greeting + icons + search icon inline */
+.header-row1 {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 4px;
+}
+.greeting-block {
+  display: flex; flex-direction: column;
+  gap: 1px;
+}
+.greeting-hello {
+  font-size: 11px;
+  color: var(--text-3);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+.greeting-name {
+  font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-1);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.greeting-name em {
+  font-style: italic;
+  color: var(--amber);
+  font-weight: 500;
+}
+.header-icons {
+  display: flex; gap: 8px; align-items: center;
+}
+.header-icon {
+  position: relative;
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: var(--text-2);
+  transition: all 0.15s;
+  border-radius: 12px;
+  background: var(--bg-warm);
+}
+.header-icon:active { transform: scale(0.92); background: var(--amber-pale); color: var(--amber-dark); }
+.header-icon svg { width: 18px; height: 18px; stroke-width: 1.8; }
+/* Badge : petit dot coloré, pas de numéro (plus propre, plus premium) */
+.header-icon-dot {
+  position: absolute;
+  top: 8px; right: 8px;
+  width: 7px; height: 7px;
+  border-radius: 999px;
+  background: var(--terracotta);
+  border: 2px solid var(--bg-cream);
+}
+.header-icon-dot.amber { background: var(--amber); }
+
+/* Row 2 : search pill compact (icône + texte court) */
+.search-pill {
+  display: flex; align-items: center;
+  gap: 10px;
+  padding: 7px 12px 7px 11px;
+  background: var(--bg-warm);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 0;
+  border: 1px solid transparent;
+}
+.search-pill:active { transform: scale(0.99); background: var(--amber-pale); border-color: var(--amber-pale); }
+.search-pill svg { width: 14px; height: 14px; color: var(--text-3); flex-shrink: 0; }
+.search-pill-text {
+  font-size: 12.5px;
+  color: var(--text-3);
+  flex: 1;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+.search-pill-badge {
+  width: 24px; height: 24px;
+  border-radius: 7px;
+  background: var(--bg-card);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 1px 2px rgba(30, 24, 19, 0.04);
+}
+.search-pill-badge svg { width: 12px; height: 12px; color: var(--text-2); }
+
+/* ═══ SCREEN PAGES — multi-screen system ═══ */
+.screen-page {
+  position: absolute;
+  top: calc(44px + var(--safe-top) + 116px);
+  bottom: 64px;
+  left: 0; right: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  display: none;
+}
+.screen-page::-webkit-scrollbar { display: none; }
+.screen-page.active { display: block; }
+
+/* Fiche produit = plein écran (pas de header, pas de tab bar) */
+#screen-product {
+  top: 0;
+  bottom: 0;
+  background: var(--bg-cream);
+}
+#screen-product.active { display: block; }
+
+/* ═══ SCROLL CONTENT (home — kept for backward compat) ═══ */
+.scroll {
+  position: absolute;
+  top: calc(44px + var(--safe-top) + 100px);
+  bottom: 76px;
+  left: 0; right: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.scroll::-webkit-scrollbar { display: none; }
+
+/* ═══ HERO — carrousel éditorial ═══ */
+.hero {
+  margin: 0 16px 20px;
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  aspect-ratio: 16/10;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+  box-shadow: 0 12px 28px rgba(30, 24, 19, 0.12), 0 4px 10px rgba(30, 24, 19, 0.05);
+}
+.hero:active { transform: scale(0.98); }
+.hero-slides {
+  position: absolute; inset: 0;
+  display: flex;
+  transition: transform 0.55s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.hero-slide {
+  flex-shrink: 0;
+  width: 100%; height: 100%;
+  position: relative;
+}
+.hero-slide img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s ease;
+}
+.hero:active .hero-slide img { transform: scale(1.03); }
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(26, 22, 18, 0.88) 0%, rgba(26, 22, 18, 0.4) 40%, transparent 70%);
+}
+.hero-content {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 18px 20px;
+  color: white;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.95;
+  margin-bottom: 8px;
+  padding: 4px 10px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px);
+  border-radius: 999px;
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 5px; height: 5px;
+  background: var(--amber);
+  border-radius: 999px;
+}
+.hero-title {
+  font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.08;
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+.hero-title em { font-style: italic; font-weight: 500; color: #F5D9B0; }
+.hero-sub {
+  font-size: 12px;
+  opacity: 0.9;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+.hero-cta {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 9px 16px;
+  background: var(--amber);
+  color: white;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: var(--shadow-amber);
+  transition: transform 0.15s;
+}
+.hero-cta:active { transform: scale(0.96); }
+.hero-dots {
+  position: absolute;
+  bottom: 8px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 4px;
+  z-index: 10;
+}
+.hero-dot {
+  width: 5px; height: 5px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.4);
+  transition: all 0.3s;
+}
+.hero-dot.active {
+  width: 16px;
+  background: var(--amber);
+}
+
+/* ═══ CATÉGORIES — grille 2 lignes ═══ */
+.categories {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px 10px;
+  padding: 2px 16px 18px;
+}
+.cat-item {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 6px;
+  cursor: pointer;
+}
+.cat-icon-wrap {
+  width: 56px; height: 56px;
+  border-radius: 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 1px 2px rgba(30, 24, 19, 0.03);
+  position: relative;
+  overflow: hidden;
+}
+.cat-item.active .cat-icon-wrap {
+  background: linear-gradient(135deg, var(--amber) 0%, var(--amber-dark) 100%);
+  border-color: var(--amber-dark);
+  box-shadow: 0 6px 16px rgba(191, 121, 59, 0.25), 0 2px 4px rgba(191, 121, 59, 0.15);
+  transform: translateY(-3px);
+}
+.cat-item:active .cat-icon-wrap { transform: scale(0.92); }
+.cat-icon-wrap svg { width: 26px; height: 26px; stroke-width: 1.7; color: var(--text-2); transition: color 0.2s; }
+.cat-item.active .cat-icon-wrap svg { color: white; }
+.cat-label {
+  font-size: 11px;
+  color: var(--text-2);
+  font-weight: 500;
+  text-align: center;
+  margin-top: 4px;
+  letter-spacing: -0.005em;
+}
+.cat-item.active .cat-label { color: var(--amber-dark); font-weight: 600; }
+
+/* ═══ SECTION HEADER ═══ */
+.section {
+  padding: 22px 0 0;
+}
+.section-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: 0 18px 14px;
+}
+.section-title {
+  font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--text-1);
+  letter-spacing: -0.01em;
+}
+.section-link {
+  font-size: 12px;
+  color: var(--amber-dark);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ═══ COLLECTIONS — scroll horizontal ═══ */
+.collections-scroll {
+  display: flex;
+  gap: 12px;
+  padding: 0 18px 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+}
+.collections-scroll::-webkit-scrollbar { display: none; }
+.collection-card {
+  flex-shrink: 0;
+  width: 160px;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  scroll-snap-align: start;
+  position: relative;
+  aspect-ratio: 3/4;
+  background: var(--bg-card);
+  transition: transform 0.15s;
+  box-shadow: var(--shadow-card);
+}
+.collection-card:active { transform: scale(0.98); }
+.collection-card img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.collection-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(30,24,19,0.75) 0%, rgba(30,24,19,0.1) 45%, transparent 70%);
+}
+.collection-info {
+  position: absolute;
+  bottom: 12px; left: 12px; right: 12px;
+  color: white;
+}
+.collection-tag {
+  display: inline-block;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(8px);
+  border-radius: 999px;
+  margin-bottom: 5px;
+}
+.collection-name {
+  font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 2px;
+  line-height: 1.15;
+}
+.collection-count {
+  font-size: 10px;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+/* ═══ PRODUITS — grille 2 colonnes ═══ */
+.products-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  padding: 0 18px;
+}
+.product-card {
+  background: var(--bg-card);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.15s;
+  box-shadow: var(--shadow-card);
+}
+.product-card:active { transform: scale(0.98); }
+.product-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--bg-warm);
+}
+.product-img-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.product-badge {
+  position: absolute;
+  top: 8px; left: 8px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: white;
+  backdrop-filter: blur(8px);
+}
+.product-badge.amber { background: rgba(191, 121, 59, 0.92); }
+.product-badge.forest { background: rgba(84, 140, 69, 0.92); }
+.product-fav {
+  position: absolute;
+  top: 8px; right: 8px;
+  width: 28px; height: 28px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.product-fav:active { transform: scale(0.85); }
+.product-fav svg { width: 14px; height: 14px; color: var(--text-2); fill: none; stroke: currentColor; }
+.product-fav.active svg { color: var(--terracotta); fill: var(--terracotta); }
+.product-info {
+  padding: 12px 14px 14px;
+}
+.product-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-1);
+  margin-bottom: 3px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.product-artisan {
+  font-size: 11px;
+  color: var(--text-3);
+  margin-bottom: 6px;
+  display: flex; align-items: center; gap: 4px;
+}
+.product-artisan::before {
+  content: '';
+  width: 4px; height: 4px;
+  background: var(--forest);
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+.product-price {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--amber-dark);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ═══ CRÉATEURS — 2 colonnes designers + artisans ═══ */
+.creators-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 0 18px;
+}
+.creator-col {
+  display: flex; flex-direction: column;
+  gap: 8px;
+}
+.creator-card {
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer;
+  padding: 12px;
+  background: var(--bg-card);
+  border-radius: 14px;
+  transition: transform 0.15s;
+  box-shadow: var(--shadow-card);
+  position: relative;
+}
+.creator-card:active { transform: scale(0.98); }
+.creator-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+.creator-avatar {
+  width: 44px; height: 44px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 2px solid var(--bg-card);
+  box-shadow: 0 0 0 1px var(--border);
+}
+.creator-verified {
+  position: absolute;
+  bottom: -2px; right: -2px;
+  width: 14px; height: 14px;
+  background: var(--forest);
+  border: 2px solid var(--bg-card);
+  border-radius: 999px;
+  display: flex; align-items: center; justify-content: center;
+}
+.creator-verified svg { width: 8px; height: 8px; color: white; }
+.creator-info { flex: 1; min-width: 0; }
+.creator-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-1);
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.creator-specialty {
+  font-size: 9px;
+  color: var(--text-3);
+  display: flex; align-items: center; gap: 3px;
+}
+.creator-level {
+  display: inline-block;
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--amber-dark);
+  background: var(--amber-pale);
+  padding: 1px 5px;
+  border-radius: 999px;
+}
+
+/* ═══ PROJET CTA — section immersion ═══ */
+.project-cta {
+  margin: 16px 18px 0;
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  aspect-ratio: 16/9;
+  cursor: pointer;
+  transition: transform 0.2s;
+  box-shadow: var(--shadow-md);
+}
+.project-cta:active { transform: scale(0.98); }
+.project-cta img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.project-cta-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(191,121,59,0.92) 0%, rgba(166,68,46,0.82) 100%);
+}
+.project-cta-content {
+  position: absolute;
+  inset: 0;
+  padding: 20px;
+  display: flex; flex-direction: column;
+  justify-content: center;
+  color: white;
+}
+.project-cta-eyebrow {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.95;
+  margin-bottom: 6px;
+}
+.project-cta-eyebrow::before {
+  content: '';
+  width: 14px; height: 1px;
+  background: white;
+  opacity: 0.7;
+}
+.project-cta-title {
+  font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+.project-cta-title em { font-style: italic; font-weight: 500; }
+.project-cta-sub {
+  font-size: 12px;
+  opacity: 0.95;
+  margin-bottom: 12px;
+  max-width: 220px;
+}
+.project-cta-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 9px 16px;
+  background: white;
+  color: var(--amber-dark);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  align-self: flex-start;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+}
+
+/* ═══ PROJET EN COURS — card ═══ */
+.current-project {
+  margin: 8px 18px 28px;
+  background: var(--bg-card);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.15s;
+  box-shadow: var(--shadow-card);
+}
+.current-project:active { transform: scale(0.98); }
+.current-project-img {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+}
+.current-project-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.current-project-status {
+  position: absolute;
+  top: 10px; left: 10px;
+  padding: 3px 8px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(8px);
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--amber-dark);
+  display: flex; align-items: center; gap: 4px;
+}
+.current-project-status::before {
+  content: '';
+  width: 5px; height: 5px;
+  background: var(--amber);
+  border-radius: 999px;
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.current-project-info {
+  padding: 12px 14px;
+}
+.current-project-title {
+  font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-1);
+  margin-bottom: 2px;
+}
+.current-project-meta {
+  font-size: 10px;
+  color: var(--text-3);
+  margin-bottom: 8px;
+}
+.current-project-progress-row {
+  display: flex; align-items: center; gap: 8px;
+}
+.current-project-progress {
+  flex: 1;
+  height: 4px;
+  background: var(--bg-warm);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.current-project-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--amber) 0%, var(--amber-light) 100%);
+  border-radius: 999px;
+  width: 60%;
+}
+.current-project-progress-pct {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--amber-dark);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ═══ TAB BAR — conforme specs §2.1 ═══ */
+/* 5 onglets : Accueil, Inspirations, Marché, Projets, Compte */
+/* Icône active : amber filled 24px + label 10px/600 amber */
+/* Icône inactive : text-3 outline 24px + label 10px/400 text-3 */
+.tab-bar {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 76px;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  z-index: 80;
+  box-shadow: 0 -4px 24px rgba(30, 24, 19, 0.06);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.tab-item {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 4px;
+  padding-top: 11px;
+  cursor: pointer;
+  color: var(--text-3);
+  transition: color 0.2s;
+  position: relative;
+}
+/* Indicateur actif : petite barre amber en haut + blob derrière l'icône */
+.tab-item::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 28px; height: 3px;
+  background: var(--amber);
+  border-radius: 0 0 4px 4px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.tab-item.active::before { transform: translateX(-50%) scaleX(1); }
+.tab-item.active { color: var(--amber); }
+.tab-icon {
+  width: 24px; height: 24px;
+  stroke-width: 1.8;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.tab-item.active .tab-icon { transform: scale(1.1) translateY(-1px); }
+.tab-label { font-size: 10px; font-weight: 500; letter-spacing: 0.01em; }
+.tab-item.active .tab-label { font-weight: 700; }
+
+/* ═══ INSPIRATIONS — masonry + filter chips ═══ */
+.inspo-filters {
+  display: flex;
+  gap: 8px;
+  padding: 0 20px 14px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.inspo-filters::-webkit-scrollbar { display: none; }
+.inspo-filter {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: var(--bg-warm);
+  color: var(--text-2);
+}
+.inspo-filter.active {
+  background: var(--amber);
+  color: white;
+}
+.inspo-masonry {
+  column-count: 2;
+  column-gap: 12px;
+  padding: 0 18px 28px;
+}
+.inspo-scene {
+  break-inside: avoid;
+  margin-bottom: 12px;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.15s;
+}
+.inspo-scene:active { transform: scale(0.98); }
+.inspo-scene img { width: 100%; display: block; }
+.inspo-scene-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(30,24,19,0.75) 0%, transparent 50%);
+}
+.inspo-scene-info {
+  position: absolute;
+  bottom: 10px; left: 10px; right: 10px;
+  color: white;
+}
+.inspo-scene-name {
+  font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 1px;
+  line-height: 1.15;
+}
+.inspo-scene-count {
+  font-size: 10px;
+  opacity: 0.9;
+}
+.inspo-scene-bookmark {
+  position: absolute;
+  top: 8px; right: 8px;
+  width: 28px; height: 28px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.inspo-scene-bookmark svg { width: 14px; height: 14px; color: var(--text-2); fill: none; stroke: currentColor; }
+.inspo-scene-bookmark.active svg { color: var(--amber); fill: var(--amber); }
+
+/* ═══ MARKETPLACE — grille produits étendue ═══ */
+.market-search {
+  margin: 0 20px 14px;
+}
+.market-cats {
+  display: flex;
+  gap: 8px;
+  padding: 0 18px 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.market-cats::-webkit-scrollbar { display: none; }
+.market-cat {
+  flex-shrink: 0;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: var(--bg-warm);
+  color: var(--text-2);
+}
+.market-cat.active {
+  background: var(--amber);
+  color: white;
+}
+
+/* ═══ FICHE PRODUIT — gallery + details + sticky CTA ═══ */
+.product-gallery {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  background: var(--bg-warm);
+}
+.product-gallery img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.product-gallery-top {
+  position: absolute;
+  top: calc(44px + var(--safe-top) + 12px);
+  left: 16px; right: 16px;
+  display: flex; justify-content: space-between;
+  z-index: 20;
+}
+.gallery-btn {
+  width: 40px; height: 40px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s;
+}
+.gallery-btn:active { transform: scale(0.92); }
+.gallery-btn svg { width: 18px; height: 18px; color: var(--text-1); stroke-width: 1.8; }
+.gallery-dots {
+  position: absolute;
+  bottom: 14px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 5px;
+  z-index: 10;
+}
+.gallery-dot {
+  width: 5px; height: 5px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.5);
+}
+.gallery-dot.active { background: white; width: 16px; }
+
+.product-detail {
+  padding: 22px 18px 110px;
+  background: var(--bg-cream);
+  border-radius: 24px 24px 0 0;
+  margin-top: -20px;
+  position: relative;
+  z-index: 5;
+}
+.product-breadcrumb {
+  font-size: 11px;
+  color: var(--text-3);
+  margin-bottom: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.product-detail-name {
+  font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text-1);
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+.product-detail-artisan {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px;
+  color: var(--amber-dark);
+  font-weight: 700;
+  margin-bottom: 18px;
+  cursor: pointer;
+}
+.product-verified-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 9px;
+  background: var(--forest-pale);
+  color: var(--forest);
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+.product-verified-badge svg { width: 10px; height: 10px; }
+.product-price-row {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px dashed var(--border-dark);
+}
+.product-price-main {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--amber-dark);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.product-stock {
+  padding: 4px 12px;
+  background: var(--forest-pale);
+  color: var(--forest);
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.product-desc {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--text-2);
+  margin-bottom: 24px;
+}
+.product-specs {
+  background: var(--bg-warm);
+  border-radius: 16px;
+  padding: 16px 18px;
+  margin-bottom: 20px;
+}
+.spec-section-title {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-3);
+  margin-bottom: 12px;
+}
+.spec-row {
+  display: flex; justify-content: space-between;
+  padding: 7px 0;
+  font-size: 13px;
+}
+.spec-row + .spec-row { border-top: 1px solid var(--border); }
+.spec-label { color: var(--text-3); font-weight: 500; }
+.spec-value { font-weight: 700; color: var(--text-1); font-variant-numeric: tabular-nums; }
+
+/* Quantity selector moderne */
+.qty-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin: 0 0 20px;
+  padding: 14px 16px;
+  background: var(--bg-card);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-xs);
+}
+.qty-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-1);
+  letter-spacing: -0.01em;
+}
+.qty-stepper {
+  display: flex; align-items: center; gap: 14px;
+}
+.qty-btn {
+  width: 32px; height: 32px;
+  border-radius: 10px;
+  background: var(--bg-warm);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-1);
+  transition: transform 0.15s, background 0.2s;
+}
+.qty-btn:active { transform: scale(0.9); background: var(--amber-pale); }
+.qty-value {
+  font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-1);
+  min-width: 24px;
+  text-align: center;
+}
+
+/* Color swatches modernes */
+.color-row {
+  display: flex; align-items: center; gap: 12px;
+  margin: 0 0 20px;
+  padding: 14px 16px;
+  background: var(--bg-card);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-xs);
+}
+.color-swatch {
+  width: 36px; height: 36px;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+.color-swatch.active {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 3px var(--amber-pale);
+  transform: scale(1.05);
+}
+.color-swatch:active { transform: scale(0.9); }
+.product-trust {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin: 0 0 16px;
+}
+.product-floating-cta {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 14px 16px calc(14px + env(safe-area-inset-bottom, 0px));
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  box-shadow: 0 -6px 24px rgba(30,24,19,0.08);
+  display: flex; gap: 10px;
+  z-index: 70;
+}
+.float-btn-secondary {
+  width: 54px; height: 52px;
+  border-radius: 14px;
+  background: var(--bg-warm);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.float-btn-secondary:active { transform: scale(0.95); }
+.float-btn-secondary svg { width: 20px; height: 20px; color: var(--text-1); }
+.float-btn-primary {
+  flex: 1; height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--amber) 0%, var(--amber-dark) 100%);
+  color: white;
+  border: none;
+  font-size: 14.5px;
+  font-weight: 700;
+  font-family: inherit;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(191, 121, 59, 0.28), 0 2px 4px rgba(191, 121, 59, 0.15);
+  letter-spacing: -0.01em;
+  transition: transform 0.15s;
+}
+.float-btn-primary:active { transform: scale(0.98); }
+.float-btn-primary svg { width: 18px; height: 18px; }
+.app-hint {
+  position: absolute;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(30, 24, 19, 0.95);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-size: 12px;
+  z-index: 200;
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.app-hint.show { opacity: 1; }
+
+/* ═══ VERSION TAG — masqué pour éviter override ═══ */
+.version-tag {
+  position: fixed;
+  top: 30px; right: 30px;
+  background: var(--amber);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  z-index: 1001;
+}
+.version-tag a { color: white; text-decoration: none; margin-left: 8px; opacity: 0.85; }
+</style>
+</head>
+<body>
+
+<div class="version-tag">v5 Référence · <a href="/app-simulator-v1-web.html">v1</a></div>
+
+<div class="app-shell" id="appShell">
+  <div class="notch"></div>
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="icons">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.18L12 21z"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.01 21.49L23.64 7c-.45-.34-4.93-4-11.64-4C5.28 3 .81 6.66.36 7l11.63 14.49.01.01.01-.01z"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-row1">
+      <div class="greeting-block">
+        <div class="greeting-name" style="font-size: 18px; font-weight: 700;">Dedco<span style="color: var(--amber);">.</span></div>
+        <div class="greeting-hello">Bonjour, Fatou</div>
+      </div>
+      <div class="header-icons">
+        <div class="header-icon" onclick="navigateTo('chat')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+          <span class="header-icon-dot"></span>
+        </div>
+        <div class="header-icon" onclick="navigateTo('notifications')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          <span class="header-icon-dot amber"></span>
+        </div>
+        <div class="header-icon" onclick="navigateTo('panier')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </div>
+      </div>
+    </div>
+    <div class="search-pill" onclick="showHint('Recherche')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <span class="search-pill-text">Rechercher…</span>
+      <div class="search-pill-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCROLL CONTENT -->
+  <div class="scroll" id="scroll">
+
+    <!-- HERO CAROUSEL -->
+    <div class="hero" onclick="navigateTo('inspirations')">
+      <div class="hero-slides" id="heroSlides">
+        <div class="hero-slide">
+          <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=900&h=560&q=85" alt="">
+          <div class="hero-overlay"></div>
+          <div class="hero-content">
+            <div class="hero-eyebrow">Scène du moment</div>
+            <div class="hero-title">L'art de <em>vivre</em><br>chez soi</div>
+            <div class="hero-sub">3 pièces · par Kofi Akindélé · Cotonou</div>
+            <div class="hero-cta">Découvrir la scène →</div>
+          </div>
+        </div>
+        <div class="hero-slide">
+          <img src="https://images.unsplash.com/photo-1615875605825-5eb9bb5d52ac?auto=format&fit=crop&w=900&h=560&q=85" alt="">
+          <div class="hero-overlay"></div>
+          <div class="hero-content">
+            <div class="hero-eyebrow">Nouvelle collection</div>
+            <div class="hero-title">Bois & <em>Wax</em><br>édition limitée</div>
+            <div class="hero-sub">18 pièces · par Amara Dossou · Porto-Novo</div>
+            <div class="hero-cta">Voir la collection →</div>
+          </div>
+        </div>
+        <div class="hero-slide">
+          <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=900&h=560&q=85" alt="">
+          <div class="hero-overlay"></div>
+          <div class="hero-content">
+            <div class="hero-eyebrow">Coup de cœur</div>
+            <div class="hero-title">Rotin <em>tressé</em><br>main par des experts</div>
+            <div class="hero-sub">Fauteuil Sahel · 245 000 FCFA</div>
+            <div class="hero-cta">Voir le produit →</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-dots">
+        <div class="hero-dot active"></div>
+        <div class="hero-dot"></div>
+        <div class="hero-dot"></div>
+      </div>
+    </div>
+
+    <!-- CATÉGORIES — 8 catégories sur 2 lignes (4 par ligne), icônes lucide du site -->
+    <div class="categories">
+      <div class="cat-item active" onclick="selectCat(this)">
+        <div class="cat-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
+        </div>
+        <div class="cat-label">Tables</div>
+      </div>
+      <div class="cat-item" onclick="selectCat(this)">
+        <div class="cat-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3"/><path d="M3 16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V11a2 2 0 0 0-4 0z"/><path d="M5 18v2"/><path d="M19 18v2"/></svg>
+        </div>
+        <div class="cat-label">Fauteuils</div>
+      </div>
+      <div class="cat-item" onclick="selectCat(this)">
+        <div class="cat-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12v6"/><path d="M4.077 10.615A1 1 0 0 0 5 12h14a1 1 0 0 0 .923-1.385l-3.077-7.384A2 2 0 0 0 15 2H9a2 2 0 0 0-1.846 1.23Z"/><path d="M8 20a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1z"/></svg>
+        </div>
+        <div class="cat-label">Luminaires</div>
+      </div>
+      <div class="cat-item" onclick="selectCat(this)">
+        <div class="cat-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>
+        </div>
+        <div class="cat-label">Textiles</div>
+      </div>
+      <div class="cat-item" onclick="selectCat(this)">
+        <div class="cat-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="22" x2="2" y1="6" y2="6"/><line x1="22" x2="2" y1="18" y2="18"/><line x1="6" x2="6" y1="2" y2="22"/><line x1="18" x2="18" y1="2" y2="22"/></svg>
+        </div>
+        <div class="cat-label">Déco</div>
+      </div>
+      <div class="cat-item" onclick="selectCat(this)">
+        <div class="cat-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/><path d="M2 6h20v2H2z"/></svg>
+        </div>
+        <div class="cat-label">Rangements</div>
+      </div>
+      <div class="cat-item" onclick="selectCat(this)">
+        <div class="cat-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3"/><path d="M2 16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v1.5a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5V11a2 2 0 0 0-4 0z"/><path d="M4 18v2"/><path d="M20 18v2"/><path d="M12 4v9"/></svg>
+        </div>
+        <div class="cat-label">Canapés</div>
+      </div>
+      <div class="cat-item" onclick="selectCat(this)">
+        <div class="cat-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"/><path d="M12 4v6"/><path d="M2 18h20"/></svg>
+        </div>
+        <div class="cat-label">Lits</div>
+      </div>
+    </div>
+
+    <!-- COLLECTIONS -->
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title">Collections éditoriales</div>
+        <div class="section-link" onclick="navigateTo('marketplace')">Voir tout</div>
+      </div>
+      <div class="collections-scroll">
+        <div class="collection-card" onclick="navigateTo('marketplace')">
+          <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=400&q=85" alt="">
+          <div class="collection-overlay"></div>
+          <div class="collection-info">
+            <div class="collection-tag">Cotonou</div>
+            <div class="collection-name">Été tropical</div>
+            <div class="collection-count">24 pièces</div>
+          </div>
+        </div>
+        <div class="collection-card" onclick="navigateTo('marketplace')">
+          <img src="https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=400&q=85" alt="">
+          <div class="collection-overlay"></div>
+          <div class="collection-info">
+            <div class="collection-tag">Porto-Novo</div>
+            <div class="collection-name">Bois & Wax</div>
+            <div class="collection-count">18 pièces</div>
+          </div>
+        </div>
+        <div class="collection-card" onclick="navigateTo('marketplace')">
+          <img src="https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=400&q=85" alt="">
+          <div class="collection-overlay"></div>
+          <div class="collection-info">
+            <div class="collection-tag">Parakou</div>
+            <div class="collection-name">Bogolan Moderne</div>
+            <div class="collection-count">12 pièces</div>
+          </div>
+        </div>
+        <div class="collection-card" onclick="navigateTo('marketplace')">
+          <img src="https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=400&q=85" alt="">
+          <div class="collection-overlay"></div>
+          <div class="collection-info">
+            <div class="collection-tag">Parakou</div>
+            <div class="collection-name">Rotin Tressé</div>
+            <div class="collection-count">15 pièces</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUITS PHARES -->
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title">Produits phares</div>
+        <div class="section-link" onclick="navigateTo('marketplace')">Voir tout</div>
+      </div>
+      <div class="products-grid" id="productsGrid"></div>
+    </div>
+
+    <!-- CRÉATEURS -->
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title">Créateurs vedettes</div>
+        <div class="section-link" onclick="navigateTo('marketplace')">Voir tout</div>
+      </div>
+      <div class="creators-section">
+        <div class="creator-col">
+          <div class="creator-card" onclick="navigateTo('artisan')">
+            <div class="creator-avatar-wrap">
+              <img class="creator-avatar" src="https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=100&q=85" alt="">
+              <div class="creator-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            </div>
+            <div class="creator-info">
+              <div class="creator-name">Kofi A.</div>
+              <div class="creator-specialty">Mobilier <span class="creator-level">N3</span></div>
+            </div>
+          </div>
+          <div class="creator-card" onclick="navigateTo('artisan')">
+            <div class="creator-avatar-wrap">
+              <img class="creator-avatar" src="https://images.unsplash.com/photo-1509099863731-ef4bff19e808?auto=format&fit=crop&crop=faces&w=100&q=85" alt="">
+              <div class="creator-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            </div>
+            <div class="creator-info">
+              <div class="creator-name">Amara D.</div>
+              <div class="creator-specialty">Rotin <span class="creator-level">N3</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="creator-col">
+          <div class="creator-card" onclick="navigateTo('designer')">
+            <div class="creator-avatar-wrap">
+              <img class="creator-avatar" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=100&q=85" alt="">
+              <div class="creator-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            </div>
+            <div class="creator-info">
+              <div class="creator-name">Ndèye S.</div>
+              <div class="creator-specialty">Designer <span class="creator-level">N4</span></div>
+            </div>
+          </div>
+          <div class="creator-card" onclick="navigateTo('artisan')">
+            <div class="creator-avatar-wrap">
+              <img class="creator-avatar" src="https://images.unsplash.com/photo-1614317226704-8b1f7a4c4d3e?auto=format&fit=crop&crop=faces&w=100&q=85" alt="">
+              <div class="creator-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            </div>
+            <div class="creator-info">
+              <div class="creator-name">Sophie K.</div>
+              <div class="creator-specialty">Déco wax <span class="creator-level">N2</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJET CHOIX — 2 bannières full-width style PROJET CTA -->
+    <div class="section" style="padding:0 16px 28px;">
+      <div class="section-head" style="padding:0 0 14px;">
+        <div class="section-title">Lancez votre projet</div>
+      </div>
+
+      <!-- Bannière 1 : Brief artisan — amber brillant -->
+      <div style="position:relative;border-radius:20px;padding:20px;margin-bottom:12px;cursor:pointer;overflow:hidden;background:linear-gradient(135deg,#D4954A 0%,#BF793B 50%,#9A5A1F 100%);box-shadow:0 8px 24px rgba(191,121,59,0.35);" onclick="navigateTo('brief')">
+        <!-- Reflet glossy fort -->
+        <div style="position:absolute;top:0;left:0;right:0;height:55%;background:linear-gradient(180deg,rgba(255,255,255,0.25) 0%,rgba(255,255,255,0.05) 70%,transparent 100%);pointer-events:none;"></div>
+        <!-- Bulle décorative -->
+        <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:999px;background:rgba(255,255,255,0.08);pointer-events:none;"></div>
+        <div style="position:relative;z-index:1;color:white;">
+          <div style="font-size:9px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;opacity:0.85;margin-bottom:8px;">Sur-mesure</div>
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:700;letter-spacing:-0.02em;line-height:1.1;margin-bottom:4px;">Brief artisan</div>
+          <div style="font-size:12px;opacity:0.9;line-height:1.4;margin-bottom:14px;">Décrivez votre pièce, recevez des devis sous 48h</div>
+          <div style="display:inline-flex;align-items:center;gap:5px;padding:8px 16px;background:rgba(255,255,255,0.95);border-radius:999px;font-size:12px;font-weight:700;color:var(--amber-dark);letter-spacing:-0.01em;">
+            Démarrer
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bannière 2 : Designer d'espace — forest brillant -->
+      <div style="position:relative;border-radius:20px;padding:20px;margin-bottom:0;cursor:pointer;overflow:hidden;background:linear-gradient(135deg,#6BA35A 0%,#548C45 50%,#3D6B33 100%);box-shadow:0 8px 24px rgba(84,140,69,0.35);" onclick="navigateTo('brief')">
+        <div style="position:absolute;top:0;left:0;right:0;height:55%;background:linear-gradient(180deg,rgba(255,255,255,0.25) 0%,rgba(255,255,255,0.05) 70%,transparent 100%);pointer-events:none;"></div>
+        <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:999px;background:rgba(255,255,255,0.08);pointer-events:none;"></div>
+        <div style="position:relative;z-index:1;color:white;">
+          <div style="font-size:9px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;opacity:0.85;margin-bottom:8px;">Aménagement</div>
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:700;letter-spacing:-0.02em;line-height:1.1;margin-bottom:4px;">Designer d'espace</div>
+          <div style="font-size:12px;opacity:0.9;line-height:1.4;margin-bottom:14px;">Un designer coordonne tout votre aménagement</div>
+          <div style="display:inline-flex;align-items:center;gap:5px;padding:8px 16px;background:rgba(255,255,255,0.95);border-radius:999px;font-size:12px;font-weight:700;color:var(--forest);letter-spacing:-0.01em;">
+            Démarrer
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJET EN COURS -->
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title">Votre projet en cours</div>
+      </div>
+      <div class="current-project" onclick="navigateTo('projets')">
+        <div class="current-project-img">
+          <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=400&q=85" alt="">
+          <div class="current-project-status">En cours</div>
+        </div>
+        <div class="current-project-info">
+          <div class="current-project-title">Salon Tropical Akpakpa</div>
+          <div class="current-project-meta">Projet design · Kofi Akindélé · 10 juil.</div>
+          <div class="current-project-progress-row">
+            <div class="current-project-progress">
+              <div class="current-project-progress-bar"></div>
+            </div>
+            <span class="current-project-progress-pct">60%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="height: 24px;"></div>
+  </div>
+
+  <!-- ═══ SCREEN: INSPIRATIONS ═══ -->
+  <div class="screen-page" id="screen-inspirations">
+    <div class="inspo-filters">
+      <div class="inspo-filter active" onclick="selectFilter(this)">Pour vous</div>
+      <div class="inspo-filter" onclick="selectFilter(this)">Salon</div>
+      <div class="inspo-filter" onclick="selectFilter(this)">Chambre</div>
+      <div class="inspo-filter" onclick="selectFilter(this)">Salle à manger</div>
+      <div class="inspo-filter" onclick="selectFilter(this)">Bureau</div>
+      <div class="inspo-filter" onclick="selectFilter(this)">Extérieur</div>
+    </div>
+    <div class="inspo-masonry" id="inspoMasonry"></div>
+  </div>
+
+  <!-- ═══ SCREEN: MARKETPLACE ═══ -->
+  <div class="screen-page" id="screen-marketplace">
+    <div class="market-cats">
+      <div class="market-cat active" onclick="selectMarketCat(this)">Tout</div>
+      <div class="market-cat" onclick="selectMarketCat(this)">Mobilier</div>
+      <div class="market-cat" onclick="selectMarketCat(this)">Luminaire</div>
+      <div class="market-cat" onclick="selectMarketCat(this)">Déco</div>
+      <div class="market-cat" onclick="selectMarketCat(this)">Textiles</div>
+      <div class="market-cat" onclick="selectMarketCat(this)">Art</div>
+    </div>
+    <div class="products-grid" id="marketGrid"></div>
+    <div style="height: 24px;"></div>
+  </div>
+
+  <!-- ═══ SCREEN: FICHE PRODUIT (plein écran) ═══ -->
+  <div class="screen-page" id="screen-product">
+    <div class="product-gallery">
+      <img id="productGalleryImg" src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=800&q=85" alt="">
+      <div class="product-gallery-top">
+        <div class="gallery-btn" onclick="closeProduct()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <div class="gallery-btn" onclick="toggleFav(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/></svg>
+          </div>
+          <div class="gallery-btn" onclick="showHint('Partager')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-dots">
+        <div class="gallery-dot active"></div>
+        <div class="gallery-dot"></div>
+        <div class="gallery-dot"></div>
+        <div class="gallery-dot"></div>
+      </div>
+    </div>
+    <div class="product-detail">
+      <!-- Header : catégorie + nom + artisan -->
+      <div style="font-size:10px;font-weight:800;color:var(--amber);text-transform:uppercase;letter-spacing:0.14em;margin-bottom:6px;">Mobilier · Tables</div>
+      <div class="product-detail-name" id="productDetailName">Table basse Bénin Wax</div>
+      <div class="product-detail-artisan" onclick="navigateTo('artisan')">
+        <img src="https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=60&q=85" style="width:20px;height:20px;border-radius:999px;object-fit:cover;">
+        par Kofi Akindélé
+        <span class="product-verified-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          N3
+        </span>
+      </div>
+
+      <!-- Prix + stock dans une card -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--bg-card);border-radius:14px;border:1px solid var(--border);box-shadow:var(--shadow-xs);margin-bottom:20px;">
+        <div>
+          <div style="font-size:10px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:2px;">Prix</div>
+          <div class="product-price-main" id="productDetailPrice" style="font-size:24px;">145 000 FCFA</div>
+        </div>
+        <div class="product-stock">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline;vertical-align:-1px;margin-right:2px;"><polyline points="20 6 9 17 4 12"/></svg>
+          En stock
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">Description</div>
+      <div class="product-desc">
+        Table basse en bois iroko massif, plateau incrusté de motifs wax traditionnels du Bénin. Pièce unique fabriquée à la main dans l'atelier de Kofi Akindélé à Cotonou.
+      </div>
+
+      <!-- Variantes couleur — card -->
+      <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">Finition</div>
+      <div class="color-row">
+        <div class="color-swatch active" style="background:#8B4513;" onclick="selectColor(this)" title="Iroko naturel"></div>
+        <div class="color-swatch" style="background:#A0522D;" onclick="selectColor(this)" title="Wax terracotta"></div>
+        <div class="color-swatch" style="background:#2F2F2F;" onclick="selectColor(this)" title="Bois fumé"></div>
+        <div style="flex:1;text-align:right;font-size:12px;color:var(--text-2);font-weight:600;align-self:center;">Iroko naturel</div>
+      </div>
+
+      <!-- Quantité — card -->
+      <div class="qty-row">
+        <div class="qty-label">Quantité</div>
+        <div class="qty-stepper">
+          <div class="qty-btn" onclick="changeQty(-1)">−</div>
+          <div class="qty-value" id="qtyValue">1</div>
+          <div class="qty-btn" onclick="changeQty(1)">+</div>
+        </div>
+      </div>
+
+      <!-- Specs — card warm -->
+      <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">Détails</div>
+      <div class="product-specs">
+        <div class="spec-row"><span class="spec-label">Matériaux</span><span class="spec-value">Bois iroko, wax</span></div>
+        <div class="spec-row"><span class="spec-label">Dimensions</span><span class="spec-value">110 × 60 × 40 cm</span></div>
+        <div class="spec-row"><span class="spec-label">Poids</span><span class="spec-value">18 kg</span></div>
+        <div class="spec-row"><span class="spec-label">Fabrication</span><span class="spec-value">10 jours</span></div>
+      </div>
+
+      <!-- Trust — 3 chips inline -->
+      <div class="product-trust">
+        <div style="display:inline-flex;align-items:center;gap:6px;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;font-size:11px;font-weight:700;color:var(--text-1);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Garantie
+        </div>
+        <div style="display:inline-flex;align-items:center;gap:6px;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;font-size:11px;font-weight:700;color:var(--text-1);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Vérifié
+        </div>
+        <div style="display:inline-flex;align-items:center;gap:6px;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;font-size:11px;font-weight:700;color:var(--text-1);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/></svg>
+          Livraison
+        </div>
+      </div>
+    </div>
+    <div class="product-floating-cta">
+      <div class="float-btn-secondary" onclick="navigateTo('chat')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+      </div>
+      <button class="float-btn-primary" onclick="navigateTo('panier')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Ajouter au panier
+      </button>
+    </div>
+  </div>
+
+  <!-- HINT -->
+  <div class="app-hint" id="appHint"></div>
+
+  <!-- ═══ SCREEN: PROJETS ═══ -->
+  <div class="screen-page" id="screen-projets">
+    <div style="padding: 20px;">
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);margin-bottom:4px;">Mes projets</div>
+      <div style="font-size:12px;color:var(--text-3);margin-bottom:20px;">2 projets actifs · 1 décision en attente</div>
+
+      <!-- Projet en cours -->
+      <div style="background:var(--bg-card);border-radius:14px;overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:12px;cursor:pointer;" onclick="navigateTo('tracking')">
+        <div style="position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=400&q=85" style="width:100%;height:100%;object-fit:cover;">
+          <div style="position:absolute;top:10px;left:10px;padding:3px 8px;background:rgba(255,255,255,0.92);border-radius:999px;font-size:9px;font-weight:700;color:var(--amber-dark);">En cours</div>
+        </div>
+        <div style="padding:14px;">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:15px;font-weight:600;color:var(--text-1);margin-bottom:2px;">Salon Tropical Akpakpa</div>
+          <div style="font-size:11px;color:var(--text-3);margin-bottom:10px;">Projet design · Kofi Akindélé · 10 juil.</div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="flex:1;height:4px;background:var(--bg-warm);border-radius:999px;overflow:hidden;"><div style="height:100%;width:60%;background:linear-gradient(90deg,var(--amber),var(--amber-light));border-radius:999px;"></div></div>
+            <span style="font-size:11px;font-weight:700;color:var(--amber-dark);">60%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Projet en attente -->
+      <div style="background:var(--bg-card);border-radius:14px;overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:12px;cursor:pointer;" onclick="navigateTo('tracking')">
+        <div style="position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=85" style="width:100%;height:100%;object-fit:cover;">
+          <div style="position:absolute;top:10px;left:10px;padding:3px 8px;background:rgba(166,68,46,0.92);border-radius:999px;font-size:9px;font-weight:700;color:white;">Action requise</div>
+        </div>
+        <div style="padding:14px;">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:15px;font-weight:600;color:var(--text-1);margin-bottom:2px;">Bureau Afro-contemporain</div>
+          <div style="font-size:11px;color:var(--text-3);margin-bottom:8px;">Brief designer · 3 propositions reçues</div>
+          <div style="font-size:11px;color:var(--amber-dark);font-weight:600;">Choisir une proposition →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: COMPTE ═══ -->
+  <div class="screen-page" id="screen-compte">
+    <div style="padding:20px 16px;">
+      <!-- Profile header moderne — card avec gradient subtle -->
+      <div style="background:linear-gradient(135deg,var(--bg-card) 0%,#FDFBF6 100%);border-radius:20px;padding:18px;margin-bottom:24px;box-shadow:0 4px 14px rgba(30,24,19,0.06);border:1px solid var(--border);position:relative;overflow:hidden;">
+        <div style="position:absolute;top:-20px;right:-20px;width:120px;height:120px;border-radius:999px;background:radial-gradient(circle,var(--amber-pale) 0%,transparent 70%);opacity:0.6;"></div>
+        <div style="display:flex;align-items:center;gap:14px;position:relative;">
+          <div style="position:relative;flex-shrink:0;">
+            <img src="https://images.unsplash.com/photo-1614317226704-8b1f7a4c4d3e?auto=format&fit=crop&crop=faces&w=120&q=85" style="width:64px;height:64px;border-radius:18px;object-fit:cover;border:3px solid var(--bg-card);box-shadow:0 4px 10px rgba(30,24,19,0.1);">
+            <div style="position:absolute;bottom:-4px;right:-4px;width:22px;height:22px;border-radius:999px;background:linear-gradient(135deg,var(--amber) 0%,var(--amber-dark) 100%);border:3px solid var(--bg-card);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 4px rgba(191,121,59,0.3);">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:20px;font-weight:600;color:var(--text-1);letter-spacing:-0.02em;">Fatou Kossou</div>
+            <div style="font-size:11.5px;color:var(--text-3);margin-top:2px;">fatou.kossou@email.bj</div>
+            <div style="display:inline-flex;align-items:center;gap:4px;padding:3px 10px;background:linear-gradient(135deg,var(--amber) 0%,var(--amber-dark) 100%);color:white;border-radius:999px;font-size:10px;font-weight:800;margin-top:6px;letter-spacing:0.02em;box-shadow:0 2px 4px rgba(191,121,59,0.2);">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              Client Premium
+            </div>
+          </div>
+        </div>
+        <!-- Stats rapides -->
+        <div style="display:flex;gap:8px;margin-top:16px;padding-top:14px;border-top:1px dashed var(--border-dark);position:relative;">
+          <div style="flex:1;text-align:center;">
+            <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:700;color:var(--text-1);font-variant-numeric:tabular-nums;">12</div>
+            <div style="font-size:10px;color:var(--text-3);font-weight:600;margin-top:1px;">Commandes</div>
+          </div>
+          <div style="width:1px;background:var(--border);"></div>
+          <div style="flex:1;text-align:center;">
+            <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:700;color:var(--text-1);font-variant-numeric:tabular-nums;">3</div>
+            <div style="font-size:10px;color:var(--text-3);font-weight:600;margin-top:1px;">Projets</div>
+          </div>
+          <div style="width:1px;background:var(--border);"></div>
+          <div style="flex:1;text-align:center;">
+            <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:700;color:var(--text-1);font-variant-numeric:tabular-nums;">8</div>
+            <div style="font-size:10px;color:var(--text-3);font-weight:600;margin-top:1px;">Favoris</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sections -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-3);">Mes activités</div>
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+      </div>
+      <div style="background:var(--bg-card);border-radius:16px;box-shadow:0 2px 8px rgba(30,24,19,0.04);margin-bottom:20px;overflow:hidden;border:1px solid var(--border);">
+        <div style="display:flex;align-items:center;gap:12px;padding:13px 14px;cursor:pointer;border-bottom:1px solid var(--border);" onclick="navigateTo('tracking')">
+          <div style="width:38px;height:38px;border-radius:11px;background:var(--amber-pale);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amber-dark)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/></svg></div>
+          <div style="flex:1;font-size:13.5px;font-weight:600;color:var(--text-1);letter-spacing:-0.01em;">Mes commandes</div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:13px 14px;cursor:pointer;border-bottom:1px solid var(--border);" onclick="navigateTo('projets')">
+          <div style="width:38px;height:38px;border-radius:11px;background:var(--forest-pale);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg></div>
+          <div style="flex:1;font-size:13.5px;font-weight:600;color:var(--text-1);letter-spacing:-0.01em;">Mes projets</div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:13px 14px;cursor:pointer;border-bottom:1px solid var(--border);" onclick="showHint('Paiements')">
+          <div style="width:38px;height:38px;border-radius:11px;background:var(--terracotta-pale);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--terracotta)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+          <div style="flex:1;font-size:13.5px;font-weight:600;color:var(--text-1);letter-spacing:-0.01em;">Paiements</div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:13px 14px;cursor:pointer;border-bottom:1px solid var(--border);" onclick="showHint('Adresses')">
+          <div style="width:38px;height:38px;border-radius:11px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div style="flex:1;font-size:13.5px;font-weight:600;color:var(--text-1);letter-spacing:-0.01em;">Adresses</div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:13px 14px;cursor:pointer;" onclick="navigateTo('favoris')">
+          <div style="width:38px;height:38px;border-radius:11px;background:var(--terracotta-pale);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--terracotta)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+          <div style="flex:1;font-size:13.5px;font-weight:600;color:var(--text-1);letter-spacing:-0.01em;">Mes favoris</div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-3);">Préférences</div>
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+      </div>
+      <div style="background:var(--bg-card);border-radius:16px;box-shadow:0 2px 8px rgba(30,24,19,0.04);margin-bottom:20px;overflow:hidden;border:1px solid var(--border);">
+        <div style="display:flex;align-items:center;gap:12px;padding:13px 14px;cursor:pointer;border-bottom:1px solid var(--border);" onclick="navigateTo('notifications')">
+          <div style="width:38px;height:38px;border-radius:11px;background:var(--amber-pale);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amber-dark)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/></svg></div>
+          <div style="flex:1;font-size:13.5px;font-weight:600;color:var(--text-1);letter-spacing:-0.01em;">Notifications</div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:13px 14px;cursor:pointer;" onclick="showHint('Paramètres')">
+          <div style="width:38px;height:38px;border-radius:11px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <div style="flex:1;font-size:13.5px;font-weight:600;color:var(--text-1);letter-spacing:-0.01em;">Paramètres</div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+      </div>
+
+      <!-- Déconnexion moderne -->
+      <div style="display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;background:var(--terracotta-pale);border-radius:14px;border:1px solid rgba(166,68,46,0.15);" onclick="navigateTo('auth')">
+        <div style="width:38px;height:38px;border-radius:11px;background:var(--terracotta);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(166,68,46,0.2);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div>
+        <div style="font-size:13.5px;font-weight:700;color:var(--terracotta);letter-spacing:-0.01em;">Déconnexion</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: ARTISAN (plein écran) ═══ -->
+  <div class="screen-page" id="screen-artisan" style="top:0;bottom:0;background:var(--bg-cream);">
+    <div style="position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;">
+      <img src="https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&w=800&q=85" style="width:100%;height:100%;object-fit:cover;">
+      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(30,24,19,0.8) 0%,transparent 50%);"></div>
+      <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;">
+        <div class="gallery-btn" onclick="navigateTo('home')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </div>
+      </div>
+    </div>
+    <div style="padding:20px;">
+      <div style="display:flex;align-items:flex-end;gap:14px;margin-top:-40px;position:relative;z-index:2;margin-bottom:16px;">
+        <img src="https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=160&q=85" style="width:80px;height:80px;border-radius:999px;object-fit:cover;border:3px solid var(--bg-cream);box-shadow:var(--shadow-md);">
+        <div style="flex:1;padding-bottom:4px;">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);">Kofi Akindélé</div>
+          <div style="font-size:12px;color:var(--text-3);display:flex;align-items:center;gap:4px;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Cotonou · Mobilier bois · N3
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-bottom:20px;">
+        <div style="flex:1;text-align:center;padding:12px;background:var(--bg-card);border-radius:12px;box-shadow:var(--shadow-sm);">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:700;color:var(--text-1);">47</div>
+          <div style="font-size:10px;color:var(--text-3);">Produits</div>
+        </div>
+        <div style="flex:1;text-align:center;padding:12px;background:var(--bg-card);border-radius:12px;box-shadow:var(--shadow-sm);">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:700;color:var(--text-1);">4.9</div>
+          <div style="font-size:10px;color:var(--text-3);">Note</div>
+        </div>
+        <div style="flex:1;text-align:center;padding:12px;background:var(--bg-card);border-radius:12px;box-shadow:var(--shadow-sm);">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:700;color:var(--text-1);">128</div>
+          <div style="font-size:10px;color:var(--text-3);">Avis</div>
+        </div>
+      </div>
+
+      <div style="font-size:13px;line-height:1.6;color:var(--text-2);margin-bottom:20px;">
+        Artisan menuisier depuis 15 ans, spécialisé dans le mobilier en bois iroko et wax. Chaque pièce est unique, façonnée à la main dans mon atelier à Cotonou.
+      </div>
+
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:600;color:var(--text-1);margin-bottom:12px;">Réalisations</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;">
+        <img src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=300&q=85" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;">
+        <img src="https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=300&q=85" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;">
+        <img src="https://images.unsplash.com/photo-1517467139951-f5a925c9f9de?auto=format&fit=crop&w=300&q=85" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;">
+        <img src="https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=300&q=85" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;">
+      </div>
+    </div>
+    <div class="product-floating-cta">
+      <div class="float-btn-secondary" onclick="navigateTo('chat')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <button class="float-btn-primary" onclick="navigateTo('brief')">
+        Démarrer un projet
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: PANIER ═══ -->
+  <div class="screen-page" id="screen-panier">
+    <div style="padding:20px;">
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);margin-bottom:20px;">Mon panier</div>
+
+      <div style="background:var(--bg-card);border-radius:14px;box-shadow:var(--shadow-sm);margin-bottom:12px;padding:14px;display:flex;gap:12px;">
+        <img src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=200&q=85" style="width:72px;height:72px;border-radius:10px;object-fit:cover;flex-shrink:0;">
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;color:var(--text-1);margin-bottom:2px;">Table basse Bénin Wax</div>
+          <div style="font-size:11px;color:var(--text-3);margin-bottom:8px;">Kofi Akindélé</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="qty-btn" style="width:28px;height:28px;font-size:14px;" onclick="changeCartQty(this, -1)">−</div>
+              <div style="font-size:13px;font-weight:700;" class="cart-qty">1</div>
+              <div class="qty-btn" style="width:28px;height:28px;font-size:14px;" onclick="changeCartQty(this, 1)">+</div>
+            </div>
+            <div style="font-size:14px;font-weight:700;color:var(--amber-dark);font-variant-numeric:tabular-nums;">145 000 FCFA</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg-card);border-radius:14px;box-shadow:var(--shadow-sm);margin-bottom:20px;padding:14px;display:flex;gap:12px;">
+        <img src="https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=200&q=85" style="width:72px;height:72px;border-radius:10px;object-fit:cover;flex-shrink:0;">
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;color:var(--text-1);margin-bottom:2px;">Lampe Bogolan</div>
+          <div style="font-size:11px;color:var(--text-3);margin-bottom:8px;">Sophie Kossou</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="qty-btn" style="width:28px;height:28px;font-size:14px;" onclick="changeCartQty(this, -1)">−</div>
+              <div style="font-size:13px;font-weight:700;" class="cart-qty">2</div>
+              <div class="qty-btn" style="width:28px;height:28px;font-size:14px;" onclick="changeCartQty(this, 1)">+</div>
+            </div>
+            <div style="font-size:14px;font-weight:700;color:var(--amber-dark);font-variant-numeric:tabular-nums;">130 000 FCFA</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg-card);border-radius:14px;box-shadow:var(--shadow-sm);padding:16px;margin-bottom:20px;">
+        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;color:var(--text-2);"><span>Sous-total</span><span style="font-variant-numeric:tabular-nums;">275 000 FCFA</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;color:var(--text-2);"><span>Livraison</span><span style="font-variant-numeric:tabular-nums;">5 000 FCFA</span></div>
+        <div style="border-top:1px solid var(--border);margin-top:8px;padding-top:12px;display:flex;justify-content:space-between;align-items:baseline;">
+          <span style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:16px;font-weight:600;color:var(--text-1);">Total</span>
+          <span style="font-size:18px;font-weight:700;color:var(--amber-dark);font-variant-numeric:tabular-nums;">280 000 FCFA</span>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:6px;padding:12px;background:var(--forest-pale);border-radius:12px;margin-bottom:20px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <div style="font-size:11px;color:var(--forest);font-weight:600;">Paiement 100% sécurisé · MTN Money & Moov Money</div>
+      </div>
+
+      <button class="float-btn-primary" style="width:100%;height:52px;font-size:15px;" onclick="navigateTo('checkout')">Valider la commande</button>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: BRIEF (placeholder) ═══ -->
+  <div class="screen-page" id="screen-brief" style="top:0;bottom:0;background:var(--bg-cream);">
+    <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:20;">
+      <div class="gallery-btn" onclick="navigateTo('home')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:var(--text-1);letter-spacing:-0.01em;">Démarrer un projet</div>
+      <div style="width:38px;"></div>
+    </div>
+    <div style="padding:calc(44px + var(--safe-top) + 60px) 16px 24px;">
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:26px;font-weight:600;color:var(--text-1);margin-bottom:6px;letter-spacing:-0.02em;line-height:1.1;">Lancez votre projet</div>
+      <div style="font-size:13px;color:var(--text-3);margin-bottom:24px;line-height:1.5;">Fabriquer une pièce précise ou coordonner l'ensemble de votre aménagement ?</div>
+
+      <!-- Card 1 : Brief artisan — full-width app-style -->
+      <div style="display:flex;align-items:center;gap:14px;background:var(--bg-card);border-radius:20px;padding:16px;margin-bottom:10px;cursor:pointer;box-shadow:0 2px 8px rgba(30,24,19,0.04);border:1px solid var(--border);" onclick="showHint('Brief artisan')">
+        <div style="width:56px;height:56px;border-radius:18px;background:var(--amber);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 6px 14px rgba(191,121,59,0.25);position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,0.28) 0%,transparent 100%);border-radius:18px 18px 0 0;pointer-events:none;"></div>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="position:relative;z-index:1;"><path d="M15 12h-5"/><path d="M15 12c.5 0 1 .2 1.4.6l3 3a2 2 0 0 1 0 2.8l-1.4 1.4a2 2 0 0 1-2.8 0l-3-3a2 2 0 0 1-.6-1.4"/><path d="m10.5 13.5-7-7"/><path d="m6 3 4 4-3 3-4-4z"/></svg>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:700;color:var(--text-1);letter-spacing:-0.02em;line-height:1.1;margin-bottom:3px;">Fabriquer une pièce</div>
+          <div style="font-size:12.5px;color:var(--text-3);line-height:1.4;">Meuble, objet déco, sur-mesure</div>
+        </div>
+        <div style="flex-shrink:0;color:var(--text-3);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+      </div>
+
+      <!-- Card 2 : Designer d'espace — full-width app-style -->
+      <div style="display:flex;align-items:center;gap:14px;background:var(--bg-card);border-radius:20px;padding:16px;margin-bottom:24px;cursor:pointer;box-shadow:0 2px 8px rgba(30,24,19,0.04);border:1px solid var(--border);" onclick="showHint('Brief designer')">
+        <div style="width:56px;height:56px;border-radius:18px;background:var(--forest);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 6px 14px rgba(84,140,69,0.25);position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,0.28) 0%,transparent 100%);border-radius:18px 18px 0 0;pointer-events:none;"></div>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="position:relative;z-index:1;"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:700;color:var(--text-1);letter-spacing:-0.02em;line-height:1.1;margin-bottom:3px;">Aménager mon espace</div>
+          <div style="font-size:12.5px;color:var(--text-3);line-height:1.4;">Designer pense et coordonne le projet</div>
+        </div>
+        <div style="flex-shrink:0;color:var(--text-3);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+      </div>
+
+      <!-- Trust bar -->
+      <div style="display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;background:var(--bg-warm);border-radius:14px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div style="font-size:11px;color:var(--text-2);font-weight:600;">Sécurisé · Artisans vérifiés · Réponse sous 48h</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: SUIVI COMMANDE (plein écran) ═══ -->
+  <div class="screen-page" id="screen-tracking" style="top:0;bottom:0;background:var(--bg-cream);">
+    <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;right:16px;display:flex;justify-content:space-between;z-index:20;">
+      <div class="gallery-btn" onclick="navigateTo('projets')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      </div>
+      <div class="gallery-btn" onclick="showHint('Support')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+    </div>
+    <div style="padding:80px 20px 20px;">
+      <div style="font-size:11px;color:var(--text-3);margin-bottom:4px;">CMD-2847 · 145 000 FCFA</div>
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);margin-bottom:6px;">Table basse Bénin Wax</div>
+      <div style="font-size:12px;color:var(--text-2);margin-bottom:24px;">par Kofi Akindélé · Cotonou</div>
+
+      <!-- Timeline -->
+      <div style="position:relative;padding-left:32px;">
+        <!-- Ligne verticale -->
+        <div style="position:absolute;left:11px;top:12px;bottom:12px;width:2px;background:var(--border);"></div>
+
+        <!-- Étape 1 : Commandé (done) -->
+        <div style="position:relative;margin-bottom:24px;">
+          <div style="position:absolute;left:-32px;top:0;width:24px;height:24px;border-radius:999px;background:var(--forest);display:flex;align-items:center;justify-content:center;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div style="font-size:13px;font-weight:600;color:var(--text-1);">Commande passée</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:2px;">28 juin 2026 · 14:30</div>
+        </div>
+
+        <!-- Étape 2 : En fabrication (done) -->
+        <div style="position:relative;margin-bottom:24px;">
+          <div style="position:absolute;left:-32px;top:0;width:24px;height:24px;border-radius:999px;background:var(--forest);display:flex;align-items:center;justify-content:center;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div style="font-size:13px;font-weight:600;color:var(--text-1);">Fabrication en cours</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:2px;">30 juin 2026 · 09:00</div>
+          <!-- Photos fabrication -->
+          <div style="display:flex;gap:8px;margin-top:10px;">
+            <img src="https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&w=200&q=85" style="width:64px;height:64px;border-radius:10px;object-fit:cover;">
+            <img src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=200&q=85" style="width:64px;height:64px;border-radius:10px;object-fit:cover;">
+          </div>
+        </div>
+
+        <!-- Étape 3 : Expédié (current) -->
+        <div style="position:relative;margin-bottom:24px;">
+          <div style="position:absolute;left:-32px;top:0;width:24px;height:24px;border-radius:999px;background:var(--amber);display:flex;align-items:center;justify-content:center;">
+            <div style="width:8px;height:8px;background:white;border-radius:999px;animation:pulse-dot 1.5s ease-in-out infinite;"></div>
+          </div>
+          <div style="font-size:13px;font-weight:600;color:var(--amber-dark);">Expédié — en route</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:2px;">3 juillet 2026 · 11:20</div>
+          <div style="font-size:11px;color:var(--text-2);margin-top:4px;">Livraison estimée : 6-8 juillet</div>
+        </div>
+
+        <!-- Étape 4 : Livré (pending) -->
+        <div style="position:relative;margin-bottom:24px;">
+          <div style="position:absolute;left:-32px;top:0;width:24px;height:24px;border-radius:999px;background:var(--bg-warm);border:2px solid var(--border);"></div>
+          <div style="font-size:13px;font-weight:600;color:var(--text-3);">Livraison</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:2px;">En attente</div>
+        </div>
+
+        <!-- Étape 5 : Confirmation (pending) -->
+        <div style="position:relative;">
+          <div style="position:absolute;left:-32px;top:0;width:24px;height:24px;border-radius:999px;background:var(--bg-warm);border:2px solid var(--border);"></div>
+          <div style="font-size:13px;font-weight:600;color:var(--text-3);">Confirmation de réception</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:2px;">En attente</div>
+        </div>
+      </div>
+
+      <div style="margin-top:28px;padding:14px;background:var(--amber-pale);border-radius:12px;">
+        <div style="font-size:11px;color:var(--amber-dark);font-weight:600;line-height:1.5;">Votre paiement de 145 000 FCFA est sécurisé par Dedco. Il sera versé à l'artisan après confirmation de votre livraison.</div>
+      </div>
+    </div>
+    <div class="product-floating-cta">
+      <div class="float-btn-secondary" onclick="navigateTo('chat')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <button class="float-btn-primary" onclick="showHint('Contacter le support')">
+        Contacter le support
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: CHECKOUT (3 étapes) ═══ -->
+  <div class="screen-page" id="screen-checkout" style="top:0;bottom:0;background:var(--bg-warm);">
+    <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;right:16px;z-index:20;display:flex;align-items:center;justify-content:space-between;">
+      <div class="gallery-btn" onclick="navigateTo('panier')" style="background:var(--bg-card);box-shadow:var(--shadow-sm);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:var(--text-1);letter-spacing:-0.01em;">Validation</div>
+      <div style="width:38px;"></div>
+    </div>
+    <div style="padding:calc(44px + var(--safe-top) + 60px) 16px 24px;">
+      <!-- Stepper moderne — avec progress bar amber -->
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:24px;padding:14px 16px;background:var(--bg-card);border-radius:16px;box-shadow:var(--shadow-sm);">
+        <div style="display:flex;align-items:center;gap:6px;flex:1;">
+          <div style="width:26px;height:26px;border-radius:999px;background:linear-gradient(135deg,var(--amber) 0%,var(--amber-dark) 100%);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(191,121,59,0.3);">1</div>
+          <div style="font-size:11px;font-weight:700;color:var(--text-1);letter-spacing:-0.01em;">Adresse</div>
+        </div>
+        <div style="width:16px;height:2px;background:var(--amber);border-radius:1px;"></div>
+        <div style="display:flex;align-items:center;gap:6px;flex:1;">
+          <div style="width:26px;height:26px;border-radius:999px;background:var(--bg-warm);color:var(--text-3);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);">2</div>
+          <div style="font-size:11px;color:var(--text-3);font-weight:600;">Livraison</div>
+        </div>
+        <div style="width:16px;height:2px;background:var(--border);border-radius:1px;"></div>
+        <div style="display:flex;align-items:center;gap:6px;flex:1;">
+          <div style="width:26px;height:26px;border-radius:999px;background:var(--bg-warm);color:var(--text-3);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);">3</div>
+          <div style="font-size:11px;color:var(--text-3);font-weight:600;">Paiement</div>
+        </div>
+      </div>
+
+      <!-- Adresse -->
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:20px;font-weight:600;color:var(--text-1);margin-bottom:14px;letter-spacing:-0.01em;">Adresse de livraison</div>
+
+      <div style="background:var(--bg-card);border-radius:16px;box-shadow:0 2px 8px rgba(30,24,19,0.05);padding:16px;margin-bottom:10px;border:2px solid var(--amber);cursor:pointer;position:relative;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <div style="width:36px;height:36px;border-radius:10px;background:var(--amber-pale);display:flex;align-items:center;justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <div style="font-size:14px;font-weight:700;color:var(--text-1);letter-spacing:-0.01em;">Domicile</div>
+          <div style="margin-left:auto;width:22px;height:22px;border-radius:999px;background:linear-gradient(135deg,var(--amber) 0%,var(--amber-dark) 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 4px rgba(191,121,59,0.3);">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:var(--text-2);line-height:1.55;">Fatou Kossou<br>Quartier Akpakpa, Rue 12<br>Cotonou, Bénin<br>+229 97 45 23 10</div>
+      </div>
+
+      <div style="background:var(--bg-card);border-radius:14px;box-shadow:var(--shadow-xs);padding:14px 16px;margin-bottom:24px;cursor:pointer;border:1px dashed var(--border-dark);transition:all 0.2s;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:28px;height:28px;border-radius:8px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          </div>
+          <div style="font-size:13px;color:var(--text-3);font-weight:500;">Ajouter une nouvelle adresse</div>
+        </div>
+      </div>
+
+      <!-- Récap -->
+      <div style="background:var(--bg-card);border-radius:16px;box-shadow:0 2px 8px rgba(30,24,19,0.05);padding:18px;margin-bottom:24px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-3);margin-bottom:12px;">Résumé</div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;color:var(--text-2);"><span>2 articles</span><span style="font-variant-numeric:tabular-nums;font-weight:600;">275 000 FCFA</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;color:var(--text-2);"><span>Livraison</span><span style="font-variant-numeric:tabular-nums;font-weight:600;">5 000 FCFA</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;color:var(--text-2);"><span>Garantie (1.5%)</span><span style="font-variant-numeric:tabular-nums;font-weight:600;">4 125 FCFA</span></div>
+        <div style="border-top:1px dashed var(--border-dark);margin-top:10px;padding-top:12px;display:flex;justify-content:space-between;align-items:baseline;">
+          <span style="font-size:14px;font-weight:700;color:var(--text-1);letter-spacing:-0.01em;">Total</span>
+          <span style="font-size:20px;font-weight:800;color:var(--amber-dark);font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">284 125 <span style="font-size:13px;font-weight:700;">FCFA</span></span>
+        </div>
+      </div>
+
+      <!-- Paiement -->
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:20px;font-weight:600;color:var(--text-1);margin-bottom:14px;letter-spacing:-0.01em;">Mode de paiement</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
+        <div style="background:var(--bg-card);border-radius:16px;padding:16px;box-shadow:0 4px 12px rgba(30,24,19,0.06);border:2px solid var(--amber);cursor:pointer;text-align:center;position:relative;">
+          <div style="position:absolute;top:8px;right:8px;width:18px;height:18px;border-radius:999px;background:linear-gradient(135deg,var(--amber) 0%,var(--amber-dark) 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 4px rgba(191,121,59,0.3);">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#FFCC00 0%,#FFB800 100%);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;box-shadow:0 4px 8px rgba(255,204,0,0.25);">
+            <span style="font-size:13px;font-weight:900;color:#000;letter-spacing:-0.02em;">MTN</span>
+          </div>
+          <div style="font-size:12px;font-weight:700;color:var(--text-1);letter-spacing:-0.01em;">MTN Money</div>
+        </div>
+        <div style="background:var(--bg-card);border-radius:16px;padding:16px;box-shadow:var(--shadow-sm);border:1px solid var(--border);cursor:pointer;text-align:center;">
+          <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#0066CC 0%,#0052A3 100%);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;box-shadow:0 4px 8px rgba(0,102,204,0.2);">
+            <span style="font-size:13px;font-weight:900;color:white;letter-spacing:-0.02em;">Moov</span>
+          </div>
+          <div style="font-size:12px;font-weight:700;color:var(--text-1);letter-spacing:-0.01em;">Moov Money</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:18px;">
+        <div style="font-size:11px;color:var(--text-3);margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;">Numéro de téléphone</div>
+        <div style="display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--bg-card);border-radius:14px;border:1px solid var(--border);box-shadow:var(--shadow-xs);">
+          <span style="font-size:14px;color:var(--text-2);font-weight:600;">+229</span>
+          <div style="width:1px;height:18px;background:var(--border);"></div>
+          <input type="tel" value="97 45 23 10" style="flex:1;border:none;outline:none;font-size:15px;font-weight:700;color:var(--text-1);background:transparent;font-family:inherit;letter-spacing:-0.01em;">
+        </div>
+        <div style="font-size:11px;color:var(--text-3);margin-top:8px;line-height:1.45;">Vous recevrez une demande de confirmation sur ce numéro.</div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--forest-pale);border-radius:12px;margin-bottom:20px;border:1px solid var(--forest-pale);">
+        <div style="width:28px;height:28px;border-radius:8px;background:var(--forest);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div style="font-size:12px;color:var(--forest);font-weight:600;line-height:1.4;">Paiement sécurisé · Garantie Dedco</div>
+      </div>
+
+      <button class="float-btn-primary" style="width:100%;height:54px;font-size:15px;border-radius:14px;" onclick="showHint('Paiement en cours...')">Payer 284 125 FCFA</button>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: FAVORIS ═══ -->
+  <div class="screen-page" id="screen-favoris">
+    <div style="padding:20px;">
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);margin-bottom:16px;">Mes favoris</div>
+
+      <!-- Tabs -->
+      <div style="display:flex;gap:8px;margin-bottom:20px;overflow-x:auto;scrollbar-width:none;">
+        <div style="flex-shrink:0;padding:8px 16px;background:var(--amber);color:white;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">Tout (12)</div>
+        <div style="flex-shrink:0;padding:8px 16px;background:var(--bg-warm);color:var(--text-2);border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">Produits (6)</div>
+        <div style="flex-shrink:0;padding:8px 16px;background:var(--bg-warm);color:var(--text-2);border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">Inspirations (4)</div>
+        <div style="flex-shrink:0;padding:8px 16px;background:var(--bg-warm);color:var(--text-2);border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">Créateurs (2)</div>
+      </div>
+
+      <!-- Produits favoris -->
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-3);margin-bottom:10px;">Produits favoris</div>
+      <div class="products-grid" style="margin-bottom:24px;">
+        <div class="product-card" onclick="openProduct(1)">
+          <div class="product-img-wrap">
+            <img src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=400&q=85">
+            <span class="product-badge amber">UNIQUE</span>
+            <div class="product-fav active" onclick="event.stopPropagation(); toggleFav(this)">
+              <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Table basse Wax</div>
+            <div class="product-artisan">Kofi A.</div>
+            <div class="product-price">145 000 FCFA</div>
+          </div>
+        </div>
+        <div class="product-card" onclick="openProduct(3)">
+          <div class="product-img-wrap">
+            <img src="https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=400&q=85">
+            <div class="product-fav active" onclick="event.stopPropagation(); toggleFav(this)">
+              <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Lampe Bogolan</div>
+            <div class="product-artisan">Sophie K.</div>
+            <div class="product-price">65 000 FCFA</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Inspirations favorites -->
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-3);margin-bottom:10px;">Inspirations favorites</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;">
+        <div style="position:relative;border-radius:14px;overflow:hidden;cursor:pointer;box-shadow:var(--shadow-sm);">
+          <img src="https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&w=300&q=85" style="width:100%;aspect-ratio:3/4;object-fit:cover;">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(30,24,19,0.7),transparent 50%);"></div>
+          <div style="position:absolute;bottom:10px;left:10px;color:white;font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:13px;font-weight:600;">Salon Tropical</div>
+        </div>
+        <div style="position:relative;border-radius:14px;overflow:hidden;cursor:pointer;box-shadow:var(--shadow-sm);">
+          <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=300&q=85" style="width:100%;aspect-ratio:3/4;object-fit:cover;">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(30,24,19,0.7),transparent 50%);"></div>
+          <div style="position:absolute;bottom:10px;left:10px;color:white;font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:13px;font-weight:600;">Salle à manger Kente</div>
+        </div>
+      </div>
+
+      <!-- Créateurs favoris -->
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-3);margin-bottom:10px;">Créateurs favoris</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="creator-card" onclick="navigateTo('artisan')" style="background:var(--bg-card);border-radius:14px;box-shadow:var(--shadow-sm);padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;">
+          <div class="creator-avatar-wrap">
+            <img class="creator-avatar" src="https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=100&q=85">
+            <div class="creator-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          </div>
+          <div class="creator-info">
+            <div class="creator-name">Kofi A.</div>
+            <div class="creator-specialty">Mobilier <span class="creator-level">N3</span></div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--terracotta)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="var(--terracotta)"/></svg>
+        </div>
+        <div class="creator-card" onclick="navigateTo('designer')" style="background:var(--bg-card);border-radius:14px;box-shadow:var(--shadow-sm);padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;">
+          <div class="creator-avatar-wrap">
+            <img class="creator-avatar" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=100&q=85">
+            <div class="creator-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          </div>
+          <div class="creator-info">
+            <div class="creator-name">Ndèye S.</div>
+            <div class="creator-specialty">Designer <span class="creator-level">N4</span></div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--terracotta)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="var(--terracotta)"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: DESIGNER (plein écran) ═══ -->
+  <div class="screen-page" id="screen-designer" style="top:0;bottom:0;background:var(--bg-cream);">
+    <div style="position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;">
+      <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=85" style="width:100%;height:100%;object-fit:cover;">
+      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(30,24,19,0.8) 0%,transparent 50%);"></div>
+      <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;">
+        <div class="gallery-btn" onclick="navigateTo('home')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </div>
+      </div>
+    </div>
+    <div style="padding:20px;">
+      <div style="display:flex;align-items:flex-end;gap:14px;margin-top:-40px;position:relative;z-index:2;margin-bottom:16px;">
+        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=160&q=85" style="width:80px;height:80px;border-radius:999px;object-fit:cover;border:3px solid var(--bg-cream);box-shadow:var(--shadow-md);">
+        <div style="flex:1;padding-bottom:4px;">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);">Ndèye Sarr</div>
+          <div style="font-size:12px;color:var(--text-3);display:flex;align-items:center;gap:4px;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Cotonou · Designer d'intérieur · N4
+          </div>
+          <div style="display:flex;gap:5px;margin-top:4px;">
+            <span style="font-size:9px;padding:2px 7px;background:var(--amber-pale);color:var(--amber-dark);border-radius:999px;font-weight:600;">Afro-contemporain</span>
+            <span style="font-size:9px;padding:2px 7px;background:var(--amber-pale);color:var(--amber-dark);border-radius:999px;font-weight:600;">Minimaliste</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-bottom:20px;">
+        <div style="flex:1;text-align:center;padding:12px;background:var(--bg-card);border-radius:12px;box-shadow:var(--shadow-sm);">
+          <div style="font-size:18px;font-weight:700;color:var(--text-1);">23</div>
+          <div style="font-size:10px;color:var(--text-3);">Projets</div>
+        </div>
+        <div style="flex:1;text-align:center;padding:12px;background:var(--bg-card);border-radius:12px;box-shadow:var(--shadow-sm);">
+          <div style="font-size:18px;font-weight:700;color:var(--text-1);">4.9</div>
+          <div style="font-size:10px;color:var(--text-3);">Note</div>
+        </div>
+        <div style="flex:1;text-align:center;padding:12px;background:var(--bg-card);border-radius:12px;box-shadow:var(--shadow-sm);">
+          <div style="font-size:18px;font-weight:700;color:var(--text-1);">8 ans</div>
+          <div style="font-size:10px;color:var(--text-3);">Expérience</div>
+        </div>
+      </div>
+
+      <div style="font-size:13px;line-height:1.6;color:var(--text-2);margin-bottom:20px;">
+        Designer d'intérieur spécialisée dans le mélange de styles contemporains et de savoir-faire béninois. Je transforme les espaces en créant des intérieurs chaleureux et uniques.
+      </div>
+
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:600;color:var(--text-1);margin-bottom:12px;">Portfolio</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
+        <div style="position:relative;border-radius:12px;overflow:hidden;cursor:pointer;">
+          <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=300&q=85" style="width:100%;aspect-ratio:1;object-fit:cover;">
+          <div style="position:absolute;bottom:8px;left:8px;color:white;font-size:11px;font-weight:600;text-shadow:0 1px 4px rgba(0,0,0,0.5);">Bureau Afro</div>
+        </div>
+        <div style="position:relative;border-radius:12px;overflow:hidden;cursor:pointer;">
+          <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=300&q=85" style="width:100%;aspect-ratio:1;object-fit:cover;">
+          <div style="position:absolute;bottom:8px;left:8px;color:white;font-size:11px;font-weight:600;text-shadow:0 1px 4px rgba(0,0,0,0.5);">Salle à manger</div>
+        </div>
+      </div>
+
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:600;color:var(--text-1);margin-bottom:12px;">Services</div>
+      <div style="background:var(--bg-card);border-radius:14px;box-shadow:var(--shadow-sm);margin-bottom:12px;padding:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--text-1);margin-bottom:2px;">Consultation complète</div>
+            <div style="font-size:11px;color:var(--text-3);">Plan 2D/3D + sélection mobilier</div>
+          </div>
+          <div style="font-size:14px;font-weight:700;color:var(--amber-dark);font-variant-numeric:tabular-nums;">350 000 FCFA</div>
+        </div>
+      </div>
+    </div>
+    <div class="product-floating-cta">
+      <div class="float-btn-secondary" onclick="navigateTo('chat')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <button class="float-btn-primary" onclick="navigateTo('brief')">
+        Démarrer un projet
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: CHAT (plein écran) ═══ -->
+  <div class="screen-page" id="screen-chat" style="top:0;bottom:0;background:var(--bg-warm);">
+    <!-- Header chat — sticky, blur backdrop, shadow subtile -->
+    <div style="position:absolute;top:0;left:0;right:0;height:calc(44px + var(--safe-top) + 56px);background:rgba(255,255,255,0.92);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--border);z-index:20;padding:calc(44px + var(--safe-top)) 16px 0;display:flex;align-items:center;gap:10px;box-shadow:0 1px 3px rgba(30,24,19,0.03);">
+      <div class="gallery-btn" onclick="navigateTo('projets')" style="width:38px;height:38px;border-radius:12px;background:transparent;border:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      </div>
+      <div style="position:relative;flex-shrink:0;">
+        <img src="https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=80&q=85" style="width:38px;height:38px;border-radius:999px;object-fit:cover;border:2px solid var(--bg-card);box-shadow:0 0 0 1px var(--border);">
+        <span style="position:absolute;bottom:-1px;right:-1px;width:11px;height:11px;border-radius:999px;background:var(--forest);border:2px solid var(--bg-card);"></span>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:14px;font-weight:700;color:var(--text-1);letter-spacing:-0.01em;">Kofi Akindélé</div>
+        <div style="font-size:11px;color:var(--forest);font-weight:600;display:flex;align-items:center;gap:4px;">
+          <span style="width:5px;height:5px;border-radius:999px;background:var(--forest);"></span>
+          En ligne
+        </div>
+      </div>
+      <div style="font-size:10px;padding:4px 10px;background:var(--amber-pale);color:var(--amber-dark);border-radius:8px;font-weight:700;letter-spacing:0.02em;">CMD-2847</div>
+    </div>
+
+    <!-- Messages — fond warm pour contraste avec bulles blanches -->
+    <div id="chatMessages" style="position:absolute;top:calc(44px + var(--safe-top) + 56px);bottom:68px;left:0;right:0;overflow-y:auto;padding:20px 16px 24px;scrollbar-width:none;">
+      <div style="text-align:center;font-size:10px;color:var(--text-3);margin-bottom:18px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;">
+        <span style="background:var(--bg-warm);padding:0 12px;position:relative;z-index:1;">Aujourd'hui</span>
+      </div>
+
+      <!-- Message reçu — bulle cream avec border subtil -->
+      <div style="display:flex;gap:8px;margin-bottom:14px;max-width:82%;">
+        <img src="https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=60&q=85" style="width:30px;height:30px;border-radius:999px;object-fit:cover;flex-shrink:0;margin-top:auto;">
+        <div>
+          <div style="background:var(--bg-card);border:1px solid var(--border);padding:10px 14px;border-radius:16px 16px 16px 4px;font-size:13.5px;color:var(--text-1);line-height:1.45;box-shadow:0 1px 2px rgba(30,24,19,0.03);">Bonjour Fatou, j'ai commencé la fabrication de votre table basse. Voici l'iroko que j'ai sélectionné.</div>
+          <div style="font-size:10px;color:var(--text-3);margin-top:4px;margin-left:6px;font-weight:500;">09:15</div>
+        </div>
+      </div>
+
+      <!-- Photo reçue — radius plus grand, ombre douce -->
+      <div style="display:flex;gap:8px;margin-bottom:14px;max-width:82%;">
+        <div style="width:30px;flex-shrink:0;"></div>
+        <div>
+          <img src="https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&w=300&q=85" style="width:200px;border-radius:16px 16px 16px 4px;object-fit:cover;box-shadow:0 4px 12px rgba(30,24,19,0.08);">
+          <div style="font-size:10px;color:var(--text-3);margin-top:4px;margin-left:6px;font-weight:500;">09:16</div>
+        </div>
+      </div>
+
+      <!-- Message envoyé — gradient amber, plus moderne -->
+      <div style="display:flex;justify-content:flex-end;margin-bottom:14px;">
+        <div style="max-width:82%;">
+          <div style="background:linear-gradient(135deg,var(--amber) 0%,var(--amber-dark) 100%);color:white;padding:10px 14px;border-radius:16px 16px 4px 16px;font-size:13.5px;line-height:1.45;box-shadow:0 2px 8px rgba(191,121,59,0.2);">Super, le bois est magnifique ! Combien de temps pour la finition ?</div>
+          <div style="font-size:10px;color:var(--text-3);margin-top:4px;margin-right:6px;text-align:right;font-weight:500;">09:18</div>
+        </div>
+      </div>
+
+      <!-- Message reçu -->
+      <div style="display:flex;gap:8px;margin-bottom:14px;max-width:82%;">
+        <img src="https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=60&q=85" style="width:30px;height:30px;border-radius:999px;object-fit:cover;flex-shrink:0;margin-top:auto;">
+        <div>
+          <div style="background:var(--bg-card);border:1px solid var(--border);padding:10px 14px;border-radius:16px 16px 16px 4px;font-size:13.5px;color:var(--text-1);line-height:1.45;box-shadow:0 1px 2px rgba(30,24,19,0.03);">Environ 7 jours pour le ponçage, la teinte et le vernis. Je vous enverrai des photos à chaque étape.</div>
+          <div style="font-size:10px;color:var(--text-3);margin-top:4px;margin-left:6px;font-weight:500;">09:20</div>
+        </div>
+      </div>
+
+      <!-- Message envoyé -->
+      <div style="display:flex;justify-content:flex-end;margin-bottom:14px;">
+        <div style="max-width:82%;">
+          <div style="background:linear-gradient(135deg,var(--amber) 0%,var(--amber-dark) 100%);color:white;padding:10px 14px;border-radius:16px 16px 4px 16px;font-size:13.5px;line-height:1.45;box-shadow:0 2px 8px rgba(191,121,59,0.2);">Parfait, j'ai hâte de voir le résultat. Merci Kofi !</div>
+          <div style="font-size:10px;color:var(--text-3);margin-top:4px;margin-right:6px;text-align:right;font-weight:500;">09:22</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input bar — moderne, field large, bouton send gradient -->
+    <div style="position:absolute;bottom:0;left:0;right:0;padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));background:rgba(255,255,255,0.96);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;z-index:20;">
+      <div style="width:38px;height:38px;border-radius:12px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;" onclick="showHint('Joindre')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+      </div>
+      <input type="text" placeholder="Votre message..." style="flex:1;padding:10px 16px;background:var(--bg-warm);border:1px solid var(--border);border-radius:14px;font-size:13.5px;outline:none;font-family:inherit;color:var(--text-1);min-width:0;">
+      <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--amber) 0%,var(--amber-dark) 100%);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;box-shadow:0 4px 10px rgba(191,121,59,0.25);" onclick="showHint('Envoyé')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: AUTH (login) ═══ -->
+  <div class="screen-page" id="screen-auth" style="top:0;bottom:0;background:var(--bg-cream);">
+    <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;z-index:20;">
+      <div class="gallery-btn" onclick="navigateTo('home')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      </div>
+    </div>
+    <div style="padding:100px 24px 24px;">
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:28px;font-weight:600;color:var(--text-1);margin-bottom:6px;">Bienvenue</div>
+      <div style="font-size:13px;color:var(--text-3);margin-bottom:32px;">Connectez-vous pour accéder à vos projets et commandes.</div>
+
+      <div style="margin-bottom:16px;">
+        <div style="font-size:12px;color:var(--text-2);margin-bottom:6px;font-weight:600;">Email ou téléphone</div>
+        <input type="text" placeholder="fatou.kossou@email.bj" style="width:100%;padding:14px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;outline:none;font-family:inherit;color:var(--text-1);">
+      </div>
+
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <div style="font-size:12px;color:var(--text-2);font-weight:600;">Mot de passe</div>
+          <div style="font-size:11px;color:var(--amber-dark);font-weight:600;cursor:pointer;" onclick="showHint('Reset mot de passe')">Oublié ?</div>
+        </div>
+        <input type="password" placeholder="••••••••" style="width:100%;padding:14px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;outline:none;font-family:inherit;color:var(--text-1);">
+      </div>
+
+      <button class="float-btn-primary" style="width:100%;height:50px;font-size:15px;margin-bottom:20px;" onclick="navigateTo('home')">Se connecter</button>
+
+      <div style="text-align:center;font-size:13px;color:var(--text-3);">Pas encore de compte ? <span style="color:var(--amber-dark);font-weight:600;cursor:pointer;" onclick="showHint('Inscription')">S'inscrire</span></div>
+
+      <div style="margin-top:32px;text-align:center;font-size:11px;color:var(--text-3);line-height:1.5;">
+        En vous connectant, vous acceptez les conditions générales de Dedco et sa politique de confidentialité.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: NOTIFICATIONS ═══ -->
+  <div class="screen-page" id="screen-notifications">
+    <div style="padding:20px 16px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+        <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:26px;font-weight:600;color:var(--text-1);letter-spacing:-0.02em;">Notifications</div>
+        <div style="font-size:11px;color:var(--amber-dark);font-weight:700;cursor:pointer;padding:8px 12px;background:var(--amber-pale);border-radius:10px;letter-spacing:0.02em;" onclick="showHint('Tout marquer lu')">Tout lire</div>
+      </div>
+
+      <!-- Filtres modernes -->
+      <div style="display:flex;gap:8px;margin-bottom:24px;">
+        <div style="padding:8px 16px;background:linear-gradient(135deg,var(--amber) 0%,var(--amber-dark) 100%);color:white;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;box-shadow:0 2px 6px rgba(191,121,59,0.25);">Tout</div>
+        <div style="padding:8px 16px;background:var(--bg-card);color:var(--text-2);border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);display:flex;align-items:center;gap:6px;">Non lues <span style="display:inline-block;padding:1px 8px;background:var(--terracotta);color:white;border-radius:999px;font-size:10px;font-weight:800;">3</span></div>
+      </div>
+
+      <!-- Aujourd'hui -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.14em;color:var(--text-3);">Aujourd'hui</div>
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+      </div>
+
+      <!-- Notification 1 — non lue, message de Kofi -->
+      <div style="background:var(--bg-card);border-radius:14px;padding:14px;margin-bottom:8px;display:flex;gap:12px;cursor:pointer;box-shadow:0 1px 4px rgba(30,24,19,0.04);position:relative;border:1px solid var(--border);" onclick="navigateTo('projets')">
+        <img src="https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=80&q=85" style="width:42px;height:42px;border-radius:999px;object-fit:cover;flex-shrink:0;">
+        <div style="flex:1;min-width:0;padding-right:16px;">
+          <div style="display:flex;align-items:baseline;gap:5px;margin-bottom:2px;flex-wrap:wrap;">
+            <span style="font-size:13px;font-weight:700;color:var(--text-1);letter-spacing:-0.01em;">Kofi A.</span>
+            <span style="font-size:11.5px;color:var(--text-3);">vous a écrit</span>
+          </div>
+          <div style="font-size:12px;color:var(--text-2);line-height:1.45;">"Bonjour Fatou, j'ai commencé la fabrication..."</div>
+          <div style="font-size:10px;color:var(--text-3);margin-top:4px;font-weight:600;">Il y a 2h</div>
+        </div>
+        <div style="position:absolute;top:14px;right:14px;width:8px;height:8px;border-radius:999px;background:var(--terracotta);"></div>
+      </div>
+
+      <!-- Notification 2 — non lue, paiement -->
+      <div style="background:var(--bg-card);border-radius:14px;padding:14px;margin-bottom:8px;display:flex;gap:12px;cursor:pointer;box-shadow:0 1px 4px rgba(30,24,19,0.04);position:relative;border:1px solid var(--border);" onclick="navigateTo('projets')">
+        <div style="width:42px;height:42px;border-radius:999px;background:var(--forest);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <div style="flex:1;min-width:0;padding-right:16px;">
+          <div style="font-size:13px;font-weight:700;color:var(--text-1);letter-spacing:-0.01em;margin-bottom:2px;">Paiement confirmé</div>
+          <div style="font-size:12px;color:var(--text-2);line-height:1.45;">Votre commande <span style="font-weight:700;color:var(--text-1);font-variant-numeric:tabular-nums;">CMD-2847</span> est en production.</div>
+          <div style="font-size:10px;color:var(--text-3);margin-top:4px;font-weight:600;">Il y a 5h</div>
+        </div>
+        <div style="position:absolute;top:14px;right:14px;width:8px;height:8px;border-radius:999px;background:var(--terracotta);"></div>
+      </div>
+
+      <!-- Notification 3 — non lue, expédition -->
+      <div style="background:var(--bg-card);border-radius:14px;padding:14px;margin-bottom:16px;display:flex;gap:12px;cursor:pointer;box-shadow:0 1px 4px rgba(30,24,19,0.04);position:relative;border:1px solid var(--border);" onclick="navigateTo('tracking')">
+        <div style="width:42px;height:42px;border-radius:999px;background:var(--amber);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/></svg>
+        </div>
+        <div style="flex:1;min-width:0;padding-right:16px;">
+          <div style="font-size:13px;font-weight:700;color:var(--text-1);letter-spacing:-0.01em;margin-bottom:2px;">Commande expédiée</div>
+          <div style="font-size:12px;color:var(--text-2);line-height:1.45;">Table basse Bénin Wax en route — livraison 6-8 juillet.</div>
+          <div style="font-size:10px;color:var(--text-3);margin-top:4px;font-weight:600;">Il y a 6h</div>
+        </div>
+        <div style="position:absolute;top:14px;right:14px;width:8px;height:8px;border-radius:999px;background:var(--terracotta);"></div>
+      </div>
+
+      <!-- Hier -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.14em;color:var(--text-3);">Hier</div>
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+      </div>
+
+      <!-- Notification 4 — lue, proposition -->
+      <div style="padding:14px;margin-bottom:8px;display:flex;gap:12px;cursor:pointer;opacity:0.65;" onclick="navigateTo('projets')">
+        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=80&q=85" style="width:42px;height:42px;border-radius:999px;object-fit:cover;flex-shrink:0;">
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:baseline;gap:5px;margin-bottom:2px;flex-wrap:wrap;">
+            <span style="font-size:13px;font-weight:600;color:var(--text-2);letter-spacing:-0.01em;">Amara D.</span>
+            <span style="font-size:11px;color:var(--text-3);">a proposé un devis</span>
+          </div>
+          <div style="font-size:12px;color:var(--text-3);line-height:1.45;">245 000 FCFA — Fauteuil Sahel sur mesure</div>
+          <div style="font-size:10px;color:var(--text-3);margin-top:4px;">Hier, 16:30</div>
+        </div>
+      </div>
+
+      <!-- Notification 5 — lue, avis -->
+      <div style="padding:14px;margin-bottom:8px;display:flex;gap:12px;cursor:pointer;opacity:0.65;" onclick="showHint('Avis')">
+        <div style="width:42px;height:42px;border-radius:999px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13px;font-weight:600;color:var(--text-2);letter-spacing:-0.01em;margin-bottom:2px;">Avis obligatoire</div>
+          <div style="font-size:12px;color:var(--text-3);line-height:1.45;">Donnez votre avis sur votre Fauteuil Sahel.</div>
+          <div style="font-size:10px;color:var(--text-3);margin-top:4px;">Hier, 10:00</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB BAR — 5 onglets conformes specs §2.1 -->
+  <!-- Accueil, Inspirations, Marché, Projets, Compte -->
+  <div class="tab-bar" id="tabBar">
+    <div class="tab-item active" data-screen="home" onclick="navigateTo('home')">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9v9a2 2 0 0 1-2 2h-4v-6H10v6H6a2 2 0 0 1-2-2v-9z"/></svg>
+      <span class="tab-label">Accueil</span>
+    </div>
+    <div class="tab-item" data-screen="inspirations" onclick="navigateTo('inspirations')">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+      <span class="tab-label">Inspirations</span>
+    </div>
+    <div class="tab-item" data-screen="marketplace" onclick="navigateTo('marketplace')">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9"/><path d="M9 22V12h6v10"/></svg>
+      <span class="tab-label">Marché</span>
+    </div>
+    <div class="tab-item" data-screen="projets" onclick="navigateTo('projets')">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6"/><path d="M9 16h6"/></svg>
+      <span class="tab-label">Projets</span>
+    </div>
+    <div class="tab-item" data-screen="compte" onclick="navigateTo('compte')">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span class="tab-label">Compte</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ═══ HERO CAROUSEL ═══
+let heroIdx = 0;
+const heroSlides = document.getElementById('heroSlides');
+const heroDots = document.querySelectorAll('.hero-dot');
+const heroSlideCount = 3;
+
+function heroNext() {
+  heroIdx = (heroIdx + 1) % heroSlideCount;
+  heroSlides.style.transform = `translateX(-${heroIdx * 100}%)`;
+  heroDots.forEach((d, i) => d.classList.toggle('active', i === heroIdx));
+}
+setInterval(heroNext, 4000); // 4 secondes par slide
+
+const PRODUCTS = [
+  { id: 1, name: "Table basse Wax", artisan: "Kofi A.", price: 145000, img: "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber" },
+  { id: 2, name: "Fauteuil Sahel", artisan: "Amara D.", price: 245000, img: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=400&q=85", badge: "NOUVEAU", badgeColor: "forest" },
+  { id: 3, name: "Lampe Bogolan", artisan: "Sophie K.", price: 65000, img: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=400&q=85" },
+  { id: 4, name: "Miroir Raffia", artisan: "Sophie K.", price: 95000, img: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber" },
+  { id: 5, name: "Commode Porto-Novo", artisan: "Amara D.", price: 385000, img: "https://images.unsplash.com/photo-1517467139951-f5a925c9f9de?auto=format&fit=crop&w=400&q=85" },
+  { id: 6, name: "Tabouret Tamtam", artisan: "Brice G.", price: 76000, img: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=400&q=85" },
+];
+
+const SCENES = [
+  { name: "Salon Tropical", count: "3 pièces", img: "https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&w=400&q=85", h: 280 },
+  { name: "Salle à manger Kente", count: "5 pièces", img: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=400&q=85", h: 220 },
+  { name: "Bureau Afro-contemporain", count: "4 pièces", img: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=85", h: 320 },
+  { name: "Chambre Sahel", count: "3 pièces", img: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=400&q=85", h: 240 },
+  { name: "Entrée Zen", count: "2 pièces", img: "https://images.unsplash.com/photo-1604264726154-26480e76f4e1?auto=format&fit=crop&w=400&q=85", h: 300 },
+  { name: "Salon Bois & Wax", count: "6 pièces", img: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=400&q=85", h: 260 },
+];
+
+function formatFCFA(n) { return n.toLocaleString('fr-FR') + ' FCFA'; }
+
+// ═══ NAVIGATION ═══
+let currentScreen = 'home';
+let previousScreen = 'home';
+
+function navigateTo(screen) {
+  // Cacher tous les screen-pages
+  document.querySelectorAll('.screen-page').forEach(s => s.classList.remove('active'));
+  document.getElementById('scroll').style.display = 'none';
+
+  // Écrans plein écran (pas de header, pas de tab bar)
+  const fullscreenScreens = ['product', 'artisan', 'brief', 'tracking', 'checkout', 'designer', 'chat', 'auth'];
+  const isFullscreen = fullscreenScreens.includes(screen);
+
+  // Écrans où la search bar est utile (présence justifiée)
+  const searchVisibleScreens = ['home', 'marketplace', 'inspirations'];
+  const showSearch = searchVisibleScreens.includes(screen);
+
+  if (isFullscreen) {
+    document.querySelector('.header').style.display = 'none';
+    document.getElementById('tabBar').style.display = 'none';
+  } else {
+    document.querySelector('.header').style.display = '';
+    document.getElementById('tabBar').style.display = '';
+    // Toggle la classe no-search sur le header selon l'écran
+    document.querySelector('.header').classList.toggle('no-search', !showSearch);
+  }
+
+  // Ajuster le top des screen-pages selon la présence de la search
+  // Header sans search = ~64px, header avec search = ~100px
+  document.querySelectorAll('.screen-page').forEach(s => {
+    s.style.top = showSearch
+      ? 'calc(44px + var(--safe-top) + 100px)'
+      : 'calc(44px + var(--safe-top) + 64px)';
+  });
+
+  // Montrer le bon écran
+  if (screen === 'home') {
+    document.getElementById('scroll').style.display = '';
+  } else {
+    const el = document.getElementById('screen-' + screen);
+    if (el) {
+      el.classList.add('active');
+      el.scrollTop = 0;
+    }
+  }
+
+  // Update tab bar active (seulement pour les 5 onglets principaux)
+  const tabScreens = ['home', 'inspirations', 'marketplace', 'projets', 'compte'];
+  if (tabScreens.includes(screen)) {
+    document.querySelectorAll('.tab-item').forEach(t => {
+      t.classList.toggle('active', t.dataset.screen === screen);
+    });
+  }
+
+  currentScreen = screen;
+
+  // Update header greeting
+  const greetings = {
+    home: { hello: 'Bonjour, Fatou', name: 'Dedco<span style="color:var(--amber);">.</span>' },
+    inspirations: { hello: 'Découvrez', name: 'Inspirations' },
+    marketplace: { hello: 'Explorez', name: 'Le marché' },
+    projets: { hello: 'Suivez', name: 'Mes projets' },
+    compte: { hello: 'Gérez', name: 'Mon compte' },
+    panier: { hello: 'Finalisez', name: 'Mon panier' },
+    favoris: { hello: 'Retrouvez', name: 'Mes favoris' },
+    designer: { hello: 'Découvrez', name: 'Profil designer' },
+    notifications: { hello: 'Restez', name: 'Notifications' },
+  };
+  const g = greetings[screen] || greetings.home;
+  document.querySelector('.greeting-hello').textContent = g.hello;
+  document.querySelector('.greeting-name').innerHTML = screen === 'home'
+    ? '<span style="font-size:20px;font-weight:700;">Dedco<span style="color:var(--amber);">.</span></span>'
+    : '<span style="font-size:20px;font-weight:700;">' + g.name + '</span>';
+}
+
+function openProduct(productId) {
+  const p = PRODUCTS.find(x => x.id === productId) || PRODUCTS[0];
+  document.getElementById('productDetailName').textContent = p.name;
+  document.getElementById('productDetailPrice').textContent = formatFCFA(p.price);
+  document.getElementById('productGalleryImg').src = p.img.replace('w=400', 'w=800');
+
+  // Cacher header + tab bar
+  document.querySelector('.header').style.display = 'none';
+  document.getElementById('tabBar').style.display = 'none';
+  document.getElementById('scroll').style.display = 'none';
+  document.querySelectorAll('.screen-page').forEach(s => s.classList.remove('active'));
+
+  // Montrer fiche produit
+  const el = document.getElementById('screen-product');
+  el.classList.add('active');
+  el.scrollTop = 0;
+  previousScreen = currentScreen;
+}
+
+function closeProduct() {
+  document.getElementById('screen-product').classList.remove('active');
+  document.querySelector('.header').style.display = '';
+  document.getElementById('tabBar').style.display = '';
+  navigateTo(previousScreen);
+}
+
+// ═══ RENDER ═══
+function renderProducts() {
+  document.getElementById('productsGrid').innerHTML = PRODUCTS.slice(0, 4).map(p => `
+    <div class="product-card" onclick="openProduct(${p.id})">
+      <div class="product-img-wrap">
+        <img src="${p.img}" alt="${p.name}">
+        ${p.badge ? `<span class="product-badge ${p.badgeColor}">${p.badge}</span>` : ''}
+        <div class="product-fav" onclick="event.stopPropagation(); toggleFav(this)">
+          <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-name">${p.name}</div>
+        <div class="product-artisan">${p.artisan}</div>
+        <div class="product-price">${formatFCFA(p.price)}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderMarketplace() {
+  document.getElementById('marketGrid').innerHTML = PRODUCTS.map(p => `
+    <div class="product-card" onclick="openProduct(${p.id})">
+      <div class="product-img-wrap">
+        <img src="${p.img}" alt="${p.name}">
+        ${p.badge ? `<span class="product-badge ${p.badgeColor}">${p.badge}</span>` : ''}
+        <div class="product-fav" onclick="event.stopPropagation(); toggleFav(this)">
+          <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-name">${p.name}</div>
+        <div class="product-artisan">${p.artisan}</div>
+        <div class="product-price">${formatFCFA(p.price)}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderInspirations() {
+  document.getElementById('inspoMasonry').innerHTML = SCENES.map(s => `
+    <div class="inspo-scene" onclick="showHint('${s.name}')">
+      <img src="${s.img}" alt="${s.name}" style="height:${s.h}px;object-fit:cover;">
+      <div class="inspo-scene-overlay"></div>
+      <div class="inspo-scene-bookmark" onclick="event.stopPropagation(); toggleBookmark(this)">
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div class="inspo-scene-info">
+        <div class="inspo-scene-name">${s.name}</div>
+        <div class="inspo-scene-count">${s.count}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ═══ INTERACTIONS ═══
+function toggleFav(el) {
+  el.classList.toggle('active');
+  if (el.classList.contains('active')) {
+    el.style.transform = 'scale(1.3)';
+    setTimeout(() => el.style.transform = '', 200);
+  }
+}
+
+function toggleBookmark(el) {
+  el.classList.toggle('active');
+  if (el.classList.contains('active')) {
+    el.style.transform = 'scale(1.2)';
+    setTimeout(() => el.style.transform = '', 200);
+  }
+}
+
+function selectCat(el) {
+  document.querySelectorAll('.cat-item').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function selectFilter(el) {
+  document.querySelectorAll('.inspo-filter').forEach(f => f.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function selectMarketCat(el) {
+  document.querySelectorAll('.market-cat').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Quantity
+let currentQty = 1;
+function changeQty(delta) {
+  currentQty = Math.max(1, Math.min(99, currentQty + delta));
+  const el = document.getElementById('qtyValue');
+  el.textContent = currentQty;
+  el.style.transform = 'scale(1.2)';
+  setTimeout(() => el.style.transform = '', 150);
+}
+
+// Cart quantity stepper (panier)
+function changeCartQty(btn, delta) {
+  const qtyEl = btn.parentElement.querySelector('.cart-qty');
+  let val = parseInt(qtyEl.textContent) || 1;
+  val = Math.max(1, Math.min(99, val + delta));
+  qtyEl.textContent = val;
+  qtyEl.style.transform = 'scale(1.2)';
+  setTimeout(() => qtyEl.style.transform = '', 150);
+}
+
+// Color swatches
+function selectColor(el) {
+  document.querySelectorAll('.color-swatch').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+let hintTimer;
+function showHint(msg) {
+  const hint = document.getElementById('appHint');
+  hint.textContent = msg;
+  hint.classList.add('show');
+  clearTimeout(hintTimer);
+  hintTimer = setTimeout(() => hint.classList.remove('show'), 1600);
+}
+
+// ═══ INIT ═══
+renderProducts();
+renderMarketplace();
+renderInspirations();
+
+document.body.addEventListener('touchmove', (e) => {
+  if (e.target.closest('.screen-page') || e.target.closest('.scroll') || e.target.closest('.categories') || e.target.closest('.collections-scroll') || e.target.closest('.inspo-filters') || e.target.closest('.market-cats')) return;
+  e.preventDefault();
+}, { passive: false });
+</script>
+
+</body>
+</html>
