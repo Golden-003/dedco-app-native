@@ -1996,56 +1996,74 @@ html, body {
 
   <!-- ═══ SCREEN: PANIER ═══ -->
   <div class="screen-page" id="screen-panier">
-    <div style="padding:20px;">
-      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);margin-bottom:20px;">Mon panier</div>
+    <div style="padding:20px 16px;">
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);margin-bottom:4px;letter-spacing:-0.02em;">Mon panier</div>
+      <div style="font-size:12px;color:var(--text-3);margin-bottom:20px;">2 articles · 1 artisan</div>
 
-      <div style="background:var(--bg-card);border-radius:14px;box-shadow:var(--shadow-sm);margin-bottom:12px;padding:14px;display:flex;gap:12px;">
-        <img src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=200&q=85" style="width:72px;height:72px;border-radius:10px;object-fit:cover;flex-shrink:0;">
-        <div style="flex:1;">
-          <div style="font-size:13px;font-weight:600;color:var(--text-1);margin-bottom:2px;">Table basse Bénin Wax</div>
-          <div style="font-size:11px;color:var(--text-3);margin-bottom:8px;">Kofi Akindélé</div>
-          <div style="display:flex;align-items:center;justify-content:space-between;">
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div class="qty-btn" style="width:28px;height:28px;font-size:14px;" onclick="changeCartQty(this, -1)">−</div>
-              <div style="font-size:13px;font-weight:700;" class="cart-qty">1</div>
-              <div class="qty-btn" style="width:28px;height:28px;font-size:14px;" onclick="changeCartQty(this, 1)">+</div>
+      <!-- Item 1 -->
+      <div style="background:var(--bg-card);border-radius:16px;margin-bottom:10px;padding:14px;display:flex;gap:12px;border:1px solid var(--border);box-shadow:0 1px 4px rgba(30,24,19,0.04);">
+        <img src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=200&q=85" style="width:72px;height:72px;border-radius:12px;object-fit:cover;flex-shrink:0;">
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:2px;">
+            <div style="font-size:13.5px;font-weight:700;color:var(--text-1);letter-spacing:-0.01em;">Table basse Bénin Wax</div>
+            <div onclick="showHint('Supprimé')" style="flex-shrink:0;width:28px;height:28px;border-radius:8px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;cursor:pointer;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
             </div>
-            <div style="font-size:14px;font-weight:700;color:var(--amber-dark);font-variant-numeric:tabular-nums;">145 000 FCFA</div>
+          </div>
+          <div style="font-size:11px;color:var(--text-3);margin-bottom:8px;">Kofi Akindélé · Iroko naturel</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:0;background:var(--bg-warm);border-radius:10px;">
+              <div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--text-2);" onclick="changeCartQty(this, -1)">−</div>
+              <div style="font-size:13px;font-weight:700;min-width:24px;text-align:center;" class="cart-qty">1</div>
+              <div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--text-2);" onclick="changeCartQty(this, 1)">+</div>
+            </div>
+            <div style="font-size:15px;font-weight:800;color:var(--amber-dark);font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">145 000 <span style="font-size:11px;font-weight:700;">FCFA</span></div>
           </div>
         </div>
       </div>
 
-      <div style="background:var(--bg-card);border-radius:14px;box-shadow:var(--shadow-sm);margin-bottom:20px;padding:14px;display:flex;gap:12px;">
-        <img src="https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=200&q=85" style="width:72px;height:72px;border-radius:10px;object-fit:cover;flex-shrink:0;">
-        <div style="flex:1;">
-          <div style="font-size:13px;font-weight:600;color:var(--text-1);margin-bottom:2px;">Lampe Bogolan</div>
-          <div style="font-size:11px;color:var(--text-3);margin-bottom:8px;">Sophie Kossou</div>
-          <div style="display:flex;align-items:center;justify-content:space-between;">
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div class="qty-btn" style="width:28px;height:28px;font-size:14px;" onclick="changeCartQty(this, -1)">−</div>
-              <div style="font-size:13px;font-weight:700;" class="cart-qty">2</div>
-              <div class="qty-btn" style="width:28px;height:28px;font-size:14px;" onclick="changeCartQty(this, 1)">+</div>
+      <!-- Item 2 -->
+      <div style="background:var(--bg-card);border-radius:16px;margin-bottom:20px;padding:14px;display:flex;gap:12px;border:1px solid var(--border);box-shadow:0 1px 4px rgba(30,24,19,0.04);">
+        <img src="https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=200&q=85" style="width:72px;height:72px;border-radius:12px;object-fit:cover;flex-shrink:0;">
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:2px;">
+            <div style="font-size:13.5px;font-weight:700;color:var(--text-1);letter-spacing:-0.01em;">Lampe Bogolan</div>
+            <div onclick="showHint('Supprimé')" style="flex-shrink:0;width:28px;height:28px;border-radius:8px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;cursor:pointer;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
             </div>
-            <div style="font-size:14px;font-weight:700;color:var(--amber-dark);font-variant-numeric:tabular-nums;">130 000 FCFA</div>
+          </div>
+          <div style="font-size:11px;color:var(--text-3);margin-bottom:8px;">Sophie Kossou · Bogolan naturel</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:0;background:var(--bg-warm);border-radius:10px;">
+              <div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--text-2);" onclick="changeCartQty(this, -1)">−</div>
+              <div style="font-size:13px;font-weight:700;min-width:24px;text-align:center;" class="cart-qty">2</div>
+              <div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--text-2);" onclick="changeCartQty(this, 1)">+</div>
+            </div>
+            <div style="font-size:15px;font-weight:800;color:var(--amber-dark);font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">130 000 <span style="font-size:11px;font-weight:700;">FCFA</span></div>
           </div>
         </div>
       </div>
 
-      <div style="background:var(--bg-card);border-radius:14px;box-shadow:var(--shadow-sm);padding:16px;margin-bottom:20px;">
-        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;color:var(--text-2);"><span>Sous-total</span><span style="font-variant-numeric:tabular-nums;">275 000 FCFA</span></div>
-        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;color:var(--text-2);"><span>Livraison</span><span style="font-variant-numeric:tabular-nums;">5 000 FCFA</span></div>
-        <div style="border-top:1px solid var(--border);margin-top:8px;padding-top:12px;display:flex;justify-content:space-between;align-items:baseline;">
+      <!-- Résumé -->
+      <div style="background:var(--bg-warm);border-radius:16px;padding:16px;margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;color:var(--text-2);"><span>Sous-total</span><span style="font-variant-numeric:tabular-nums;font-weight:600;">275 000 FCFA</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;color:var(--text-2);"><span>Livraison</span><span style="font-variant-numeric:tabular-nums;font-weight:600;">5 000 FCFA</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;color:var(--text-2);"><span>Garantie (1.5%)</span><span style="font-variant-numeric:tabular-nums;font-weight:600;">4 125 FCFA</span></div>
+        <div style="border-top:1px dashed var(--border-dark);margin-top:10px;padding-top:12px;display:flex;justify-content:space-between;align-items:baseline;">
           <span style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:16px;font-weight:600;color:var(--text-1);">Total</span>
-          <span style="font-size:18px;font-weight:700;color:var(--amber-dark);font-variant-numeric:tabular-nums;">280 000 FCFA</span>
+          <span style="font-size:20px;font-weight:800;color:var(--amber-dark);font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">284 125 <span style="font-size:12px;font-weight:700;">FCFA</span></span>
         </div>
       </div>
 
-      <div style="display:flex;align-items:center;gap:6px;padding:12px;background:var(--forest-pale);border-radius:12px;margin-bottom:20px;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <div style="font-size:11px;color:var(--forest);font-weight:600;">Paiement 100% sécurisé · MTN Money & Moov Money</div>
+      <!-- Trust bar compact -->
+      <div style="display:flex;align-items:center;gap:6px;padding:10px 14px;background:var(--forest-pale);border-radius:12px;margin-bottom:20px;">
+        <div style="width:24px;height:24px;border-radius:8px;background:var(--forest);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div style="font-size:11px;color:var(--forest);font-weight:600;">Paiement sécurisé · MTN & Moov Money</div>
       </div>
 
-      <button class="float-btn-primary" style="width:100%;height:52px;font-size:15px;" onclick="navigateTo('checkout')">Valider la commande</button>
+      <button class="float-btn-primary" style="width:100%;height:52px;font-size:15px;border-radius:14px;" onclick="navigateTo('checkout')">Passer commande</button>
     </div>
   </div>
 
@@ -2174,11 +2192,180 @@ html, body {
     </div>
     <div class="product-floating-cta">
       <div class="float-btn-secondary" onclick="navigateTo('chat')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
       </div>
-      <button class="float-btn-primary" onclick="showHint('Contacter le support')">
-        Contacter le support
+      <button class="float-btn-primary" onclick="navigateTo('review')">
+        Confirmer la réception
       </button>
+    </div>
+    <div style="position:absolute;bottom:80px;left:16px;right:16px;text-align:center;">
+      <div onclick="navigateTo('litige')" style="font-size:12px;color:var(--terracotta);font-weight:600;cursor:pointer;padding:8px;">Ouvrir un litige</div>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: CONFIRMATION COMMANDE ═══ -->
+  <div class="screen-page" id="screen-confirmation" style="top:0;bottom:0;background:var(--bg-cream);">
+    <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;z-index:20;">
+      <div class="gallery-btn" onclick="navigateTo('home')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      </div>
+    </div>
+    <div style="padding:calc(44px + var(--safe-top) + 60px) 20px 24px;text-align:center;">
+      <!-- Checkmark animé -->
+      <div style="width:72px;height:72px;border-radius:999px;background:var(--forest);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 8px 24px rgba(84,140,69,0.3);">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:26px;font-weight:600;color:var(--text-1);letter-spacing:-0.02em;margin-bottom:6px;">Commande confirmée !</div>
+      <div style="font-size:13px;color:var(--text-3);margin-bottom:24px;">L'artisan a été notifié et commence la fabrication.</div>
+
+      <!-- Card commande -->
+      <div style="background:var(--bg-card);border-radius:16px;padding:16px;text-align:left;border:1px solid var(--border);box-shadow:0 2px 8px rgba(30,24,19,0.05);margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <img src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=200&q=85" style="width:48px;height:48px;border-radius:12px;object-fit:cover;">
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:700;color:var(--text-1);">Table basse Bénin Wax</div>
+            <div style="font-size:11px;color:var(--text-3);">Kofi Akindélé · N3</div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px;color:var(--text-2);border-top:1px solid var(--border);"><span>N° commande</span><span style="font-weight:700;font-variant-numeric:tabular-nums;">CMD-2847</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px;color:var(--text-2);"><span>Montant payé</span><span style="font-weight:700;font-variant-numeric:tabular-nums;color:var(--amber-dark);">145 000 FCFA</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px;color:var(--text-2);"><span>Livraison estimée</span><span style="font-weight:700;">6-8 juillet</span></div>
+      </div>
+
+      <!-- Info paiement -->
+      <div style="display:flex;align-items:center;gap:8px;padding:12px 14px;background:var(--forest-pale);border-radius:12px;margin-bottom:24px;text-align:left;">
+        <div style="width:28px;height:28px;border-radius:8px;background:var(--forest);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div style="font-size:11px;color:var(--forest);font-weight:600;line-height:1.4;">Paiement sécurisé par Dedco — versé à l'artisan après livraison.</div>
+      </div>
+
+      <button class="float-btn-primary" style="width:100%;height:52px;font-size:15px;border-radius:14px;margin-bottom:10px;" onclick="navigateTo('tracking')">Suivre ma commande</button>
+      <button style="width:100%;height:48px;font-size:14px;font-weight:600;color:var(--text-2);background:transparent;border:1px solid var(--border);border-radius:14px;cursor:pointer;font-family:inherit;" onclick="navigateTo('marketplace')">Continuer mes achats</button>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: AVIS (post-livraison) ═══ -->
+  <div class="screen-page" id="screen-review" style="top:0;bottom:0;background:var(--bg-cream);">
+    <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:20;">
+      <div class="gallery-btn" onclick="navigateTo('tracking')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:var(--text-1);">Avis</div>
+      <div style="width:38px;"></div>
+    </div>
+    <div style="padding:calc(44px + var(--safe-top) + 60px) 16px 24px;">
+      <div style="text-align:center;margin-bottom:24px;">
+        <img src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=200&q=85" style="width:64px;height:64px;border-radius:16px;object-fit:cover;margin:0 auto 12px;">
+        <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:20px;font-weight:600;color:var(--text-1);letter-spacing:-0.02em;margin-bottom:4px;">Comment était votre expérience ?</div>
+        <div style="font-size:12px;color:var(--text-3);">Table basse Bénin Wax · Kofi Akindélé</div>
+      </div>
+
+      <!-- Note globale -->
+      <div style="background:var(--bg-card);border-radius:16px;padding:20px;text-align:center;border:1px solid var(--border);margin-bottom:12px;">
+        <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:10px;">Note globale</div>
+        <div style="display:flex;justify-content:center;gap:6px;" id="starRating">
+          <div onclick="selectStar(this,1)" style="cursor:pointer;color:var(--amber);font-size:28px;line-height:1;">★</div>
+          <div onclick="selectStar(this,2)" style="cursor:pointer;color:var(--amber);font-size:28px;line-height:1;">★</div>
+          <div onclick="selectStar(this,3)" style="cursor:pointer;color:var(--amber);font-size:28px;line-height:1;">★</div>
+          <div onclick="selectStar(this,4)" style="cursor:pointer;color:var(--amber);font-size:28px;line-height:1;">★</div>
+          <div onclick="selectStar(this,5)" style="cursor:pointer;color:var(--border-dark);font-size:28px;line-height:1;">★</div>
+        </div>
+      </div>
+
+      <!-- Notes détachées -->
+      <div style="background:var(--bg-card);border-radius:16px;padding:16px;border:1px solid var(--border);margin-bottom:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+          <span style="font-size:12px;color:var(--text-2);font-weight:600;">Qualité du produit</span>
+          <div style="display:flex;gap:3px;"><span style="color:var(--amber);font-size:16px;">★★★★</span><span style="color:var(--border-dark);font-size:16px;">★</span></div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+          <span style="font-size:12px;color:var(--text-2);font-weight:600;">Respect des délais</span>
+          <div style="display:flex;gap:3px;"><span style="color:var(--amber);font-size:16px;">★★★★★</span></div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;">
+          <span style="font-size:12px;color:var(--text-2);font-weight:600;">Communication</span>
+          <div style="display:flex;gap:3px;"><span style="color:var(--amber);font-size:16px;">★★★★</span><span style="color:var(--border-dark);font-size:16px;">★</span></div>
+        </div>
+      </div>
+
+      <!-- Commentaire -->
+      <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">Commentaire</div>
+      <textarea placeholder="Partagez votre expérience..." style="width:100%;min-height:80px;padding:14px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;font-size:13px;color:var(--text-1);font-family:inherit;resize:none;outline:none;margin-bottom:16px;" maxlength="500"></textarea>
+
+      <!-- Photos -->
+      <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">Photos (optionnel)</div>
+      <div style="display:flex;gap:8px;margin-bottom:24px;">
+        <div onclick="showHint('Photo ajoutée')" style="width:72px;height:72px;border-radius:14px;border:2px dashed var(--border-dark);display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--bg-warm);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+        </div>
+      </div>
+
+      <button class="float-btn-primary" style="width:100%;height:52px;font-size:15px;border-radius:14px;" onclick="showHint('Avis publié !')">Publier mon avis</button>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN: LITIGE ═══ -->
+  <div class="screen-page" id="screen-litige" style="top:0;bottom:0;background:var(--bg-cream);">
+    <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:20;">
+      <div class="gallery-btn" onclick="navigateTo('tracking')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:var(--text-1);">Ouvrir un litige</div>
+      <div style="width:38px;"></div>
+    </div>
+    <div style="padding:calc(44px + var(--safe-top) + 60px) 16px 24px;">
+      <!-- Warning -->
+      <div style="display:flex;align-items:center;gap:10px;padding:14px;background:var(--terracotta-pale);border-radius:14px;margin-bottom:20px;border:1px solid rgba(166,68,46,0.15);">
+        <div style="width:36px;height:36px;border-radius:10px;background:var(--terracotta);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div style="font-size:11.5px;color:var(--terracotta);font-weight:600;line-height:1.45;flex:1;">Votre paiement est protégé. Dedco médie entre vous et l'artisan sous 48h.</div>
+      </div>
+
+      <!-- Commande concernée -->
+      <div style="background:var(--bg-card);border-radius:14px;padding:14px;display:flex;gap:12px;border:1px solid var(--border);margin-bottom:20px;">
+        <img src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=200&q=85" style="width:48px;height:48px;border-radius:12px;object-fit:cover;flex-shrink:0;">
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:700;color:var(--text-1);">Table basse Bénin Wax</div>
+          <div style="font-size:11px;color:var(--text-3);">CMD-2847 · 145 000 FCFA</div>
+        </div>
+      </div>
+
+      <!-- Motif -->
+      <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">Motif du litige</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
+        <div onclick="selectLitigeReason(this)" style="display:flex;align-items:center;gap:10px;padding:14px;background:var(--bg-card);border:2px solid var(--amber);border-radius:14px;cursor:pointer;">
+          <div style="width:20px;height:20px;border-radius:999px;background:var(--amber);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span style="font-size:13px;font-weight:600;color:var(--text-1);">Produit non conforme</span>
+        </div>
+        <div onclick="selectLitigeReason(this)" style="display:flex;align-items:center;gap:10px;padding:14px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;cursor:pointer;">
+          <div style="width:20px;height:20px;border-radius:999px;border:2px solid var(--border-dark);flex-shrink:0;"></div>
+          <span style="font-size:13px;font-weight:600;color:var(--text-2);">Produit endommagé</span>
+        </div>
+        <div onclick="selectLitigeReason(this)" style="display:flex;align-items:center;gap:10px;padding:14px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;cursor:pointer;">
+          <div style="width:20px;height:20px;border-radius:999px;border:2px solid var(--border-dark);flex-shrink:0;"></div>
+          <span style="font-size:13px;font-weight:600;color:var(--text-2);">Retard de livraison</span>
+        </div>
+        <div onclick="selectLitigeReason(this)" style="display:flex;align-items:center;gap:10px;padding:14px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;cursor:pointer;">
+          <div style="width:20px;height:20px;border-radius:999px;border:2px solid var(--border-dark);flex-shrink:0;"></div>
+          <span style="font-size:13px;font-weight:600;color:var(--text-2);">Autre motif</span>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">Description</div>
+      <textarea placeholder="Décrivez le problème..." style="width:100%;min-height:80px;padding:14px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;font-size:13px;color:var(--text-1);font-family:inherit;resize:none;outline:none;margin-bottom:16px;" maxlength="500"></textarea>
+
+      <!-- Photos -->
+      <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">Photos (obligatoire)</div>
+      <div style="display:flex;gap:8px;margin-bottom:24px;">
+        <div onclick="showHint('Photo ajoutée')" style="width:72px;height:72px;border-radius:14px;border:2px dashed var(--border-dark);display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--bg-warm);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+        </div>
+      </div>
+
+      <button class="float-btn-primary" style="width:100%;height:52px;font-size:15px;border-radius:14px;background:var(--terracotta);box-shadow:0 6px 16px rgba(166,68,46,0.25);" onclick="showHint('Litige ouvert · Dedco médie sous 48h')">Ouvrir le litige</button>
     </div>
   </div>
 
@@ -2285,7 +2472,7 @@ html, body {
         <div style="font-size:12px;color:var(--forest);font-weight:600;line-height:1.4;">Paiement sécurisé · Garantie Dedco</div>
       </div>
 
-      <button class="float-btn-primary" style="width:100%;height:54px;font-size:15px;border-radius:14px;" onclick="showHint('Paiement en cours...')">Payer 284 125 FCFA</button>
+      <button class="float-btn-primary" style="width:100%;height:54px;font-size:15px;border-radius:14px;" onclick="navigateTo('confirmation')">Payer 284 125 FCFA</button>
     </div>
   </div>
 
@@ -2740,7 +2927,7 @@ function navigateTo(screen) {
   document.getElementById('scroll').style.display = 'none';
 
   // Écrans plein écran (pas de header, pas de tab bar)
-  const fullscreenScreens = ['product', 'artisan', 'brief', 'tracking', 'checkout', 'designer', 'chat', 'auth'];
+  const fullscreenScreens = ['product', 'artisan', 'brief', 'tracking', 'checkout', 'designer', 'chat', 'auth', 'confirmation', 'review', 'litige'];
   const isFullscreen = fullscreenScreens.includes(screen);
 
   // Écrans où la search bar est utile (présence justifiée)
@@ -2996,6 +3183,28 @@ function changeCartQty(btn, delta) {
 function selectColor(el) {
   document.querySelectorAll('.color-swatch').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
+}
+
+function selectStar(el, rating) {
+  const stars = document.querySelectorAll('#starRating > div');
+  stars.forEach((s, i) => {
+    s.style.color = i < rating ? 'var(--amber)' : 'var(--border-dark)';
+  });
+}
+
+function selectLitigeReason(el) {
+  document.querySelectorAll('[onclick*="selectLitigeReason"]').forEach(item => {
+    item.style.border = '1px solid var(--border)';
+    item.querySelector('div').style.background = 'transparent';
+    item.querySelector('div').style.border = '2px solid var(--border-dark)';
+    item.querySelector('div').innerHTML = '';
+    item.querySelector('span').style.color = 'var(--text-2)';
+  });
+  el.style.border = '2px solid var(--amber)';
+  el.querySelector('div').style.background = 'var(--amber)';
+  el.querySelector('div').style.border = 'none';
+  el.querySelector('div').innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
+  el.querySelector('span').style.color = 'var(--text-1)';
 }
 
 let hintTimer;
