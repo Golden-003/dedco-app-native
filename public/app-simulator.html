@@ -2247,9 +2247,10 @@ html, body {
     </div>
     <div style="padding:calc(44px + var(--safe-top) + 60px) 20px 24px;text-align:center;">
       <!-- Checkmark animé -->
-      <div style="width:72px;height:72px;border-radius:999px;background:var(--forest);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 8px 24px rgba(84,140,69,0.3);">
-        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      <div style="width:72px;height:72px;border-radius:999px;background:var(--forest);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 8px 24px rgba(84,140,69,0.3);animation:checkPop 0.5s cubic-bezier(0.34,1.56,0.64,1);">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="animation:checkDraw 0.4s ease 0.2s both;"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
+      <style>@keyframes checkPop{0%{transform:scale(0);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}@keyframes checkDraw{0%{stroke-dasharray:30;stroke-dashoffset:30}100%{stroke-dasharray:30;stroke-dashoffset:0}}</style>
       <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:26px;font-weight:600;color:var(--text-1);letter-spacing:-0.02em;margin-bottom:6px;">Commande confirmée !</div>
       <div style="font-size:13px;color:var(--text-3);margin-bottom:24px;">L'artisan a été notifié et commence la fabrication.</div>
 
@@ -2414,7 +2415,7 @@ html, body {
       <div style="width:36px;"></div>
     </div>
 
-    <div style="padding:calc(44px + var(--safe-top) + 56px) 16px 24px;">
+    <div style="padding:calc(44px + var(--safe-top) + 72px) 16px 24px;">
       <!-- Stepper -->
       <div style="display:flex;align-items:center;gap:4px;margin-bottom:24px;">
         <div id="step1Dot" style="display:flex;align-items:center;gap:5px;flex:1;">
@@ -2439,14 +2440,14 @@ html, body {
         <div style="font-size:12px;color:var(--text-3);margin-bottom:20px;">Renseignez vos coordonnées pour la livraison</div>
 
         <!-- Nom + Prénom -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
           <div>
             <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Prénom</div>
-            <input type="text" value="Fatou" placeholder="Prénom" style="width:100%;padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;">
+            <input type="text" value="Fatou" placeholder="Prénom" style="width:100%;padding:14px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;">
           </div>
           <div>
             <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Nom</div>
-            <input type="text" value="Kossou" placeholder="Nom" style="width:100%;padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;">
+            <input type="text" value="Kossou" placeholder="Nom" style="width:100%;padding:14px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;">
           </div>
         </div>
 
@@ -2462,14 +2463,9 @@ html, body {
 
         <!-- Adresse -->
         <div style="margin-bottom:12px;">
-          <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Adresse</div>
-          <input type="text" value="Quartier Akpakpa, Rue 12" placeholder="Quartier, rue, repère..." style="width:100%;padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;margin-bottom:10px;">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <input type="text" value="Cotonou" placeholder="Ville" style="padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;">
-            <select style="padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;-webkit-appearance:none;">
-              <option>Littoral</option><option>Atlantique</option><option>Ouémé</option><option>Zou</option><option>Plateau</option><option>Borgou</option>
-            </select>
-          </div>
+          <div style="font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Adresse de livraison</div>
+          <input type="text" value="Quartier Akpakpa, Rue 12" placeholder="Quartier, rue, repère..." style="width:100%;padding:14px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;margin-bottom:10px;">
+          <input type="text" value="Cotonou" placeholder="Ville" style="width:100%;padding:14px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;">
         </div>
 
         <!-- Email (optionnel) -->
@@ -2509,7 +2505,7 @@ html, body {
           </div>
         </div>
 
-        <div onclick="selectDelivery(this)" style="display:flex;align-items:flex-start;gap:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:10px;cursor:pointer;">
+        <div onclick="selectDelivery(this)" style="display:flex;align-items:flex-start;gap:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:24px;cursor:pointer;">
           <div style="width:22px;height:22px;border-radius:999px;border:2px solid var(--border-dark);flex-shrink:0;margin-top:2px;"></div>
           <div style="flex:1;">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
@@ -2518,18 +2514,6 @@ html, body {
             </div>
             <div style="font-size:11px;color:var(--text-3);line-height:1.4;">Cotonou · 24 à 48h</div>
             <div style="font-size:11px;color:var(--amber-dark);font-weight:600;margin-top:4px;">Réception estimée : 15-16 juillet</div>
-          </div>
-        </div>
-
-        <div onclick="selectDelivery(this)" style="display:flex;align-items:flex-start;gap:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:24px;cursor:pointer;">
-          <div style="width:22px;height:22px;border-radius:999px;border:2px solid var(--border-dark);flex-shrink:0;margin-top:2px;"></div>
-          <div style="flex:1;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
-              <span style="font-size:13px;font-weight:700;color:var(--text-1);">Retrait à l'atelier</span>
-              <span style="font-size:13px;font-weight:800;color:var(--forest);">Gratuit</span>
-            </div>
-            <div style="font-size:11px;color:var(--text-3);line-height:1.4;">Akpakpa, Cotonou · Dès fabrication terminée</div>
-            <div style="font-size:11px;color:var(--amber-dark);font-weight:600;margin-top:4px;">Disponible : 14 juillet</div>
           </div>
         </div>
 
