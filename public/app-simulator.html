@@ -1179,7 +1179,7 @@ html, body {
   margin: 0 0 16px;
 }
 .product-floating-cta {
-  position: fixed;
+  position: absolute;
   bottom: 0; left: 0; right: 0;
   padding: 14px 16px calc(14px + env(safe-area-inset-bottom, 0px));
   background: rgba(255,255,255,0.97);
@@ -1676,7 +1676,7 @@ html, body {
     </div>
 
     <!-- Scrollable content -->
-    <div class="product-detail" style="padding-bottom:80px;">
+    <div class="product-detail" style="padding-bottom:90px;">
       <!-- Header : catégorie + nom + note + artisan -->
       <div style="font-size:10px;font-weight:800;color:var(--amber);text-transform:uppercase;letter-spacing:0.14em;margin-bottom:6px;">Mobilier · Tables</div>
       <div class="product-detail-name" id="productDetailName">Table basse Bénin Wax</div>
@@ -1818,8 +1818,8 @@ html, body {
       </div>
     </div>
 
-    <!-- CTA flottant permanent -->
-    <div class="product-floating-cta" id="productCta" style="display:none;">
+    <!-- CTA flottant — sticky dans le screen-product -->
+    <div class="product-floating-cta" id="productCta" style="display:none;position:sticky;bottom:0;">
       <button class="float-btn-primary" onclick="navigateTo('panier')" style="flex:1;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
         Ajouter au panier · 145 000 FCFA
