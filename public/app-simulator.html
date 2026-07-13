@@ -260,7 +260,12 @@ html, body {
   top: 0;
   bottom: 0;
   background: var(--bg-cream);
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
+#screen-product::-webkit-scrollbar { display: none; }
 #screen-product.active { display: block; }
 
 /* ═══ SCROLL CONTENT (home — kept for backward compat) ═══ */
@@ -1174,7 +1179,7 @@ html, body {
   margin: 0 0 16px;
 }
 .product-floating-cta {
-  position: absolute;
+  position: fixed;
   bottom: 0; left: 0; right: 0;
   padding: 14px 16px calc(14px + env(safe-area-inset-bottom, 0px));
   background: rgba(255,255,255,0.97);
@@ -1814,7 +1819,7 @@ html, body {
     </div>
 
     <!-- CTA flottant permanent -->
-    <div class="product-floating-cta">
+    <div class="product-floating-cta" id="productCta" style="display:none;">
       <button class="float-btn-primary" onclick="navigateTo('panier')" style="flex:1;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
         Ajouter au panier · 145 000 FCFA
@@ -3041,6 +3046,10 @@ function openProduct(productId) {
   el.scrollTop = 0;
   previousScreen = currentScreen;
 
+  // Afficher le CTA flottant
+  const cta = document.getElementById('productCta');
+  if (cta) cta.style.display = 'flex';
+
   // Compteur de galerie
   updateGalleryCounter();
 
@@ -3094,6 +3103,9 @@ function renderSimilarProducts(currentId) {
 
 function closeProduct() {
   document.getElementById('screen-product').classList.remove('active');
+  // Cacher le CTA flottant
+  const cta = document.getElementById('productCta');
+  if (cta) cta.style.display = 'none';
   document.querySelector('.header').style.display = '';
   document.getElementById('tabBar').style.display = '';
   navigateTo(previousScreen);
