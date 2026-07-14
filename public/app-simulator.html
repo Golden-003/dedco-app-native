@@ -417,6 +417,7 @@ html, body {
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  touch-action: pan-y;
 }
 #screen-product::-webkit-scrollbar { display: none; }
 #screen-product.active { display: block; }
@@ -1020,107 +1021,176 @@ html, body {
 .tab-label { font-size: 10px; font-weight: 500; letter-spacing: 0.01em; }
 .tab-item.active .tab-label { font-weight: 700; }
 
-/* ═══ INSPIRATIONS — cards scene éditoriales ═══ */
+/* ††† INSPIRATIONS — featured + masonry ††† */
+.inspo-filters {
+  display: flex;
+  gap: 8px;
+  padding: 2px 16px 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.inspo-filters::-webkit-scrollbar { display: none; }
+.inspo-filter {
+  flex-shrink: 0;
+  padding: 7px 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--bg-warm);
+  color: var(--text-2);
+  user-select: none;
+  -webkit-user-select: none;
+}
+.inspo-filter:active { transform: scale(0.95); }
+.inspo-filter.active {
+  background: var(--ink);
+  color: white;
+}
+/* Featured scene — full width hero */
+.inspo-featured {
+  margin: 0 16px 12px;
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.2s;
+}
+.inspo-featured:active { transform: scale(0.98); }
+.inspo-featured img { width: 100%; display: block; height: 210px; object-fit: cover; }
+.inspo-featured-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(26,22,18,0.75) 0%, rgba(26,22,18,0.12) 50%, transparent 70%);
+}
+.inspo-featured-info {
+  position: absolute;
+  bottom: 16px; left: 16px; right: 50px;
+  color: white;
+}
+.inspo-featured-name {
+  font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 3px;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+.inspo-featured-count {
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0.85;
+}
+.inspo-featured-tag {
+  position: absolute;
+  top: 12px; left: 12px;
+  padding: 5px 11px;
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-1);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.inspo-featured-bookmark {
+  position: absolute;
+  top: 12px; right: 12px;
+  width: 34px; height: 34px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+  z-index: 2;
+}
+.inspo-featured-bookmark:active { transform: scale(0.88); }
+.inspo-featured-bookmark svg { width: 16px; height: 16px; color: var(--text-2); fill: none; stroke: currentColor; stroke-width: 2; transition: color 0.2s, fill 0.2s; }
+.inspo-featured-bookmark.active { background: rgba(191,121,59,0.15); }
+.inspo-featured-bookmark.active svg { color: var(--amber); fill: var(--amber); stroke: var(--amber); }
+/* Masonry grid */
 .inspo-masonry {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  column-count: 2;
+  column-gap: 10px;
+  padding: 0 16px 100px;
 }
 .inspo-scene {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
+  break-inside: avoid;
+  margin-bottom: 10px;
   border-radius: 14px;
-  background: var(--bg-warm);
+  overflow: hidden;
+  position: relative;
   cursor: pointer;
-  transition: transform 0.15s;
-  aspect-ratio: 3/4;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.2s;
+  opacity: 0;
+  transform: translateY(12px);
+  animation: inspoStagger 0.4s ease forwards;
 }
-.inspo-scene:active { transform: scale(0.98); }
-.inspo-scene img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+.inspo-scene:active { transform: scale(0.97); }
+@keyframes inspoStagger {
+  to { opacity: 1; transform: translateY(0); }
 }
+.inspo-scene img { width: 100%; display: block; }
 .inspo-scene-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(30,24,19,0.78) 0%, rgba(30,24,19,0.15) 45%, transparent 70%);
-  pointer-events: none;
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(26,22,18,0.72) 0%, rgba(26,22,18,0.08) 42%, transparent 60%);
 }
-.inspo-scene-room {
+.inspo-scene-info {
+  position: absolute;
+  bottom: 10px; left: 10px; right: 36px;
+  color: white;
+}
+.inspo-scene-name {
+  font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 1px;
+  line-height: 1.2;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.inspo-scene-count {
+  font-size: 9.5px;
+  font-weight: 600;
+  opacity: 0.85;
+  letter-spacing: 0.02em;
+}
+.inspo-scene-tag {
   position: absolute;
   top: 8px; left: 8px;
   padding: 3px 8px;
-  background: rgba(255,255,255,0.92);
+  background: rgba(255,255,255,0.88);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border-radius: 999px;
+  border-radius: 6px;
   font-size: 9px;
   font-weight: 700;
   color: var(--text-1);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
 }
 .inspo-scene-bookmark {
   position: absolute;
   top: 8px; right: 8px;
   width: 28px; height: 28px;
   border-radius: 999px;
-  background: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.88);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: transform 0.2s, background 0.2s;
+  z-index: 2;
 }
-.inspo-scene-bookmark:active { transform: scale(0.85); }
-.inspo-scene-bookmark svg { width: 13px; height: 13px; color: var(--text-2); fill: none; stroke: currentColor; }
-.inspo-scene-bookmark.active svg { color: var(--terracotta); fill: var(--terracotta); }
-.inspo-scene-info {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  padding: 10px 12px;
-  color: white;
-}
-.inspo-scene-name {
-  font-family: 'Quache','Plus Jakarta Sans',Georgia,serif;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
-  margin-bottom: 2px;
-}
-.inspo-scene-style {
-  font-size: 10px;
-  color: rgba(255,255,255,0.78);
-  font-weight: 500;
-  margin-bottom: 6px;
-}
-.inspo-scene-meta {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 10px;
-  color: rgba(255,255,255,0.92);
-  font-weight: 600;
-}
-.inspo-scene-meta svg { width: 10px; height: 10px; }
-.inspo-scene-meta .dot {
-  width: 3px; height: 3px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.5);
-}
-.inspo-empty {
-  grid-column: 1 / -1;
-  padding: 60px 32px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-}
+.inspo-scene-bookmark:active { transform: scale(0.88); }
+.inspo-scene-bookmark svg { width: 13px; height: 13px; color: var(--text-2); fill: none; stroke: currentColor; stroke-width: 2; transition: color 0.2s, fill 0.2s; }
+.inspo-scene-bookmark.active { background: rgba(191,121,59,0.15); }
+.inspo-scene-bookmark.active svg { color: var(--amber); fill: var(--amber); stroke: var(--amber); }
 
 /* ═══ MARKETPLACE — grille produits étendue ═══ */
 .market-cats {
@@ -1527,12 +1597,16 @@ html, body {
   position: relative;
   width: 100%;
   aspect-ratio: 1/1;
-  overflow: hidden;
+  overflow: clip;
   background: var(--bg-warm);
 }
 .product-gallery img {
   width: 100%; height: 100%;
   object-fit: cover;
+  pointer-events: none;
+}
+#productGalleryScroll {
+  touch-action: pan-x pinch-zoom;
 }
 .product-gallery-top {
   position: absolute;
@@ -2198,27 +2272,17 @@ html, body {
 
   <!-- ═══ SCREEN: INSPIRATIONS ═══ -->
   <div class="screen-page" id="screen-inspirations">
-    <!-- Header éditorial -->
-    <div style="padding:16px 16px 0;">
-      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:24px;font-weight:600;color:var(--text-1);letter-spacing:-0.02em;line-height:1.1;">Inspirations</div>
-      <div style="font-size:11px;color:var(--text-3);margin-top:4px;line-height:1.4;">Découvrez des scènes aménagées par nos designers. Shop the Look — chaque objet est cliquable.</div>
+    <div class="inspo-filters">
+      <div class="inspo-filter active" data-filter="all" onclick="selectFilter(this)">Pour vous</div>
+      <div class="inspo-filter" data-filter="salon" onclick="selectFilter(this)">Salon</div>
+      <div class="inspo-filter" data-filter="chambre" onclick="selectFilter(this)">Chambre</div>
+      <div class="inspo-filter" data-filter="salle-a-manger" onclick="selectFilter(this)">Salle &agrave; manger</div>
+      <div class="inspo-filter" data-filter="bureau" onclick="selectFilter(this)">Bureau</div>
+      <div class="inspo-filter" data-filter="entree" onclick="selectFilter(this)">Entr&eacute;e</div>
+      <div class="inspo-filter" data-filter="exterieur" onclick="selectFilter(this)">Ext&eacute;rieur</div>
     </div>
-    <!-- Filtres par pièce -->
-    <div class="market-cats" style="padding:14px 16px 12px;">
-      <div class="market-cat active" onclick="selectInspoFilter(this, 'all')">Toutes</div>
-      <div class="market-cat" onclick="selectInspoFilter(this, 'Salon')">Salon</div>
-      <div class="market-cat" onclick="selectInspoFilter(this, 'Chambre')">Chambre</div>
-      <div class="market-cat" onclick="selectInspoFilter(this, 'Salle à manger')">Salle à manger</div>
-      <div class="market-cat" onclick="selectInspoFilter(this, 'Bureau')">Bureau</div>
-      <div class="market-cat" onclick="selectInspoFilter(this, 'Cuisine')">Cuisine</div>
-      <div class="market-cat" onclick="selectInspoFilter(this, 'Entrée')">Entrée</div>
-    </div>
-    <!-- Compteur résultats -->
-    <div class="market-sort" style="padding:0 16px 12px;">
-      <div class="market-sort-info"><b id="inspoCount">8</b> scènes</div>
-    </div>
-    <!-- Masonry -->
-    <div class="inspo-masonry" id="inspoMasonry" style="padding:0 16px 20px;"></div>
+    <div id="inspoFeatured"></div>
+    <div class="inspo-masonry" id="inspoMasonry"></div>
   </div>
 
   <!-- ═══ SCREEN: MARKETPLACE ═══ -->
@@ -2275,25 +2339,10 @@ html, body {
   </div>
 
   <!-- ═══ SCREEN: FICHE PRODUIT (plein écran) ═══ -->
-  <div class="screen-page" id="screen-product">
-    <!-- Galerie plein écran avec swipe horizontal -->
+  <div class="screen-page" id="screen-product" style="top:0;bottom:0;">
+    <!-- Galerie plein écran — rebuilt dynamically by openProduct() -->
     <div class="product-gallery" style="aspect-ratio:1/1;">
       <div id="productGalleryScroll" style="display:flex;width:100%;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;">
-        <div style="flex-shrink:0;width:100%;height:100%;scroll-snap-align:start;position:relative;">
-          <img id="productGalleryImg" src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=800&q=85" style="width:100%;height:100%;object-fit:cover;" alt="">
-        </div>
-        <div style="flex-shrink:0;width:100%;height:100%;scroll-snap-align:start;position:relative;background:var(--bg-warm);">
-          <img src="https://images.unsplash.com/photo-1615875605825-5eb9bb5d52ac?auto=format&fit=crop&w=800&q=85" style="width:100%;height:100%;object-fit:cover;" alt="">
-        </div>
-        <div style="flex-shrink:0;width:100%;height:100%;scroll-snap-align:start;position:relative;background:var(--bg-warm);">
-          <img src="https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=800&q=85" style="width:100%;height:100%;object-fit:cover;" alt="">
-        </div>
-        <div style="flex-shrink:0;width:100%;height:100%;scroll-snap-align:start;position:relative;background:#1a1612;display:flex;align-items:center;justify-content:center;cursor:pointer;" onclick="showHint('Vidéo de présentation')">
-          <div style="width:64px;height:64px;border-radius:999px;background:rgba(255,255,255,0.2);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,0.4);">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-          </div>
-          <div style="position:absolute;bottom:16px;left:50%;transform:translateX(-50%);color:white;font-size:11px;font-weight:600;opacity:0.8;">Vidéo de l'atelier</div>
-        </div>
       </div>
       <div class="product-gallery-top">
         <div class="gallery-btn" onclick="closeProduct()">
@@ -3807,14 +3856,18 @@ const PRODUCTS = [
 ];
 
 const SCENES = [
-  { id: 1, slug: "salon-terracotta-wax", title: "Salon Terracotta & Wax", style: "Afro-contemporain", room: "Salon", img: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=800&q=85", saves: 234, count: 3 },
-  { id: 2, slug: "chambre-zen-bambou", title: "Chambre Zen Bambou", style: "Tropical minimaliste", room: "Chambre", img: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=800&q=85", saves: 189, count: 3 },
-  { id: 3, slug: "bureau-laiton-bois", title: "Bureau Laiton & Bois", style: "Tropical luxe", room: "Bureau", img: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=85", saves: 156, count: 3 },
-  { id: 4, slug: "cuisine-terre-cuite", title: "Cuisine Terre Cuite", style: "Méditerranée africaine", room: "Cuisine", img: "https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&w=800&q=85", saves: 98, count: 3 },
-  { id: 5, slug: "entree-sculpturale", title: "Entrée Sculpturale", style: "Art & Artisanat", room: "Entrée", img: "https://images.unsplash.com/photo-1604264726154-26480e76f4e1?auto=format&fit=crop&w=800&q=85", saves: 143, count: 3 },
-  { id: 6, slug: "salon-bois-wax", title: "Salon Bois & Wax", style: "Afro-contemporain", room: "Salon", img: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=85", saves: 312, count: 6 },
-  { id: 7, slug: "salle-manger-kente", title: "Salle à Manger Kente", style: "Afro-contemporain", room: "Salle à manger", img: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=800&q=85", saves: 178, count: 5 },
-  { id: 8, slug: "chambre-sahel", title: "Chambre Sahel", style: "Tropical minimaliste", room: "Chambre", img: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=85", saves: 205, count: 4 },
+  { id: 1, name: "Salon Tropical Adjamé", tag: "salon", tagLabel: "Salon", count: "5 pièces · Kofi Akindélé", img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=600&q=85", h: 260, saved: false },
+  { id: 2, name: "Chambre Sahélienne", tag: "chambre", tagLabel: "Chambre", count: "3 pièces · Sophie Kpadé", img: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=400&q=85", h: 240, saved: false },
+  { id: 3, name: "Salle à manger Kente", tag: "salle-a-manger", tagLabel: "Salle à manger", count: "5 pièces · Amara Dossou", img: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=400&q=85", h: 220, saved: false },
+  { id: 4, name: "Bureau Afro-contemporain", tag: "bureau", tagLabel: "Bureau", count: "4 pièces · Brice Gbénou", img: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=85", h: 300, saved: false },
+  { id: 5, name: "Entrée Zen Ganvié", tag: "entree", tagLabel: "Entrée", count: "2 pièces · Léa Houngbédji", img: "https://images.unsplash.com/photo-1604264726154-26480e76f4e1?auto=format&fit=crop&w=400&q=85", h: 280, saved: false },
+  { id: 6, name: "Salon Bois & Wax", tag: "salon", tagLabel: "Salon", count: "6 pièces · Kofi Akindélé", img: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=400&q=85", h: 250, saved: false },
+  { id: 7, name: "Chambre Raffia Ouidah", tag: "chambre", tagLabel: "Chambre", count: "4 pièces · Aïcha Touré", img: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=400&q=85", h: 270, saved: false },
+  { id: 8, name: "Terrasse Palmiers", tag: "exterieur", tagLabel: "Extérieur", count: "3 pièces · Mariam Boukari", img: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=400&q=85", h: 230, saved: false },
+  { id: 9, name: "Salle à manger Minimaliste", tag: "salle-a-manger", tagLabel: "Salle à manger", count: "4 pièces · Étienne Dossou-Yovo", img: "https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&w=400&q=85", h: 210, saved: false },
+  { id: 10, name: "Bureau Créatif Cotonou", tag: "bureau", tagLabel: "Bureau", count: "5 pièces · Brice Gbénou", img: "https://images.unsplash.com/photo-1593062096033-9a26b09da705?auto=format&fit=crop&w=400&q=85", h: 260, saved: false },
+  { id: 11, name: "Salon Terre cuite", tag: "salon", tagLabel: "Salon", count: "4 pièces · Aïcha Touré", img: "https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&w=400&q=85", h: 290, saved: false },
+  { id: 12, name: "Entrée Bogolan", tag: "entree", tagLabel: "Entrée", count: "3 pièces · Sophie Kpadé", img: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&w=400&q=85", h: 200, saved: false },
 ];
 
 function formatFCFA(n) { return n.toLocaleString('fr-FR') + ' FCFA'; }
@@ -3833,7 +3886,7 @@ function navigateTo(screen) {
   const isFullscreen = fullscreenScreens.includes(screen);
 
   // Écrans où la search bar est utile (présence justifiée)
-  const searchVisibleScreens = ['home', 'marketplace', 'inspirations'];
+  const searchVisibleScreens = ['home', 'marketplace'];
   const showSearch = searchVisibleScreens.includes(screen);
 
   if (isFullscreen) {
@@ -3905,11 +3958,23 @@ function openProduct(productId) {
   const p = PRODUCTS.find(x => x.id === productId) || PRODUCTS[0];
   document.getElementById('productDetailName').textContent = p.name;
   document.getElementById('productDetailPrice').textContent = formatFCFA(p.price);
-  document.getElementById('productGalleryImg').src = p.img.replace('w=400', 'w=800');
 
-  // Reset gallery scroll position
+  // Rebuild gallery dynamically with product-specific images
   const galleryScroll = document.getElementById('productGalleryScroll');
-  if (galleryScroll) galleryScroll.scrollLeft = 0;
+  const images = getProductImages(p);
+  galleryScroll.innerHTML = images.map((src, i) => `
+    <div style="flex-shrink:0;width:100%;height:100%;scroll-snap-align:start;position:relative;${i > 0 ? 'background:var(--bg-warm);' : ''}">
+      <img src="${src}" style="width:100%;height:100%;object-fit:cover;pointer-events:none;" alt="${p.name} — vue ${i+1}" loading="${i === 0 ? 'eager' : 'lazy'}">
+    </div>
+  `).join('') + `
+    <div style="flex-shrink:0;width:100%;height:100%;scroll-snap-align:start;position:relative;background:#1a1612;display:flex;align-items:center;justify-content:center;cursor:pointer;" onclick="showHint('Vidéo de présentation')">
+      <div style="width:64px;height:64px;border-radius:999px;background:rgba(255,255,255,0.2);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,0.4);">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+      </div>
+      <div style="position:absolute;bottom:16px;left:50%;transform:translateX(-50%);color:white;font-size:11px;font-weight:600;opacity:0.8;">Vidéo de l'atelier</div>
+    </div>
+  `;
+  galleryScroll.scrollLeft = 0;
 
   // Cacher header + tab bar
   document.querySelector('.header').style.display = 'none';
@@ -3934,18 +3999,28 @@ function openProduct(productId) {
   renderSimilarProducts(productId);
 }
 
-// Met à jour le compteur quand on swipe
+// Generate 3 image variations per product using different Unsplash crops
+function getProductImages(p) {
+  const base = p.img.replace('w=400', 'w=800');
+  const crops = ['', '&crop=top', '&crop=left', '&crop=entropy'];
+  return crops.map((suffix, i) => i === 0 ? base : base + suffix);
+}
+
+// Gallery counter — no duplicate listeners
+let _galleryScrollHandler = null;
 function updateGalleryCounter() {
   const scroll = document.getElementById('productGalleryScroll');
   const counter = document.getElementById('galleryCounter');
   if (!scroll || !counter) return;
   const totalSlides = scroll.children.length;
-  const update = () => {
+  // Remove old listener to avoid leaks
+  if (_galleryScrollHandler) scroll.removeEventListener('scroll', _galleryScrollHandler);
+  _galleryScrollHandler = () => {
     const idx = Math.round(scroll.scrollLeft / scroll.offsetWidth) + 1;
     counter.textContent = idx + '/' + totalSlides;
   };
-  scroll.addEventListener('scroll', update);
-  update();
+  scroll.addEventListener('scroll', _galleryScrollHandler);
+  _galleryScrollHandler(); // init
 }
 
 // Flèches galerie
@@ -4343,60 +4418,82 @@ function applySort(sort, el, label) {
   }, 150);
 }
 
-// ═══ INSPIRATIONS — filtres + render ═══
-let inspoFilter = 'all';
-
-function selectInspoFilter(el, room) {
-  document.querySelectorAll('#screen-inspirations .market-cat').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  inspoFilter = room;
-  renderInspirations();
-}
+let currentInspoFilter = 'all';
 
 function renderInspirations() {
-  const filtered = inspoFilter === 'all' ? SCENES : SCENES.filter(s => s.room === inspoFilter);
-  document.getElementById('inspoCount').textContent = filtered.length;
-  const grid = document.getElementById('inspoMasonry');
+  const filtered = currentInspoFilter === 'all'
+    ? SCENES
+    : SCENES.filter(s => s.tag === currentInspoFilter);
+
+  const featuredEl = document.getElementById('inspoFeatured');
+  const container = document.getElementById('inspoMasonry');
+  if (!container) return;
+
   if (filtered.length === 0) {
-    grid.innerHTML = `
-      <div class="inspo-empty">
-        <div class="market-empty-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+    if (featuredEl) featuredEl.innerHTML = '';
+    container.innerHTML = `
+      <div style="column-span:all;text-align:center;padding:60px 20px;">
+        <div style="width:56px;height:56px;margin:0 auto 14px;border-radius:16px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
         </div>
-        <div class="market-empty-title">Aucune scène ici</div>
-        <div class="market-empty-text">Aucune inspiration pour cette pièce pour le moment. Reviens bientôt !</div>
-      </div>
-    `;
+        <div style="font-size:14px;font-weight:600;color:var(--text-2);margin-bottom:4px;">Aucune ambiance</div>
+        <div style="font-size:12px;color:var(--text-3);">Essayez un autre filtre</div>
+      </div>`;
     return;
   }
-  grid.innerHTML = filtered.map(s => `
-    <div class="inspo-scene" onclick="openScene('${s.slug}')">
-      <img src="${s.img}" alt="${s.title}" loading="lazy">
+
+  // Featured scene (first, full width)
+  const feat = filtered[0];
+  if (featuredEl) {
+    featuredEl.innerHTML = `
+    <div class="inspo-featured" onclick="showHint('${feat.name}')">
+      <img src="${feat.img}" alt="${feat.name}" loading="eager">
+      <div class="inspo-featured-overlay"></div>
+      <div class="inspo-featured-tag">${feat.tagLabel}</div>
+      <div class="inspo-featured-bookmark ${feat.saved ? 'active' : ''}" onclick="event.stopPropagation(); toggleInspoBookmark(${feat.id}, this)">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div class="inspo-featured-info">
+        <div class="inspo-featured-name">${feat.name}</div>
+        <div class="inspo-featured-count">${feat.count}</div>
+      </div>
+    </div>`;
+  }
+
+  // Rest in masonry grid
+  const rest = filtered.slice(1);
+  container.innerHTML = rest.map((s, i) => `
+    <div class="inspo-scene" style="animation-delay:${i * 60}ms" onclick="showHint('${s.name}')">
+      <img src="${s.img}" alt="${s.name}" style="height:${s.h}px;object-fit:cover;" loading="lazy">
       <div class="inspo-scene-overlay"></div>
-      <div class="inspo-scene-room">${s.room}</div>
-      <div class="inspo-scene-bookmark" onclick="event.stopPropagation(); toggleBookmark(this)">
-        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      <div class="inspo-scene-tag">${s.tagLabel}</div>
+      <div class="inspo-scene-bookmark ${s.saved ? 'active' : ''}" onclick="event.stopPropagation(); toggleInspoBookmark(${s.id}, this)">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
       </div>
       <div class="inspo-scene-info">
-        <div class="inspo-scene-name">${s.title}</div>
-        <div class="inspo-scene-style">${s.style}</div>
-        <div class="inspo-scene-meta">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          ${s.count} pièces
-          <span class="dot"></span>
-          ${s.saves} sauvegardes
-        </div>
+        <div class="inspo-scene-name">${s.name}</div>
+        <div class="inspo-scene-count">${s.count}</div>
       </div>
     </div>
   `).join('');
 }
 
-function openScene(slug) {
-  const scene = SCENES.find(s => s.slug === slug);
-  if (scene) {
-    showHint(`Scène : ${scene.title}`);
-    // TODO: créer page détaillée scene avec hotspots
+function toggleInspoBookmark(id, el) {
+  const scene = SCENES.find(s => s.id === id);
+  if (!scene) return;
+  scene.saved = !scene.saved;
+  el.classList.toggle('active');
+  if (scene.saved) {
+    el.style.transform = 'scale(1.25)';
+    setTimeout(() => el.style.transform = '', 200);
   }
+}
+
+function selectFilter(el) {
+  document.querySelectorAll('.inspo-filter').forEach(f => f.classList.remove('active'));
+  el.classList.add('active');
+  currentInspoFilter = el.dataset.filter || 'all';
+  renderInspirations();
 }
 
 // ═══ INTERACTIONS ═══
@@ -4418,12 +4515,6 @@ function toggleBookmark(el) {
 
 function selectCat(el) {
   document.querySelectorAll('.cat-item').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-}
-
-function selectFilter(el) {
-  // Legacy — anciens filtres inspirations remplacés par selectInspoFilter
-  document.querySelectorAll('.inspo-filter').forEach(f => f.classList.remove('active'));
   el.classList.add('active');
 }
 
