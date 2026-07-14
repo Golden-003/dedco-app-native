@@ -2213,7 +2213,7 @@ html, body {
       <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;">
         <div>
           <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:24px;font-weight:600;color:var(--text-1);letter-spacing:-0.02em;">Marketplace</div>
-          <div style="font-size:11px;color:var(--text-3);margin-top:2px;"><span class="font-numeric font-semibold text-ink" id="marketCount">28</span> pièces · Fabrication artisanale</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:2px;"><span class="font-numeric font-semibold text-ink" id="marketCount">40</span> pièces · Fabrication artisanale</div>
         </div>
         <!-- Bouton filtres fonctionnel -->
         <div id="filterBtn" onclick="openFilterSheet()" style="display:flex;align-items:center;gap:5px;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;cursor:pointer;position:relative;">
@@ -2236,12 +2236,16 @@ html, body {
       <div class="market-cat" onclick="selectMarketCat(this, 'Tapis')">Tapis</div>
       <div class="market-cat" onclick="selectMarketCat(this, 'Textiles')">Textiles</div>
       <div class="market-cat" onclick="selectMarketCat(this, 'Arts de la table')">Arts de la table</div>
+      <div class="market-cat" onclick="selectMarketCat(this, 'Sculptures')">Sculptures</div>
+      <div class="market-cat" onclick="selectMarketCat(this, 'Tableaux')">Tableaux</div>
+      <div class="market-cat" onclick="selectMarketCat(this, 'Cadres')">Cadres</div>
+      <div class="market-cat" onclick="selectMarketCat(this, 'Vases')">Vases</div>
       <div class="market-cat" onclick="selectMarketCat(this, 'Objets d\'art')">Objets d'art</div>
       <div class="market-cat" onclick="selectMarketCat(this, 'Déco')">Déco</div>
     </div>
     <!-- Barre de tri -->
     <div class="market-sort">
-      <div class="market-sort-info"><b id="sortCount">28</b> résultats</div>
+      <div class="market-sort-info"><b id="sortCount">40</b> résultats</div>
       <div id="sortBtn" class="market-sort-btn" onclick="openSortSheet()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="m21 8-4-4-4 4"/><path d="M17 4v16"/></svg>
         <span id="sortLabel">Pertinence</span>
@@ -2494,11 +2498,18 @@ html, body {
           <div class="sheet-chip" onclick="toggleChip(this, 'material')">Raffia</div>
           <div class="sheet-chip" onclick="toggleChip(this, 'material')">Raphia</div>
           <div class="sheet-chip" onclick="toggleChip(this, 'material')">Céramique</div>
+          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Grès</div>
           <div class="sheet-chip" onclick="toggleChip(this, 'material')">Terre cuite</div>
           <div class="sheet-chip" onclick="toggleChip(this, 'material')">Métal</div>
+          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Bronze</div>
+          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Laiton</div>
+          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Verre</div>
           <div class="sheet-chip" onclick="toggleChip(this, 'material')">Bogolan</div>
           <div class="sheet-chip" onclick="toggleChip(this, 'material')">Kente</div>
           <div class="sheet-chip" onclick="toggleChip(this, 'material')">Tissu</div>
+          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Cauris</div>
+          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Acrylique</div>
+          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Pigments</div>
           <div class="sheet-chip" onclick="toggleChip(this, 'material')">Cire</div>
         </div>
       </div>
@@ -3234,7 +3245,7 @@ html, body {
           <img src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=200&q=85" style="width:44px;height:44px;border-radius:10px;object-fit:cover;flex-shrink:0;">
           <div style="flex:1;min-width:0;">
             <div style="font-size:12.5px;font-weight:700;color:var(--text-1);letter-spacing:-0.01em;">Table basse Bénin Wax</div>
-            <div style="font-size:10px;color:var(--text-3);">Kofi Akindélé · Quantité: 1</div>
+            <div style="font-size:10px;color:var(--text-3);">Kofi Akindélé</div>
           </div>
           <div style="font-size:13px;font-weight:800;color:var(--amber-dark);font-variant-numeric:tabular-nums;flex-shrink:0;">145 000 F</div>
         </div>
@@ -3798,6 +3809,22 @@ const PRODUCTS = [
   // Déco
   { id: 7, name: "Vase Terre Cuite", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 45000, cat: "Déco", rating: 4.8, reviews: 19, materials: ["Terre cuite"], delay: 4, img: "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?auto=format&fit=crop&w=400&q=85", badge: "NOUVEAU", badgeColor: "forest", new: true },
   { id: 28, name: "Bougie Cirage Naturel", artisan: "Sophie Kpadé", artisanImg: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&crop=faces&w=60&q=85", price: 28000, cat: "Déco", rating: 4.5, reviews: 33, materials: ["Cire"], delay: 3, img: "https://images.unsplash.com/photo-1602874801006-e26c4c5b5e8a?auto=format&fit=crop&w=400&q=85", new: false },
+  // Sculptures
+  { id: 29, name: "Sculpture Feminine Iroko", artisan: "Étienne Dossou-Yovo", artisanImg: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&crop=faces&w=60&q=85", price: 285000, cat: "Sculptures", rating: 5.0, reviews: 4, materials: ["Bois"], delay: 25, img: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber", new: false },
+  { id: 30, name: "Statuette Bronze Royalty", artisan: "Léa Houngbédji", artisanImg: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&crop=faces&w=60&q=85", price: 195000, cat: "Sculptures", rating: 4.8, reviews: 8, materials: ["Bronze","Métal"], delay: 15, img: "https://images.unsplash.com/photo-1564399579883-451a5d44ec08?auto=format&fit=crop&w=400&q=85", new: false },
+  { id: 31, name: "Tronc Céramique Noire", artisan: "Léa Houngbédji", artisanImg: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&crop=faces&w=60&q=85", price: 110000, cat: "Sculptures", rating: 4.7, reviews: 11, materials: ["Céramique"], delay: 9, img: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=400&q=85", badge: "NOUVEAU", badgeColor: "forest", new: true },
+  // Tableaux
+  { id: 32, name: "Toile Wax Abstrait 80×120", artisan: "Aïcha Touré", artisanImg: "https://images.unsplash.com/photo-1559548331-f9cb98001426?auto=format&fit=crop&crop=faces&w=60&q=85", price: 215000, cat: "Tableaux", rating: 4.9, reviews: 9, materials: ["Coton","Acrylique"], delay: 14, img: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber", new: false },
+  { id: 33, name: "Pigments Naturels Cotonou", artisan: "Aïcha Touré", artisanImg: "https://images.unsplash.com/photo-1559548331-f9cb98001426?auto=format&fit=crop&crop=faces&w=60&q=85", price: 145000, cat: "Tableaux", rating: 4.7, reviews: 13, materials: ["Coton","Pigments"], delay: 11, img: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=400&q=85", new: false },
+  { id: 34, name: "Triptyque Sahel Mix Média", artisan: "Aïcha Touré", artisanImg: "https://images.unsplash.com/photo-1559548331-f9cb98001426?auto=format&fit=crop&crop=faces&w=60&q=85", price: 365000, cat: "Tableaux", rating: 4.8, reviews: 6, materials: ["Coton","Bois","Pigments"], delay: 22, img: "https://images.unsplash.com/photo-1545987796-200677ee1011?auto=format&fit=crop&w=400&q=85", badge: "NOUVEAU", badgeColor: "forest", new: true },
+  // Cadres
+  { id: 35, name: "Cadre Photo Raffia A3", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 42000, cat: "Cadres", rating: 4.6, reviews: 18, materials: ["Bois","Raffia"], delay: 5, img: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=400&q=85", new: false },
+  { id: 36, name: "Cadre Mosaïque Cauris", artisan: "Étienne Dossou-Yovo", artisanImg: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&crop=faces&w=60&q=85", price: 68000, cat: "Cadres", rating: 4.8, reviews: 7, materials: ["Bois","Cauris"], delay: 8, img: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber", new: false },
+  { id: 37, name: "Cadre 3 Cases Iroko", artisan: "Kofi Akindélé", artisanImg: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=60&q=85", price: 85000, cat: "Cadres", rating: 4.7, reviews: 12, materials: ["Bois","Verre"], delay: 7, img: "https://images.unsplash.com/photo-1577083552431-6e5fd01988ec?auto=format&fit=crop&w=400&q=85", new: false },
+  // Vases
+  { id: 38, name: "Vase Grès Noir Artisé", artisan: "Léa Houngbédji", artisanImg: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&crop=faces&w=60&q=85", price: 78000, cat: "Vases", rating: 4.9, reviews: 16, materials: ["Céramique","Grès"], delay: 9, img: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=400&q=85", badge: "NOUVEAU", badgeColor: "forest", new: true },
+  { id: 39, name: "Vase Double Cauris", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 52000, cat: "Vases", rating: 4.6, reviews: 14, materials: ["Terre cuite","Cauris"], delay: 6, img: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=400&q=85", new: false },
+  { id: 40, name: "Vase Soliflore Bronze", artisan: "Léa Houngbédji", artisanImg: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&crop=faces&w=60&q=85", price: 95000, cat: "Vases", rating: 4.7, reviews: 8, materials: ["Bronze"], delay: 12, img: "https://images.unsplash.com/photo-1612196808214-b40b3ee79f31?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber", new: false },
 ];
 
 const SCENES = [
