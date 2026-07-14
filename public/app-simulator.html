@@ -260,9 +260,9 @@ html, body {
   100% { opacity: 0; transform: scale(0.5) translateY(-12px); }
 }
 
-/* Fade out du splash */
+/* Fade out du splash — démarre juste après la dernière icône (6.3s) */
 .splash-fade-out {
-  animation: splashFadeOut 0.6s ease 7.5s forwards;
+  animation: splashFadeOut 0.6s ease 6.5s forwards;
 }
 @keyframes splashFadeOut {
   0% { opacity: 1; }
@@ -2455,43 +2455,6 @@ html, body {
           <div class="sheet-chip" data-min="500000" data-max="9999999" onclick="quickPrice(500000,9999999,this)">500k+</div>
         </div>
       </div>
-      <!-- Matériaux -->
-      <div class="sheet-section">
-        <div class="sheet-section-title">Matériaux</div>
-        <div class="sheet-chips" id="filterMaterials">
-          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Bois</div>
-          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Wax</div>
-          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Coton</div>
-          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Laine</div>
-          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Cuir</div>
-          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Raffia</div>
-          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Raphia</div>
-          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Céramique</div>
-          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Grès</div>
-          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Terre cuite</div>
-          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Métal</div>
-          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Bronze</div>
-          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Laiton</div>
-          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Verre</div>
-          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Bogolan</div>
-          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Kente</div>
-          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Tissu</div>
-          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Cauris</div>
-          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Acrylique</div>
-          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Pigments</div>
-          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Cire</div>
-        </div>
-      </div>
-      <!-- Délai max -->
-      <div class="sheet-section">
-        <div class="sheet-section-title">Délai de fabrication</div>
-        <div class="sheet-rating-row" id="filterDelay">
-          <div class="sheet-rating-btn" onclick="selectDelay(this, 0)" data-delay="0">Tous</div>
-          <div class="sheet-rating-btn" onclick="selectDelay(this, 7)" data-delay="7">≤ 7 j</div>
-          <div class="sheet-rating-btn" onclick="selectDelay(this, 14)" data-delay="14">≤ 14 j</div>
-          <div class="sheet-rating-btn" onclick="selectDelay(this, 30)" data-delay="30">≤ 30 j</div>
-        </div>
-      </div>
       <!-- Note min -->
       <div class="sheet-section">
         <div class="sheet-section-title">Note minimum</div>
@@ -4031,15 +3994,8 @@ function renderMarketplace() {
     list = list.filter(p => p.price <= marketState.priceMax);
   }
   
-  // Matériaux
-  if (marketState.materials.length > 0) {
-    list = list.filter(p => marketState.materials.every(m => p.materials.includes(m)));
-  }
-  
-  // Délai
-  if (marketState.maxDelay > 0) {
-    list = list.filter(p => p.delay <= marketState.maxDelay);
-  }
+  // Matériaux supprimé (filtre inutile)
+  // Délai supprimé (filtre inutile)
   
   // Note min
   if (marketState.minRating > 0) {
@@ -4105,8 +4061,6 @@ const marketState = {
   sort: 'relevance',
   priceMin: null,
   priceMax: null,
-  materials: [],
-  maxDelay: 0,
   minRating: 0,
 };
 
@@ -4149,8 +4103,6 @@ function clearSearch() {
 const filterDraft = {
   priceMin: null,
   priceMax: null,
-  materials: [],
-  maxDelay: 0,
   minRating: 0,
 };
 
@@ -4167,8 +4119,6 @@ function openFilterSheet() {
   // Copier l'état courant dans le draft
   filterDraft.priceMin = marketState.priceMin;
   filterDraft.priceMax = marketState.priceMax;
-  filterDraft.materials = [...marketState.materials];
-  filterDraft.maxDelay = marketState.maxDelay;
   filterDraft.minRating = marketState.minRating;
   renderFilterSheet();
   document.getElementById('filterOverlay').classList.add('show');
@@ -4185,7 +4135,7 @@ function renderFilterSheet() {
   // Prix
   document.getElementById('filterPriceMin').value = filterDraft.priceMin || '';
   document.getElementById('filterPriceMax').value = filterDraft.priceMax || '';
-  // Désélectionner les quick price chips — match par data-min/data-max
+  // Quick price chips — match par data-min/data-max
   document.querySelectorAll('#filterPriceChips .sheet-chip').forEach(c => {
     const cmin = parseInt(c.dataset.min);
     const cmax = parseInt(c.dataset.max);
@@ -4193,16 +4143,6 @@ function renderFilterSheet() {
       filterDraft.priceMin === cmin &&
       ((cmax >= 9999999 && filterDraft.priceMax == null) || filterDraft.priceMax === cmax)
     );
-  });
-  
-  // Matériaux
-  document.querySelectorAll('#filterMaterials .sheet-chip').forEach(c => {
-    c.classList.toggle('selected', filterDraft.materials.includes(c.textContent.trim()));
-  });
-  
-  // Délai
-  document.querySelectorAll('#filterDelay .sheet-rating-btn').forEach(b => {
-    b.classList.toggle('selected', parseInt(b.dataset.delay) === filterDraft.maxDelay);
   });
   
   // Note min
@@ -4227,27 +4167,6 @@ function onPriceManualInput() {
   updateApplyCount();
 }
 
-function toggleChip(el, type) {
-  const val = el.textContent.trim();
-  const idx = filterDraft.materials.indexOf(val);
-  if (idx >= 0) {
-    filterDraft.materials.splice(idx, 1);
-    el.classList.remove('selected');
-  } else {
-    filterDraft.materials.push(val);
-    el.classList.add('selected');
-  }
-  // Désélectionner les quick price chips car on édite manuellement
-  updateApplyCount();
-}
-
-function selectDelay(el, val) {
-  document.querySelectorAll('#filterDelay .sheet-rating-btn').forEach(b => b.classList.remove('selected'));
-  el.classList.add('selected');
-  filterDraft.maxDelay = val;
-  updateApplyCount();
-}
-
 function selectMinRating(el, val) {
   document.querySelectorAll('#filterRating .sheet-rating-btn').forEach(b => b.classList.remove('selected'));
   el.classList.add('selected');
@@ -4266,8 +4185,6 @@ function updateApplyCount() {
   let count = 0;
   if (filterDraft.priceMin != null) count++;
   if (filterDraft.priceMax != null) count++;
-  if (filterDraft.materials.length > 0) count++;
-  if (filterDraft.maxDelay > 0) count++;
   if (filterDraft.minRating > 0) count++;
   
   const txt = document.getElementById('filterApplyText');
@@ -4284,8 +4201,6 @@ function applyFilters() {
   // Appliquer au state
   marketState.priceMin = filterDraft.priceMin;
   marketState.priceMax = filterDraft.priceMax;
-  marketState.materials = [...filterDraft.materials];
-  marketState.maxDelay = filterDraft.maxDelay;
   marketState.minRating = filterDraft.minRating;
   
   closeFilterSheet();
@@ -4297,8 +4212,6 @@ function applyFilters() {
 function resetFilters() {
   filterDraft.priceMin = null;
   filterDraft.priceMax = null;
-  filterDraft.materials = [];
-  filterDraft.maxDelay = 0;
   filterDraft.minRating = 0;
   renderFilterSheet();
   updateApplyCount();
@@ -4307,8 +4220,6 @@ function resetFilters() {
 function resetAllFilters() {
   marketState.priceMin = null;
   marketState.priceMax = null;
-  marketState.materials = [];
-  marketState.maxDelay = 0;
   marketState.minRating = 0;
   renderMarketplace();
   updateActiveChips();
@@ -4319,8 +4230,6 @@ function updateFilterBadge() {
   let count = 0;
   if (marketState.priceMin != null) count++;
   if (marketState.priceMax != null) count++;
-  if (marketState.materials.length > 0) count++;
-  if (marketState.maxDelay > 0) count++;
   if (marketState.minRating > 0) count++;
   const badge = document.getElementById('filterCountBadge');
   if (count > 0) {
@@ -4340,12 +4249,6 @@ function updateActiveChips() {
     chips.push({label: `≥ ${(marketState.priceMin/1000)}k FCFA`, clear: () => { marketState.priceMin=null; }});
   } else if (marketState.priceMax != null) {
     chips.push({label: `≤ ${(marketState.priceMax/1000)}k FCFA`, clear: () => { marketState.priceMax=null; }});
-  }
-  marketState.materials.forEach(m => {
-    chips.push({label: m, clear: () => { marketState.materials = marketState.materials.filter(x => x!==m); }});
-  });
-  if (marketState.maxDelay > 0) {
-    chips.push({label: `≤ ${marketState.maxDelay}j`, clear: () => { marketState.maxDelay = 0; }});
   }
   if (marketState.minRating > 0) {
     chips.push({label: `★ ${marketState.minRating}+`, clear: () => { marketState.minRating = 0; }});
