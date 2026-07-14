@@ -1322,9 +1322,10 @@ html, body {
   margin-bottom: 10px;
 }
 .sheet-price-input {
-  flex: 1 1 0;
-  min-width: 0;
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
   width: 100%;
+  max-width: calc(50% - 12px);
   text-align: center;
   padding: 10px 8px;
   background: var(--bg-card);
