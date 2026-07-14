@@ -2213,7 +2213,7 @@ html, body {
       <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;">
         <div>
           <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:24px;font-weight:600;color:var(--text-1);letter-spacing:-0.02em;">Marketplace</div>
-          <div style="font-size:11px;color:var(--text-3);margin-top:2px;"><span class="font-numeric font-semibold text-ink" id="marketCount">14</span> pièces · Fabrication artisanale</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:2px;"><span class="font-numeric font-semibold text-ink" id="marketCount">28</span> pièces · Fabrication artisanale</div>
         </div>
         <!-- Bouton filtres fonctionnel -->
         <div id="filterBtn" onclick="openFilterSheet()" style="display:flex;align-items:center;gap:5px;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;cursor:pointer;position:relative;">
@@ -2228,15 +2228,20 @@ html, body {
       <div class="market-cat active" onclick="selectMarketCat(this, 'Tout')">Tout</div>
       <div class="market-cat" onclick="selectMarketCat(this, 'Tables')">Tables</div>
       <div class="market-cat" onclick="selectMarketCat(this, 'Fauteuils')">Fauteuils</div>
-      <div class="market-cat" onclick="selectMarketCat(this, 'Luminaires')">Luminaires</div>
-      <div class="market-cat" onclick="selectMarketCat(this, 'Textiles')">Textiles</div>
-      <div class="market-cat" onclick="selectMarketCat(this, 'Déco')">Déco</div>
       <div class="market-cat" onclick="selectMarketCat(this, 'Canapés')">Canapés</div>
       <div class="market-cat" onclick="selectMarketCat(this, 'Lits')">Lits</div>
+      <div class="market-cat" onclick="selectMarketCat(this, 'Rangements')">Rangements</div>
+      <div class="market-cat" onclick="selectMarketCat(this, 'Luminaires')">Luminaires</div>
+      <div class="market-cat" onclick="selectMarketCat(this, 'Miroirs')">Miroirs</div>
+      <div class="market-cat" onclick="selectMarketCat(this, 'Tapis')">Tapis</div>
+      <div class="market-cat" onclick="selectMarketCat(this, 'Textiles')">Textiles</div>
+      <div class="market-cat" onclick="selectMarketCat(this, 'Arts de la table')">Arts de la table</div>
+      <div class="market-cat" onclick="selectMarketCat(this, 'Objets d\'art')">Objets d'art</div>
+      <div class="market-cat" onclick="selectMarketCat(this, 'Déco')">Déco</div>
     </div>
     <!-- Barre de tri -->
     <div class="market-sort">
-      <div class="market-sort-info"><b id="sortCount">14</b> résultats</div>
+      <div class="market-sort-info"><b id="sortCount">28</b> résultats</div>
       <div id="sortBtn" class="market-sort-btn" onclick="openSortSheet()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="m21 8-4-4-4 4"/><path d="M17 4v16"/></svg>
         <span id="sortLabel">Pertinence</span>
@@ -2484,6 +2489,7 @@ html, body {
           <div class="sheet-chip" onclick="toggleChip(this, 'material')">Bois</div>
           <div class="sheet-chip" onclick="toggleChip(this, 'material')">Wax</div>
           <div class="sheet-chip" onclick="toggleChip(this, 'material')">Coton</div>
+          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Laine</div>
           <div class="sheet-chip" onclick="toggleChip(this, 'material')">Cuir</div>
           <div class="sheet-chip" onclick="toggleChip(this, 'material')">Raffia</div>
           <div class="sheet-chip" onclick="toggleChip(this, 'material')">Raphia</div>
@@ -2493,6 +2499,7 @@ html, body {
           <div class="sheet-chip" onclick="toggleChip(this, 'material')">Bogolan</div>
           <div class="sheet-chip" onclick="toggleChip(this, 'material')">Kente</div>
           <div class="sheet-chip" onclick="toggleChip(this, 'material')">Tissu</div>
+          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Cire</div>
         </div>
       </div>
       <!-- Délai max -->
@@ -3751,20 +3758,46 @@ function heroNext() {
 setInterval(heroNext, 4000); // 4 secondes par slide
 
 const PRODUCTS = [
+  // Tables
   { id: 1, name: "Table basse Wax", artisan: "Kofi Akindélé", artisanImg: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=60&q=85", price: 145000, cat: "Tables", rating: 4.9, reviews: 23, materials: ["Bois","Wax"], delay: 10, img: "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber", new: false },
-  { id: 2, name: "Fauteuil Sahel", artisan: "Amara Dossou", artisanImg: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&crop=faces&w=60&q=85", price: 245000, cat: "Fauteuils", rating: 4.8, reviews: 17, materials: ["Bois","Coton"], delay: 14, img: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=400&q=85", badge: "NOUVEAU", badgeColor: "forest", new: true },
-  { id: 3, name: "Lampe Bogolan", artisan: "Sophie Kpadé", artisanImg: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&crop=faces&w=60&q=85", price: 65000, cat: "Luminaires", rating: 4.7, reviews: 31, materials: ["Céramique","Bogolan"], delay: 5, img: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=400&q=85", new: false },
-  { id: 4, name: "Miroir Raffia", artisan: "Sophie Kpadé", artisanImg: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&crop=faces&w=60&q=85", price: 95000, cat: "Déco", rating: 5.0, reviews: 8, materials: ["Raffia","Bois"], delay: 7, img: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber", new: false },
-  { id: 5, name: "Commode Porto-Novo", artisan: "Amara Dossou", artisanImg: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&crop=faces&w=60&q=85", price: 385000, cat: "Tables", rating: 4.9, reviews: 12, materials: ["Bois"], delay: 21, img: "https://images.unsplash.com/photo-1517467139951-f5a925c9f9de?auto=format&fit=crop&w=400&q=85", new: false },
-  { id: 6, name: "Tabouret Tamtam", artisan: "Brice Gbénou", artisanImg: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&crop=faces&w=60&q=85", price: 76000, cat: "Fauteuils", rating: 4.6, reviews: 24, materials: ["Bois","Tissu"], delay: 6, img: "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=400&q=85", new: false },
-  { id: 7, name: "Vase Terre Cuite", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 45000, cat: "Déco", rating: 4.8, reviews: 19, materials: ["Terre cuite"], delay: 4, img: "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?auto=format&fit=crop&w=400&q=85", badge: "NOUVEAU", badgeColor: "forest", new: true },
-  { id: 8, name: "Pouf Wax", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 85000, cat: "Textiles", rating: 4.7, reviews: 15, materials: ["Coton","Wax"], delay: 5, img: "https://images.unsplash.com/photo-1567016432779-094069958ea5?auto=format&fit=crop&w=400&q=85", new: false },
-  { id: 9, name: "Canapé Iroko 3 places", artisan: "Kofi Akindélé", artisanImg: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=60&q=85", price: 690000, cat: "Canapés", rating: 5.0, reviews: 6, materials: ["Bois","Coton"], delay: 25, img: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber", new: false },
-  { id: 10, name: "Lit King Sahel", artisan: "Amara Dossou", artisanImg: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&crop=faces&w=60&q=85", price: 540000, cat: "Lits", rating: 4.8, reviews: 9, materials: ["Bois","Coton"], delay: 28, img: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=400&q=85", new: false },
-  { id: 11, name: "Suspension Raphia", artisan: "Sophie Kpadé", artisanImg: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&crop=faces&w=60&q=85", price: 78000, cat: "Luminaires", rating: 4.6, reviews: 22, materials: ["Raphia","Métal"], delay: 8, img: "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&w=400&q=85", new: false },
-  { id: 12, name: "Tapis Kente Maison", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 165000, cat: "Textiles", rating: 4.9, reviews: 14, materials: ["Coton","Kente"], delay: 12, img: "https://images.unsplash.com/photo-1600166898405-da9535204843?auto=format&fit=crop&w=400&q=85", new: false },
   { id: 13, name: "Console Abomey", artisan: "Brice Gbénou", artisanImg: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&crop=faces&w=60&q=85", price: 295000, cat: "Tables", rating: 4.7, reviews: 7, materials: ["Bois","Métal"], delay: 18, img: "https://images.unsplash.com/photo-1532372320572-cda25653a26d?auto=format&fit=crop&w=400&q=85", badge: "NOUVEAU", badgeColor: "forest", new: true },
+  { id: 15, name: "Table à manger Kente", artisan: "Amara Dossou", artisanImg: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&crop=faces&w=60&q=85", price: 425000, cat: "Tables", rating: 4.8, reviews: 11, materials: ["Bois","Kente"], delay: 22, img: "https://images.unsplash.com/photo-1577140917170-285929fb55b7?auto=format&fit=crop&w=400&q=85", new: false },
+  // Fauteuils
+  { id: 2, name: "Fauteuil Sahel", artisan: "Amara Dossou", artisanImg: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&crop=faces&w=60&q=85", price: 245000, cat: "Fauteuils", rating: 4.8, reviews: 17, materials: ["Bois","Coton"], delay: 14, img: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=400&q=85", badge: "NOUVEAU", badgeColor: "forest", new: true },
+  { id: 6, name: "Tabouret Tamtam", artisan: "Brice Gbénou", artisanImg: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&crop=faces&w=60&q=85", price: 76000, cat: "Fauteuils", rating: 4.6, reviews: 24, materials: ["Bois","Tissu"], delay: 6, img: "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=400&q=85", new: false },
   { id: 14, name: "Fauteuil Lounge Iroko", artisan: "Kofi Akindélé", artisanImg: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=60&q=85", price: 320000, cat: "Fauteuils", rating: 4.9, reviews: 11, materials: ["Bois","Cuir"], delay: 16, img: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=400&q=85", new: false },
+  // Canapés
+  { id: 9, name: "Canapé Iroko 3 places", artisan: "Kofi Akindélé", artisanImg: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=60&q=85", price: 690000, cat: "Canapés", rating: 5.0, reviews: 6, materials: ["Bois","Coton"], delay: 25, img: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber", new: false },
+  { id: 16, name: "Canapé d'angle Sahel", artisan: "Amara Dossou", artisanImg: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&crop=faces&w=60&q=85", price: 890000, cat: "Canapés", rating: 4.7, reviews: 4, materials: ["Bois","Coton","Wax"], delay: 32, img: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=400&q=85", new: false },
+  // Lits
+  { id: 10, name: "Lit King Sahel", artisan: "Amara Dossou", artisanImg: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&crop=faces&w=60&q=85", price: 540000, cat: "Lits", rating: 4.8, reviews: 9, materials: ["Bois","Coton"], delay: 28, img: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=400&q=85", new: false },
+  { id: 17, name: "Tête de lit Raffia", artisan: "Sophie Kpadé", artisanImg: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&crop=faces&w=60&q=85", price: 185000, cat: "Lits", rating: 4.6, reviews: 13, materials: ["Bois","Raffia"], delay: 12, img: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=400&q=85", new: false },
+  // Rangements
+  { id: 5, name: "Commode Porto-Novo", artisan: "Amara Dossou", artisanImg: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&crop=faces&w=60&q=85", price: 385000, cat: "Rangements", rating: 4.9, reviews: 12, materials: ["Bois"], delay: 21, img: "https://images.unsplash.com/photo-1517467139951-f5a925c9f9de?auto=format&fit=crop&w=400&q=85", new: false },
+  { id: 18, name: "Armoire Abomey 3 portes", artisan: "Brice Gbénou", artisanImg: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&crop=faces&w=60&q=85", price: 625000, cat: "Rangements", rating: 4.8, reviews: 5, materials: ["Bois","Métal"], delay: 30, img: "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber", new: false },
+  { id: 19, name: "Étagère Iroko 5 niveaux", artisan: "Kofi Akindélé", artisanImg: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=60&q=85", price: 245000, cat: "Rangements", rating: 4.7, reviews: 8, materials: ["Bois"], delay: 15, img: "https://images.unsplash.com/photo-1594620302200-9a762244a156?auto=format&fit=crop&w=400&q=85", new: false },
+  // Luminaires
+  { id: 3, name: "Lampe Bogolan", artisan: "Sophie Kpadé", artisanImg: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&crop=faces&w=60&q=85", price: 65000, cat: "Luminaires", rating: 4.7, reviews: 31, materials: ["Céramique","Bogolan"], delay: 5, img: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=400&q=85", new: false },
+  { id: 11, name: "Suspension Raphia", artisan: "Sophie Kpadé", artisanImg: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&crop=faces&w=60&q=85", price: 78000, cat: "Luminaires", rating: 4.6, reviews: 22, materials: ["Raphia","Métal"], delay: 8, img: "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&w=400&q=85", new: false },
+  { id: 20, name: "Applique Murale Laiton", artisan: "Brice Gbénou", artisanImg: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&crop=faces&w=60&q=85", price: 92000, cat: "Luminaires", rating: 4.5, reviews: 14, materials: ["Métal"], delay: 7, img: "https://images.unsplash.com/photo-1517991104123-1d56a6e81ed9?auto=format&fit=crop&w=400&q=85", badge: "NOUVEAU", badgeColor: "forest", new: true },
+  // Miroirs
+  { id: 4, name: "Miroir Raffia", artisan: "Sophie Kpadé", artisanImg: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&crop=faces&w=60&q=85", price: 95000, cat: "Miroirs", rating: 5.0, reviews: 8, materials: ["Raffia","Bois"], delay: 7, img: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber", new: false },
+  { id: 21, name: "Miroir Solaire Cotonou", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 135000, cat: "Miroirs", rating: 4.8, reviews: 10, materials: ["Métal","Bois"], delay: 11, img: "https://images.unsplash.com/photo-1618221198498-2e5a1c6e3c4e?auto=format&fit=crop&w=400&q=85", new: false },
+  // Tapis
+  { id: 12, name: "Tapis Kente Maison", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 165000, cat: "Tapis", rating: 4.9, reviews: 14, materials: ["Coton","Kente"], delay: 12, img: "https://images.unsplash.com/photo-1600166898405-da9535204843?auto=format&fit=crop&w=400&q=85", new: false },
+  { id: 22, name: "Tapis Berbère Sahel", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 215000, cat: "Tapis", rating: 4.7, reviews: 9, materials: ["Laine","Coton"], delay: 18, img: "https://images.unsplash.com/photo-1602872030490-4a484a7b3ba6?auto=format&fit=crop&w=400&q=85", new: false },
+  // Textiles
+  { id: 8, name: "Pouf Wax", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 85000, cat: "Textiles", rating: 4.7, reviews: 15, materials: ["Coton","Wax"], delay: 5, img: "https://images.unsplash.com/photo-1567016432779-094069958ea5?auto=format&fit=crop&w=400&q=85", new: false },
+  { id: 23, name: "Lot 4 coussins Wax", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 58000, cat: "Textiles", rating: 4.6, reviews: 28, materials: ["Coton","Wax"], delay: 4, img: "https://images.unsplash.com/photo-1584346133934-2a8aaa9c7c2c?auto=format&fit=crop&w=400&q=85", new: false },
+  // Arts de la table
+  { id: 24, name: "Service Vaisselle Bogolan", artisan: "Sophie Kpadé", artisanImg: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&crop=faces&w=60&q=85", price: 125000, cat: "Arts de la table", rating: 4.8, reviews: 7, materials: ["Céramique","Bogolan"], delay: 14, img: "https://images.unsplash.com/photo-1603199506016-b9a594b593c0?auto=format&fit=crop&w=400&q=85", new: false },
+  { id: 25, name: "Plateau Cérémonie Iroko", artisan: "Kofi Akindélé", artisanImg: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=60&q=85", price: 72000, cat: "Arts de la table", rating: 4.7, reviews: 12, materials: ["Bois"], delay: 6, img: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=400&q=85", badge: "NOUVEAU", badgeColor: "forest", new: true },
+  // Objets d'art
+  { id: 26, name: "Sculpture Bois Iroko", artisan: "Brice Gbénou", artisanImg: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&crop=faces&w=60&q=85", price: 155000, cat: "Objets d'art", rating: 5.0, reviews: 5, materials: ["Bois"], delay: 20, img: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber", new: false },
+  { id: 27, name: "Masque Traditionnel Abomey", artisan: "Brice Gbénou", artisanImg: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&crop=faces&w=60&q=85", price: 98000, cat: "Objets d'art", rating: 4.9, reviews: 6, materials: ["Bois"], delay: 10, img: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=400&q=85", new: false },
+  // Déco
+  { id: 7, name: "Vase Terre Cuite", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 45000, cat: "Déco", rating: 4.8, reviews: 19, materials: ["Terre cuite"], delay: 4, img: "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?auto=format&fit=crop&w=400&q=85", badge: "NOUVEAU", badgeColor: "forest", new: true },
+  { id: 28, name: "Bougie Cirage Naturel", artisan: "Sophie Kpadé", artisanImg: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&crop=faces&w=60&q=85", price: 28000, cat: "Déco", rating: 4.5, reviews: 33, materials: ["Cire"], delay: 3, img: "https://images.unsplash.com/photo-1602874801006-e26c4c5b5e8a?auto=format&fit=crop&w=400&q=85", new: false },
 ];
 
 const SCENES = [
@@ -4038,14 +4071,6 @@ function renderMarketplace() {
           <span class="product-rating-stars">${stars}</span>
           <b>${p.rating.toFixed(1)}</b>
           <span>· ${p.reviews}</span>
-        </div>
-        <div class="product-artisan-row">
-          <img src="${p.artisanImg}" class="product-artisan-avatar" alt="">
-          <span class="product-artisan-name">${p.artisan.split(' ')[0]}</span>
-          <span class="product-artisan-verified">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            N3
-          </span>
         </div>
         <div class="product-price">${formatFCFA(p.price)}</div>
       </div>
