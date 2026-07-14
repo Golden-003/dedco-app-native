@@ -423,7 +423,7 @@ html, body {
 /* ═══ SCROLL CONTENT (home — kept for backward compat) ═══ */
 .scroll {
   position: absolute;
-  top: calc(44px + var(--safe-top) + 100px);
+  top: calc(44px + var(--safe-top) + 108px);
   bottom: 76px;
   left: 0; right: 0;
   overflow-y: auto;
@@ -1825,7 +1825,7 @@ html, body {
     </div>
     <div class="search-pill" id="searchPill">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" id="searchInput" placeholder="Rechercher une pièce, un matériau…" autocomplete="off" onfocus="onSearchFocus()" oninput="onSearchInput(this.value)" style="flex:1;background:transparent;border:none;outline:none;font-size:12.5px;color:var(--text-1);font-weight:500;font-family:inherit;letter-spacing:-0.005em;min-width:0;" />
+      <input type="text" id="searchInput" placeholder="Rechercher une pièce, un matériau…" autocomplete="off" onfocus="onSearchFocus()" oninput="onSearchInput(this.value)" style="flex:1;background:transparent;border:none;outline:none;font-size:12.5px;color:var(--text-1);font-weight:500;font-family:inherit;letter-spacing:-0.005em;min-width:0;height:18px;line-height:18px;" />
       <div class="search-clear" id="searchClear" onclick="clearSearch()" style="display:none;width:20px;height:20px;border-radius:7px;background:var(--bg-card);display:none;align-items:center;justify-content:center;cursor:pointer;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;color:var(--text-2);"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
       </div>
@@ -3815,10 +3815,10 @@ function navigateTo(screen) {
   }
 
   // Ajuster le top des screen-pages selon la présence de la search
-  // Header sans search = ~64px, header avec search = ~100px
+  // Header sans search = ~64px, header avec search = ~108px (input + marge)
   document.querySelectorAll('.screen-page').forEach(s => {
     s.style.top = showSearch
-      ? 'calc(44px + var(--safe-top) + 100px)'
+      ? 'calc(44px + var(--safe-top) + 108px)'
       : 'calc(44px + var(--safe-top) + 64px)';
   });
 
