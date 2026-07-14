@@ -1198,30 +1198,6 @@ html, body {
   font-weight: 800;
   font-variant-numeric: tabular-nums;
 }
-.product-stock-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 6px;
-}
-.product-stock {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-}
-.product-stock .stock-dot {
-  width: 6px; height: 6px;
-  border-radius: 999px;
-  flex-shrink: 0;
-}
-.product-stock.forest { color: var(--forest); }
-.product-stock.forest .stock-dot { background: var(--forest); }
-.product-stock.amber { color: var(--amber-dark); }
-.product-stock.amber .stock-dot { background: var(--amber); }
 
 /* ═══ BOTTOM SHEET FILTRES ═══ */
 .sheet-overlay {
@@ -4060,18 +4036,6 @@ function renderMarketplace() {
   grid.style.display = 'grid';
   grid.innerHTML = list.map(p => {
     const stars = '★★★★★'.slice(0, Math.round(p.rating));
-    // Stock indicator logic
-    let stockLabel, stockClass;
-    if (p.badge === 'UNIQUE') {
-      stockLabel = 'Pièce unique';
-      stockClass = 'amber';
-    } else if (p.delay >= 20) {
-      stockLabel = 'Sur commande';
-      stockClass = 'forest';
-    } else {
-      stockLabel = 'En stock';
-      stockClass = 'forest';
-    }
     return `
     <div class="product-card" onclick="openProduct(${p.id})">
       <div class="product-img-wrap">
@@ -4087,12 +4051,7 @@ function renderMarketplace() {
           <span class="product-rating-stars">${stars}</span>
           <b>${p.rating.toFixed(1)}</b>
         </div>
-        <div class="product-stock-row">
-          <span class="product-price">${formatFCFA(p.price)}</span>
-          <span class="product-stock ${stockClass}">
-            <span class="stock-dot"></span>${stockLabel}
-          </span>
-        </div>
+        <div class="product-price">${formatFCFA(p.price)}</div>
       </div>
     </div>
   `;}).join('');
