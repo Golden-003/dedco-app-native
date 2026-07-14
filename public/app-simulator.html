@@ -402,6 +402,7 @@ html, body {
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   display: none;
+  background: var(--bg-cream);
 }
 .screen-page::-webkit-scrollbar { display: none; }
 .screen-page.active { display: block; }
@@ -2417,15 +2418,15 @@ html, body {
       <div class="sheet-section">
         <div class="sheet-section-title">Budget (FCFA)</div>
         <div class="sheet-price-row">
-          <input type="number" class="sheet-price-input" id="filterPriceMin" placeholder="Min" min="0">
+          <input type="number" class="sheet-price-input" id="filterPriceMin" placeholder="Min" min="0" oninput="updateApplyCount()">
           <span class="sheet-price-sep">—</span>
-          <input type="number" class="sheet-price-input" id="filterPriceMax" placeholder="Max" min="0">
+          <input type="number" class="sheet-price-input" id="filterPriceMax" placeholder="Max" min="0" oninput="updateApplyCount()">
         </div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;">
-          <div class="sheet-chip" onclick="quickPrice(0,100000,this)">≤ 100k</div>
-          <div class="sheet-chip" onclick="quickPrice(100000,250000,this)">100k–250k</div>
-          <div class="sheet-chip" onclick="quickPrice(250000,500000,this)">250k–500k</div>
-          <div class="sheet-chip" onclick="quickPrice(500000,9999999,this)">500k+</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;" id="filterPriceChips">
+          <div class="sheet-chip" data-min="0" data-max="100000" onclick="quickPrice(0,100000,this)">≤ 100k</div>
+          <div class="sheet-chip" data-min="100000" data-max="250000" onclick="quickPrice(100000,250000,this)">100k–250k</div>
+          <div class="sheet-chip" data-min="250000" data-max="500000" onclick="quickPrice(250000,500000,this)">250k–500k</div>
+          <div class="sheet-chip" data-min="500000" data-max="9999999" onclick="quickPrice(500000,9999999,this)">500k+</div>
         </div>
       </div>
       <!-- Matériaux -->
@@ -4150,8 +4151,15 @@ function renderFilterSheet() {
   // Prix
   document.getElementById('filterPriceMin').value = filterDraft.priceMin || '';
   document.getElementById('filterPriceMax').value = filterDraft.priceMax || '';
-  // Désélectionner les quick price chips
-  document.querySelectorAll('#filterSheet .sheet-section:nth-child(1) .sheet-chip').forEach(c => c.classList.remove('selected'));
+  // Désélectionner les quick price chips — match par data-min/data-max
+  document.querySelectorAll('#filterPriceChips .sheet-chip').forEach(c => {
+    const cmin = parseInt(c.dataset.min);
+    const cmax = parseInt(c.dataset.max);
+    c.classList.toggle('selected',
+      filterDraft.priceMin === cmin &&
+      ((cmax >= 9999999 && filterDraft.priceMax == null) || filterDraft.priceMax === cmax)
+    );
+  });
   
   // Matériaux
   document.querySelectorAll('#filterMaterials .sheet-chip').forEach(c => {
@@ -4170,7 +4178,7 @@ function renderFilterSheet() {
 }
 
 function quickPrice(min, max, el) {
-  document.querySelectorAll('#filterSheet .sheet-section:nth-child(1) .sheet-chip').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('#filterPriceChips .sheet-chip').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
   filterDraft.priceMin = min;
   filterDraft.priceMax = max >= 9999999 ? null : max;
