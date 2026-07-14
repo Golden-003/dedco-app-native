@@ -1122,6 +1122,406 @@ html, body {
   border-color: var(--ink);
 }
 
+/* ═══ MARKETPLACE — barre de tri ═══ */
+.market-sort {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px 12px;
+  gap: 8px;
+}
+.market-sort-info {
+  font-size: 11px;
+  color: var(--text-3);
+  font-weight: 600;
+}
+.market-sort-info b {
+  color: var(--text-1);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.market-sort-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px;
+  background: var(--bg-warm);
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-1);
+  transition: background 0.15s;
+}
+.market-sort-btn:active { background: var(--border); }
+.market-sort-btn svg { width: 12px; height: 12px; color: var(--text-2); }
+.market-sort-btn.active { background: var(--ink); color: white; }
+.market-sort-btn.active svg { color: white; }
+
+/* Badges actifs (filtre actif) */
+.market-chips-active {
+  display: flex;
+  gap: 6px;
+  padding: 0 16px 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.market-chips-active::-webkit-scrollbar { display: none; }
+.chip-active {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 8px 5px 10px;
+  background: var(--amber-pale);
+  color: var(--amber-dark);
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.chip-active svg { width: 11px; height: 11px; }
+
+/* Card enrichie — rating + handmade badge */
+.product-handmade {
+  position: absolute;
+  bottom: 8px; left: 8px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 7px 3px 5px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 999px;
+  font-size: 8px;
+  font-weight: 800;
+  color: var(--text-1);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.product-handmade svg { width: 9px; height: 9px; color: var(--amber); }
+.product-rating {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-bottom: 4px;
+  font-size: 10px;
+  color: var(--text-3);
+}
+.product-rating-stars {
+  color: var(--amber);
+  font-size: 10px;
+  letter-spacing: -1px;
+}
+.product-rating b {
+  color: var(--text-1);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.product-artisan-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+.product-artisan-avatar {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.product-artisan-name {
+  font-size: 10px;
+  color: var(--text-2);
+  font-weight: 600;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.product-artisan-verified {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 1px 5px;
+  background: var(--forest-pale);
+  color: var(--forest);
+  border-radius: 5px;
+  font-size: 8px;
+  font-weight: 800;
+}
+.product-artisan-verified svg { width: 7px; height: 7px; }
+
+/* ═══ BOTTOM SHEET FILTRES ═══ */
+.sheet-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+  z-index: 1000;
+}
+.sheet-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.sheet-panel {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  max-height: 85%;
+  background: var(--bg-cream);
+  border-radius: 28px 28px 0 0;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 -8px 40px rgba(0,0,0,0.18);
+}
+.sheet-panel.show { transform: translateY(0); }
+.sheet-handle {
+  width: 40px;
+  height: 4px;
+  background: var(--border-dark);
+  border-radius: 999px;
+  margin: 10px auto 4px;
+  flex-shrink: 0;
+}
+.sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 18px 14px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.sheet-title {
+  font-family: 'Quache','Plus Jakarta Sans',Georgia,serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-1);
+  letter-spacing: -0.01em;
+}
+.sheet-close {
+  width: 30px; height: 30px;
+  border-radius: 10px;
+  background: var(--bg-warm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.sheet-close svg { width: 14px; height: 14px; color: var(--text-2); }
+.sheet-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px;
+  -webkit-overflow-scrolling: touch;
+}
+.sheet-section {
+  margin-bottom: 24px;
+}
+.sheet-section:last-child { margin-bottom: 8px; }
+.sheet-section-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text-1);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+.sheet-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.sheet-chip {
+  padding: 8px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.sheet-chip.selected {
+  background: var(--ink);
+  color: white;
+  border-color: var(--ink);
+}
+.sheet-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.sheet-price-input {
+  flex: 1;
+  text-align: center;
+  padding: 10px 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-1);
+  font-variant-numeric: tabular-nums;
+}
+.sheet-price-input:first-child { margin-right: 8px; }
+.sheet-price-input:last-child { margin-left: 8px; }
+.sheet-price-sep {
+  font-size: 12px;
+  color: var(--text-3);
+  font-weight: 700;
+}
+.sheet-rating-row {
+  display: flex;
+  gap: 8px;
+}
+.sheet-rating-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 11px 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.sheet-rating-btn.selected {
+  background: var(--amber-pale);
+  border-color: var(--amber);
+  color: var(--amber-dark);
+}
+.sheet-rating-btn .stars { color: var(--amber); font-size: 11px; letter-spacing: -1px; }
+.sheet-footer {
+  display: flex;
+  gap: 10px;
+  padding: 14px 18px calc(14px + var(--safe-bottom));
+  background: var(--bg-cream);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.sheet-btn-reset {
+  flex: 1;
+  height: 48px;
+  background: var(--bg-warm);
+  border: none;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-1);
+  cursor: pointer;
+}
+.sheet-btn-apply {
+  flex: 2;
+  height: 48px;
+  background: var(--ink);
+  border: none;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 800;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* ═══ BOTTOM SHEET — sort options ═══ */
+.sort-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 4px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.sort-option:last-child { border-bottom: none; }
+.sort-option:active { background: var(--bg-warm); }
+.sort-option-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-1);
+}
+.sort-option-label svg {
+  width: 18px; height: 18px;
+  color: var(--text-3);
+}
+.sort-option.selected .sort-option-label {
+  color: var(--ink);
+  font-weight: 800;
+}
+.sort-option.selected .sort-option-label svg {
+  color: var(--amber);
+}
+.sort-check {
+  color: var(--amber);
+  font-size: 16px;
+  font-weight: 800;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.sort-option.selected .sort-check { opacity: 1; }
+
+/* État vide marketplace */
+.market-empty {
+  padding: 60px 32px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.market-empty-icon {
+  width: 64px; height: 64px;
+  border-radius: 20px;
+  background: var(--bg-warm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.market-empty-icon svg { width: 28px; height: 28px; color: var(--text-3); }
+.market-empty-title {
+  font-family: 'Quache','Plus Jakarta Sans',Georgia,serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-1);
+}
+.market-empty-text {
+  font-size: 12px;
+  color: var(--text-3);
+  line-height: 1.5;
+  max-width: 240px;
+}
+.market-empty-btn {
+  margin-top: 6px;
+  padding: 10px 20px;
+  background: var(--ink);
+  color: white;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 /* ═══ FICHE PRODUIT — gallery + details + sticky CTA ═══ */
 .product-gallery {
   position: relative;
@@ -1813,26 +2213,38 @@ html, body {
       <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;">
         <div>
           <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:24px;font-weight:600;color:var(--text-1);letter-spacing:-0.02em;">Marketplace</div>
-          <div style="font-size:11px;color:var(--text-3);margin-top:2px;"><span class="font-numeric font-semibold text-ink" id="marketCount">8</span> pièces · Fabrication artisanale</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:2px;"><span class="font-numeric font-semibold text-ink" id="marketCount">14</span> pièces · Fabrication artisanale</div>
         </div>
-        <!-- Bouton filtres -->
-        <div onclick="showHint('Filtres')" style="display:flex;align-items:center;gap:5px;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;cursor:pointer;">
+        <!-- Bouton filtres fonctionnel -->
+        <div id="filterBtn" onclick="openFilterSheet()" style="display:flex;align-items:center;gap:5px;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;cursor:pointer;position:relative;">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/></svg>
           <span style="font-size:12px;font-weight:600;color:var(--text-2);">Filtres</span>
+          <span id="filterCountBadge" style="display:none;position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;padding:0 4px;background:var(--amber);color:white;border-radius:999px;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;">0</span>
         </div>
       </div>
     </div>
     <!-- Filtres catégories -->
-    <div class="market-cats" style="padding:0 16px 16px;">
-      <div class="market-cat active" onclick="selectMarketCat(this)">Tout</div>
-      <div class="market-cat" onclick="selectMarketCat(this)">Tables</div>
-      <div class="market-cat" onclick="selectMarketCat(this)">Fauteuils</div>
-      <div class="market-cat" onclick="selectMarketCat(this)">Luminaires</div>
-      <div class="market-cat" onclick="selectMarketCat(this)">Textiles</div>
-      <div class="market-cat" onclick="selectMarketCat(this)">Déco</div>
-      <div class="market-cat" onclick="selectMarketCat(this)">Canapés</div>
-      <div class="market-cat" onclick="selectMarketCat(this)">Lits</div>
+    <div class="market-cats" style="padding:0 16px 12px;">
+      <div class="market-cat active" onclick="selectMarketCat(this, 'Tout')">Tout</div>
+      <div class="market-cat" onclick="selectMarketCat(this, 'Tables')">Tables</div>
+      <div class="market-cat" onclick="selectMarketCat(this, 'Fauteuils')">Fauteuils</div>
+      <div class="market-cat" onclick="selectMarketCat(this, 'Luminaires')">Luminaires</div>
+      <div class="market-cat" onclick="selectMarketCat(this, 'Textiles')">Textiles</div>
+      <div class="market-cat" onclick="selectMarketCat(this, 'Déco')">Déco</div>
+      <div class="market-cat" onclick="selectMarketCat(this, 'Canapés')">Canapés</div>
+      <div class="market-cat" onclick="selectMarketCat(this, 'Lits')">Lits</div>
     </div>
+    <!-- Barre de tri -->
+    <div class="market-sort">
+      <div class="market-sort-info"><b id="sortCount">14</b> résultats</div>
+      <div id="sortBtn" class="market-sort-btn" onclick="openSortSheet()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="m21 8-4-4-4 4"/><path d="M17 4v16"/></svg>
+        <span id="sortLabel">Pertinence</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
+    </div>
+    <!-- Chips actifs (filtres en cours) -->
+    <div class="market-chips-active" id="marketChipsActive" style="display:none;"></div>
     <!-- Grille produits -->
     <div class="products-grid" id="marketGrid" style="padding:0 16px;"></div>
     <div style="height: 20px;"></div>
@@ -2038,6 +2450,130 @@ html, body {
 
   <!-- HINT -->
   <div class="app-hint" id="appHint"></div>
+
+  <!-- ═══ BOTTOM SHEET: FILTRES ═══ -->
+  <div class="sheet-overlay" id="filterOverlay" onclick="closeFilterSheet()"></div>
+  <div class="sheet-panel" id="filterSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div class="sheet-title">Filtres</div>
+      <div class="sheet-close" onclick="closeFilterSheet()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </div>
+    </div>
+    <div class="sheet-body">
+      <!-- Budget -->
+      <div class="sheet-section">
+        <div class="sheet-section-title">Budget (FCFA)</div>
+        <div class="sheet-price-row">
+          <input type="number" class="sheet-price-input" id="filterPriceMin" placeholder="Min" min="0">
+          <span class="sheet-price-sep">—</span>
+          <input type="number" class="sheet-price-input" id="filterPriceMax" placeholder="Max" min="0">
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <div class="sheet-chip" onclick="quickPrice(0,100000,this)">≤ 100k</div>
+          <div class="sheet-chip" onclick="quickPrice(100000,250000,this)">100k–250k</div>
+          <div class="sheet-chip" onclick="quickPrice(250000,500000,this)">250k–500k</div>
+          <div class="sheet-chip" onclick="quickPrice(500000,9999999,this)">500k+</div>
+        </div>
+      </div>
+      <!-- Matériaux -->
+      <div class="sheet-section">
+        <div class="sheet-section-title">Matériaux</div>
+        <div class="sheet-chips" id="filterMaterials">
+          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Bois</div>
+          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Wax</div>
+          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Coton</div>
+          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Cuir</div>
+          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Raffia</div>
+          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Raphia</div>
+          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Céramique</div>
+          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Terre cuite</div>
+          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Métal</div>
+          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Bogolan</div>
+          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Kente</div>
+          <div class="sheet-chip" onclick="toggleChip(this, 'material')">Tissu</div>
+        </div>
+      </div>
+      <!-- Délai max -->
+      <div class="sheet-section">
+        <div class="sheet-section-title">Délai de fabrication</div>
+        <div class="sheet-rating-row" id="filterDelay">
+          <div class="sheet-rating-btn" onclick="selectDelay(this, 0)" data-delay="0">Tous</div>
+          <div class="sheet-rating-btn" onclick="selectDelay(this, 7)" data-delay="7">≤ 7 j</div>
+          <div class="sheet-rating-btn" onclick="selectDelay(this, 14)" data-delay="14">≤ 14 j</div>
+          <div class="sheet-rating-btn" onclick="selectDelay(this, 30)" data-delay="30">≤ 30 j</div>
+        </div>
+      </div>
+      <!-- Note min -->
+      <div class="sheet-section">
+        <div class="sheet-section-title">Note minimum</div>
+        <div class="sheet-rating-row" id="filterRating">
+          <div class="sheet-rating-btn" onclick="selectMinRating(this, 0)" data-rating="0">Toutes</div>
+          <div class="sheet-rating-btn" onclick="selectMinRating(this, 4)" data-rating="4"><span class="stars">★</span> 4+</div>
+          <div class="sheet-rating-btn" onclick="selectMinRating(this, 4.5)" data-rating="4.5"><span class="stars">★</span> 4.5+</div>
+          <div class="sheet-rating-btn" onclick="selectMinRating(this, 4.8)" data-rating="4.8"><span class="stars">★</span> 4.8+</div>
+        </div>
+      </div>
+    </div>
+    <div class="sheet-footer">
+      <button class="sheet-btn-reset" onclick="resetFilters()">Réinitialiser</button>
+      <button class="sheet-btn-apply" id="filterApplyBtn" onclick="applyFilters()">
+        <span id="filterApplyText">Appliquer</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══ BOTTOM SHEET: TRI ═══ -->
+  <div class="sheet-overlay" id="sortOverlay" onclick="closeSortSheet()"></div>
+  <div class="sheet-panel" id="sortSheet" style="max-height:55%;">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div class="sheet-title">Trier par</div>
+      <div class="sheet-close" onclick="closeSortSheet()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </div>
+    </div>
+    <div class="sheet-body" style="padding:8px 18px 18px;">
+      <div id="sortOptions" style="display:flex;flex-direction:column;">
+        <div class="sort-option selected" onclick="applySort('relevance', this, 'Pertinence')">
+          <div class="sort-option-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+            Pertinence
+          </div>
+          <span class="sort-check">✓</span>
+        </div>
+        <div class="sort-option" onclick="applySort('price-asc', this, 'Prix croissant')">
+          <div class="sort-option-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="M21 4h-7"/><path d="M21 8h-5"/></svg>
+            Prix croissant
+          </div>
+          <span class="sort-check">✓</span>
+        </div>
+        <div class="sort-option" onclick="applySort('price-desc', this, 'Prix décroissant')">
+          <div class="sort-option-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 8-4-4-4 4"/><path d="M17 4v16"/><path d="M3 16h7"/><path d="M3 12h5"/></svg>
+            Prix décroissant
+          </div>
+          <span class="sort-check">✓</span>
+        </div>
+        <div class="sort-option" onclick="applySort('rating', this, 'Mieux notés')">
+          <div class="sort-option-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Mieux notés
+          </div>
+          <span class="sort-check">✓</span>
+        </div>
+        <div class="sort-option" onclick="applySort('new', this, 'Nouveautés')">
+          <div class="sort-option-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M2 7v5h20V7"/><path d="M5 12v7h14v-7"/><path d="M2 7l5-5h10l5 5"/></svg>
+            Nouveautés
+          </div>
+          <span class="sort-check">✓</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ═══ SCREEN: PROJETS ═══ -->
   <div class="screen-page" id="screen-projets">
@@ -3215,14 +3751,20 @@ function heroNext() {
 setInterval(heroNext, 4000); // 4 secondes par slide
 
 const PRODUCTS = [
-  { id: 1, name: "Table basse Wax", artisan: "Kofi A.", price: 145000, img: "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber" },
-  { id: 2, name: "Fauteuil Sahel", artisan: "Amara D.", price: 245000, img: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=400&q=85", badge: "NOUVEAU", badgeColor: "forest" },
-  { id: 3, name: "Lampe Bogolan", artisan: "Sophie K.", price: 65000, img: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=400&q=85" },
-  { id: 4, name: "Miroir Raffia", artisan: "Sophie K.", price: 95000, img: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber" },
-  { id: 5, name: "Commode Porto-Novo", artisan: "Amara D.", price: 385000, img: "https://images.unsplash.com/photo-1517467139951-f5a925c9f9de?auto=format&fit=crop&w=400&q=85" },
-  { id: 6, name: "Tabouret Tamtam", artisan: "Brice G.", price: 76000, img: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=400&q=85" },
-  { id: 7, name: "Vase Terre Cuite", artisan: "Mariam B.", price: 45000, img: "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?auto=format&fit=crop&w=400&q=85", badge: "NOUVEAU", badgeColor: "forest" },
-  { id: 8, name: "Pouf Wax", artisan: "Mariam B.", price: 85000, img: "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=400&q=85" },
+  { id: 1, name: "Table basse Wax", artisan: "Kofi Akindélé", artisanImg: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=60&q=85", price: 145000, cat: "Tables", rating: 4.9, reviews: 23, materials: ["Bois","Wax"], delay: 10, img: "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber", new: false },
+  { id: 2, name: "Fauteuil Sahel", artisan: "Amara Dossou", artisanImg: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&crop=faces&w=60&q=85", price: 245000, cat: "Fauteuils", rating: 4.8, reviews: 17, materials: ["Bois","Coton"], delay: 14, img: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=400&q=85", badge: "NOUVEAU", badgeColor: "forest", new: true },
+  { id: 3, name: "Lampe Bogolan", artisan: "Sophie Kpadé", artisanImg: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&crop=faces&w=60&q=85", price: 65000, cat: "Luminaires", rating: 4.7, reviews: 31, materials: ["Céramique","Bogolan"], delay: 5, img: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=400&q=85", new: false },
+  { id: 4, name: "Miroir Raffia", artisan: "Sophie Kpadé", artisanImg: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&crop=faces&w=60&q=85", price: 95000, cat: "Déco", rating: 5.0, reviews: 8, materials: ["Raffia","Bois"], delay: 7, img: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber", new: false },
+  { id: 5, name: "Commode Porto-Novo", artisan: "Amara Dossou", artisanImg: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&crop=faces&w=60&q=85", price: 385000, cat: "Tables", rating: 4.9, reviews: 12, materials: ["Bois"], delay: 21, img: "https://images.unsplash.com/photo-1517467139951-f5a925c9f9de?auto=format&fit=crop&w=400&q=85", new: false },
+  { id: 6, name: "Tabouret Tamtam", artisan: "Brice Gbénou", artisanImg: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&crop=faces&w=60&q=85", price: 76000, cat: "Fauteuils", rating: 4.6, reviews: 24, materials: ["Bois","Tissu"], delay: 6, img: "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=400&q=85", new: false },
+  { id: 7, name: "Vase Terre Cuite", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 45000, cat: "Déco", rating: 4.8, reviews: 19, materials: ["Terre cuite"], delay: 4, img: "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?auto=format&fit=crop&w=400&q=85", badge: "NOUVEAU", badgeColor: "forest", new: true },
+  { id: 8, name: "Pouf Wax", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 85000, cat: "Textiles", rating: 4.7, reviews: 15, materials: ["Coton","Wax"], delay: 5, img: "https://images.unsplash.com/photo-1567016432779-094069958ea5?auto=format&fit=crop&w=400&q=85", new: false },
+  { id: 9, name: "Canapé Iroko 3 places", artisan: "Kofi Akindélé", artisanImg: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=60&q=85", price: 690000, cat: "Canapés", rating: 5.0, reviews: 6, materials: ["Bois","Coton"], delay: 25, img: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber", new: false },
+  { id: 10, name: "Lit King Sahel", artisan: "Amara Dossou", artisanImg: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&crop=faces&w=60&q=85", price: 540000, cat: "Lits", rating: 4.8, reviews: 9, materials: ["Bois","Coton"], delay: 28, img: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=400&q=85", new: false },
+  { id: 11, name: "Suspension Raphia", artisan: "Sophie Kpadé", artisanImg: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&crop=faces&w=60&q=85", price: 78000, cat: "Luminaires", rating: 4.6, reviews: 22, materials: ["Raphia","Métal"], delay: 8, img: "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&w=400&q=85", new: false },
+  { id: 12, name: "Tapis Kente Maison", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 165000, cat: "Textiles", rating: 4.9, reviews: 14, materials: ["Coton","Kente"], delay: 12, img: "https://images.unsplash.com/photo-1600166898405-da9535204843?auto=format&fit=crop&w=400&q=85", new: false },
+  { id: 13, name: "Console Abomey", artisan: "Brice Gbénou", artisanImg: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&crop=faces&w=60&q=85", price: 295000, cat: "Tables", rating: 4.7, reviews: 7, materials: ["Bois","Métal"], delay: 18, img: "https://images.unsplash.com/photo-1532372320572-cda25653a26d?auto=format&fit=crop&w=400&q=85", badge: "NOUVEAU", badgeColor: "forest", new: true },
+  { id: 14, name: "Fauteuil Lounge Iroko", artisan: "Kofi Akindélé", artisanImg: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=60&q=85", price: 320000, cat: "Fauteuils", rating: 4.9, reviews: 11, materials: ["Bois","Cuir"], delay: 16, img: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=400&q=85", new: false },
 ];
 
 const SCENES = [
@@ -3419,7 +3961,69 @@ function renderProducts() {
 }
 
 function renderMarketplace() {
-  document.getElementById('marketGrid').innerHTML = PRODUCTS.map(p => `
+  // Appliquer catégorie + filtres + tri
+  let list = PRODUCTS.slice();
+  
+  // Catégorie
+  if (marketState.category !== 'Tout') {
+    list = list.filter(p => p.cat === marketState.category);
+  }
+  
+  // Filtres prix
+  if (marketState.priceMin != null) {
+    list = list.filter(p => p.price >= marketState.priceMin);
+  }
+  if (marketState.priceMax != null) {
+    list = list.filter(p => p.price <= marketState.priceMax);
+  }
+  
+  // Matériaux
+  if (marketState.materials.length > 0) {
+    list = list.filter(p => marketState.materials.every(m => p.materials.includes(m)));
+  }
+  
+  // Délai
+  if (marketState.maxDelay > 0) {
+    list = list.filter(p => p.delay <= marketState.maxDelay);
+  }
+  
+  // Note min
+  if (marketState.minRating > 0) {
+    list = list.filter(p => p.rating >= marketState.minRating);
+  }
+  
+  // Tri
+  switch (marketState.sort) {
+    case 'price-asc': list.sort((a,b) => a.price - b.price); break;
+    case 'price-desc': list.sort((a,b) => b.price - a.price); break;
+    case 'rating': list.sort((a,b) => b.rating - a.rating); break;
+    case 'new': list.sort((a,b) => (b.new?1:0) - (a.new?1:0)); break;
+    default: break; // relevance = ordre original
+  }
+  
+  // Update count
+  document.getElementById('sortCount').textContent = list.length;
+  
+  // Render
+  const grid = document.getElementById('marketGrid');
+  if (list.length === 0) {
+    grid.style.display = 'block';
+    grid.innerHTML = `
+      <div class="market-empty">
+        <div class="market-empty-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </div>
+        <div class="market-empty-title">Aucune pièce trouvée</div>
+        <div class="market-empty-text">Essaie d'élargir tes critères de prix, de matériaux ou de délai.</div>
+        <div class="market-empty-btn" onclick="resetAllFilters()">Réinitialiser les filtres</div>
+      </div>
+    `;
+    return;
+  }
+  grid.style.display = 'grid';
+  grid.innerHTML = list.map(p => {
+    const stars = '★★★★★'.slice(0, Math.round(p.rating));
+    return `
     <div class="product-card" onclick="openProduct(${p.id})">
       <div class="product-img-wrap">
         <img src="${p.img}" alt="${p.name}">
@@ -3427,14 +4031,281 @@ function renderMarketplace() {
         <div class="product-fav" onclick="event.stopPropagation(); toggleFav(this)">
           <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </div>
+        <div class="product-handmade">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 11 2-2-2-2"/><path d="M11 13h4"/><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/></svg>
+          Fait main
+        </div>
       </div>
       <div class="product-info">
         <div class="product-name">${p.name}</div>
-        <div class="product-artisan">${p.artisan}</div>
+        <div class="product-rating">
+          <span class="product-rating-stars">${stars}</span>
+          <b>${p.rating.toFixed(1)}</b>
+          <span>· ${p.reviews}</span>
+        </div>
+        <div class="product-artisan-row">
+          <img src="${p.artisanImg}" class="product-artisan-avatar" alt="">
+          <span class="product-artisan-name">${p.artisan.split(' ')[0]}</span>
+          <span class="product-artisan-verified">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            N3
+          </span>
+        </div>
         <div class="product-price">${formatFCFA(p.price)}</div>
       </div>
     </div>
+  `;}).join('');
+}
+
+// ═══ ÉTAT MARKETPLACE ═══
+const marketState = {
+  category: 'Tout',
+  sort: 'relevance',
+  priceMin: null,
+  priceMax: null,
+  materials: [],
+  maxDelay: 0,
+  minRating: 0,
+};
+
+// Filtres temporaires (pendant l'édition dans la sheet)
+const filterDraft = {
+  priceMin: null,
+  priceMax: null,
+  materials: [],
+  maxDelay: 0,
+  minRating: 0,
+};
+
+function selectMarketCat(el, cat) {
+  document.querySelectorAll('.market-cat').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  marketState.category = cat;
+  renderMarketplace();
+  updateActiveChips();
+}
+
+// ═══ FILTRES — Sheet ═══
+function openFilterSheet() {
+  // Copier l'état courant dans le draft
+  filterDraft.priceMin = marketState.priceMin;
+  filterDraft.priceMax = marketState.priceMax;
+  filterDraft.materials = [...marketState.materials];
+  filterDraft.maxDelay = marketState.maxDelay;
+  filterDraft.minRating = marketState.minRating;
+  renderFilterSheet();
+  document.getElementById('filterOverlay').classList.add('show');
+  document.getElementById('filterSheet').classList.add('show');
+  updateApplyCount();
+}
+
+function closeFilterSheet() {
+  document.getElementById('filterOverlay').classList.remove('show');
+  document.getElementById('filterSheet').classList.remove('show');
+}
+
+function renderFilterSheet() {
+  // Prix
+  document.getElementById('filterPriceMin').value = filterDraft.priceMin || '';
+  document.getElementById('filterPriceMax').value = filterDraft.priceMax || '';
+  // Désélectionner les quick price chips
+  document.querySelectorAll('#filterSheet .sheet-section:nth-child(1) .sheet-chip').forEach(c => c.classList.remove('selected'));
+  
+  // Matériaux
+  document.querySelectorAll('#filterMaterials .sheet-chip').forEach(c => {
+    c.classList.toggle('selected', filterDraft.materials.includes(c.textContent.trim()));
+  });
+  
+  // Délai
+  document.querySelectorAll('#filterDelay .sheet-rating-btn').forEach(b => {
+    b.classList.toggle('selected', parseInt(b.dataset.delay) === filterDraft.maxDelay);
+  });
+  
+  // Note min
+  document.querySelectorAll('#filterRating .sheet-rating-btn').forEach(b => {
+    b.classList.toggle('selected', parseFloat(b.dataset.rating) === filterDraft.minRating);
+  });
+}
+
+function quickPrice(min, max, el) {
+  document.querySelectorAll('#filterSheet .sheet-section:nth-child(1) .sheet-chip').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  filterDraft.priceMin = min;
+  filterDraft.priceMax = max >= 9999999 ? null : max;
+  document.getElementById('filterPriceMin').value = min || '';
+  document.getElementById('filterPriceMax').value = (max >= 9999999 ? '' : max);
+  updateApplyCount();
+}
+
+function toggleChip(el, type) {
+  const val = el.textContent.trim();
+  const idx = filterDraft.materials.indexOf(val);
+  if (idx >= 0) {
+    filterDraft.materials.splice(idx, 1);
+    el.classList.remove('selected');
+  } else {
+    filterDraft.materials.push(val);
+    el.classList.add('selected');
+  }
+  // Désélectionner les quick price chips car on édite manuellement
+  updateApplyCount();
+}
+
+function selectDelay(el, val) {
+  document.querySelectorAll('#filterDelay .sheet-rating-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  filterDraft.maxDelay = val;
+  updateApplyCount();
+}
+
+function selectMinRating(el, val) {
+  document.querySelectorAll('#filterRating .sheet-rating-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  filterDraft.minRating = val;
+  updateApplyCount();
+}
+
+function updateApplyCount() {
+  // Lecture des inputs prix
+  const minV = document.getElementById('filterPriceMin').value;
+  const maxV = document.getElementById('filterPriceMax').value;
+  if (minV !== '') filterDraft.priceMin = parseInt(minV);
+  if (maxV !== '') filterDraft.priceMax = parseInt(maxV);
+  
+  // Compter les filtres actifs
+  let count = 0;
+  if (filterDraft.priceMin != null) count++;
+  if (filterDraft.priceMax != null) count++;
+  if (filterDraft.materials.length > 0) count++;
+  if (filterDraft.maxDelay > 0) count++;
+  if (filterDraft.minRating > 0) count++;
+  
+  const txt = document.getElementById('filterApplyText');
+  txt.textContent = count > 0 ? `Appliquer (${count})` : 'Appliquer';
+}
+
+function applyFilters() {
+  // Lecture finale des inputs prix
+  const minV = document.getElementById('filterPriceMin').value;
+  const maxV = document.getElementById('filterPriceMax').value;
+  filterDraft.priceMin = minV ? parseInt(minV) : null;
+  filterDraft.priceMax = maxV ? parseInt(maxV) : null;
+  
+  // Appliquer au state
+  marketState.priceMin = filterDraft.priceMin;
+  marketState.priceMax = filterDraft.priceMax;
+  marketState.materials = [...filterDraft.materials];
+  marketState.maxDelay = filterDraft.maxDelay;
+  marketState.minRating = filterDraft.minRating;
+  
+  closeFilterSheet();
+  renderMarketplace();
+  updateActiveChips();
+  updateFilterBadge();
+}
+
+function resetFilters() {
+  filterDraft.priceMin = null;
+  filterDraft.priceMax = null;
+  filterDraft.materials = [];
+  filterDraft.maxDelay = 0;
+  filterDraft.minRating = 0;
+  renderFilterSheet();
+  updateApplyCount();
+}
+
+function resetAllFilters() {
+  marketState.priceMin = null;
+  marketState.priceMax = null;
+  marketState.materials = [];
+  marketState.maxDelay = 0;
+  marketState.minRating = 0;
+  renderMarketplace();
+  updateActiveChips();
+  updateFilterBadge();
+}
+
+function updateFilterBadge() {
+  let count = 0;
+  if (marketState.priceMin != null) count++;
+  if (marketState.priceMax != null) count++;
+  if (marketState.materials.length > 0) count++;
+  if (marketState.maxDelay > 0) count++;
+  if (marketState.minRating > 0) count++;
+  const badge = document.getElementById('filterCountBadge');
+  if (count > 0) {
+    badge.style.display = 'flex';
+    badge.textContent = count;
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+function updateActiveChips() {
+  const container = document.getElementById('marketChipsActive');
+  const chips = [];
+  if (marketState.priceMin != null && marketState.priceMax != null) {
+    chips.push({label: `${(marketState.priceMin/1000)}k–${(marketState.priceMax/1000)}k FCFA`, clear: () => { marketState.priceMin=null; marketState.priceMax=null; }});
+  } else if (marketState.priceMin != null) {
+    chips.push({label: `≥ ${(marketState.priceMin/1000)}k FCFA`, clear: () => { marketState.priceMin=null; }});
+  } else if (marketState.priceMax != null) {
+    chips.push({label: `≤ ${(marketState.priceMax/1000)}k FCFA`, clear: () => { marketState.priceMax=null; }});
+  }
+  marketState.materials.forEach(m => {
+    chips.push({label: m, clear: () => { marketState.materials = marketState.materials.filter(x => x!==m); }});
+  });
+  if (marketState.maxDelay > 0) {
+    chips.push({label: `≤ ${marketState.maxDelay}j`, clear: () => { marketState.maxDelay = 0; }});
+  }
+  if (marketState.minRating > 0) {
+    chips.push({label: `★ ${marketState.minRating}+`, clear: () => { marketState.minRating = 0; }});
+  }
+  
+  if (chips.length === 0) {
+    container.style.display = 'none';
+    container.innerHTML = '';
+    return;
+  }
+  container.style.display = 'flex';
+  container.innerHTML = chips.map((c, i) => `
+    <div class="chip-active" onclick="clearChip(${i})">
+      ${c.label}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </div>
   `).join('');
+  // Stocker les clearers
+  window._chipClearers = chips.map(c => c.clear);
+}
+
+function clearChip(i) {
+  if (window._chipClearers && window._chipClearers[i]) {
+    window._chipClearers[i]();
+    renderMarketplace();
+    updateActiveChips();
+    updateFilterBadge();
+  }
+}
+
+// ═══ TRI — Sheet ═══
+function openSortSheet() {
+  document.getElementById('sortOverlay').classList.add('show');
+  document.getElementById('sortSheet').classList.add('show');
+}
+
+function closeSortSheet() {
+  document.getElementById('sortOverlay').classList.remove('show');
+  document.getElementById('sortSheet').classList.remove('show');
+}
+
+function applySort(sort, el, label) {
+  document.querySelectorAll('.sort-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  marketState.sort = sort;
+  document.getElementById('sortLabel').textContent = label;
+  setTimeout(() => {
+    closeSortSheet();
+    renderMarketplace();
+  }, 150);
 }
 
 function renderInspirations() {
@@ -3477,11 +4348,6 @@ function selectCat(el) {
 
 function selectFilter(el) {
   document.querySelectorAll('.inspo-filter').forEach(f => f.classList.remove('active'));
-  el.classList.add('active');
-}
-
-function selectMarketCat(el) {
-  document.querySelectorAll('.market-cat').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
 }
 
