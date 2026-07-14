@@ -1020,66 +1020,48 @@ html, body {
 .tab-label { font-size: 10px; font-weight: 500; letter-spacing: 0.01em; }
 .tab-item.active .tab-label { font-weight: 700; }
 
-/* ═══ INSPIRATIONS — masonry + filter chips ═══ */
-.inspo-filters {
-  display: flex;
-  gap: 8px;
-  padding: 0 20px 14px;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.inspo-filters::-webkit-scrollbar { display: none; }
-.inspo-filter {
-  flex-shrink: 0;
-  padding: 8px 16px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s;
-  background: var(--bg-warm);
-  color: var(--text-2);
-}
-.inspo-filter.active {
-  background: var(--amber);
-  color: white;
-}
+/* ═══ INSPIRATIONS — cards scene éditoriales ═══ */
 .inspo-masonry {
-  column-count: 2;
-  column-gap: 12px;
-  padding: 0 18px 28px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
 .inspo-scene {
-  break-inside: avoid;
-  margin-bottom: 12px;
-  border-radius: 16px;
-  overflow: hidden;
   position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 14px;
+  background: var(--bg-warm);
   cursor: pointer;
-  box-shadow: var(--shadow-card);
   transition: transform 0.15s;
+  aspect-ratio: 3/4;
 }
 .inspo-scene:active { transform: scale(0.98); }
-.inspo-scene img { width: 100%; display: block; }
+.inspo-scene img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 .inspo-scene-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(30,24,19,0.75) 0%, transparent 50%);
-}
-.inspo-scene-info {
   position: absolute;
-  bottom: 10px; left: 10px; right: 10px;
-  color: white;
+  inset: 0;
+  background: linear-gradient(to top, rgba(30,24,19,0.78) 0%, rgba(30,24,19,0.15) 45%, transparent 70%);
+  pointer-events: none;
 }
-.inspo-scene-name {
-  font-family: 'Quache', 'Plus Jakarta Sans', Georgia, serif;
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 1px;
-  line-height: 1.15;
-}
-.inspo-scene-count {
-  font-size: 10px;
-  opacity: 0.9;
+.inspo-scene-room {
+  position: absolute;
+  top: 8px; left: 8px;
+  padding: 3px 8px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-1);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 .inspo-scene-bookmark {
   position: absolute;
@@ -1088,11 +1070,57 @@ html, body {
   border-radius: 999px;
   background: rgba(255,255,255,0.85);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
+  transition: transform 0.2s;
 }
-.inspo-scene-bookmark svg { width: 14px; height: 14px; color: var(--text-2); fill: none; stroke: currentColor; }
-.inspo-scene-bookmark.active svg { color: var(--amber); fill: var(--amber); }
+.inspo-scene-bookmark:active { transform: scale(0.85); }
+.inspo-scene-bookmark svg { width: 13px; height: 13px; color: var(--text-2); fill: none; stroke: currentColor; }
+.inspo-scene-bookmark.active svg { color: var(--terracotta); fill: var(--terracotta); }
+.inspo-scene-info {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 10px 12px;
+  color: white;
+}
+.inspo-scene-name {
+  font-family: 'Quache','Plus Jakarta Sans',Georgia,serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-bottom: 2px;
+}
+.inspo-scene-style {
+  font-size: 10px;
+  color: rgba(255,255,255,0.78);
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+.inspo-scene-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: rgba(255,255,255,0.92);
+  font-weight: 600;
+}
+.inspo-scene-meta svg { width: 10px; height: 10px; }
+.inspo-scene-meta .dot {
+  width: 3px; height: 3px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.5);
+}
+.inspo-empty {
+  grid-column: 1 / -1;
+  padding: 60px 32px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
 
 /* ═══ MARKETPLACE — grille produits étendue ═══ */
 .market-cats {
@@ -2170,15 +2198,27 @@ html, body {
 
   <!-- ═══ SCREEN: INSPIRATIONS ═══ -->
   <div class="screen-page" id="screen-inspirations">
-    <div class="inspo-filters">
-      <div class="inspo-filter active" onclick="selectFilter(this)">Pour vous</div>
-      <div class="inspo-filter" onclick="selectFilter(this)">Salon</div>
-      <div class="inspo-filter" onclick="selectFilter(this)">Chambre</div>
-      <div class="inspo-filter" onclick="selectFilter(this)">Salle à manger</div>
-      <div class="inspo-filter" onclick="selectFilter(this)">Bureau</div>
-      <div class="inspo-filter" onclick="selectFilter(this)">Extérieur</div>
+    <!-- Header éditorial -->
+    <div style="padding:16px 16px 0;">
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:24px;font-weight:600;color:var(--text-1);letter-spacing:-0.02em;line-height:1.1;">Inspirations</div>
+      <div style="font-size:11px;color:var(--text-3);margin-top:4px;line-height:1.4;">Découvrez des scènes aménagées par nos designers. Shop the Look — chaque objet est cliquable.</div>
     </div>
-    <div class="inspo-masonry" id="inspoMasonry"></div>
+    <!-- Filtres par pièce -->
+    <div class="market-cats" style="padding:14px 16px 12px;">
+      <div class="market-cat active" onclick="selectInspoFilter(this, 'all')">Toutes</div>
+      <div class="market-cat" onclick="selectInspoFilter(this, 'Salon')">Salon</div>
+      <div class="market-cat" onclick="selectInspoFilter(this, 'Chambre')">Chambre</div>
+      <div class="market-cat" onclick="selectInspoFilter(this, 'Salle à manger')">Salle à manger</div>
+      <div class="market-cat" onclick="selectInspoFilter(this, 'Bureau')">Bureau</div>
+      <div class="market-cat" onclick="selectInspoFilter(this, 'Cuisine')">Cuisine</div>
+      <div class="market-cat" onclick="selectInspoFilter(this, 'Entrée')">Entrée</div>
+    </div>
+    <!-- Compteur résultats -->
+    <div class="market-sort" style="padding:0 16px 12px;">
+      <div class="market-sort-info"><b id="inspoCount">8</b> scènes</div>
+    </div>
+    <!-- Masonry -->
+    <div class="inspo-masonry" id="inspoMasonry" style="padding:0 16px 20px;"></div>
   </div>
 
   <!-- ═══ SCREEN: MARKETPLACE ═══ -->
@@ -3767,12 +3807,14 @@ const PRODUCTS = [
 ];
 
 const SCENES = [
-  { name: "Salon Tropical", count: "3 pièces", img: "https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&w=400&q=85", h: 280 },
-  { name: "Salle à manger Kente", count: "5 pièces", img: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=400&q=85", h: 220 },
-  { name: "Bureau Afro-contemporain", count: "4 pièces", img: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=85", h: 320 },
-  { name: "Chambre Sahel", count: "3 pièces", img: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=400&q=85", h: 240 },
-  { name: "Entrée Zen", count: "2 pièces", img: "https://images.unsplash.com/photo-1604264726154-26480e76f4e1?auto=format&fit=crop&w=400&q=85", h: 300 },
-  { name: "Salon Bois & Wax", count: "6 pièces", img: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=400&q=85", h: 260 },
+  { id: 1, slug: "salon-terracotta-wax", title: "Salon Terracotta & Wax", style: "Afro-contemporain", room: "Salon", img: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=800&q=85", saves: 234, count: 3 },
+  { id: 2, slug: "chambre-zen-bambou", title: "Chambre Zen Bambou", style: "Tropical minimaliste", room: "Chambre", img: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=800&q=85", saves: 189, count: 3 },
+  { id: 3, slug: "bureau-laiton-bois", title: "Bureau Laiton & Bois", style: "Tropical luxe", room: "Bureau", img: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=85", saves: 156, count: 3 },
+  { id: 4, slug: "cuisine-terre-cuite", title: "Cuisine Terre Cuite", style: "Méditerranée africaine", room: "Cuisine", img: "https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&w=800&q=85", saves: 98, count: 3 },
+  { id: 5, slug: "entree-sculpturale", title: "Entrée Sculpturale", style: "Art & Artisanat", room: "Entrée", img: "https://images.unsplash.com/photo-1604264726154-26480e76f4e1?auto=format&fit=crop&w=800&q=85", saves: 143, count: 3 },
+  { id: 6, slug: "salon-bois-wax", title: "Salon Bois & Wax", style: "Afro-contemporain", room: "Salon", img: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=85", saves: 312, count: 6 },
+  { id: 7, slug: "salle-manger-kente", title: "Salle à Manger Kente", style: "Afro-contemporain", room: "Salle à manger", img: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=800&q=85", saves: 178, count: 5 },
+  { id: 8, slug: "chambre-sahel", title: "Chambre Sahel", style: "Tropical minimaliste", room: "Chambre", img: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=85", saves: 205, count: 4 },
 ];
 
 function formatFCFA(n) { return n.toLocaleString('fr-FR') + ' FCFA'; }
@@ -4301,20 +4343,60 @@ function applySort(sort, el, label) {
   }, 150);
 }
 
+// ═══ INSPIRATIONS — filtres + render ═══
+let inspoFilter = 'all';
+
+function selectInspoFilter(el, room) {
+  document.querySelectorAll('#screen-inspirations .market-cat').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  inspoFilter = room;
+  renderInspirations();
+}
+
 function renderInspirations() {
-  document.getElementById('inspoMasonry').innerHTML = SCENES.map(s => `
-    <div class="inspo-scene" onclick="showHint('${s.name}')">
-      <img src="${s.img}" alt="${s.name}" style="height:${s.h}px;object-fit:cover;">
+  const filtered = inspoFilter === 'all' ? SCENES : SCENES.filter(s => s.room === inspoFilter);
+  document.getElementById('inspoCount').textContent = filtered.length;
+  const grid = document.getElementById('inspoMasonry');
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="inspo-empty">
+        <div class="market-empty-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="market-empty-title">Aucune scène ici</div>
+        <div class="market-empty-text">Aucune inspiration pour cette pièce pour le moment. Reviens bientôt !</div>
+      </div>
+    `;
+    return;
+  }
+  grid.innerHTML = filtered.map(s => `
+    <div class="inspo-scene" onclick="openScene('${s.slug}')">
+      <img src="${s.img}" alt="${s.title}" loading="lazy">
       <div class="inspo-scene-overlay"></div>
+      <div class="inspo-scene-room">${s.room}</div>
       <div class="inspo-scene-bookmark" onclick="event.stopPropagation(); toggleBookmark(this)">
         <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
       </div>
       <div class="inspo-scene-info">
-        <div class="inspo-scene-name">${s.name}</div>
-        <div class="inspo-scene-count">${s.count}</div>
+        <div class="inspo-scene-name">${s.title}</div>
+        <div class="inspo-scene-style">${s.style}</div>
+        <div class="inspo-scene-meta">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          ${s.count} pièces
+          <span class="dot"></span>
+          ${s.saves} sauvegardes
+        </div>
       </div>
     </div>
   `).join('');
+}
+
+function openScene(slug) {
+  const scene = SCENES.find(s => s.slug === slug);
+  if (scene) {
+    showHint(`Scène : ${scene.title}`);
+    // TODO: créer page détaillée scene avec hotspots
+  }
 }
 
 // ═══ INTERACTIONS ═══
@@ -4340,6 +4422,7 @@ function selectCat(el) {
 }
 
 function selectFilter(el) {
+  // Legacy — anciens filtres inspirations remplacés par selectInspoFilter
   document.querySelectorAll('.inspo-filter').forEach(f => f.classList.remove('active'));
   el.classList.add('active');
 }
