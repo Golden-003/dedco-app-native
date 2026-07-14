@@ -1097,9 +1097,21 @@ html, body {
 .market-cats {
   display: flex;
   gap: 8px;
-  padding: 0 16px 16px;
+  padding: 0 16px 14px;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  white-space: nowrap;
+  /* padding-right virtuel pour que le dernier item ne soit pas coupé */
+  position: relative;
+}
+.market-cats::after {
+  content: '';
+  display: block;
+  flex-shrink: 0;
+  width: 16px;
+  height: 1px;
 }
 .market-cats::-webkit-scrollbar { display: none; }
 .market-cat {
@@ -1286,7 +1298,7 @@ html, body {
   gap: 6px;
 }
 .sheet-chip {
-  padding: 8px 14px;
+  padding: 7px 12px;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 999px;
@@ -1295,6 +1307,7 @@ html, body {
   color: var(--text-2);
   cursor: pointer;
   transition: all 0.15s;
+  white-space: nowrap;
 }
 .sheet-chip.selected {
   background: var(--ink);
@@ -2413,16 +2426,16 @@ html, body {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
       </div>
     </div>
-    <div class="sheet-body">
+    <div class="sheet-body" id="filterSheetBody">
       <!-- Budget -->
       <div class="sheet-section">
-        <div class="sheet-section-title">Budget (FCFA)</div>
+        <div class="sheet-section-title">Budget</div>
         <div class="sheet-price-row">
-          <input type="number" class="sheet-price-input" id="filterPriceMin" placeholder="Min" min="0" oninput="updateApplyCount()">
+          <input type="number" class="sheet-price-input" id="filterPriceMin" placeholder="Min FCFA" min="0" oninput="onPriceManualInput()">
           <span class="sheet-price-sep">—</span>
-          <input type="number" class="sheet-price-input" id="filterPriceMax" placeholder="Max" min="0" oninput="updateApplyCount()">
+          <input type="number" class="sheet-price-input" id="filterPriceMax" placeholder="Max FCFA" min="0" oninput="onPriceManualInput()">
         </div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;" id="filterPriceChips">
+        <div class="sheet-chips" id="filterPriceChips">
           <div class="sheet-chip" data-min="0" data-max="100000" onclick="quickPrice(0,100000,this)">≤ 100k</div>
           <div class="sheet-chip" data-min="100000" data-max="250000" onclick="quickPrice(100000,250000,this)">100k–250k</div>
           <div class="sheet-chip" data-min="250000" data-max="500000" onclick="quickPrice(250000,500000,this)">250k–500k</div>
@@ -2476,6 +2489,7 @@ html, body {
           <div class="sheet-rating-btn" onclick="selectMinRating(this, 4.8)" data-rating="4.8"><span class="stars">★</span> 4.8+</div>
         </div>
       </div>
+      <div style="height:4px;"></div>
     </div>
     <div class="sheet-footer">
       <button class="sheet-btn-reset" onclick="resetFilters()">Réinitialiser</button>
@@ -4191,6 +4205,12 @@ function quickPrice(min, max, el) {
   filterDraft.priceMax = max >= 9999999 ? null : max;
   document.getElementById('filterPriceMin').value = min || '';
   document.getElementById('filterPriceMax').value = (max >= 9999999 ? '' : max);
+  updateApplyCount();
+}
+
+function onPriceManualInput() {
+  // Quand on tape dans les inputs, on désélectionne les quick chips
+  document.querySelectorAll('#filterPriceChips .sheet-chip').forEach(c => c.classList.remove('selected'));
   updateApplyCount();
 }
 
