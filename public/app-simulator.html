@@ -1099,25 +1099,27 @@ html, body {
 .market-cats {
   display: flex;
   gap: 8px;
-  padding: 0 18px 16px;
+  padding: 0 16px 16px;
   overflow-x: auto;
   scrollbar-width: none;
 }
 .market-cats::-webkit-scrollbar { display: none; }
 .market-cat {
   flex-shrink: 0;
-  padding: 7px 14px;
+  padding: 8px 14px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s;
-  background: var(--bg-warm);
+  background: var(--bg-card);
   color: var(--text-2);
+  border: 1px solid var(--border);
 }
 .market-cat.active {
-  background: var(--amber);
+  background: var(--ink);
   color: white;
+  border-color: var(--ink);
 }
 
 /* ═══ FICHE PRODUIT — gallery + details + sticky CTA ═══ */
@@ -1806,16 +1808,34 @@ html, body {
 
   <!-- ═══ SCREEN: MARKETPLACE ═══ -->
   <div class="screen-page" id="screen-marketplace">
-    <div class="market-cats">
-      <div class="market-cat active" onclick="selectMarketCat(this)">Tout</div>
-      <div class="market-cat" onclick="selectMarketCat(this)">Mobilier</div>
-      <div class="market-cat" onclick="selectMarketCat(this)">Luminaire</div>
-      <div class="market-cat" onclick="selectMarketCat(this)">Déco</div>
-      <div class="market-cat" onclick="selectMarketCat(this)">Textiles</div>
-      <div class="market-cat" onclick="selectMarketCat(this)">Art</div>
+    <div style="padding:16px 16px 0;">
+      <!-- Titre + count -->
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;">
+        <div>
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:24px;font-weight:600;color:var(--text-1);letter-spacing:-0.02em;">Marketplace</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:2px;"><span class="font-numeric font-semibold text-ink" id="marketCount">8</span> pièces · Fabrication artisanale</div>
+        </div>
+        <!-- Bouton filtres -->
+        <div onclick="showHint('Filtres')" style="display:flex;align-items:center;gap:5px;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;cursor:pointer;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/></svg>
+          <span style="font-size:12px;font-weight:600;color:var(--text-2);">Filtres</span>
+        </div>
+      </div>
     </div>
-    <div class="products-grid" id="marketGrid"></div>
-    <div style="height: 24px;"></div>
+    <!-- Filtres catégories -->
+    <div class="market-cats" style="padding:0 16px 16px;">
+      <div class="market-cat active" onclick="selectMarketCat(this)">Tout</div>
+      <div class="market-cat" onclick="selectMarketCat(this)">Tables</div>
+      <div class="market-cat" onclick="selectMarketCat(this)">Fauteuils</div>
+      <div class="market-cat" onclick="selectMarketCat(this)">Luminaires</div>
+      <div class="market-cat" onclick="selectMarketCat(this)">Textiles</div>
+      <div class="market-cat" onclick="selectMarketCat(this)">Déco</div>
+      <div class="market-cat" onclick="selectMarketCat(this)">Canapés</div>
+      <div class="market-cat" onclick="selectMarketCat(this)">Lits</div>
+    </div>
+    <!-- Grille produits -->
+    <div class="products-grid" id="marketGrid" style="padding:0 16px;"></div>
+    <div style="height: 20px;"></div>
   </div>
 
   <!-- ═══ SCREEN: FICHE PRODUIT (plein écran) ═══ -->
