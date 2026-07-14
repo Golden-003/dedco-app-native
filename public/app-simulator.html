@@ -1093,9 +1093,6 @@ html, body {
 .inspo-scene-bookmark.active svg { color: var(--amber); fill: var(--amber); }
 
 /* ═══ MARKETPLACE — grille produits étendue ═══ */
-.market-search {
-  margin: 0 20px 14px;
-}
 .market-cats {
   display: flex;
   gap: 8px;
@@ -1182,30 +1179,12 @@ html, body {
 }
 .chip-active svg { width: 11px; height: 11px; }
 
-/* Card enrichie — rating + handmade badge */
-.product-handmade {
-  position: absolute;
-  bottom: 8px; left: 8px;
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  padding: 3px 7px 3px 5px;
-  background: rgba(255,255,255,0.92);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-radius: 999px;
-  font-size: 8px;
-  font-weight: 800;
-  color: var(--text-1);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-.product-handmade svg { width: 9px; height: 9px; color: var(--amber); }
+/* Card enrichie — rating + stock indicator */
 .product-rating {
   display: flex;
   align-items: center;
   gap: 3px;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   font-size: 10px;
   color: var(--text-3);
 }
@@ -1219,40 +1198,30 @@ html, body {
   font-weight: 800;
   font-variant-numeric: tabular-nums;
 }
-.product-artisan-row {
+.product-stock-row {
   display: flex;
   align-items: center;
-  gap: 5px;
-  margin-bottom: 8px;
+  justify-content: space-between;
+  gap: 6px;
 }
-.product-artisan-avatar {
-  width: 16px;
-  height: 16px;
+.product-stock {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.product-stock .stock-dot {
+  width: 6px; height: 6px;
   border-radius: 999px;
-  object-fit: cover;
   flex-shrink: 0;
 }
-.product-artisan-name {
-  font-size: 10px;
-  color: var(--text-2);
-  font-weight: 600;
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.product-artisan-verified {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  padding: 1px 5px;
-  background: var(--forest-pale);
-  color: var(--forest);
-  border-radius: 5px;
-  font-size: 8px;
-  font-weight: 800;
-}
-.product-artisan-verified svg { width: 7px; height: 7px; }
+.product-stock.forest { color: var(--forest); }
+.product-stock.forest .stock-dot { background: var(--forest); }
+.product-stock.amber { color: var(--amber-dark); }
+.product-stock.amber .stock-dot { background: var(--amber); }
 
 /* ═══ BOTTOM SHEET FILTRES ═══ */
 .sheet-overlay {
@@ -1877,10 +1846,13 @@ html, body {
         </div>
       </div>
     </div>
-    <div class="search-pill" onclick="showHint('Recherche')">
+    <div class="search-pill" id="searchPill">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <span class="search-pill-text">Rechercher…</span>
-      <div class="search-pill-badge">
+      <input type="text" id="searchInput" placeholder="Rechercher une pièce, un matériau…" autocomplete="off" onfocus="onSearchFocus()" oninput="onSearchInput(this.value)" style="flex:1;background:transparent;border:none;outline:none;font-size:12.5px;color:var(--text-1);font-weight:500;font-family:inherit;letter-spacing:-0.005em;min-width:0;" />
+      <div class="search-clear" id="searchClear" onclick="clearSearch()" style="display:none;width:20px;height:20px;border-radius:7px;background:var(--bg-card);display:none;align-items:center;justify-content:center;cursor:pointer;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;color:var(--text-2);"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </div>
+      <div class="search-pill-badge" onclick="openFilterSheet()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/></svg>
       </div>
     </div>
@@ -3793,13 +3765,13 @@ const PRODUCTS = [
   { id: 20, name: "Applique Murale Laiton", artisan: "Brice Gbénou", artisanImg: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&crop=faces&w=60&q=85", price: 92000, cat: "Luminaires", rating: 4.5, reviews: 14, materials: ["Métal"], delay: 7, img: "https://images.unsplash.com/photo-1517991104123-1d56a6e81ed9?auto=format&fit=crop&w=400&q=85", badge: "NOUVEAU", badgeColor: "forest", new: true },
   // Miroirs
   { id: 4, name: "Miroir Raffia", artisan: "Sophie Kpadé", artisanImg: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&crop=faces&w=60&q=85", price: 95000, cat: "Miroirs", rating: 5.0, reviews: 8, materials: ["Raffia","Bois"], delay: 7, img: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber", new: false },
-  { id: 21, name: "Miroir Solaire Cotonou", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 135000, cat: "Miroirs", rating: 4.8, reviews: 10, materials: ["Métal","Bois"], delay: 11, img: "https://images.unsplash.com/photo-1618221198498-2e5a1c6e3c4e?auto=format&fit=crop&w=400&q=85", new: false },
+  { id: 21, name: "Miroir Solaire Cotonou", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 135000, cat: "Miroirs", rating: 4.8, reviews: 10, materials: ["Métal","Bois"], delay: 11, img: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=400&q=85", new: false },
   // Tapis
   { id: 12, name: "Tapis Kente Maison", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 165000, cat: "Tapis", rating: 4.9, reviews: 14, materials: ["Coton","Kente"], delay: 12, img: "https://images.unsplash.com/photo-1600166898405-da9535204843?auto=format&fit=crop&w=400&q=85", new: false },
   { id: 22, name: "Tapis Berbère Sahel", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 215000, cat: "Tapis", rating: 4.7, reviews: 9, materials: ["Laine","Coton"], delay: 18, img: "https://images.unsplash.com/photo-1602872030490-4a484a7b3ba6?auto=format&fit=crop&w=400&q=85", new: false },
   // Textiles
   { id: 8, name: "Pouf Wax", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 85000, cat: "Textiles", rating: 4.7, reviews: 15, materials: ["Coton","Wax"], delay: 5, img: "https://images.unsplash.com/photo-1567016432779-094069958ea5?auto=format&fit=crop&w=400&q=85", new: false },
-  { id: 23, name: "Lot 4 coussins Wax", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 58000, cat: "Textiles", rating: 4.6, reviews: 28, materials: ["Coton","Wax"], delay: 4, img: "https://images.unsplash.com/photo-1584346133934-2a8aaa9c7c2c?auto=format&fit=crop&w=400&q=85", new: false },
+  { id: 23, name: "Lot 4 coussins Wax", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 58000, cat: "Textiles", rating: 4.6, reviews: 28, materials: ["Coton","Wax"], delay: 4, img: "https://images.unsplash.com/photo-1592078615290-033ee584e267?auto=format&fit=crop&w=400&q=85", new: false },
   // Arts de la table
   { id: 24, name: "Service Vaisselle Bogolan", artisan: "Sophie Kpadé", artisanImg: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&crop=faces&w=60&q=85", price: 125000, cat: "Arts de la table", rating: 4.8, reviews: 7, materials: ["Céramique","Bogolan"], delay: 14, img: "https://images.unsplash.com/photo-1603199506016-b9a594b593c0?auto=format&fit=crop&w=400&q=85", new: false },
   { id: 25, name: "Plateau Cérémonie Iroko", artisan: "Kofi Akindélé", artisanImg: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=60&q=85", price: 72000, cat: "Arts de la table", rating: 4.7, reviews: 12, materials: ["Bois"], delay: 6, img: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=400&q=85", badge: "NOUVEAU", badgeColor: "forest", new: true },
@@ -3820,11 +3792,11 @@ const PRODUCTS = [
   // Cadres
   { id: 35, name: "Cadre Photo Raffia A3", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 42000, cat: "Cadres", rating: 4.6, reviews: 18, materials: ["Bois","Raffia"], delay: 5, img: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=400&q=85", new: false },
   { id: 36, name: "Cadre Mosaïque Cauris", artisan: "Étienne Dossou-Yovo", artisanImg: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&crop=faces&w=60&q=85", price: 68000, cat: "Cadres", rating: 4.8, reviews: 7, materials: ["Bois","Cauris"], delay: 8, img: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber", new: false },
-  { id: 37, name: "Cadre 3 Cases Iroko", artisan: "Kofi Akindélé", artisanImg: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=60&q=85", price: 85000, cat: "Cadres", rating: 4.7, reviews: 12, materials: ["Bois","Verre"], delay: 7, img: "https://images.unsplash.com/photo-1577083552431-6e5fd01988ec?auto=format&fit=crop&w=400&q=85", new: false },
+  { id: 37, name: "Cadre 3 Cases Iroko", artisan: "Kofi Akindélé", artisanImg: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=60&q=85", price: 85000, cat: "Cadres", rating: 4.7, reviews: 12, materials: ["Bois","Verre"], delay: 7, img: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=400&q=85", new: false },
   // Vases
   { id: 38, name: "Vase Grès Noir Artisé", artisan: "Léa Houngbédji", artisanImg: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&crop=faces&w=60&q=85", price: 78000, cat: "Vases", rating: 4.9, reviews: 16, materials: ["Céramique","Grès"], delay: 9, img: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=400&q=85", badge: "NOUVEAU", badgeColor: "forest", new: true },
   { id: 39, name: "Vase Double Cauris", artisan: "Mariam Boukari", artisanImg: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=60&q=85", price: 52000, cat: "Vases", rating: 4.6, reviews: 14, materials: ["Terre cuite","Cauris"], delay: 6, img: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=400&q=85", new: false },
-  { id: 40, name: "Vase Soliflore Bronze", artisan: "Léa Houngbédji", artisanImg: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&crop=faces&w=60&q=85", price: 95000, cat: "Vases", rating: 4.7, reviews: 8, materials: ["Bronze"], delay: 12, img: "https://images.unsplash.com/photo-1612196808214-b40b3ee79f31?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber", new: false },
+  { id: 40, name: "Vase Soliflore Bronze", artisan: "Léa Houngbédji", artisanImg: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&crop=faces&w=60&q=85", price: 95000, cat: "Vases", rating: 4.7, reviews: 8, materials: ["Bronze"], delay: 12, img: "https://images.unsplash.com/photo-1606744824163-985d376605aa?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber", new: false },
 ];
 
 const SCENES = [
@@ -4021,8 +3993,19 @@ function renderProducts() {
 }
 
 function renderMarketplace() {
-  // Appliquer catégorie + filtres + tri
+  // Appliquer recherche + catégorie + filtres + tri
   let list = PRODUCTS.slice();
+  
+  // Recherche textuelle
+  if (marketState.query && marketState.query.trim().length > 0) {
+    const q = marketState.query.trim().toLowerCase();
+    list = list.filter(p => 
+      p.name.toLowerCase().includes(q) ||
+      p.cat.toLowerCase().includes(q) ||
+      p.artisan.toLowerCase().includes(q) ||
+      (p.materials && p.materials.some(m => m.toLowerCase().includes(q)))
+    );
+  }
   
   // Catégorie
   if (marketState.category !== 'Tout') {
@@ -4074,7 +4057,7 @@ function renderMarketplace() {
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
         </div>
         <div class="market-empty-title">Aucune pièce trouvée</div>
-        <div class="market-empty-text">Essaie d'élargir tes critères de prix, de matériaux ou de délai.</div>
+        <div class="market-empty-text">Essaie d'élargir tes critères de recherche, de prix, de matériaux ou de délai.</div>
         <div class="market-empty-btn" onclick="resetAllFilters()">Réinitialiser les filtres</div>
       </div>
     `;
@@ -4083,10 +4066,22 @@ function renderMarketplace() {
   grid.style.display = 'grid';
   grid.innerHTML = list.map(p => {
     const stars = '★★★★★'.slice(0, Math.round(p.rating));
+    // Stock indicator logic
+    let stockLabel, stockClass;
+    if (p.badge === 'UNIQUE') {
+      stockLabel = 'Pièce unique';
+      stockClass = 'amber';
+    } else if (p.delay >= 20) {
+      stockLabel = 'Sur commande';
+      stockClass = 'forest';
+    } else {
+      stockLabel = 'En stock';
+      stockClass = 'forest';
+    }
     return `
     <div class="product-card" onclick="openProduct(${p.id})">
       <div class="product-img-wrap">
-        <img src="${p.img}" alt="${p.name}">
+        <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=400&q=85';">
         ${p.badge ? `<span class="product-badge ${p.badgeColor}">${p.badge}</span>` : ''}
         <div class="product-fav" onclick="event.stopPropagation(); toggleFav(this)">
           <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
@@ -4099,7 +4094,12 @@ function renderMarketplace() {
           <b>${p.rating.toFixed(1)}</b>
           <span>· ${p.reviews}</span>
         </div>
-        <div class="product-price">${formatFCFA(p.price)}</div>
+        <div class="product-stock-row">
+          <span class="product-price">${formatFCFA(p.price)}</span>
+          <span class="product-stock ${stockClass}">
+            <span class="stock-dot"></span>${stockLabel}
+          </span>
+        </div>
       </div>
     </div>
   `;}).join('');
@@ -4107,6 +4107,7 @@ function renderMarketplace() {
 
 // ═══ ÉTAT MARKETPLACE ═══
 const marketState = {
+  query: '',
   category: 'Tout',
   sort: 'relevance',
   priceMin: null,
@@ -4115,6 +4116,41 @@ const marketState = {
   maxDelay: 0,
   minRating: 0,
 };
+
+// ═══ RECHERCHE ═══
+function onSearchFocus() {
+  // Si on n'est pas sur marketplace, on y navigue
+  if (currentScreen !== 'marketplace') {
+    navigateTo('marketplace');
+    setTimeout(() => document.getElementById('searchInput').focus(), 100);
+  }
+}
+
+function onSearchInput(val) {
+  marketState.query = val;
+  const clearBtn = document.getElementById('searchClear');
+  clearBtn.style.display = val.length > 0 ? 'flex' : 'none';
+  if (currentScreen === 'marketplace') {
+    renderMarketplace();
+  } else {
+    navigateTo('marketplace');
+    setTimeout(() => renderMarketplace(), 50);
+  }
+}
+
+function clearSearch() {
+  const input = document.getElementById('searchInput');
+  input.value = '';
+  marketState.query = '';
+  document.getElementById('searchClear').style.display = 'none';
+  if (currentScreen !== 'marketplace') {
+    navigateTo('marketplace');
+    setTimeout(() => renderMarketplace(), 50);
+  } else {
+    renderMarketplace();
+  }
+  input.blur();
+}
 
 // Filtres temporaires (pendant l'édition dans la sheet)
 const filterDraft = {
