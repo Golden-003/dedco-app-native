@@ -406,21 +406,7 @@ html, body {
   background: var(--bg-cream);
 }
 .screen-page::-webkit-scrollbar { display: none; }
-.screen-page.active { display: block; animation: screenFadeIn 0.25s ease; }
-@keyframes screenFadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Tap feedback global — boutons et cards cliquables */
-[onclick] { -webkit-tap-highlight-color: transparent; transition: transform 0.1s ease, opacity 0.1s ease; }
-[onclick]:active { transform: scale(0.96); opacity: 0.92; }
-button { -webkit-tap-highlight-color: transparent; transition: transform 0.1s ease; }
-button:active { transform: scale(0.96); }
-.gallery-btn:active { transform: scale(0.92); }
-.product-card:active { transform: scale(0.98); }
-.order-card:active { transform: scale(0.98); }
-.fav-tab:active, .order-filter:active, .market-cat:active { transform: scale(0.95); }
+.screen-page.active { display: block; }
 
 /* Fiche produit = plein écran (pas de header, pas de tab bar) */
 #screen-product {
@@ -1292,196 +1278,6 @@ button:active { transform: scale(0.96); }
 .inspo-filters {
   display: flex; flex-wrap: wrap; gap: 6px;
   padding: 4px 16px 12px;
-}
-
-/* ═══ COMMANDES — filtres + cards ═══ */
-.order-filter {
-  flex-shrink: 0;
-  padding: 7px 13px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 700;
-  cursor: pointer;
-  background: var(--bg-card);
-  color: var(--text-2);
-  border: 1px solid var(--border);
-  transition: all 0.15s;
-  white-space: nowrap;
-}
-.order-filter.active {
-  background: var(--ink);
-  color: white;
-  border-color: var(--ink);
-}
-
-/* ═══ FAVORIS — tabs ═══ */
-.fav-tab {
-  flex-shrink: 0;
-  padding: 7px 13px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 700;
-  cursor: pointer;
-  background: var(--bg-card);
-  color: var(--text-2);
-  border: 1px solid var(--border);
-  transition: all 0.15s;
-  white-space: nowrap;
-}
-.fav-tab.active {
-  background: var(--ink);
-  color: white;
-  border-color: var(--ink);
-}
-.fav-section-title {
-  font-size: 10px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--text-3);
-  margin-bottom: 10px;
-  margin-top: 4px;
-}
-
-/* ═══ BRIEF — step indicator + options ═══ */
-.brief-step {
-  width: 28px; height: 28px;
-  border-radius: 999px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 800;
-  background: var(--bg-card);
-  color: var(--text-3);
-  border: 1px solid var(--border);
-  transition: all 0.2s;
-  flex-shrink: 0;
-}
-.brief-step.active {
-  background: var(--ink);
-  color: white;
-  border-color: var(--ink);
-}
-.brief-step-line {
-  flex: 1;
-  height: 2px;
-  background: var(--border);
-  border-radius: 999px;
-  min-width: 20px;
-}
-.brief-option {
-  padding: 12px 14px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-2);
-  cursor: pointer;
-  transition: all 0.15s;
-  text-align: center;
-}
-.brief-option.selected {
-  background: var(--ink);
-  color: white;
-  border-color: var(--ink);
-}
-.brief-option:active { transform: scale(0.96); }
-
-/* ═══ COMMANDES — cards ═══ */
-.order-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 12px;
-  margin-bottom: 10px;
-  cursor: pointer;
-  transition: transform 0.15s;
-}
-.order-card:active { transform: scale(0.98); }
-.order-card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-.order-card-num {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-3);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.02em;
-}
-.order-card-date {
-  font-size: 10px;
-  color: var(--text-3);
-  font-weight: 600;
-}
-.order-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 8px;
-  border-radius: 999px;
-  font-size: 9px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-.order-status.livraison { background: var(--amber-pale); color: var(--amber-dark); }
-.order-status.fabrication { background: var(--bg-warm); color: var(--text-2); }
-.order-status.livree { background: var(--forest-pale); color: var(--forest); }
-.order-status.litige { background: rgba(166,68,46,0.1); color: var(--terracotta); }
-.order-status .dot {
-  width: 5px; height: 5px;
-  border-radius: 999px;
-  background: currentColor;
-}
-.order-card-body {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.order-card-imgs {
-  display: flex;
-  flex-shrink: 0;
-}
-.order-card-imgs img {
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
-  object-fit: cover;
-  border: 2px solid var(--bg-card);
-  margin-left: -8px;
-}
-.order-card-imgs img:first-child { margin-left: 0; }
-.order-card-info {
-  flex: 1;
-  min-width: 0;
-}
-.order-card-title {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: var(--text-1);
-  line-height: 1.2;
-  margin-bottom: 2px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.order-card-meta {
-  font-size: 10px;
-  color: var(--text-3);
-  font-weight: 600;
-}
-.order-card-price {
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--amber-dark);
-  font-variant-numeric: tabular-nums;
-  flex-shrink: 0;
-}
-.order-empty {
-  padding: 60px 32px;
-  text-align: center;
 }
 
 /* ═══ MARKETPLACE — grille produits étendue ═══ */
@@ -2527,7 +2323,7 @@ button:active { transform: scale(0.96); }
       </div>
 
       <!-- Bannière 1 : Brief artisan — amber brillant -->
-      <div style="position:relative;border-radius:20px;padding:20px;margin-bottom:12px;cursor:pointer;overflow:hidden;background:linear-gradient(135deg,#D4954A 0%,#BF793B 50%,#9A5A1F 100%);box-shadow:0 8px 24px rgba(191,121,59,0.35);" onclick="navigateTo('brief-artisan')">
+      <div style="position:relative;border-radius:20px;padding:20px;margin-bottom:12px;cursor:pointer;overflow:hidden;background:linear-gradient(135deg,#D4954A 0%,#BF793B 50%,#9A5A1F 100%);box-shadow:0 8px 24px rgba(191,121,59,0.35);" onclick="navigateTo('brief')">
         <!-- Reflet glossy fort -->
         <div style="position:absolute;top:0;left:0;right:0;height:55%;background:linear-gradient(180deg,rgba(255,255,255,0.25) 0%,rgba(255,255,255,0.05) 70%,transparent 100%);pointer-events:none;"></div>
         <!-- Bulle décorative -->
@@ -2544,7 +2340,7 @@ button:active { transform: scale(0.96); }
       </div>
 
       <!-- Bannière 2 : Designer d'espace — forest brillant -->
-      <div style="position:relative;border-radius:20px;padding:20px;margin-bottom:0;cursor:pointer;overflow:hidden;background:linear-gradient(135deg,#6BA35A 0%,#548C45 50%,#3D6B33 100%);box-shadow:0 8px 24px rgba(84,140,69,0.35);" onclick="navigateTo('brief-designer')">
+      <div style="position:relative;border-radius:20px;padding:20px;margin-bottom:0;cursor:pointer;overflow:hidden;background:linear-gradient(135deg,#6BA35A 0%,#548C45 50%,#3D6B33 100%);box-shadow:0 8px 24px rgba(84,140,69,0.35);" onclick="navigateTo('brief')">
         <div style="position:absolute;top:0;left:0;right:0;height:55%;background:linear-gradient(180deg,rgba(255,255,255,0.25) 0%,rgba(255,255,255,0.05) 70%,transparent 100%);pointer-events:none;"></div>
         <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:999px;background:rgba(255,255,255,0.08);pointer-events:none;"></div>
         <div style="position:relative;z-index:1;color:white;">
@@ -2564,13 +2360,6 @@ button:active { transform: scale(0.96); }
 
   <!-- ═══ SCREEN: INSPIRATIONS ═══ -->
   <div class="screen-page" id="screen-inspirations">
-    <!-- Recherche inspirations -->
-    <div style="padding:16px 16px 0;">
-      <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--bg-warm);border-radius:12px;border:1px solid var(--border);">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <input type="text" id="inspoSearchInput" placeholder="Rechercher une ambiance, un style…" autocomplete="off" oninput="onInspoSearch(this.value)" style="flex:1;background:transparent;border:none;outline:none;font-size:12.5px;color:var(--text-1);font-weight:500;font-family:inherit;min-width:0;height:18px;line-height:18px;" />
-      </div>
-    </div>
     <div class="inspo-filters">
       <div class="inspo-filter active" data-filter="all" onclick="selectFilter(this)">Pour vous</div>
       <div class="inspo-filter" data-filter="salon" onclick="selectFilter(this)">Salon</div>
@@ -2674,7 +2463,6 @@ button:active { transform: scale(0.96); }
         </div>
       </div>
       <div id="galleryCounter" style="position:absolute;bottom:12px;right:12px;padding:4px 10px;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);border-radius:999px;color:white;font-size:10px;font-weight:700;font-variant-numeric:tabular-nums;z-index:10;">1/4</div>
-      <div id="galleryDots" class="gallery-dots"></div>
       <div onclick="galleryPrev()" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:999px;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,0.15);">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-1)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
       </div>
@@ -2934,77 +2722,36 @@ button:active { transform: scale(0.96); }
 
   <!-- ═══ SCREEN: PROJETS ═══ -->
   <div class="screen-page" id="screen-projets">
-    <div style="padding:20px 16px 40px;">
-      <!-- Header éditorial -->
-      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:18px;">
-        <div>
-          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:24px;font-weight:600;color:var(--text-1);letter-spacing:-0.02em;">Mes projets</div>
-          <div style="font-size:11px;color:var(--text-3);margin-top:2px;"><span id="projetsCount">0</span> projet en cours</div>
+    <div style="padding: 20px;">
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);margin-bottom:4px;">Mes projets</div>
+      <div style="font-size:12px;color:var(--text-3);margin-bottom:20px;">2 projets actifs · 1 décision en attente</div>
+
+      <!-- Projet en cours -->
+      <div style="background:var(--bg-card);border-radius:14px;overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:12px;cursor:pointer;" onclick="navigateTo('tracking')">
+        <div style="position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=400&q=85" style="width:100%;height:100%;object-fit:cover;">
+          <div style="position:absolute;top:10px;left:10px;padding:3px 8px;background:rgba(255,255,255,0.92);border-radius:999px;font-size:9px;font-weight:700;color:var(--amber-dark);">En cours</div>
         </div>
-        <div onclick="navigateTo('brief')" style="display:flex;align-items:center;gap:5px;padding:8px 12px;background:var(--ink);color:white;border-radius:12px;cursor:pointer;">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-          <span style="font-size:11px;font-weight:700;">Nouveau</span>
+        <div style="padding:14px;">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:15px;font-weight:600;color:var(--text-1);margin-bottom:2px;">Salon Tropical Akpakpa</div>
+          <div style="font-size:11px;color:var(--text-3);margin-bottom:10px;">Projet design · Kofi Akindélé · 10 juil.</div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="flex:1;height:4px;background:var(--bg-warm);border-radius:999px;overflow:hidden;"><div style="height:100%;width:60%;background:linear-gradient(90deg,var(--amber),var(--amber-light));border-radius:999px;"></div></div>
+            <span style="font-size:11px;font-weight:700;color:var(--amber-dark);">60%</span>
+          </div>
         </div>
       </div>
 
-      <!-- Filtres statut (visibles seulement si projets) -->
-      <div id="projetsFilters" style="display:none;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:18px;">
-        <div class="order-filter active" data-status="all" onclick="selectProjetFilter(this)">Tous</div>
-        <div class="order-filter" data-status="brief" onclick="selectProjetFilter(this)">Brief</div>
-        <div class="order-filter" data-status="propositions" onclick="selectProjetFilter(this)">Propositions</div>
-        <div class="order-filter" data-status="fabrication" onclick="selectProjetFilter(this)">Fabrication</div>
-        <div class="order-filter" data-status="livraison" onclick="selectProjetFilter(this)">Livraison</div>
-        <div class="order-filter" data-status="termine" onclick="selectProjetFilter(this)">Terminés</div>
-      </div>
-
-      <!-- Contenu dynamique -->
-      <div id="projetsContent"></div>
-
-      <!-- Processus projet (visible seulement si aucun projet) -->
-      <div id="projetsProcess" style="margin-top:32px;">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
-          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.14em;color:var(--text-3);">Comment ça marche</div>
-          <div style="flex:1;height:1px;background:var(--border);"></div>
+      <!-- Projet en attente -->
+      <div style="background:var(--bg-card);border-radius:14px;overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:12px;cursor:pointer;" onclick="navigateTo('tracking')">
+        <div style="position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=85" style="width:100%;height:100%;object-fit:cover;">
+          <div style="position:absolute;top:10px;left:10px;padding:3px 8px;background:rgba(166,68,46,0.92);border-radius:999px;font-size:9px;font-weight:700;color:white;">Action requise</div>
         </div>
-        <div style="display:flex;flex-direction:column;gap:12px;">
-          <!-- Step 1 -->
-          <div style="display:flex;gap:12px;align-items:flex-start;">
-            <div style="width:32px;height:32px;border-radius:10px;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:14px;font-weight:700;color:var(--text-1);flex-shrink:0;">1</div>
-            <div style="flex:1;padding-top:4px;">
-              <div style="font-size:13px;font-weight:700;color:var(--text-1);margin-bottom:2px;">Décrivez votre besoin</div>
-              <div style="font-size:11.5px;color:var(--text-3);line-height:1.5;">Pièce à aménager, style souhaité, budget, photos d'inspiration.</div>
-            </div>
-          </div>
-          <!-- Step 2 -->
-          <div style="display:flex;gap:12px;align-items:flex-start;">
-            <div style="width:32px;height:32px;border-radius:10px;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:14px;font-weight:700;color:var(--text-1);flex-shrink:0;">2</div>
-            <div style="flex:1;padding-top:4px;">
-              <div style="font-size:13px;font-weight:700;color:var(--text-1);margin-bottom:2px;">Recevez des propositions</div>
-              <div style="font-size:11.5px;color:var(--text-3);line-height:1.5;">Des designers et artisans vous soumettent leurs idées avec devis.</div>
-            </div>
-          </div>
-          <!-- Step 3 -->
-          <div style="display:flex;gap:12px;align-items:flex-start;">
-            <div style="width:32px;height:32px;border-radius:10px;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:14px;font-weight:700;color:var(--text-1);flex-shrink:0;">3</div>
-            <div style="flex:1;padding-top:4px;">
-              <div style="font-size:13px;font-weight:700;color:var(--text-1);margin-bottom:2px;">Choisissez et démarrez</div>
-              <div style="font-size:11.5px;color:var(--text-3);line-height:1.5;">Sélectionnez votre proposition préférée, l'artisan commence la fabrication.</div>
-            </div>
-          </div>
-          <!-- Step 4 -->
-          <div style="display:flex;gap:12px;align-items:flex-start;">
-            <div style="width:32px;height:32px;border-radius:10px;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:14px;font-weight:700;color:var(--text-1);flex-shrink:0;">4</div>
-            <div style="flex:1;padding-top:4px;">
-              <div style="font-size:13px;font-weight:700;color:var(--text-1);margin-bottom:2px;">Suivez et recevez</div>
-              <div style="font-size:11.5px;color:var(--text-3);line-height:1.5;">Suivez l'avancement étape par étape, jusqu'à la livraison.</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- CTA démarrer -->
-        <div onclick="navigateTo('brief')" style="margin-top:24px;display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;background:var(--ink);color:white;border-radius:14px;cursor:pointer;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-          <span style="font-size:13px;font-weight:800;">Démarrer un projet</span>
+        <div style="padding:14px;">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:15px;font-weight:600;color:var(--text-1);margin-bottom:2px;">Bureau Afro-contemporain</div>
+          <div style="font-size:11px;color:var(--text-3);margin-bottom:8px;">Brief designer · 3 propositions reçues</div>
+          <div style="font-size:11px;color:var(--amber-dark);font-weight:600;">Choisir une proposition →</div>
         </div>
       </div>
     </div>
@@ -3022,12 +2769,33 @@ button:active { transform: scale(0.96); }
           <div style="flex:1;min-width:0;">
             <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
               <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:21px;font-weight:600;color:var(--text-1);letter-spacing:-0.02em;">Fatou Kossou</div>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--amber)" stroke="var(--amber)" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
             </div>
             <div style="font-size:11.5px;color:var(--text-3);margin-top:2px;">fatou.kossou@email.bj</div>
+            <div style="font-size:11.5px;color:var(--text-3);margin-top:1px;">+229 97 45 32 10</div>
+            <div style="font-size:10px;color:var(--amber-dark);font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-top:4px;">Client Premium · depuis 2024</div>
           </div>
         </div>
-        <div onclick="navigateTo('profil')" style="width:36px;height:36px;border-radius:12px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;">
+        <div onclick="showHint('Modifier le profil')" style="width:36px;height:36px;border-radius:12px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+        </div>
+      </div>
+
+      <!-- Stats row minimaliste -->
+      <div style="display:flex;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:14px 8px;margin-bottom:28px;">
+        <div onclick="navigateTo('tracking')" style="flex:1;text-align:center;cursor:pointer;">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:700;color:var(--text-1);font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">12</div>
+          <div style="font-size:10px;color:var(--text-3);font-weight:600;margin-top:1px;">Commandes</div>
+        </div>
+        <div style="width:1px;background:var(--border);"></div>
+        <div onclick="navigateTo('projets')" style="flex:1;text-align:center;cursor:pointer;">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:700;color:var(--text-1);font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">3</div>
+          <div style="font-size:10px;color:var(--text-3);font-weight:600;margin-top:1px;">Projets</div>
+        </div>
+        <div style="width:1px;background:var(--border);"></div>
+        <div onclick="navigateTo('favoris')" style="flex:1;text-align:center;cursor:pointer;">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:700;color:var(--text-1);font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">8</div>
+          <div style="font-size:10px;color:var(--text-3);font-weight:600;margin-top:1px;">Favoris</div>
         </div>
       </div>
 
@@ -3037,7 +2805,7 @@ button:active { transform: scale(0.96); }
         <div style="flex:1;height:1px;background:var(--border);"></div>
       </div>
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:24px;">
-        <div onclick="navigateTo('commandes')" style="display:flex;align-items:center;gap:14px;padding:13px 14px;cursor:pointer;border-bottom:1px solid var(--border);">
+        <div onclick="navigateTo('tracking')" style="display:flex;align-items:center;gap:14px;padding:13px 14px;cursor:pointer;border-bottom:1px solid var(--border);">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
           <div style="flex:1;font-size:13.5px;font-weight:600;color:var(--text-1);">Mes commandes</div>
           <span style="font-size:11px;color:var(--text-3);font-weight:600;margin-right:4px;">12</span>
@@ -3046,7 +2814,7 @@ button:active { transform: scale(0.96); }
         <div onclick="navigateTo('projets')" style="display:flex;align-items:center;gap:14px;padding:13px 14px;cursor:pointer;border-bottom:1px solid var(--border);">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>
           <div style="flex:1;font-size:13.5px;font-weight:600;color:var(--text-1);">Mes projets</div>
-          <span style="font-size:11px;color:var(--text-3);font-weight:600;margin-right:4px;">0</span>
+          <span style="font-size:11px;color:var(--text-3);font-weight:600;margin-right:4px;">3</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
         </div>
         <div onclick="navigateTo('favoris')" style="display:flex;align-items:center;gap:14px;padding:13px 14px;cursor:pointer;border-bottom:1px solid var(--border);">
@@ -3055,7 +2823,7 @@ button:active { transform: scale(0.96); }
           <span style="font-size:11px;color:var(--text-3);font-weight:600;margin-right:4px;">8</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
         </div>
-        <div onclick="navigateTo('avis')" style="display:flex;align-items:center;gap:14px;padding:13px 14px;cursor:pointer;">
+        <div onclick="showHint('Mes avis')" style="display:flex;align-items:center;gap:14px;padding:13px 14px;cursor:pointer;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           <div style="flex:1;font-size:13.5px;font-weight:600;color:var(--text-1);">Mes avis</div>
           <span style="font-size:11px;color:var(--text-3);font-weight:600;margin-right:4px;">5</span>
@@ -3069,12 +2837,12 @@ button:active { transform: scale(0.96); }
         <div style="flex:1;height:1px;background:var(--border);"></div>
       </div>
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:24px;">
-        <div onclick="navigateTo('adresses')" style="display:flex;align-items:center;gap:14px;padding:13px 14px;cursor:pointer;border-bottom:1px solid var(--border);">
+        <div onclick="showHint('Adresses')" style="display:flex;align-items:center;gap:14px;padding:13px 14px;cursor:pointer;border-bottom:1px solid var(--border);">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
           <div style="flex:1;font-size:13.5px;font-weight:600;color:var(--text-1);">Adresses de livraison</div>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
         </div>
-        <div onclick="navigateTo('paiements')" style="display:flex;align-items:center;gap:14px;padding:13px 14px;cursor:pointer;">
+        <div onclick="showHint('Paiements')" style="display:flex;align-items:center;gap:14px;padding:13px 14px;cursor:pointer;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
           <div style="flex:1;font-size:13.5px;font-weight:600;color:var(--text-1);">Moyens de paiement</div>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
@@ -3092,18 +2860,18 @@ button:active { transform: scale(0.96); }
           <div style="flex:1;font-size:13.5px;font-weight:600;color:var(--text-1);">Notifications</div>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
         </div>
-        <div onclick="navigateTo('langue')" style="display:flex;align-items:center;gap:14px;padding:13px 14px;cursor:pointer;border-bottom:1px solid var(--border);">
+        <div onclick="showHint('Langue & devise')" style="display:flex;align-items:center;gap:14px;padding:13px 14px;cursor:pointer;border-bottom:1px solid var(--border);">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
           <div style="flex:1;font-size:13.5px;font-weight:600;color:var(--text-1);">Langue & devise</div>
           <span style="font-size:11px;color:var(--text-3);font-weight:600;margin-right:4px;">FR · FCFA</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
         </div>
-        <div onclick="navigateTo('aide')" style="display:flex;align-items:center;gap:14px;padding:13px 14px;cursor:pointer;border-bottom:1px solid var(--border);">
+        <div onclick="showHint('Aide & support')" style="display:flex;align-items:center;gap:14px;padding:13px 14px;cursor:pointer;border-bottom:1px solid var(--border);">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
           <div style="flex:1;font-size:13.5px;font-weight:600;color:var(--text-1);">Aide & support</div>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
         </div>
-        <div onclick="navigateTo('parametres')" style="display:flex;align-items:center;gap:14px;padding:13px 14px;cursor:pointer;">
+        <div onclick="showHint('Paramètres')" style="display:flex;align-items:center;gap:14px;padding:13px 14px;cursor:pointer;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
           <div style="flex:1;font-size:13.5px;font-weight:600;color:var(--text-1);">Paramètres</div>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
@@ -3122,108 +2890,62 @@ button:active { transform: scale(0.96); }
   </div>
 
   <!-- ═══ SCREEN: ARTISAN (plein écran) ═══ -->
-  <div class="screen-page" id="screen-artisan" style="top:0;bottom:0;background:var(--bg-cream);overflow-y:auto;">
-    <!-- Cover -->
+  <div class="screen-page" id="screen-artisan" style="top:0;bottom:0;background:var(--bg-cream);">
     <div style="position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;">
       <img src="https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&w=800&q=85" style="width:100%;height:100%;object-fit:cover;">
-      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(30,24,19,0.85) 0%,rgba(30,24,19,0.2) 50%,transparent 100%);"></div>
-      <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:20;">
+      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(30,24,19,0.8) 0%,transparent 50%);"></div>
+      <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;">
         <div class="gallery-btn" onclick="navigateTo('home')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-        </div>
-        <div style="display:flex;gap:6px;">
-          <div class="gallery-btn" onclick="showHint('Partager')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
-          </div>
-          <div class="gallery-btn" onclick="showHint('Favori ajouté')" style="color:var(--terracotta);">
-            <svg viewBox="0 0 24 24" fill="var(--terracotta)" stroke="var(--terracotta)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
         </div>
       </div>
     </div>
-
-    <div style="padding:0 16px 100px;">
-      <!-- Avatar + nom (chevauche cover) -->
-      <div style="display:flex;align-items:flex-end;gap:14px;margin-top:-40px;position:relative;z-index:2;margin-bottom:18px;">
+    <div style="padding:20px;">
+      <div style="display:flex;align-items:flex-end;gap:14px;margin-top:-40px;position:relative;z-index:2;margin-bottom:16px;">
         <img src="https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=160&q=85" style="width:80px;height:80px;border-radius:999px;object-fit:cover;border:3px solid var(--bg-cream);box-shadow:var(--shadow-md);">
-        <div style="flex:1;padding-bottom:6px;">
-          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-            <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);letter-spacing:-0.02em;">Kofi Akindélé</div>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--amber)" stroke="var(--amber)" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </div>
-          <div style="font-size:11.5px;color:var(--text-3);font-weight:600;margin-top:2px;display:flex;align-items:center;gap:4px;">
+        <div style="flex:1;padding-bottom:4px;">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);">Kofi Akindélé</div>
+          <div style="font-size:12px;color:var(--text-3);display:flex;align-items:center;gap:4px;">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            Cotonou · Artisan menuisier · Niveau 3
+            Cotonou · Mobilier bois · N3
           </div>
         </div>
       </div>
 
-      <!-- Stats éditoriales (cohérent avec Compte) -->
-      <div style="display:flex;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:14px 8px;margin-bottom:20px;">
-        <div style="flex:1;text-align:center;">
-          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:700;color:var(--text-1);font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">47</div>
-          <div style="font-size:10px;color:var(--text-3);font-weight:600;margin-top:1px;">Produits</div>
+      <div style="display:flex;gap:8px;margin-bottom:20px;">
+        <div style="flex:1;text-align:center;padding:12px;background:var(--bg-card);border-radius:12px;box-shadow:var(--shadow-sm);">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:700;color:var(--text-1);">47</div>
+          <div style="font-size:10px;color:var(--text-3);">Produits</div>
         </div>
-        <div style="width:1px;background:var(--border);"></div>
-        <div style="flex:1;text-align:center;">
-          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:700;color:var(--text-1);font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">4.9</div>
-          <div style="font-size:10px;color:var(--text-3);font-weight:600;margin-top:1px;">Note</div>
+        <div style="flex:1;text-align:center;padding:12px;background:var(--bg-card);border-radius:12px;box-shadow:var(--shadow-sm);">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:700;color:var(--text-1);">4.9</div>
+          <div style="font-size:10px;color:var(--text-3);">Note</div>
         </div>
-        <div style="width:1px;background:var(--border);"></div>
-        <div style="flex:1;text-align:center;">
-          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:700;color:var(--text-1);font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">128</div>
-          <div style="font-size:10px;color:var(--text-3);font-weight:600;margin-top:1px;">Avis</div>
+        <div style="flex:1;text-align:center;padding:12px;background:var(--bg-card);border-radius:12px;box-shadow:var(--shadow-sm);">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:700;color:var(--text-1);">128</div>
+          <div style="font-size:10px;color:var(--text-3);">Avis</div>
         </div>
       </div>
 
-      <!-- Bio -->
-      <div style="font-size:13px;line-height:1.6;color:var(--text-2);margin-bottom:22px;">Artisan menuisier depuis 15 ans, spécialisé dans le mobilier en bois iroko et wax. Chaque pièce est unique, façonnée à la main dans mon atelier à Cotonou.</div>
-
-      <!-- Certifications (style trust badges éditorial) -->
-      <div style="display:flex;align-items:stretch;margin-bottom:24px;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--bg-card);">
-        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 4px;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <div style="font-size:9px;font-weight:700;color:var(--text-1);text-align:center;line-height:1.2;">Garantie<br>Dedco</div>
-        </div>
-        <div style="width:1px;background:var(--border);"></div>
-        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 4px;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m22 11-3 3-2-2"/></svg>
-          <div style="font-size:9px;font-weight:700;color:var(--text-1);text-align:center;line-height:1.2;">Artisan<br>vérifié</div>
-        </div>
-        <div style="width:1px;background:var(--border);"></div>
-        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 4px;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          <div style="font-size:9px;font-weight:700;color:var(--text-1);text-align:center;line-height:1.2;">Livraison<br>10-30j</div>
-        </div>
+      <div style="font-size:13px;line-height:1.6;color:var(--text-2);margin-bottom:20px;">
+        Artisan menuisier depuis 15 ans, spécialisé dans le mobilier en bois iroko et wax. Chaque pièce est unique, façonnée à la main dans mon atelier à Cotonou.
       </div>
 
-      <!-- Réalisations -->
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
-        <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:600;color:var(--text-1);letter-spacing:-0.01em;">Réalisations</div>
-        <div style="flex:1;height:1px;background:var(--border);"></div>
-      </div>
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:600;color:var(--text-1);margin-bottom:12px;">Réalisations</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;">
         <img src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=300&q=85" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;">
         <img src="https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=300&q=85" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;">
         <img src="https://images.unsplash.com/photo-1517467139951-f5a925c9f9de?auto=format&fit=crop&w=300&q=85" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;">
         <img src="https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=300&q=85" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;">
       </div>
-
-      <!-- Produits de l'artisan -->
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
-        <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:600;color:var(--text-1);letter-spacing:-0.01em;">Ses pièces</div>
-        <div style="flex:1;height:1px;background:var(--border);"></div>
-        <span style="font-size:11px;color:var(--text-3);font-weight:600;">47</span>
-      </div>
-      <div id="artisanProducts" class="products-grid" style="padding:0;margin-bottom:24px;"></div>
     </div>
-
-    <!-- CTA sticky -->
     <div class="product-floating-cta">
       <div class="float-btn-secondary" onclick="navigateTo('chat')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       </div>
-      <button class="float-btn-primary" onclick="navigateTo('brief')">Démarrer un projet</button>
+      <button class="float-btn-primary" onclick="navigateTo('brief')">
+        Démarrer un projet
+      </button>
     </div>
   </div>
 
@@ -3298,350 +3020,6 @@ button:active { transform: scale(0.96); }
     </div>
   </div>
 
-  <!-- ═══ SCREEN: PROFIL (édition) ═══ -->
-  <div class="screen-page" id="screen-profil" style="top:0;bottom:0;background:var(--bg-cream);overflow-y:auto;">
-    <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:20;">
-      <div class="gallery-btn" onclick="navigateTo('compte')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-      </div>
-      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:16px;font-weight:600;color:var(--text-1);letter-spacing:-0.01em;">Modifier le profil</div>
-      <div style="width:40px;"></div>
-    </div>
-    <div style="padding:calc(44px + var(--safe-top) + 70px) 16px 40px;">
-      <!-- Avatar centré -->
-      <div style="text-align:center;margin-bottom:28px;">
-        <div style="position:relative;display:inline-block;">
-          <img id="profilAvatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&crop=faces&w=200&q=85" style="width:96px;height:96px;border-radius:999px;object-fit:cover;border:1px solid var(--border);">
-          <div onclick="showHint('Photo mise à jour')" style="position:absolute;bottom:0;right:0;width:32px;height:32px;border-radius:999px;background:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;border:3px solid var(--bg-cream);">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
-          </div>
-        </div>
-        <div style="font-size:11px;color:var(--text-3);margin-top:10px;">Touchez l'icône pour changer la photo</div>
-      </div>
-      <!-- Champs -->
-      <div style="margin-bottom:14px;">
-        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-3);margin-bottom:6px;">Prénom</div>
-        <input type="text" value="Fatou" style="width:100%;padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;box-sizing:border-box;">
-      </div>
-      <div style="margin-bottom:14px;">
-        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-3);margin-bottom:6px;">Nom</div>
-        <input type="text" value="Kossou" style="width:100%;padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;box-sizing:border-box;">
-      </div>
-      <div style="margin-bottom:14px;">
-        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-3);margin-bottom:6px;">Email</div>
-        <input type="email" value="fatou.kossou@email.bj" style="width:100%;padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;box-sizing:border-box;">
-      </div>
-      <div style="margin-bottom:14px;">
-        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-3);margin-bottom:6px;">Téléphone</div>
-        <div style="display:flex;gap:8px;">
-          <div style="padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:700;color:var(--text-1);font-variant-numeric:tabular-nums;">🇧🇯 +229</div>
-          <input type="tel" value="01 97 12 34 56" style="flex:1;padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;box-sizing:border-box;min-width:0;">
-        </div>
-      </div>
-      <div style="margin-bottom:24px;">
-        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-3);margin-bottom:6px;">Ville</div>
-        <select style="width:100%;padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;box-sizing:border-box;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23A89E95%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><path d=%22m6 9 6 6 6-6%22/></svg>');background-repeat:no-repeat;background-position:right 14px center;">
-          <option>Cotonou</option>
-          <option>Porto-Novo</option>
-          <option>Abomey-Calavi</option>
-          <option>Parakou</option>
-          <option>Ouidah</option>
-        </select>
-      </div>
-      <button onclick="showHint('Profil enregistré')" style="width:100%;height:52px;background:var(--ink);color:white;border:none;border-radius:14px;font-size:14px;font-weight:800;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-        Enregistrer les modifications
-      </button>
-    </div>
-  </div>
-
-  <!-- ═══ SCREEN: ADRESSES ═══ -->
-  <div class="screen-page" id="screen-adresses" style="top:0;bottom:0;background:var(--bg-cream);overflow-y:auto;">
-    <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:20;">
-      <div class="gallery-btn" onclick="navigateTo('compte')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-      </div>
-      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:16px;font-weight:600;color:var(--text-1);letter-spacing:-0.01em;">Adresses</div>
-      <div style="width:40px;"></div>
-    </div>
-    <div style="padding:calc(44px + var(--safe-top) + 70px) 16px 40px;">
-      <!-- Adresse principale -->
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;position:relative;">
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;">
-          <div style="flex:1;">
-            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
-              <span style="font-size:13px;font-weight:700;color:var(--text-1);">Maison</span>
-              <span style="padding:2px 7px;background:var(--amber-pale);color:var(--amber-dark);border-radius:5px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;">Par défaut</span>
-            </div>
-            <div style="font-size:12px;color:var(--text-2);font-weight:600;line-height:1.5;">Fatou Kossou<br>Quartier Akpakpa, rue 234<br>Cotonou, Bénin<br>+229 01 97 12 34 56</div>
-          </div>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="cursor:pointer;flex-shrink:0;margin-top:2px;"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
-        </div>
-      </div>
-      <!-- Adresse secondaire -->
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;">
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;">
-          <div style="flex:1;">
-            <div style="font-size:13px;font-weight:700;color:var(--text-1);margin-bottom:4px;">Bureau</div>
-            <div style="font-size:12px;color:var(--text-2);font-weight:600;line-height:1.5;">Fatou Kossou<br>Avenue Steinmetz, Immeuble Botreau<br>Cotonou, Bénin<br>+229 01 97 12 34 56</div>
-          </div>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="cursor:pointer;flex-shrink:0;margin-top:2px;"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
-        </div>
-      </div>
-      <!-- Bouton ajouter -->
-      <div onclick="showHint('Nouvelle adresse')" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border:1.5px dashed var(--border-dark);border-radius:14px;cursor:pointer;margin-bottom:24px;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-        <span style="font-size:13px;font-weight:700;color:var(--text-2);">Ajouter une adresse</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ SCREEN: PAIEMENTS ═══ -->
-  <div class="screen-page" id="screen-paiements" style="top:0;bottom:0;background:var(--bg-cream);overflow-y:auto;">
-    <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:20;">
-      <div class="gallery-btn" onclick="navigateTo('compte')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-      </div>
-      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:16px;font-weight:600;color:var(--text-1);letter-spacing:-0.01em;">Paiements</div>
-      <div style="width:40px;"></div>
-    </div>
-    <div style="padding:calc(44px + var(--safe-top) + 70px) 16px 40px;">
-      <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.14em;color:var(--text-3);margin-bottom:10px;padding:0 4px;">Mobile Money</div>
-      <!-- MTN MoMo -->
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;">
-        <div style="width:44px;height:44px;border-radius:12px;background:#FFCC00;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:#000;flex-shrink:0;">MTN</div>
-        <div style="flex:1;">
-          <div style="font-size:13px;font-weight:700;color:var(--text-1);">MTN MoMo</div>
-          <div style="font-size:11px;color:var(--text-3);font-weight:600;font-variant-numeric:tabular-nums;">+229 01 97 12 34 56</div>
-        </div>
-        <span style="padding:3px 8px;background:var(--amber-pale);color:var(--amber-dark);border-radius:5px;font-size:9px;font-weight:800;text-transform:uppercase;">Par défaut</span>
-      </div>
-      <!-- Moov Money -->
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;">
-        <div style="width:44px;height:44px;border-radius:12px;background:#005BAF;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;color:white;flex-shrink:0;">MOOV</div>
-        <div style="flex:1;">
-          <div style="font-size:13px;font-weight:700;color:var(--text-1);">Moov Money</div>
-          <div style="font-size:11px;color:var(--text-3);font-weight:600;font-variant-numeric:tabular-nums;">+229 01 97 12 34 56</div>
-        </div>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-      </div>
-      <!-- Ajouter -->
-      <div onclick="showHint('Ajouter un moyen')" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border:1.5px dashed var(--border-dark);border-radius:14px;cursor:pointer;margin-bottom:24px;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-        <span style="font-size:13px;font-weight:700;color:var(--text-2);">Ajouter un moyen de paiement</span>
-      </div>
-      <!-- FedaPay trust -->
-      <div style="display:flex;align-items:center;gap:8px;padding:12px 14px;background:var(--forest-pale);border-radius:12px;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <div style="font-size:11px;color:var(--forest);font-weight:600;line-height:1.4;">Paiements sécurisés via FedaPay · MTN & Moov Money acceptés</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ SCREEN: AVIS ═══ -->
-  <div class="screen-page" id="screen-avis" style="top:0;bottom:0;background:var(--bg-cream);overflow-y:auto;">
-    <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:20;">
-      <div class="gallery-btn" onclick="navigateTo('compte')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-      </div>
-      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:16px;font-weight:600;color:var(--text-1);letter-spacing:-0.01em;">Mes avis</div>
-      <div style="width:40px;"></div>
-    </div>
-    <div style="padding:calc(44px + var(--safe-top) + 70px) 16px 40px;">
-      <!-- Stats avis -->
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:20px;text-align:center;">
-        <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:32px;font-weight:700;color:var(--text-1);font-variant-numeric:tabular-nums;">4.8</div>
-        <div style="color:var(--amber);font-size:14px;margin:2px 0;">★★★★★</div>
-        <div style="font-size:11px;color:var(--text-3);font-weight:600;">5 avis publiés · 23 utiles</div>
-      </div>
-      <!-- Item avis -->
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-          <img src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=80&q=85" style="width:44px;height:44px;border-radius:10px;object-fit:cover;flex-shrink:0;">
-          <div style="flex:1;min-width:0;">
-            <div style="font-size:13px;font-weight:700;color:var(--text-1);">Table basse Wax</div>
-            <div style="font-size:10px;color:var(--text-3);font-weight:600;">par Kofi Akindélé · 12 juin</div>
-          </div>
-          <div style="color:var(--amber);font-size:11px;">★★★★★</div>
-        </div>
-        <p style="font-size:12px;color:var(--text-2);line-height:1.5;margin:0;">Table magnifique, le bois iroko est superbe. Kofi a respecté les délais et tenu au courant à chaque étape. Je recommande !</p>
-        <div style="display:flex;align-items:center;gap:4px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:10px;color:var(--text-3);font-weight:600;">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"/></svg>
-          12 personnes ont trouvé cet avis utile
-        </div>
-      </div>
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-          <img src="https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=80&q=85" style="width:44px;height:44px;border-radius:10px;object-fit:cover;flex-shrink:0;">
-          <div style="flex:1;min-width:0;">
-            <div style="font-size:13px;font-weight:700;color:var(--text-1);">Lampe Bogolan</div>
-            <div style="font-size:10px;color:var(--text-3);font-weight:600;">par Sophie Kpadé · 3 juin</div>
-          </div>
-          <div style="color:var(--amber);font-size:11px;">★★★★★</div>
-        </div>
-        <p style="font-size:12px;color:var(--text-2);line-height:1.5;margin:0;">Lampe magnifique qui crée une ambiance très chaleureuse dans le salon. La finition bogolan est vraiment soignée.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ SCREEN: LANGUE & DEVISE ═══ -->
-  <div class="screen-page" id="screen-langue" style="top:0;bottom:0;background:var(--bg-cream);overflow-y:auto;">
-    <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:20;">
-      <div class="gallery-btn" onclick="navigateTo('compte')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-      </div>
-      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:16px;font-weight:600;color:var(--text-1);letter-spacing:-0.01em;">Langue & devise</div>
-      <div style="width:40px;"></div>
-    </div>
-    <div style="padding:calc(44px + var(--safe-top) + 70px) 16px 40px;">
-      <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.14em;color:var(--text-3);margin-bottom:10px;padding:0 4px;">Langue</div>
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:24px;">
-        <div onclick="selectLangItem(this)" style="display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;border-bottom:1px solid var(--border);">
-          <span style="font-size:18px;">🇫🇷</span>
-          <div style="flex:1;font-size:13px;font-weight:600;color:var(--text-1);">Français</div>
-          <div style="width:20px;height:20px;border-radius:999px;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;"><div style="width:10px;height:10px;border-radius:999px;background:var(--ink);"></div></div>
-        </div>
-        <div onclick="selectLangItem(this)" style="display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;">
-          <span style="font-size:18px;">🇬🇧</span>
-          <div style="flex:1;font-size:13px;font-weight:600;color:var(--text-1);">English</div>
-          <div style="width:20px;height:20px;border-radius:999px;border:2px solid var(--border-dark);"></div>
-        </div>
-      </div>
-      <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.14em;color:var(--text-3);margin-bottom:10px;padding:0 4px;">Devise</div>
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:24px;">
-        <div onclick="selectLangItem(this)" style="display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;border-bottom:1px solid var(--border);">
-          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:13px;font-weight:700;color:var(--text-1);min-width:50px;">FCFA</div>
-          <div style="flex:1;font-size:12px;color:var(--text-2);font-weight:600;">Franc CFA (Bénin)</div>
-          <div style="width:20px;height:20px;border-radius:999px;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;"><div style="width:10px;height:10px;border-radius:999px;background:var(--ink);"></div></div>
-        </div>
-        <div onclick="selectLangItem(this)" style="display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;">
-          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:13px;font-weight:700;color:var(--text-1);min-width:50px;">EUR</div>
-          <div style="flex:1;font-size:12px;color:var(--text-2);font-weight:600;">Euro</div>
-          <div style="width:20px;height:20px;border-radius:999px;border:2px solid var(--border-dark);"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ SCREEN: AIDE & SUPPORT ═══ -->
-  <div class="screen-page" id="screen-aide" style="top:0;bottom:0;background:var(--bg-cream);overflow-y:auto;">
-    <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:20;">
-      <div class="gallery-btn" onclick="navigateTo('compte')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-      </div>
-      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:16px;font-weight:600;color:var(--text-1);letter-spacing:-0.01em;">Aide & support</div>
-      <div style="width:40px;"></div>
-    </div>
-    <div style="padding:calc(44px + var(--safe-top) + 70px) 16px 40px;">
-      <!-- Contact rapide -->
-      <div style="display:flex;gap:10px;margin-bottom:24px;">
-        <div onclick="navigateTo('chat')" style="flex:1;background:var(--ink);color:white;border-radius:14px;padding:14px;text-align:center;cursor:pointer;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 4px;display:block;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          <div style="font-size:11px;font-weight:700;">Chat</div>
-        </div>
-        <div onclick="showHint('Appel...')" style="flex:1;background:var(--bg-card);border:1px solid var(--border);color:var(--text-1);border-radius:14px;padding:14px;text-align:center;cursor:pointer;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 4px;display:block;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          <div style="font-size:11px;font-weight:700;">Appel</div>
-        </div>
-        <div onclick="showHint('Email')" style="flex:1;background:var(--bg-card);border:1px solid var(--border);color:var(--text-1);border-radius:14px;padding:14px;text-align:center;cursor:pointer;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 4px;display:block;"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-          <div style="font-size:11px;font-weight:700;">Email</div>
-        </div>
-      </div>
-      <!-- FAQ -->
-      <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.14em;color:var(--text-3);margin-bottom:10px;padding:0 4px;">Questions fréquentes</div>
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:24px;">
-        <div onclick="toggleFaq(this)" style="padding:13px 14px;cursor:pointer;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
-          <span style="font-size:13px;font-weight:600;color:var(--text-1);">Comment passer une commande ?</span>
-          <svg style="transition:transform 0.2s;width:14px;height:14px;color:var(--text-3);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-        </div>
-        <div onclick="toggleFaq(this)" style="padding:13px 14px;cursor:pointer;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
-          <span style="font-size:13px;font-weight:600;color:var(--text-1);">Quels sont les délais de livraison ?</span>
-          <svg style="transition:transform 0.2s;width:14px;height:14px;color:var(--text-3);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-        </div>
-        <div onclick="toggleFaq(this)" style="padding:13px 14px;cursor:pointer;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
-          <span style="font-size:13px;font-weight:600;color:var(--text-1);">Comment ouvrir un litige ?</span>
-          <svg style="transition:transform 0.2s;width:14px;height:14px;color:var(--text-3);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-        </div>
-        <div onclick="toggleFaq(this)" style="padding:13px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
-          <span style="font-size:13px;font-weight:600;color:var(--text-1);">Puis-je personnaliser une pièce ?</span>
-          <svg style="transition:transform 0.2s;width:14px;height:14px;color:var(--text-3);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ SCREEN: PARAMETRES ═══ -->
-  <div class="screen-page" id="screen-parametres" style="top:0;bottom:0;background:var(--bg-cream);overflow-y:auto;">
-    <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:20;">
-      <div class="gallery-btn" onclick="navigateTo('compte')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-      </div>
-      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:16px;font-weight:600;color:var(--text-1);letter-spacing:-0.01em;">Paramètres</div>
-      <div style="width:40px;"></div>
-    </div>
-    <div style="padding:calc(44px + var(--safe-top) + 70px) 16px 40px;">
-      <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.14em;color:var(--text-3);margin-bottom:10px;padding:0 4px;">Notifications</div>
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:24px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;border-bottom:1px solid var(--border);">
-          <div style="flex:1;">
-            <div style="font-size:13px;font-weight:600;color:var(--text-1);">Notifications push</div>
-            <div style="font-size:11px;color:var(--text-3);margin-top:1px;">Recevoir les notifications sur ce téléphone</div>
-          </div>
-          <div onclick="toggleSwitch(this)" style="width:40px;height:24px;border-radius:999px;background:var(--ink);position:relative;cursor:pointer;transition:background 0.2s;"><div style="position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:999px;background:white;transition:transform 0.2s;"></div></div>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;border-bottom:1px solid var(--border);">
-          <div style="flex:1;">
-            <div style="font-size:13px;font-weight:600;color:var(--text-1);">Promotions</div>
-            <div style="font-size:11px;color:var(--text-3);margin-top:1px;">Offres et bons plans Dedco</div>
-          </div>
-          <div onclick="toggleSwitch(this)" style="width:40px;height:24px;border-radius:999px;background:var(--ink);position:relative;cursor:pointer;transition:background 0.2s;"><div style="position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:999px;background:white;transition:transform 0.2s;"></div></div>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;">
-          <div style="flex:1;">
-            <div style="font-size:13px;font-weight:600;color:var(--text-1);">Newsletter</div>
-            <div style="font-size:11px;color:var(--text-3);margin-top:1px;">Email hebdomadaire</div>
-          </div>
-          <div onclick="toggleSwitch(this)" style="width:40px;height:24px;border-radius:999px;background:var(--border-dark);position:relative;cursor:pointer;transition:background 0.2s;"><div style="position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:999px;background:white;transition:transform 0.2s;"></div></div>
-        </div>
-      </div>
-      <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.14em;color:var(--text-3);margin-bottom:10px;padding:0 4px;">Confidentialité</div>
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:24px;">
-        <div onclick="showHint('Données personnelles')" style="display:flex;align-items:center;justify-content:space-between;padding:14px;cursor:pointer;border-bottom:1px solid var(--border);">
-          <div style="font-size:13px;font-weight:600;color:var(--text-1);">Données personnelles</div>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-        </div>
-        <div onclick="showHint('CGU')" style="display:flex;align-items:center;justify-content:space-between;padding:14px;cursor:pointer;border-bottom:1px solid var(--border);">
-          <div style="font-size:13px;font-weight:600;color:var(--text-1);">Conditions générales</div>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-        </div>
-        <div onclick="showHint('Confidentialité')" style="display:flex;align-items:center;justify-content:space-between;padding:14px;cursor:pointer;">
-          <div style="font-size:13px;font-weight:600;color:var(--text-1);">Politique de confidentialité</div>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ SCREEN: PLACEHOLDER (écran générique — désormais rarement utilisé) ═══ -->
-  <div class="screen-page" id="screen-placeholder" style="top:0;bottom:0;background:var(--bg-cream);">
-    <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:20;">
-      <div class="gallery-btn" onclick="navigateTo('compte')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-      </div>
-      <div id="placeholderTitle" style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:16px;font-weight:600;color:var(--text-1);letter-spacing:-0.01em;">Section</div>
-      <div style="width:40px;"></div>
-    </div>
-    <div style="padding:calc(44px + var(--safe-top) + 80px) 24px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;">
-      <div style="width:72px;height:72px;border-radius:20px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;margin-bottom:18px;">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="10"/></svg>
-      </div>
-      <div id="placeholderText" style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:600;color:var(--text-1);letter-spacing:-0.01em;margin-bottom:6px;">Bientôt disponible</div>
-      <div style="font-size:12px;color:var(--text-3);line-height:1.5;max-width:240px;">Cette section est en cours de développement. Revenez bientôt pour profiter de toutes les fonctionnalités.</div>
-      <div onclick="navigateTo('compte')" style="margin-top:24px;padding:11px 22px;background:var(--ink);color:white;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;">Retour au compte</div>
-    </div>
-  </div>
-
   <!-- ═══ SCREEN: BRIEF (placeholder) ═══ -->
   <div class="screen-page" id="screen-brief" style="top:0;bottom:0;background:var(--bg-cream);">
     <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:20;">
@@ -3656,7 +3034,7 @@ button:active { transform: scale(0.96); }
       <div style="font-size:13px;color:var(--text-3);margin-bottom:24px;line-height:1.5;">Fabriquer une pièce précise ou coordonner l'ensemble de votre aménagement ?</div>
 
       <!-- Card 1 : Brief artisan — full-width app-style -->
-      <div style="display:flex;align-items:center;gap:14px;background:var(--bg-card);border-radius:20px;padding:16px;margin-bottom:10px;cursor:pointer;box-shadow:0 2px 8px rgba(30,24,19,0.04);border:1px solid var(--border);" onclick="navigateTo('brief-artisan')">
+      <div style="display:flex;align-items:center;gap:14px;background:var(--bg-card);border-radius:20px;padding:16px;margin-bottom:10px;cursor:pointer;box-shadow:0 2px 8px rgba(30,24,19,0.04);border:1px solid var(--border);" onclick="showHint('Brief artisan')">
         <div style="width:56px;height:56px;border-radius:18px;background:var(--amber);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 6px 14px rgba(191,121,59,0.25);position:relative;overflow:hidden;">
           <div style="position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,0.28) 0%,transparent 100%);border-radius:18px 18px 0 0;pointer-events:none;"></div>
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="position:relative;z-index:1;"><path d="M15 12h-5"/><path d="M15 12c.5 0 1 .2 1.4.6l3 3a2 2 0 0 1 0 2.8l-1.4 1.4a2 2 0 0 1-2.8 0l-3-3a2 2 0 0 1-.6-1.4"/><path d="m10.5 13.5-7-7"/><path d="m6 3 4 4-3 3-4-4z"/></svg>
@@ -3671,7 +3049,7 @@ button:active { transform: scale(0.96); }
       </div>
 
       <!-- Card 2 : Designer d'espace — full-width app-style -->
-      <div style="display:flex;align-items:center;gap:14px;background:var(--bg-card);border-radius:20px;padding:16px;margin-bottom:24px;cursor:pointer;box-shadow:0 2px 8px rgba(30,24,19,0.04);border:1px solid var(--border);" onclick="navigateTo('brief-designer')">
+      <div style="display:flex;align-items:center;gap:14px;background:var(--bg-card);border-radius:20px;padding:16px;margin-bottom:24px;cursor:pointer;box-shadow:0 2px 8px rgba(30,24,19,0.04);border:1px solid var(--border);" onclick="showHint('Brief designer')">
         <div style="width:56px;height:56px;border-radius:18px;background:var(--forest);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 6px 14px rgba(84,140,69,0.25);position:relative;overflow:hidden;">
           <div style="position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,0.28) 0%,transparent 100%);border-radius:18px 18px 0 0;pointer-events:none;"></div>
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="position:relative;z-index:1;"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
@@ -3690,274 +3068,6 @@ button:active { transform: scale(0.96); }
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         <div style="font-size:11px;color:var(--text-2);font-weight:600;">Sécurisé · Artisans vérifiés · Réponse sous 48h</div>
       </div>
-    </div>
-  </div>
-
-  <!-- ═══ SCREEN: BRIEF ARTISAN (multi-étapes) ═══ -->
-  <div class="screen-page" id="screen-brief-artisan" style="top:0;bottom:0;background:var(--bg-cream);overflow-y:auto;">
-    <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:20;">
-      <div class="gallery-btn" onclick="navigateTo('brief')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-      </div>
-      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:16px;font-weight:600;color:var(--text-1);letter-spacing:-0.01em;">Brief artisan</div>
-      <div style="width:40px;"></div>
-    </div>
-    <div style="padding:calc(44px + var(--safe-top) + 70px) 16px 40px;">
-      <!-- Step indicator -->
-      <div style="display:flex;align-items:center;gap:6px;margin-bottom:24px;">
-        <div id="baStep1" class="brief-step active">1</div>
-        <div class="brief-step-line"></div>
-        <div id="baStep2" class="brief-step">2</div>
-        <div class="brief-step-line"></div>
-        <div id="baStep3" class="brief-step">3</div>
-        <div class="brief-step-line"></div>
-        <div id="baStep4" class="brief-step">4</div>
-      </div>
-
-      <!-- Étape 1 : Type de pièce -->
-      <div id="baStepContent1" style="display:block;">
-        <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);margin-bottom:6px;letter-spacing:-0.02em;">Quel type de pièce ?</div>
-        <div style="font-size:12px;color:var(--text-3);margin-bottom:20px;line-height:1.5;">Sélectionnez la catégorie d'objet à fabriquer.</div>
-        <div id="baPieceType" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-          <div class="brief-option" onclick="selectBriefOption(this,'baPieceType')">Table</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'baPieceType')">Fauteuil</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'baPieceType')">Canapé</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'baPieceType')">Lit</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'baPieceType')">Rangement</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'baPieceType')">Luminaire</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'baPieceType')">Miroir</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'baPieceType')">Vase / Poterie</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'baPieceType')">Sculpture</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'baPieceType')">Tableau</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'baPieceType')">Cadre</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'baPieceType')">Autre</div>
-        </div>
-      </div>
-
-      <!-- Étape 2 : Détails -->
-      <div id="baStepContent2" style="display:none;">
-        <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);margin-bottom:6px;letter-spacing:-0.02em;">Détails de la pièce</div>
-        <div style="font-size:12px;color:var(--text-3);margin-bottom:20px;line-height:1.5;">Décrivez ce que vous imaginez.</div>
-        <div style="margin-bottom:14px;">
-          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-3);margin-bottom:6px;">Nom de la pièce</div>
-          <input type="text" placeholder="Ex : Table basse en iroko" style="width:100%;padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;box-sizing:border-box;">
-        </div>
-        <div style="margin-bottom:14px;">
-          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-3);margin-bottom:6px;">Dimensions (cm)</div>
-          <div style="display:flex;gap:8px;">
-            <input type="number" placeholder="L" style="flex:1;min-width:0;padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;box-sizing:border-box;">
-            <input type="number" placeholder="l" style="flex:1;min-width:0;padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;box-sizing:border-box;">
-            <input type="number" placeholder="h" style="flex:1;min-width:0;padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;box-sizing:border-box;">
-          </div>
-        </div>
-        <div style="margin-bottom:14px;">
-          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-3);margin-bottom:6px;">Matériaux souhaités</div>
-          <input type="text" placeholder="Ex : Bois iroko, wax, métal" style="width:100%;padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;box-sizing:border-box;">
-        </div>
-        <div style="margin-bottom:14px;">
-          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-3);margin-bottom:6px;">Description</div>
-          <textarea placeholder="Décrivez votre vision, le style, les finitions souhaitées..." style="width:100%;min-height:100px;padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:500;color:var(--text-1);font-family:inherit;outline:none;box-sizing:border-box;resize:none;line-height:1.5;"></textarea>
-        </div>
-        <div>
-          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-3);margin-bottom:6px;">Photos d'inspiration</div>
-          <div onclick="showHint('Photo ajoutée')" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:24px;border:1.5px dashed var(--border-dark);border-radius:12px;cursor:pointer;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
-            <span style="font-size:12px;font-weight:600;color:var(--text-3);">Ajouter des photos</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Étape 3 : Budget & délai -->
-      <div id="baStepContent3" style="display:none;">
-        <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);margin-bottom:6px;letter-spacing:-0.02em;">Budget & délai</div>
-        <div style="font-size:12px;color:var(--text-3);margin-bottom:20px;line-height:1.5;">Indiquez votre fourchette budgétaire.</div>
-        <div style="margin-bottom:14px;">
-          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-3);margin-bottom:6px;">Budget estimé (FCFA)</div>
-          <div id="baBudget" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-            <div class="brief-option" onclick="selectBriefOption(this,'baBudget')">≤ 100k</div>
-            <div class="brief-option" onclick="selectBriefOption(this,'baBudget')">100k–250k</div>
-            <div class="brief-option" onclick="selectBriefOption(this,'baBudget')">250k–500k</div>
-            <div class="brief-option" onclick="selectBriefOption(this,'baBudget')">500k+</div>
-          </div>
-        </div>
-        <div style="margin-bottom:14px;">
-          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-3);margin-bottom:6px;">Délai souhaité</div>
-          <div id="baDelay" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-            <div class="brief-option" onclick="selectBriefOption(this,'baDelay')">Urgent (≤ 2 sem)</div>
-            <div class="brief-option" onclick="selectBriefOption(this,'baDelay')">Normal (1 mois)</div>
-            <div class="brief-option" onclick="selectBriefOption(this,'baDelay')">Flexible (2 mois+)</div>
-            <div class="brief-option" onclick="selectBriefOption(this,'baDelay')">Pas de date</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Étape 4 : Récap -->
-      <div id="baStepContent4" style="display:none;">
-        <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);margin-bottom:6px;letter-spacing:-0.02em;">Confirmation</div>
-        <div style="font-size:12px;color:var(--text-3);margin-bottom:20px;line-height:1.5;">Vérifiez votre brief avant envoi.</div>
-        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:20px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border);">
-            <div style="width:40px;height:40px;border-radius:12px;background:var(--amber-pale);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--amber-dark)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 12h-5"/><path d="M15 12c.5 0 1 .2 1.4.6l3 3a2 2 0 0 1 0 2.8l-1.4 1.4a2 2 0 0 1-2.8 0l-3-3a2 2 0 0 1-.6-1.4"/><path d="m10.5 13.5-7-7"/><path d="m6 3 4 4-3 3-4-4z"/></svg>
-            </div>
-            <div>
-              <div style="font-size:13px;font-weight:700;color:var(--text-1);">Brief artisan</div>
-              <div style="font-size:11px;color:var(--text-3);font-weight:600;">Sur-mesure · Devis sous 48h</div>
-            </div>
-          </div>
-          <div style="font-size:12px;color:var(--text-2);line-height:1.7;">
-            Votre brief sera envoyé aux artisans qualifiés de Dedco. Vous recevrez des propositions avec devis sous 48h. Aucun engagement tant que vous n'avez pas accepté une proposition.
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;padding:12px 14px;background:var(--forest-pale);border-radius:12px;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          <div style="font-size:11px;color:var(--forest);font-weight:600;">Paiement sécurisé · Aucun engagement avant acceptation</div>
-        </div>
-      </div>
-
-      <!-- Navigation buttons -->
-      <div style="display:flex;gap:10px;margin-top:28px;">
-        <div id="baPrevBtn" onclick="briefArtisanPrev()" style="display:none;flex:1;height:48px;background:var(--bg-warm);border-radius:14px;display:none;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--text-1);cursor:pointer;">Retour</div>
-        <div id="baNextBtn" onclick="briefArtisanNext()" style="flex:1;height:48px;background:var(--ink);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:white;cursor:pointer;">Continuer →</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ SCREEN: BRIEF DESIGNER (multi-étapes) ═══ -->
-  <div class="screen-page" id="screen-brief-designer" style="top:0;bottom:0;background:var(--bg-cream);overflow-y:auto;">
-    <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:20;">
-      <div class="gallery-btn" onclick="navigateTo('brief')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-      </div>
-      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:16px;font-weight:600;color:var(--text-1);letter-spacing:-0.01em;">Designer d'espace</div>
-      <div style="width:40px;"></div>
-    </div>
-    <div style="padding:calc(44px + var(--safe-top) + 70px) 16px 40px;">
-      <!-- Step indicator -->
-      <div style="display:flex;align-items:center;gap:6px;margin-bottom:24px;">
-        <div id="bdStep1" class="brief-step active">1</div>
-        <div class="brief-step-line"></div>
-        <div id="bdStep2" class="brief-step">2</div>
-        <div class="brief-step-line"></div>
-        <div id="bdStep3" class="brief-step">3</div>
-        <div class="brief-step-line"></div>
-        <div id="bdStep4" class="brief-step">4</div>
-      </div>
-
-      <!-- Étape 1 : Espace -->
-      <div id="bdStepContent1" style="display:block;">
-        <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);margin-bottom:6px;letter-spacing:-0.02em;">Quel espace ?</div>
-        <div style="font-size:12px;color:var(--text-3);margin-bottom:20px;line-height:1.5;">Sélectionnez la pièce à aménager.</div>
-        <div id="bdSpace" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-          <div class="brief-option" onclick="selectBriefOption(this,'bdSpace')">Salon</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'bdSpace')">Chambre</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'bdSpace')">Salle à manger</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'bdSpace')">Bureau</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'bdSpace')">Cuisine</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'bdSpace')">Entrée</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'bdSpace')">Salle de bain</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'bdSpace')">Logement entier</div>
-        </div>
-        <div style="margin-top:14px;">
-          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-3);margin-bottom:6px;">Surface (m²)</div>
-          <input type="number" placeholder="Ex : 25" style="width:100%;padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;box-sizing:border-box;">
-        </div>
-      </div>
-
-      <!-- Étape 2 : Style -->
-      <div id="bdStepContent2" style="display:none;">
-        <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);margin-bottom:6px;letter-spacing:-0.02em;">Quel style ?</div>
-        <div style="font-size:12px;color:var(--text-3);margin-bottom:20px;line-height:1.5;">Choisissez l'ambiance recherchée.</div>
-        <div id="bdStyle" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-          <div class="brief-option" onclick="selectBriefOption(this,'bdStyle')">Afro-contemporain</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'bdStyle')">Tropical minimaliste</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'bdStyle')">Tropical luxe</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'bdStyle')">Méditerranée africaine</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'bdStyle')">Art & Artisanat</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'bdStyle')">Minimaliste</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'bdStyle')">Bohème</div>
-          <div class="brief-option" onclick="selectBriefOption(this,'bdStyle')">Industriel</div>
-        </div>
-        <div style="margin-top:14px;">
-          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-3);margin-bottom:6px;">Description du projet</div>
-          <textarea placeholder="Décrivez votre vision, vos besoins, les contraintes (budget, usages, famille)..." style="width:100%;min-height:100px;padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:500;color:var(--text-1);font-family:inherit;outline:none;box-sizing:border-box;resize:none;line-height:1.5;"></textarea>
-        </div>
-      </div>
-
-      <!-- Étape 3 : Budget & photos -->
-      <div id="bdStepContent3" style="display:none;">
-        <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);margin-bottom:6px;letter-spacing:-0.02em;">Budget & inspirations</div>
-        <div style="font-size:12px;color:var(--text-3);margin-bottom:20px;line-height:1.5;">Indiquez votre budget et ajoutez des photos.</div>
-        <div style="margin-bottom:14px;">
-          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-3);margin-bottom:6px;">Budget (FCFA)</div>
-          <div id="bdBudget" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-            <div class="brief-option" onclick="selectBriefOption(this,'bdBudget')">≤ 250k</div>
-            <div class="brief-option" onclick="selectBriefOption(this,'bdBudget')">250k–500k</div>
-            <div class="brief-option" onclick="selectBriefOption(this,'bdBudget')">500k–1M</div>
-            <div class="brief-option" onclick="selectBriefOption(this,'bdBudget')">1M+</div>
-          </div>
-        </div>
-        <div>
-          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-3);margin-bottom:6px;">Photos de l'espace & inspirations</div>
-          <div onclick="showHint('Photo ajoutée')" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:24px;border:1.5px dashed var(--border-dark);border-radius:12px;cursor:pointer;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
-            <span style="font-size:12px;font-weight:600;color:var(--text-3);">Ajouter des photos</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Étape 4 : Récap -->
-      <div id="bdStepContent4" style="display:none;">
-        <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);margin-bottom:6px;letter-spacing:-0.02em;">Confirmation</div>
-        <div style="font-size:12px;color:var(--text-3);margin-bottom:20px;line-height:1.5;">Vérifiez votre brief avant envoi.</div>
-        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:20px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border);">
-            <div style="width:40px;height:40px;border-radius:12px;background:var(--forest-pale);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
-            </div>
-            <div>
-              <div style="font-size:13px;font-weight:700;color:var(--text-1);">Brief designer</div>
-              <div style="font-size:11px;color:var(--text-3);font-weight:600;">Aménagement complet · Plan 2D/3D</div>
-            </div>
-          </div>
-          <div style="font-size:12px;color:var(--text-2);line-height:1.7;">
-            Votre brief sera envoyé aux designers partenaires de Dedco. Vous recevrez des propositions avec plan d'aménagement et devis. Le designer coordonne l'ensemble du projet, de la conception à la livraison.
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;padding:12px 14px;background:var(--forest-pale);border-radius:12px;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          <div style="font-size:11px;color:var(--forest);font-weight:600;">Paiement sécurisé · Aucun engagement avant acceptation</div>
-        </div>
-      </div>
-
-      <!-- Navigation buttons -->
-      <div style="display:flex;gap:10px;margin-top:28px;">
-        <div id="bdPrevBtn" onclick="briefDesignerPrev()" style="display:none;flex:1;height:48px;background:var(--bg-warm);border-radius:14px;display:none;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--text-1);cursor:pointer;">Retour</div>
-        <div id="bdNextBtn" onclick="briefDesignerNext()" style="flex:1;height:48px;background:var(--ink);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:white;cursor:pointer;">Continuer →</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ SCREEN: MES COMMANDES (liste) ═══ -->
-  <div class="screen-page" id="screen-commandes" style="top:0;bottom:0;background:var(--bg-cream);overflow-y:auto;">
-    <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:20;">
-      <div class="gallery-btn" onclick="navigateTo('compte')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-      </div>
-      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:16px;font-weight:600;color:var(--text-1);letter-spacing:-0.01em;">Mes commandes</div>
-      <div style="width:40px;"></div>
-    </div>
-    <div style="padding:calc(44px + var(--safe-top) + 70px) 16px 40px;">
-      <!-- Filtres statut -->
-      <div id="orderFilters" style="display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:18px;">
-        <div class="order-filter active" data-status="all" onclick="selectOrderFilter(this)">Toutes (12)</div>
-        <div class="order-filter" data-status="livraison" onclick="selectOrderFilter(this)">En livraison (2)</div>
-        <div class="order-filter" data-status="fabrication" onclick="selectOrderFilter(this)">En fabrication (3)</div>
-        <div class="order-filter" data-status="livree" onclick="selectOrderFilter(this)">Livrées (6)</div>
-        <div class="order-filter" data-status="litige" onclick="selectOrderFilter(this)">Litiges (1)</div>
-      </div>
-      <!-- Liste commandes -->
-      <div id="ordersList"></div>
     </div>
   </div>
 
@@ -4401,152 +3511,169 @@ button:active { transform: scale(0.96); }
 
   <!-- ═══ SCREEN: FAVORIS ═══ -->
   <div class="screen-page" id="screen-favoris">
-    <div style="padding:20px 16px 40px;">
-      <!-- Header éditorial -->
-      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:18px;">
-        <div>
-          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:24px;font-weight:600;color:var(--text-1);letter-spacing:-0.02em;">Mes favoris</div>
-          <div style="font-size:11px;color:var(--text-3);margin-top:2px;"><span id="favCount">12</span> éléments sauvegardés</div>
+    <div style="padding:20px;">
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);margin-bottom:16px;">Mes favoris</div>
+
+      <!-- Tabs -->
+      <div style="display:flex;gap:8px;margin-bottom:20px;overflow-x:auto;scrollbar-width:none;">
+        <div style="flex-shrink:0;padding:8px 16px;background:var(--amber);color:white;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">Tout (12)</div>
+        <div style="flex-shrink:0;padding:8px 16px;background:var(--bg-warm);color:var(--text-2);border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">Produits (6)</div>
+        <div style="flex-shrink:0;padding:8px 16px;background:var(--bg-warm);color:var(--text-2);border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">Inspirations (4)</div>
+        <div style="flex-shrink:0;padding:8px 16px;background:var(--bg-warm);color:var(--text-2);border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;">Créateurs (2)</div>
+      </div>
+
+      <!-- Produits favoris -->
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-3);margin-bottom:10px;">Produits favoris</div>
+      <div class="products-grid" style="margin-bottom:24px;">
+        <div class="product-card" onclick="openProduct(1)">
+          <div class="product-img-wrap">
+            <img src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=400&q=85">
+            <span class="product-badge amber">UNIQUE</span>
+            <div class="product-fav active" onclick="event.stopPropagation(); toggleFav(this)">
+              <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Table basse Wax</div>
+            <div class="product-artisan">Kofi A.</div>
+            <div class="product-price">145 000 FCFA</div>
+          </div>
         </div>
-        <div onclick="toggleFavSort(this)" id="favSortBtn" style="display:flex;align-items:center;gap:5px;padding:8px 12px;background:var(--bg-warm);border-radius:12px;cursor:pointer;">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="m21 8-4-4-4 4"/><path d="M17 4v16"/></svg>
-          <span id="favSortLabel" style="font-size:11px;font-weight:700;color:var(--text-1);">Récents</span>
+        <div class="product-card" onclick="openProduct(3)">
+          <div class="product-img-wrap">
+            <img src="https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=400&q=85">
+            <div class="product-fav active" onclick="event.stopPropagation(); toggleFav(this)">
+              <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Lampe Bogolan</div>
+            <div class="product-artisan">Sophie K.</div>
+            <div class="product-price">65 000 FCFA</div>
+          </div>
         </div>
       </div>
 
-      <!-- Tabs fonctionnelles -->
-      <div id="favTabs" style="display:flex;gap:6px;margin-bottom:20px;overflow-x:auto;scrollbar-width:none;">
-        <div class="fav-tab active" data-tab="all" onclick="selectFavTab(this)">Tout (12)</div>
-        <div class="fav-tab" data-tab="produits" onclick="selectFavTab(this)">Produits (6)</div>
-        <div class="fav-tab" data-tab="inspirations" onclick="selectFavTab(this)">Inspirations (4)</div>
-        <div class="fav-tab" data-tab="createurs" onclick="selectFavTab(this)">Créateurs (2)</div>
+      <!-- Inspirations favorites -->
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-3);margin-bottom:10px;">Inspirations favorites</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;">
+        <div style="position:relative;border-radius:14px;overflow:hidden;cursor:pointer;box-shadow:var(--shadow-sm);">
+          <img src="https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&w=300&q=85" style="width:100%;aspect-ratio:3/4;object-fit:cover;">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(30,24,19,0.7),transparent 50%);"></div>
+          <div style="position:absolute;bottom:10px;left:10px;color:white;font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:13px;font-weight:600;">Salon Tropical</div>
+        </div>
+        <div style="position:relative;border-radius:14px;overflow:hidden;cursor:pointer;box-shadow:var(--shadow-sm);">
+          <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=300&q=85" style="width:100%;aspect-ratio:3/4;object-fit:cover;">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(30,24,19,0.7),transparent 50%);"></div>
+          <div style="position:absolute;bottom:10px;left:10px;color:white;font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:13px;font-weight:600;">Salle à manger Kente</div>
+        </div>
       </div>
 
-      <!-- Contenu dynamique -->
-      <div id="favContent"></div>
+      <!-- Créateurs favoris -->
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-3);margin-bottom:10px;">Créateurs favoris</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="creator-card" onclick="navigateTo('artisan')" style="background:var(--bg-card);border-radius:14px;box-shadow:var(--shadow-sm);padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;">
+          <div class="creator-avatar-wrap">
+            <img class="creator-avatar" src="https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=100&q=85">
+            <div class="creator-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          </div>
+          <div class="creator-info">
+            <div class="creator-name">Kofi A.</div>
+            <div class="creator-specialty">Mobilier <span class="creator-level">N3</span></div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--terracotta)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="var(--terracotta)"/></svg>
+        </div>
+        <div class="creator-card" onclick="navigateTo('designer')" style="background:var(--bg-card);border-radius:14px;box-shadow:var(--shadow-sm);padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;">
+          <div class="creator-avatar-wrap">
+            <img class="creator-avatar" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=100&q=85">
+            <div class="creator-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          </div>
+          <div class="creator-info">
+            <div class="creator-name">Ndèye S.</div>
+            <div class="creator-specialty">Designer <span class="creator-level">N4</span></div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--terracotta)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="var(--terracotta)"/></svg>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- ═══ SCREEN: DESIGNER (plein écran) ═══ -->
-  <div class="screen-page" id="screen-designer" style="top:0;bottom:0;background:var(--bg-cream);overflow-y:auto;">
-    <!-- Cover -->
+  <div class="screen-page" id="screen-designer" style="top:0;bottom:0;background:var(--bg-cream);">
     <div style="position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;">
       <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=85" style="width:100%;height:100%;object-fit:cover;">
-      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(30,24,19,0.85) 0%,rgba(30,24,19,0.2) 50%,transparent 100%);"></div>
-      <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;z-index:20;">
+      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(30,24,19,0.8) 0%,transparent 50%);"></div>
+      <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;">
         <div class="gallery-btn" onclick="navigateTo('home')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-        </div>
-        <div style="display:flex;gap:6px;">
-          <div class="gallery-btn" onclick="showHint('Partager')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
-          </div>
-          <div class="gallery-btn" onclick="showHint('Favori ajouté')" style="color:var(--terracotta);">
-            <svg viewBox="0 0 24 24" fill="var(--terracotta)" stroke="var(--terracotta)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
         </div>
       </div>
     </div>
-
-    <div style="padding:0 16px 100px;">
-      <!-- Avatar + nom -->
-      <div style="display:flex;align-items:flex-end;gap:14px;margin-top:-40px;position:relative;z-index:2;margin-bottom:18px;">
+    <div style="padding:20px;">
+      <div style="display:flex;align-items:flex-end;gap:14px;margin-top:-40px;position:relative;z-index:2;margin-bottom:16px;">
         <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=160&q=85" style="width:80px;height:80px;border-radius:999px;object-fit:cover;border:3px solid var(--bg-cream);box-shadow:var(--shadow-md);">
-        <div style="flex:1;padding-bottom:6px;">
-          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-            <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);letter-spacing:-0.02em;">Ndèye Sarr</div>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--amber)" stroke="var(--amber)" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </div>
-          <div style="font-size:11.5px;color:var(--text-3);font-weight:600;margin-top:2px;display:flex;align-items:center;gap:4px;">
+        <div style="flex:1;padding-bottom:4px;">
+          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:600;color:var(--text-1);">Ndèye Sarr</div>
+          <div style="font-size:12px;color:var(--text-3);display:flex;align-items:center;gap:4px;">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            Cotonou · Designer d'intérieur · Niveau 4
+            Cotonou · Designer d'intérieur · N4
           </div>
-          <div style="display:flex;gap:5px;margin-top:6px;flex-wrap:wrap;">
-            <span style="font-size:9px;padding:2px 8px;background:var(--bg-warm);color:var(--text-2);border-radius:999px;font-weight:700;">Afro-contemporain</span>
-            <span style="font-size:9px;padding:2px 8px;background:var(--bg-warm);color:var(--text-2);border-radius:999px;font-weight:700;">Minimaliste</span>
+          <div style="display:flex;gap:5px;margin-top:4px;">
+            <span style="font-size:9px;padding:2px 7px;background:var(--amber-pale);color:var(--amber-dark);border-radius:999px;font-weight:600;">Afro-contemporain</span>
+            <span style="font-size:9px;padding:2px 7px;background:var(--amber-pale);color:var(--amber-dark);border-radius:999px;font-weight:600;">Minimaliste</span>
           </div>
         </div>
       </div>
 
-      <!-- Stats éditoriales -->
-      <div style="display:flex;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:14px 8px;margin-bottom:20px;">
-        <div style="flex:1;text-align:center;">
-          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:700;color:var(--text-1);font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">23</div>
-          <div style="font-size:10px;color:var(--text-3);font-weight:600;margin-top:1px;">Projets</div>
+      <div style="display:flex;gap:8px;margin-bottom:20px;">
+        <div style="flex:1;text-align:center;padding:12px;background:var(--bg-card);border-radius:12px;box-shadow:var(--shadow-sm);">
+          <div style="font-size:18px;font-weight:700;color:var(--text-1);">23</div>
+          <div style="font-size:10px;color:var(--text-3);">Projets</div>
         </div>
-        <div style="width:1px;background:var(--border);"></div>
-        <div style="flex:1;text-align:center;">
-          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:700;color:var(--text-1);font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">4.9</div>
-          <div style="font-size:10px;color:var(--text-3);font-weight:600;margin-top:1px;">Note</div>
+        <div style="flex:1;text-align:center;padding:12px;background:var(--bg-card);border-radius:12px;box-shadow:var(--shadow-sm);">
+          <div style="font-size:18px;font-weight:700;color:var(--text-1);">4.9</div>
+          <div style="font-size:10px;color:var(--text-3);">Note</div>
         </div>
-        <div style="width:1px;background:var(--border);"></div>
-        <div style="flex:1;text-align:center;">
-          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:22px;font-weight:700;color:var(--text-1);font-variant-numeric:tabular-nums;letter-spacing:-0.02em;">8 ans</div>
-          <div style="font-size:10px;color:var(--text-3);font-weight:600;margin-top:1px;">Expérience</div>
+        <div style="flex:1;text-align:center;padding:12px;background:var(--bg-card);border-radius:12px;box-shadow:var(--shadow-sm);">
+          <div style="font-size:18px;font-weight:700;color:var(--text-1);">8 ans</div>
+          <div style="font-size:10px;color:var(--text-3);">Expérience</div>
         </div>
       </div>
 
-      <!-- Bio -->
-      <div style="font-size:13px;line-height:1.6;color:var(--text-2);margin-bottom:22px;">Designer d'intérieur spécialisée dans le mélange de styles contemporains et de savoir-faire béninois. Je transforme les espaces en créant des intérieurs chaleureux et uniques.</div>
+      <div style="font-size:13px;line-height:1.6;color:var(--text-2);margin-bottom:20px;">
+        Designer d'intérieur spécialisée dans le mélange de styles contemporains et de savoir-faire béninois. Je transforme les espaces en créant des intérieurs chaleureux et uniques.
+      </div>
 
-      <!-- Trust badges -->
-      <div style="display:flex;align-items:stretch;margin-bottom:24px;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--bg-card);">
-        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 4px;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <div style="font-size:9px;font-weight:700;color:var(--text-1);text-align:center;line-height:1.2;">Garantie<br>Dedco</div>
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:600;color:var(--text-1);margin-bottom:12px;">Portfolio</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
+        <div style="position:relative;border-radius:12px;overflow:hidden;cursor:pointer;">
+          <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=300&q=85" style="width:100%;aspect-ratio:1;object-fit:cover;">
+          <div style="position:absolute;bottom:8px;left:8px;color:white;font-size:11px;font-weight:600;text-shadow:0 1px 4px rgba(0,0,0,0.5);">Bureau Afro</div>
         </div>
-        <div style="width:1px;background:var(--border);"></div>
-        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 4px;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m22 11-3 3-2-2"/></svg>
-          <div style="font-size:9px;font-weight:700;color:var(--text-1);text-align:center;line-height:1.2;">Designer<br>vérifié</div>
-        </div>
-        <div style="width:1px;background:var(--border);"></div>
-        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 4px;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          <div style="font-size:9px;font-weight:700;color:var(--text-1);text-align:center;line-height:1.2;">Plan<br>2D/3D</div>
+        <div style="position:relative;border-radius:12px;overflow:hidden;cursor:pointer;">
+          <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=300&q=85" style="width:100%;aspect-ratio:1;object-fit:cover;">
+          <div style="position:absolute;bottom:8px;left:8px;color:white;font-size:11px;font-weight:600;text-shadow:0 1px 4px rgba(0,0,0,0.5);">Salle à manger</div>
         </div>
       </div>
 
-      <!-- Portfolio -->
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
-        <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:600;color:var(--text-1);letter-spacing:-0.01em;">Portfolio</div>
-        <div style="flex:1;height:1px;background:var(--border);"></div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;">
-        <div style="position:relative;border-radius:12px;overflow:hidden;cursor:pointer;aspect-ratio:1;" onclick="showHint('Projet')">
-          <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=300&q=85" style="width:100%;height:100%;object-fit:cover;">
-          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(30,24,19,0.75) 0%,transparent 60%);"></div>
-          <div style="position:absolute;bottom:8px;left:8px;color:white;font-size:11px;font-weight:700;font-family:'Quache','Plus Jakarta Sans',Georgia,serif;">Bureau Afro</div>
-        </div>
-        <div style="position:relative;border-radius:12px;overflow:hidden;cursor:pointer;aspect-ratio:1;" onclick="showHint('Projet')">
-          <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=300&q=85" style="width:100%;height:100%;object-fit:cover;">
-          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(30,24,19,0.75) 0%,transparent 60%);"></div>
-          <div style="position:absolute;bottom:8px;left:8px;color:white;font-size:11px;font-weight:700;font-family:'Quache','Plus Jakarta Sans',Georgia,serif;">Salle à manger</div>
-        </div>
-      </div>
-
-      <!-- Services -->
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
-        <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:600;color:var(--text-1);letter-spacing:-0.01em;">Services</div>
-        <div style="flex:1;height:1px;background:var(--border);"></div>
-      </div>
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;margin-bottom:12px;padding:14px;">
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:18px;font-weight:600;color:var(--text-1);margin-bottom:12px;">Services</div>
+      <div style="background:var(--bg-card);border-radius:14px;box-shadow:var(--shadow-sm);margin-bottom:12px;padding:16px;">
         <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div style="flex:1;">
-            <div style="font-size:13.5px;font-weight:700;color:var(--text-1);">Consultation complète</div>
-            <div style="font-size:11px;color:var(--text-3);font-weight:600;margin-top:2px;">Plan 2D/3D + sélection mobilier</div>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--text-1);margin-bottom:2px;">Consultation complète</div>
+            <div style="font-size:11px;color:var(--text-3);">Plan 2D/3D + sélection mobilier</div>
           </div>
-          <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:15px;font-weight:700;color:var(--amber-dark);font-variant-numeric:tabular-nums;">350k<span style="font-size:10px;color:var(--text-3);font-weight:600;"> FCFA</span></div>
+          <div style="font-size:14px;font-weight:700;color:var(--amber-dark);font-variant-numeric:tabular-nums;">350 000 FCFA</div>
         </div>
       </div>
     </div>
-
-    <!-- CTA sticky -->
     <div class="product-floating-cta">
       <div class="float-btn-secondary" onclick="navigateTo('chat')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       </div>
-      <button class="float-btn-primary" onclick="navigateTo('brief')">Prendre rendez-vous</button>
+      <button class="float-btn-primary" onclick="navigateTo('brief')">
+        Démarrer un projet
+      </button>
     </div>
   </div>
 
@@ -4626,70 +3753,44 @@ button:active { transform: scale(0.96); }
       <div style="width:38px;height:38px;border-radius:12px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;" onclick="showHint('Joindre')">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
       </div>
-      <input type="text" id="chatInput" placeholder="Votre message..." onkeypress="if(event.key==='Enter') sendChatMessage()" style="flex:1;padding:10px 16px;background:var(--bg-warm);border:1px solid var(--border);border-radius:14px;font-size:13.5px;outline:none;font-family:inherit;color:var(--text-1);min-width:0;">
-      <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--amber) 0%,var(--amber-dark) 100%);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;box-shadow:0 4px 10px rgba(191,121,59,0.25);" onclick="sendChatMessage()">
+      <input type="text" placeholder="Votre message..." style="flex:1;padding:10px 16px;background:var(--bg-warm);border:1px solid var(--border);border-radius:14px;font-size:13.5px;outline:none;font-family:inherit;color:var(--text-1);min-width:0;">
+      <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--amber) 0%,var(--amber-dark) 100%);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;box-shadow:0 4px 10px rgba(191,121,59,0.25);" onclick="showHint('Envoyé')">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
       </div>
     </div>
   </div>
 
   <!-- ═══ SCREEN: AUTH (login) ═══ -->
-  <div class="screen-page" id="screen-auth" style="top:0;bottom:0;background:var(--bg-cream);overflow-y:auto;">
+  <div class="screen-page" id="screen-auth" style="top:0;bottom:0;background:var(--bg-cream);">
     <div style="position:absolute;top:calc(44px + var(--safe-top) + 12px);left:16px;z-index:20;">
       <div class="gallery-btn" onclick="navigateTo('home')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
       </div>
     </div>
-    <div style="padding:calc(44px + var(--safe-top) + 60px) 24px 40px;display:flex;flex-direction:column;min-height:100%;box-sizing:border-box;">
-      <!-- Logo Dedco centré -->
-      <div style="text-align:center;margin-bottom:40px;">
-        <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:42px;font-weight:600;color:var(--text-1);letter-spacing:-0.04em;line-height:1;">Dedco<span style="color:var(--amber);">.</span></div>
-        <div style="font-size:11px;color:var(--text-3);margin-top:8px;letter-spacing:0.04em;">L'art de vivre chez soi</div>
+    <div style="padding:100px 24px 24px;">
+      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:28px;font-weight:600;color:var(--text-1);margin-bottom:6px;">Bienvenue</div>
+      <div style="font-size:13px;color:var(--text-3);margin-bottom:32px;">Connectez-vous pour accéder à vos projets et commandes.</div>
+
+      <div style="margin-bottom:16px;">
+        <div style="font-size:12px;color:var(--text-2);margin-bottom:6px;font-weight:600;">Email ou téléphone</div>
+        <input type="text" placeholder="fatou.kossou@email.bj" style="width:100%;padding:14px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;outline:none;font-family:inherit;color:var(--text-1);">
       </div>
 
-      <!-- Titre -->
-      <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:24px;font-weight:600;color:var(--text-1);margin-bottom:6px;letter-spacing:-0.02em;">Bienvenue</div>
-      <div style="font-size:12.5px;color:var(--text-3);margin-bottom:28px;line-height:1.5;">Connectez-vous pour accéder à vos commandes, projets et favoris.</div>
-
-      <!-- Phone input avec indicatif Bénin -->
-      <div style="margin-bottom:14px;">
-        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-3);margin-bottom:6px;">Téléphone</div>
-        <div style="display:flex;gap:8px;">
-          <div style="padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:700;color:var(--text-1);font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:5px;flex-shrink:0;">🇧🇯 +229</div>
-          <input type="tel" placeholder="01 97 12 34 56" style="flex:1;min-width:0;padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;box-sizing:border-box;">
-        </div>
-      </div>
-
-      <!-- Mot de passe -->
       <div style="margin-bottom:20px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-3);">Mot de passe</div>
-          <div style="font-size:11px;color:var(--amber-dark);font-weight:700;cursor:pointer;" onclick="showHint('Reset mot de passe')">Oublié ?</div>
+          <div style="font-size:12px;color:var(--text-2);font-weight:600;">Mot de passe</div>
+          <div style="font-size:11px;color:var(--amber-dark);font-weight:600;cursor:pointer;" onclick="showHint('Reset mot de passe')">Oublié ?</div>
         </div>
-        <input type="password" placeholder="••••••••" style="width:100%;padding:13px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text-1);font-family:inherit;outline:none;box-sizing:border-box;">
+        <input type="password" placeholder="••••••••" style="width:100%;padding:14px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:14px;outline:none;font-family:inherit;color:var(--text-1);">
       </div>
 
-      <!-- Bouton se connecter -->
-      <button onclick="navigateTo('home')" style="width:100%;height:52px;background:var(--ink);color:white;border:none;border-radius:14px;font-size:14px;font-weight:800;font-family:inherit;cursor:pointer;margin-bottom:20px;">Se connecter</button>
+      <button class="float-btn-primary" style="width:100%;height:50px;font-size:15px;margin-bottom:20px;" onclick="navigateTo('home')">Se connecter</button>
 
-      <!-- Divider -->
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
-        <div style="flex:1;height:1px;background:var(--border);"></div>
-        <div style="font-size:10px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">ou</div>
-        <div style="flex:1;height:1px;background:var(--border);"></div>
+      <div style="text-align:center;font-size:13px;color:var(--text-3);">Pas encore de compte ? <span style="color:var(--amber-dark);font-weight:600;cursor:pointer;" onclick="showHint('Inscription')">S'inscrire</span></div>
+
+      <div style="margin-top:32px;text-align:center;font-size:11px;color:var(--text-3);line-height:1.5;">
+        En vous connectant, vous acceptez les conditions générales de Dedco et sa politique de confidentialité.
       </div>
-
-      <!-- Google -->
-      <div onclick="navigateTo('home')" style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:48px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;cursor:pointer;margin-bottom:24px;">
-        <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        <span style="font-size:13px;font-weight:700;color:var(--text-1);">Continuer avec Google</span>
-      </div>
-
-      <!-- Inscription -->
-      <div style="text-align:center;font-size:12.5px;color:var(--text-3);margin-bottom:24px;">Pas encore de compte ? <span style="color:var(--amber-dark);font-weight:700;cursor:pointer;" onclick="showHint('Inscription')">S'inscrire</span></div>
-
-      <!-- CGU -->
-      <div style="margin-top:auto;text-align:center;font-size:10px;color:var(--text-3);line-height:1.5;">En vous connectant, vous acceptez les conditions générales de Dedco et sa politique de confidentialité.</div>
     </div>
   </div>
 
@@ -4919,7 +4020,7 @@ function navigateTo(screen) {
   document.getElementById('scroll').style.display = 'none';
 
   // Écrans plein écran (pas de header, pas de tab bar)
-  const fullscreenScreens = ['product', 'artisan', 'brief', 'brief-artisan', 'brief-designer', 'tracking', 'checkout', 'designer', 'chat', 'auth', 'confirmation', 'review', 'litige', 'scene', 'placeholder', 'profil', 'adresses', 'paiements', 'avis', 'langue', 'aide', 'parametres', 'commandes'];
+  const fullscreenScreens = ['product', 'artisan', 'brief', 'tracking', 'checkout', 'designer', 'chat', 'auth', 'confirmation', 'review', 'litige', 'scene'];
   const isFullscreen = fullscreenScreens.includes(screen);
 
   // Écrans où la search bar est utile (présence justifiée)
@@ -4971,12 +4072,6 @@ function navigateTo(screen) {
   }
 
   currentScreen = screen;
-
-  // Si on ouvre le placeholder, mettre à jour le titre dynamiquement
-  if (screen === 'placeholder' && window._placeholderTitle) {
-    document.getElementById('placeholderTitle').textContent = window._placeholderTitle;
-    document.getElementById('placeholderText').textContent = window._placeholderTitle;
-  }
 
   // Update header greeting
   const greetings = {
@@ -5049,36 +4144,18 @@ function getProductImages(p) {
   return crops.map((suffix, i) => i === 0 ? base : base + suffix);
 }
 
-// Gallery counter + dots
+// Gallery counter — no duplicate listeners
 let _galleryScrollHandler = null;
 function updateGalleryCounter() {
   const scroll = document.getElementById('productGalleryScroll');
   const counter = document.getElementById('galleryCounter');
-  const dotsContainer = document.getElementById('galleryDots');
   if (!scroll || !counter) return;
   const totalSlides = scroll.children.length;
-
-  // Générer les dots
-  if (dotsContainer && dotsContainer.children.length !== totalSlides) {
-    dotsContainer.innerHTML = '';
-    for (let i = 0; i < totalSlides; i++) {
-      const dot = document.createElement('div');
-      dot.className = 'gallery-dot' + (i === 0 ? ' active' : '');
-      dotsContainer.appendChild(dot);
-    }
-  }
-
   // Remove old listener to avoid leaks
   if (_galleryScrollHandler) scroll.removeEventListener('scroll', _galleryScrollHandler);
   _galleryScrollHandler = () => {
-    const idx = Math.round(scroll.scrollLeft / scroll.offsetWidth);
-    counter.textContent = (idx + 1) + '/' + totalSlides;
-    // Update dots
-    if (dotsContainer) {
-      dotsContainer.querySelectorAll('.gallery-dot').forEach((d, i) => {
-        d.classList.toggle('active', i === idx);
-      });
-    }
+    const idx = Math.round(scroll.scrollLeft / scroll.offsetWidth) + 1;
+    counter.textContent = idx + '/' + totalSlides;
   };
   scroll.addEventListener('scroll', _galleryScrollHandler);
   _galleryScrollHandler(); // init
@@ -5480,28 +4557,13 @@ function applySort(sort, el, label) {
 }
 
 let currentInspoFilter = 'all';
-let currentInspoSearch = '';
 let _currentSceneId = null;
 let _activeHotspot = null;
 
-function onInspoSearch(val) {
-  currentInspoSearch = val.trim().toLowerCase();
-  renderInspirations();
-}
-
 function renderInspirations() {
-  let filtered = currentInspoFilter === 'all'
+  const filtered = currentInspoFilter === 'all'
     ? SCENES
     : SCENES.filter(s => s.tag === currentInspoFilter);
-
-  // Recherche textuelle
-  if (currentInspoSearch) {
-    filtered = filtered.filter(s =>
-      (s.name && s.name.toLowerCase().includes(currentInspoSearch)) ||
-      (s.tagLabel && s.tagLabel.toLowerCase().includes(currentInspoSearch)) ||
-      (s.count && s.count.toLowerCase().includes(currentInspoSearch))
-    );
-  }
 
   const featuredEl = document.getElementById('inspoFeatured');
   const container = document.getElementById('inspoMasonry');
@@ -5583,438 +4645,6 @@ function selectFilter(el) {
   el.classList.add('active');
   currentInspoFilter = el.dataset.filter || 'all';
   renderInspirations();
-}
-
-// ═══ FAVORIS ═══
-const FAVORITES = {
-  produits: [
-    { id: 1, name: "Table basse Wax", artisan: "Kofi Akindélé", price: 145000, img: "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber", date: 'aujourd\'hui' },
-    { id: 3, name: "Lampe Bogolan", artisan: "Sophie Kpadé", price: 65000, img: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=400&q=85", date: 'hier' },
-    { id: 14, name: "Fauteuil Lounge Iroko", artisan: "Kofi Akindélé", price: 320000, img: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=400&q=85", date: '2 j' },
-    { id: 29, name: "Sculpture Feminine Iroko", artisan: "Étienne Dossou-Yovo", price: 285000, img: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber", date: '3 j' },
-    { id: 38, name: "Vase Bouquet Grès Noir 50cm", artisan: "Léa Houngbédji", price: 78000, img: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=400&q=85", date: '5 j' },
-    { id: 4, name: "Miroir Raffia", artisan: "Sophie Kpadé", price: 95000, img: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=400&q=85", badge: "UNIQUE", badgeColor: "amber", date: '1 sem' },
-  ],
-  inspirations: [
-    { id: 1, title: "Salon Tropical Adjamé", room: "Salon", img: "https://images.unsplash.com/photo-1617364852223-75f57e78dc96?auto=format&fit=crop&w=400&q=85", count: 3 },
-    { id: 6, title: "Salon Bois & Wax", room: "Salon", img: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=400&q=85", count: 6 },
-    { id: 2, title: "Chambre Sahélienne", room: "Chambre", img: "https://images.unsplash.com/photo-1566921895456-1cee64031c33?auto=format&fit=crop&w=400&q=85", count: 3 },
-    { id: 7, title: "Salle à Manger Kente", room: "Salle à manger", img: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=400&q=85", count: 5 },
-  ],
-  createurs: [
-    { id: 1, name: "Kofi Akindélé", specialty: "Mobilier bois", level: "N3", img: "https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=100&q=85", type: 'artisan' },
-    { id: 2, name: "Ndèye Sow", specialty: "Designer d'intérieur", level: "N4", img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=100&q=85", type: 'designer' },
-  ],
-};
-
-let currentFavTab = 'all';
-let currentFavSort = 'recent'; // 'recent' | 'price-asc' | 'price-desc'
-
-function selectFavTab(el) {
-  document.querySelectorAll('#favTabs .fav-tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  currentFavTab = el.dataset.tab;
-  renderFavorites();
-}
-
-function toggleFavSort(el) {
-  const labels = { 'recent': 'Récents', 'price-asc': 'Prix ↑', 'price-desc': 'Prix ↓' };
-  const order = ['recent', 'price-asc', 'price-desc'];
-  const idx = order.indexOf(currentFavSort);
-  currentFavSort = order[(idx + 1) % order.length];
-  document.getElementById('favSortLabel').textContent = labels[currentFavSort];
-  renderFavorites();
-}
-
-function renderFavorites() {
-  const container = document.getElementById('favContent');
-  if (!container) return;
-  let html = '';
-  
-  // Produits
-  if (currentFavTab === 'all' || currentFavTab === 'produits') {
-    let produits = [...FAVORITES.produits];
-    if (currentFavSort === 'price-asc') produits.sort((a,b) => a.price - b.price);
-    if (currentFavSort === 'price-desc') produits.sort((a,b) => b.price - a.price);
-    
-    if (currentFavTab === 'all') html += `<div class="fav-section-title">Produits favoris (${produits.length})</div>`;
-    html += `<div class="products-grid" style="margin-bottom:${currentFavTab==='all'?'24px':'0'};">`;
-    produits.forEach(p => {
-      html += `
-        <div class="product-card" onclick="openProduct(${p.id})">
-          <div class="product-img-wrap">
-            <img src="${p.img}" alt="${p.name}">
-            ${p.badge ? `<span class="product-badge ${p.badgeColor}">${p.badge}</span>` : ''}
-            <div class="product-fav active" onclick="event.stopPropagation(); removeFav(${p.id}, 'produit', this)">
-              <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            </div>
-          </div>
-          <div class="product-info">
-            <div class="product-name">${p.name}</div>
-            <div class="product-rating">
-              <span class="product-rating-stars">★★★★★</span>
-            </div>
-            <div class="product-price">${p.price.toLocaleString('fr-FR')} FCFA</div>
-          </div>
-        </div>
-      `;
-    });
-    html += `</div>`;
-  }
-  
-  // Inspirations
-  if (currentFavTab === 'all' || currentFavTab === 'inspirations') {
-    if (currentFavTab === 'all') html += `<div class="fav-section-title">Inspirations favorites (${FAVORITES.inspirations.length})</div>`;
-    html += `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:${currentFavTab==='all'?'24px':'0'};">`;
-    FAVORITES.inspirations.forEach(s => {
-      html += `
-        <div style="position:relative;border-radius:14px;overflow:hidden;cursor:pointer;aspect-ratio:3/4;" onclick="openScene(${s.id})">
-          <img src="${s.img}" style="width:100%;height:100%;object-fit:cover;">
-          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(30,24,19,0.78) 0%,rgba(30,24,19,0.15) 45%,transparent 70%);"></div>
-          <div style="position:absolute;top:8px;left:8px;padding:3px 8px;background:rgba(255,255,255,0.92);border-radius:999px;font-size:9px;font-weight:700;color:var(--text-1);text-transform:uppercase;">${s.room}</div>
-          <div style="position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:999px;background:rgba(255,255,255,0.85);display:flex;align-items:center;justify-content:center;cursor:pointer;" onclick="event.stopPropagation(); showHint('Retiré des favoris')">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="var(--terracotta)" stroke="var(--terracotta)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-          </div>
-          <div style="position:absolute;bottom:0;left:0;right:0;padding:10px 12px;color:white;">
-            <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:14px;font-weight:600;line-height:1.15;margin-bottom:2px;">${s.title}</div>
-            <div style="font-size:10px;color:rgba(255,255,255,0.85);font-weight:600;">${s.count} pièces</div>
-          </div>
-        </div>
-      `;
-    });
-    html += `</div>`;
-  }
-  
-  // Créateurs
-  if (currentFavTab === 'all' || currentFavTab === 'createurs') {
-    if (currentFavTab === 'all') html += `<div class="fav-section-title">Créateurs favoris (${FAVORITES.createurs.length})</div>`;
-    html += `<div style="display:flex;flex-direction:column;gap:10px;">`;
-    FAVORITES.createurs.forEach(c => {
-      html += `
-        <div onclick="navigateTo('${c.type}')" style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;">
-          <img src="${c.img}" style="width:48px;height:48px;border-radius:999px;object-fit:cover;flex-shrink:0;">
-          <div style="flex:1;">
-            <div style="font-size:13px;font-weight:700;color:var(--text-1);">${c.name}</div>
-            <div style="font-size:11px;color:var(--text-3);font-weight:600;">${c.specialty} · ${c.level}</div>
-          </div>
-          <div onclick="event.stopPropagation(); showHint('Retiré des favoris')" style="width:32px;height:32px;border-radius:999px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--terracotta)" stroke="var(--terracotta)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </div>
-        </div>
-      `;
-    });
-    html += `</div>`;
-  }
-  
-  container.innerHTML = html;
-}
-
-function removeFav(id, type, el) {
-  el.classList.remove('active');
-  el.style.transform = 'scale(0.8)';
-  setTimeout(() => {
-    FAVORITES.produits = FAVORITES.produits.filter(p => p.id !== id);
-    renderFavorites();
-    updateFavCount();
-  }, 200);
-  showHint('Retiré des favoris');
-}
-
-function updateFavCount() {
-  const total = FAVORITES.produits.length + FAVORITES.inspirations.length + FAVORITES.createurs.length;
-  document.getElementById('favCount').textContent = total;
-  document.querySelectorAll('#favTabs .fav-tab').forEach(t => {
-    const tab = t.dataset.tab;
-    let count = total;
-    if (tab === 'produits') count = FAVORITES.produits.length;
-    if (tab === 'inspirations') count = FAVORITES.inspirations.length;
-    if (tab === 'createurs') count = FAVORITES.createurs.length;
-    const labels = { all: 'Tout', produits: 'Produits', inspirations: 'Inspirations', createurs: 'Créateurs' };
-    t.textContent = `${labels[tab]} (${count})`;
-  });
-}
-
-// ═══ COMMANDES ═══
-const ORDERS = [
-  { id: 'DCO-2024-0142', date: 'Aujourd\'hui · 14:32', status: 'livraison', statusLabel: 'En livraison', title: 'Table basse Wax + 2 articles', items: 3, price: 285000, imgs: [
-    'https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=100&q=85',
-    'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=100&q=85',
-    'https://images.unsplash.com/photo-1567016432779-094069958ea5?auto=format&fit=crop&w=100&q=85'
-  ], artisan: 'Kofi Akindélé' },
-  { id: 'DCO-2024-0141', date: 'Hier · 09:15', status: 'fabrication', statusLabel: 'En fabrication', title: 'Fauteuil Lounge Iroko', items: 1, price: 320000, imgs: [
-    'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=100&q=85'
-  ], artisan: 'Kofi Akindélé' },
-  { id: 'DCO-2024-0140', date: '8 juil. · 16:20', status: 'livraison', statusLabel: 'En livraison', title: 'Vase Soliflore Bronze + Lampe Bogolan', items: 2, price: 160000, imgs: [
-    'https://images.unsplash.com/photo-1606744824163-985d376605aa?auto=format&fit=crop&w=100&q=85',
-    'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=100&q=85'
-  ], artisan: 'Léa Houngbédji' },
-  { id: 'DCO-2024-0139', date: '5 juil. · 11:42', status: 'fabrication', statusLabel: 'En fabrication', title: 'Canapé Iroko 3 places', items: 1, price: 690000, imgs: [
-    'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=100&q=85'
-  ], artisan: 'Kofi Akindélé' },
-  { id: 'DCO-2024-0138', date: '2 juil. · 18:05', status: 'livree', statusLabel: 'Livrée', title: 'Console Abomey', items: 1, price: 295000, imgs: [
-    'https://images.unsplash.com/photo-1532372320572-cda25653a26d?auto=format&fit=crop&w=100&q=85'
-  ], artisan: 'Brice Gbénou' },
-  { id: 'DCO-2024-0137', date: '28 juin · 10:30', status: 'fabrication', statusLabel: 'En fabrication', title: 'Armoire Abomey 3 portes', items: 1, price: 625000, imgs: [
-    'https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=100&q=85'
-  ], artisan: 'Brice Gbénou' },
-  { id: 'DCO-2024-0136', date: '25 juin · 14:12', status: 'livree', statusLabel: 'Livrée', title: 'Miroir Raffia + Lot 4 coussins Wax', items: 2, price: 153000, imgs: [
-    'https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=100&q=85',
-    'https://images.unsplash.com/photo-1592078615290-033ee584e267?auto=format&fit=crop&w=100&q=85'
-  ], artisan: 'Mariam Boukari' },
-  { id: 'DCO-2024-0135', date: '20 juin · 09:00', status: 'livree', statusLabel: 'Livrée', title: 'Suspension Raphia', items: 1, price: 78000, imgs: [
-    'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&w=100&q=85'
-  ], artisan: 'Sophie Kpadé' },
-  { id: 'DCO-2024-0134', date: '15 juin · 16:45', status: 'litige', statusLabel: 'Litige ouvert', title: 'Tapis Kente Maison', items: 1, price: 165000, imgs: [
-    'https://images.unsplash.com/photo-1600166898405-da9535204843?auto=format&fit=crop&w=100&q=85'
-  ], artisan: 'Mariam Boukari' },
-  { id: 'DCO-2024-0133', date: '10 juin · 13:20', status: 'livree', statusLabel: 'Livrée', title: 'Sculpture Bois Iroko', items: 1, price: 155000, imgs: [
-    'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=100&q=85'
-  ], artisan: 'Brice Gbénou' },
-  { id: 'DCO-2024-0132', date: '5 juin · 11:00', status: 'livree', statusLabel: 'Livrée', title: 'Lampe Bogolan + Vase Terre Cuite', items: 2, price: 110000, imgs: [
-    'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=100&q=85',
-    'https://images.unsplash.com/photo-1578500494198-246f612d3b3d?auto=format&fit=crop&w=100&q=85'
-  ], artisan: 'Sophie Kpadé' },
-  { id: 'DCO-2024-0131', date: '1 juin · 08:30', status: 'livree', statusLabel: 'Livrée', title: 'Cadre Mosaïque Cauris', items: 1, price: 68000, imgs: [
-    'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=100&q=85'
-  ], artisan: 'Étienne Dossou-Yovo' },
-];
-
-let currentOrderFilter = 'all';
-
-function selectOrderFilter(el) {
-  document.querySelectorAll('#orderFilters .order-filter').forEach(f => f.classList.remove('active'));
-  el.classList.add('active');
-  currentOrderFilter = el.dataset.status;
-  renderOrders();
-}
-
-function renderOrders() {
-  const list = document.getElementById('ordersList');
-  if (!list) return;
-  const filtered = currentOrderFilter === 'all' ? ORDERS : ORDERS.filter(o => o.status === currentOrderFilter);
-  if (filtered.length === 0) {
-    list.innerHTML = `
-      <div class="order-empty">
-        <div style="width:56px;height:56px;margin:0 auto 14px;border-radius:16px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        </div>
-        <div style="font-family:'Quache','Plus Jakarta Sans',Georgia,serif;font-size:16px;font-weight:600;color:var(--text-1);margin-bottom:4px;">Aucune commande ici</div>
-        <div style="font-size:12px;color:var(--text-3);">Essayez un autre filtre</div>
-      </div>
-    `;
-    return;
-  }
-  list.innerHTML = filtered.map(o => `
-    <div class="order-card" onclick="navigateTo('tracking')">
-      <div class="order-card-header">
-        <div>
-          <div class="order-card-num">${o.id}</div>
-          <div class="order-card-date">${o.date}</div>
-        </div>
-        <span class="order-status ${o.status}"><span class="dot"></span>${o.statusLabel}</span>
-      </div>
-      <div class="order-card-body">
-        <div class="order-card-imgs">
-          ${o.imgs.map(img => `<img src="${img}" alt="">`).join('')}
-        </div>
-        <div class="order-card-info">
-          <div class="order-card-title">${o.title}</div>
-          <div class="order-card-meta">${o.artisan} · ${o.items} article${o.items>1?'s':''}</div>
-        </div>
-        <div class="order-card-price">${o.price.toLocaleString('fr-FR')}<br><span style="font-size:9px;color:var(--text-3);font-weight:600;">FCFA</span></div>
-      </div>
-    </div>
-  `).join('');
-}
-
-// ═══ BRIEF ARTISAN & DESIGNER — multi-étapes ═══
-let baCurrentStep = 1;
-let bdCurrentStep = 1;
-
-function selectBriefOption(el, groupId) {
-  document.querySelectorAll('#' + groupId + ' .brief-option').forEach(o => o.classList.remove('selected'));
-  el.classList.add('selected');
-}
-
-function updateBriefSteps(prefix, current, total) {
-  for (let i = 1; i <= total; i++) {
-    const step = document.getElementById(prefix + 'Step' + i);
-    const content = document.getElementById(prefix + 'StepContent' + i);
-    if (step) step.classList.toggle('active', i <= current);
-    if (content) content.style.display = (i === current) ? 'block' : 'none';
-  }
-  const prevBtn = document.getElementById(prefix + 'PrevBtn');
-  const nextBtn = document.getElementById(prefix + 'NextBtn');
-  if (prevBtn) prevBtn.style.display = (current > 1) ? 'flex' : 'none';
-  if (nextBtn) {
-    nextBtn.textContent = (current === total) ? 'Envoyer le brief' : 'Continuer →';
-  }
-}
-
-function briefArtisanNext() {
-  if (baCurrentStep < 4) {
-    baCurrentStep++;
-    updateBriefSteps('ba', baCurrentStep, 4);
-    document.getElementById('screen-brief-artisan').scrollTop = 0;
-  } else {
-    showHint('Brief envoyé ! Devis sous 48h.');
-    baCurrentStep = 1;
-    updateBriefSteps('ba', 1, 4);
-    navigateTo('projets');
-  }
-}
-
-function briefArtisanPrev() {
-  if (baCurrentStep > 1) {
-    baCurrentStep--;
-    updateBriefSteps('ba', baCurrentStep, 4);
-    document.getElementById('screen-brief-artisan').scrollTop = 0;
-  }
-}
-
-function briefDesignerNext() {
-  if (bdCurrentStep < 4) {
-    bdCurrentStep++;
-    updateBriefSteps('bd', bdCurrentStep, 4);
-    document.getElementById('screen-brief-designer').scrollTop = 0;
-  } else {
-    showHint('Brief envoyé ! Propositions sous 72h.');
-    bdCurrentStep = 1;
-    updateBriefSteps('bd', 1, 4);
-    navigateTo('projets');
-  }
-}
-
-function briefDesignerPrev() {
-  if (bdCurrentStep > 1) {
-    bdCurrentStep--;
-    updateBriefSteps('bd', bdCurrentStep, 4);
-    document.getElementById('screen-brief-designer').scrollTop = 0;
-  }
-}
-
-// ═══ CHAT ═══
-function sendChatMessage() {
-  const input = document.getElementById('chatInput');
-  const text = input.value.trim();
-  if (!text) return;
-  const container = document.getElementById('chatMessages');
-  const now = new Date();
-  const time = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-
-  // Message utilisateur
-  container.insertAdjacentHTML('beforeend', `
-    <div style="display:flex;justify-content:flex-end;margin-bottom:14px;">
-      <div style="max-width:82%;">
-        <div style="background:linear-gradient(135deg,var(--amber) 0%,var(--amber-dark) 100%);color:white;padding:10px 14px;border-radius:16px 16px 4px 16px;font-size:13.5px;line-height:1.45;box-shadow:0 2px 8px rgba(191,121,59,0.2);">${text.replace(/</g,'&lt;')}</div>
-        <div style="font-size:10px;color:var(--text-3);margin-top:4px;margin-right:6px;text-align:right;font-weight:500;">${time}</div>
-      </div>
-    </div>
-  `);
-  input.value = '';
-  container.scrollTop = container.scrollHeight;
-
-  // Réponse automatique artisan après 1.2s
-  setTimeout(() => {
-    const responses = [
-      "Bien noté ! Je m'en occupe.",
-      "D'accord, je vous tiens informé.",
-      "Parfait, merci pour votre retour.",
-      "Oui, c'est tout à fait possible.",
-      "Je vous envoie une photo dès que c'est prêt.",
-    ];
-    const reply = responses[Math.floor(Math.random() * responses.length)];
-    const now2 = new Date();
-    const time2 = String(now2.getHours()).padStart(2,'0') + ':' + String(now2.getMinutes()).padStart(2,'0');
-    container.insertAdjacentHTML('beforeend', `
-      <div style="display:flex;gap:8px;margin-bottom:14px;max-width:82%;">
-        <img src="https://images.unsplash.com/photo-1614023342667-6f060e9d1e04?auto=format&fit=crop&crop=faces&w=60&q=85" style="width:30px;height:30px;border-radius:999px;object-fit:cover;flex-shrink:0;margin-top:auto;">
-        <div>
-          <div style="background:var(--bg-card);border:1px solid var(--border);padding:10px 14px;border-radius:16px 16px 16px 4px;font-size:13.5px;color:var(--text-1);line-height:1.45;box-shadow:0 1px 2px rgba(30,24,19,0.03);">${reply}</div>
-          <div style="font-size:10px;color:var(--text-3);margin-top:4px;margin-left:6px;font-weight:500;">${time2}</div>
-        </div>
-      </div>
-    `);
-    container.scrollTop = container.scrollHeight;
-  }, 1200);
-}
-
-// ═══ NOTIFICATIONS — delete ═══
-function deleteNotif(el) {
-  const card = el.closest('[onclick*="navigateTo"]') || el.closest('[style*="border-radius:14px"]');
-  if (!card) return;
-  card.style.transition = 'all 0.3s ease';
-  card.style.transform = 'translateX(100%)';
-  card.style.opacity = '0';
-  setTimeout(() => card.remove(), 300);
-  showHint('Notification supprimée');
-}
-
-function initNotifDeleteButtons() {
-  const notifs = document.querySelectorAll('#screen-notifications [style*="border-radius:14px"][onclick]');
-  notifs.forEach(n => {
-    // Éviter le chevauchement avec le dot non-lu
-    const dot = n.querySelector('[style*="background:var(--terracotta)"]');
-    if (dot) dot.style.right = '36px';
-    // Ajouter le bouton supprimer
-    const delBtn = document.createElement('div');
-    delBtn.style.cssText = 'position:absolute;top:14px;right:14px;width:24px;height:24px;border-radius:8px;background:var(--bg-warm);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5;';
-    delBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
-    delBtn.onclick = function(e) { e.stopPropagation(); deleteNotif(this); };
-    n.appendChild(delBtn);
-  });
-}
-
-// ═══ PLACEHOLDER (sections en construction) ═══
-function openPlaceholder(title) {
-  window._placeholderTitle = title;
-  navigateTo('placeholder');
-}
-
-// ═══ ÉCRANS DE COMPTE — utilitaires ═══
-
-// Sélection radio (langue & devise)
-function selectLangItem(el) {
-  const parent = el.parentElement;
-  parent.querySelectorAll('div[style*="border:2px solid"]').forEach(d => {
-    d.style.border = '2px solid var(--border-dark)';
-    d.innerHTML = '';
-  });
-  const radio = el.querySelector('div[style*="border:2px"]');
-  if (radio) {
-    radio.style.border = '2px solid var(--ink)';
-    radio.innerHTML = '<div style="width:10px;height:10px;border-radius:999px;background:var(--ink);"></div>';
-  }
-  showHint('Préférence enregistrée');
-}
-
-// Toggle switch (parametres)
-function toggleSwitch(el) {
-  const dot = el.firstElementChild;
-  const isOn = el.style.background === 'var(--ink)' || el.style.background.includes('26, 22, 18');
-  if (isOn) {
-    el.style.background = 'var(--border-dark)';
-    dot.style.right = 'auto';
-    dot.style.left = '2px';
-  } else {
-    el.style.background = 'var(--ink)';
-    dot.style.left = 'auto';
-    dot.style.right = '2px';
-  }
-}
-
-// FAQ toggle (aide)
-function toggleFaq(el) {
-  const svg = el.querySelector('svg');
-  const isOpen = svg.style.transform.includes('rotate(180deg)');
-  // Fermer tous
-  el.parentElement.querySelectorAll('div[onclick="toggleFaq(this)"] svg').forEach(s => {
-    s.style.transform = 'rotate(0deg)';
-  });
-  if (!isOpen) {
-    svg.style.transform = 'rotate(180deg)';
-    showHint('Réponse affichée');
-  }
 }
 
 // ═══ SCENE DÉTAILLÉE ═══
@@ -6323,36 +4953,6 @@ function showHint(msg) {
 renderProducts();
 renderMarketplace();
 renderInspirations();
-renderOrders();
-renderFavorites();
-renderArtisanProducts();
-initNotifDeleteButtons();
-
-function renderArtisanProducts() {
-  const container = document.getElementById('artisanProducts');
-  if (!container) return;
-  // Prend les 4 premiers produits de Kofi Akindélé
-  const artisanProducts = PRODUCTS.filter(p => p.artisan === 'Kofi Akindélé').slice(0, 4);
-  container.innerHTML = artisanProducts.map(p => {
-    const stars = '★★★★★'.slice(0, Math.round(p.rating));
-    return `
-      <div class="product-card" onclick="openProduct(${p.id})">
-        <div class="product-img-wrap">
-          <img src="${p.img}" alt="${p.name}" loading="lazy">
-          ${p.badge ? `<span class="product-badge ${p.badgeColor}">${p.badge}</span>` : ''}
-        </div>
-        <div class="product-info">
-          <div class="product-name">${p.name}</div>
-          <div class="product-rating">
-            <span class="product-rating-stars">${stars}</span>
-            <b>${p.rating.toFixed(1)}</b>
-          </div>
-          <div class="product-price">${formatFCFA(p.price)}</div>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
 
 document.body.addEventListener('touchmove', (e) => {
   if (e.target.closest('.screen-page') || e.target.closest('.scroll') || e.target.closest('.categories') || e.target.closest('.collections-scroll') || e.target.closest('.inspo-filters') || e.target.closest('.market-cats')) return;
